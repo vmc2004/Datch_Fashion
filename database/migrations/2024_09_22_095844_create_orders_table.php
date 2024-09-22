@@ -21,7 +21,6 @@ return new class extends Migration
             $table->double('total_money', 10, 2);
             $table->string('status', 100);
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('shipment_id')->constrained('shipments');
             $table->softDeletes();
             $table->timestamps();
         });
