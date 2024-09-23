@@ -14,7 +14,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Mã Hàng</th>
+                        <th>Mã đơn Hàng</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
