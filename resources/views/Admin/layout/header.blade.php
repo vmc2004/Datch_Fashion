@@ -7,11 +7,9 @@
   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/admin/img/apple-icon.png')}}">
   <link rel="icon" type="image/png" href="{{asset('assets/admin/assets/img/favicon.png')}}">
   <title>
-<<<<<<< HEAD
+
     @yield('title')
-=======
-   @yield('title')
->>>>>>> ad3e83155757bae9b263fad8633f713ee0870446
+
   </title>
   {{-- link bootstrap  --}}
 
