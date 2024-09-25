@@ -2,4 +2,4 @@
 
 @yield('content')
      
-      @include('Admin.layout.footer')
+@include('Admin.layout.footer')
