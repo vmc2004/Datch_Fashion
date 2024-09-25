@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
+
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,6 +42,18 @@ Route::prefix('admin')->group(function () {
     //     Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     // });
     // Kết thúc sản phẩm
+
+    // Đường dẫn order
+        Route::prefix('orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
+        Route::post('/create', [OrderController::class, 'store'])->name('orders.store');
+        Route::get('/show/{product}', [OrderController::class, 'show'])->name('orders.show');
+        Route::get('/edit/{product}', [OrderController::class, 'edit'])->name('orders.edit');
+        Route::put('/edit/{product}', [OrderController::class, 'update'])->name('orders.update');
+        Route::delete('/destroy/{product}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    });
+    // Kết thúc order
 
 
 });

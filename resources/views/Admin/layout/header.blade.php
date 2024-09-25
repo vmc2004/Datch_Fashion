@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/admin/img/apple-icon.png')}}">
   <link rel="icon" type="image/png" href="{{asset('assets/admin/assets/img/favicon.png')}}">
   <title>
-    Argon Dashboard 2 by Creative Tim
+   @yield('title')
   </title>
   {{-- link bootstrap  --}}
 
@@ -65,11 +65,11 @@
             </a>
           </li>
         <li class="nav-item">
-          <a class="nav-link " href="{{url('/admin/billing')}}">
+          <a class="nav-link " href="{{route('orders.index')}}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Hóa đơn</span>
+            <span class="nav-link-text ms-1">Đơn hàng</span>
           </a>
         </li>
         <li class="nav-item">
