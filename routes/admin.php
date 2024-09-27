@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,12 @@ Route::prefix('admin')->group(function(){
         Route::get('/', function(){
             return view('Admin.home');
         });
+
+    //Route dang ki, dang nhap
+       Route::controller(AuthController::class)->group(function(){
+           Route::get('register', 'register')->name('register');
+
+       });
 
     // Đường dẫn danh mục sản phẩm
     Route::prefix('categories')->group(function(){
