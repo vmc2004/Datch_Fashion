@@ -1,5 +1,8 @@
 @extends('Admin.layout.app')
+@section('title', "Đơn hàng")
 
+@section('title-page', "Đơn hàng")
+@section('single-page', "Thêm đơn hàng")
 
 @section('content')
 
@@ -47,15 +50,15 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="senderName" class="form-label">Tên người gửi:</label>
-                                <input type="text" class="form-control" id="senderName" value="Thành Lộc Express">
+                                <input type="text" class="form-control" id="senderName" value="Datch Fashion" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="senderPhone" class="form-label">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="senderPhone" value="0911111111">
+                                <input type="text" class="form-control" id="senderPhone" value="0339381785" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="senderAddress" class="form-label">Địa chỉ:</label>
-                                <input type="text" class="form-control" id="senderAddress" value="Thành Lộc Express">
+                                <input type="text" class="form-control" id="senderAddress" value="Ahihi Express" disabled>
                             </div>
                         </div>
                     </div>
