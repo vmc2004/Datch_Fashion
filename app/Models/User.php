@@ -1,22 +1,24 @@
 <?php
-
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends Authenticatable
 {
     use HasFactory;
 
     protected $fillable = [
         'fullname',
-        'phone',       // Thêm từ nhánh Dev
-        'address',     // Thêm từ nhánh Dev
+        'avatar',
+        'phone',
+        'address',
         'email',
+        'email_verified_at',
         'password',
-        'role'
+        'role',
+        'status',
     ];
 
     /**
@@ -42,7 +44,7 @@ class User extends Model
     protected function role(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  ["user", "admin"][$value],
+            get: fn ($value) => ["member", "admin"][$value],
         );
     }
 }
