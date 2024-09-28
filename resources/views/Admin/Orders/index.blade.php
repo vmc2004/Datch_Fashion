@@ -20,52 +20,44 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-dark-subtle">
-                        <th><input type="checkbox" ></th>
+                        
                         <th>Mã đơn hàng</th>
                         <th>Thời gian</th>
                         <th>Khách hàng</th>
                         <th>Tổng tiền hàng</th>
                         <th>Giảm giá</th>
                         <th>Khách đã trả</th>
+                        <th>TTTT</th>
                     </tr>
                 </thead>
                 <tbody>
                   
                   @foreach ($orders as  $order)
                   <tr>
-                    <td><input type="checkbox"></td>
-                    <td><a href="{{route('orders.show', $order->id)}}"> {{ $order->id }}</a></td>
+                    <td><a href="{{route('orders.edit', $order->id)}}"> {{ $order->id }}</a></td>
                     <td>{{ $order->created_at }}</td>
                     <td>{{ $order->fullname }}</td>
-                    <td>{{ $order->OrderDetail }}</td>
+                    @foreach ($order->OrderDetail as $detail )
+                        <td>{{$detail->price}}</td>
                     <td>0</td>
-                    <td>{{ $order->total_money}}</td>
+                        <td>{{ $detail->total_price }}</td>
+                    @endforeach
+                    <td>
+                        <div class="btn {{ $order->payment == 'Thanh toán khi nhận hàng' ? 'btn-danger' : 'btn-primary' }}">
+                            {{ $order->payment == 'Thanh toán khi nhận hàng' ? 'Chưa thanh toán' : 'Đã thanh toán' }}
+                        </div>
+                        
+                    </td>
                 </tr>
                   @endforeach
                    
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>113,000</td>
-                        <td>0</td>
-                        <td>113,000</td>
-                    </tr>
                 </tbody>
             </table>
             <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <p>Hiển thị 1 - 10 trên tổng số 518 hóa đơn</p>
-                </div>
+                
                 <nav>
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                        <li class="page-item"><a class="page-link" href="#">...</a></li>
+                        <li>{{$orders->links()}}</li>
                     </ul>
                 </nav>
        

@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -69,12 +70,13 @@ Route::prefix('admin')->group(function () {
     // Kết thúc người dùng
     // Đường dẫn order
         Route::prefix('orders')->group(function () {
+        Route::get('/search/products', [OrderController::class, 'search'])->name('search.products');
+        Route::get('/products/{id}', [OrderController::class, 'show_result']);
         Route::get('/', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
         Route::post('/create', [OrderController::class, 'store'])->name('orders.store');
-        Route::get('/show/{order}', [OrderController::class, 'show'])->name('orders.show');
         Route::get('/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
-        Route::put('/edit/{order}', [OrderController::class, 'update'])->name('orders.update');
+        Route::put('/update/{order}', [OrderController::class, 'update'])->name('orders.update');
         Route::delete('/destroy/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
     });
     // Kết thúc order
