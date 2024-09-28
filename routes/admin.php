@@ -1,10 +1,14 @@
 <?php
 
+
+use App\Http\Controllers\AuthController;
+
 use App\Http\Controllers\UserController;
 
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +17,12 @@ Route::prefix('admin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');
    Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
+
+    //Route dang ki, dang nhap
+       Route::controller(AuthController::class)->group(function(){
+           Route::get('register', 'register')->name('register');
+
+       });
 
     // Đường dẫn danh mục sản phẩm
     Route::prefix('categories')->group(function () {
