@@ -12,7 +12,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('Admin.Orders.index');
+        $orders = Order::OrderByDesc('id')->paginate(10);
+        return view('Admin.Orders.index', compact('orders'));
     }
 
     /**
@@ -36,7 +37,8 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        
+        return view('Admin.Orders.view', compact('order'));
     }
 
     /**
@@ -44,7 +46,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        
     }
 
     /**

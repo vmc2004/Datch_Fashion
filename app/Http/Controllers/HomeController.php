@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    public function indexAdmin(){
+        return view('Admin.home');
+    }
     public function __construct()
     {
         $this->middleware('auth');

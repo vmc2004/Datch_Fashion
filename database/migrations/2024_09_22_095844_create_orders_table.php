@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('phone', 15);
             $table->string('address', 199);
             $table->string('email', 199);
-            $table->string('payment', 100);
+            $table->enum('payment' ,['Thanh toán khi nhận hàng' , 'Thanh toán bằng thẻ' , 'Thanh toán qua VNPay'])->default('Thanh toán khi nhận hàng');
             $table->double('total_money', 10, 2);
             $table->string('status', 100);
             $table->foreignId('user_id')->constrained('users');
