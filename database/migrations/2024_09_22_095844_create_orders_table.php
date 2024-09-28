@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('address', 199);
             $table->string('email', 199);
             $table->enum('payment' ,['Thanh toán khi nhận hàng' , 'Thanh toán bằng thẻ' , 'Thanh toán qua VNPay'])->default('Thanh toán khi nhận hàng');
-            $table->double('total_money', 10, 2);
-            $table->string('status', 100);
+            
+            $table->enum('status' , ['Chờ xác nhận', 'Đã xác nhận' ,'Đang chuẩn bị hàng', 'Đang giao hàng', 'Đã giao hàng', 'Đơn hàng đã hủy'])->default('Chờ xác nhận');
             $table->foreignId('user_id')->constrained('users');
             $table->softDeletes();
             $table->timestamps();

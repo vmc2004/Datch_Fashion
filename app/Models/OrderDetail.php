@@ -11,12 +11,17 @@ class OrderDetail extends Model
     use HasFactory;
     protected $fillable = 
     [
-'order_id',
-'variant_id',
-'price',
-'quantity',
-'unit_price',
+        'order_id',
+        'variant_id',
+        'price',
+        'quantity',
+        'unit_price',
     ];
+
+    public function Variant(): BelongsTo
+    {
+        return $this->belongsTo(ProductVariant::class);
+    }
 
 
 }

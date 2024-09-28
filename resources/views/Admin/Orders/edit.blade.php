@@ -12,33 +12,31 @@
         <div class="card-header pb-0 pt-3 bg-transparent">
            
             <h2 class="text-center  ">Cập nhật đơn hàng</h2>
-            <input type="text" class="form-control mb-3" placeholder="Tìm hàng hóa">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Mã đơn Hàng</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
-                        <th>Số Lượng</th>
                         <th>Đơn Giá</th>
+                        <th>Số Lượng</th>
                         <th>Thành Tiền</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($order->OrderDetail as $detail)
                     <tr>
-                        <td>1</td>
-                        <td>NU011</td>
-                        <td>Giày nữ màu xanh bóng</td>
-                        <td>Đỏ</td>
-                        <td>XL</td>
-                        <td><input type="number" class="form-control" value="1"></td>
-                        <td>1,995,000</td>
-                        <td>1,995,000</td>
-                        <td><i class="fas fa-trash-alt text-danger"></i></td>
+                        <td>{{$order->id}}</td>
+                        <td style="max-width:400px" class="text-truncate">{{ $detail->variant->product->name }}</td>
+                        <td>{{ $detail->variant->color->name }}</td>
+                        <td>{{ $detail->variant->size->name }}</td>
+                        <td>{{ number_format($detail->variant->price) }} đ</td>
+                        <td>{{$detail->quantity}}</td>
+                        <td>{{ number_format($detail->quantity * $detail->variant->price) }} đ</td>
                     </tr>
+                    @endforeach
+                    
                 </tbody>
             </table>
             <div class="row mb-3">
@@ -50,15 +48,15 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="senderName" class="form-label">Tên người gửi:</label>
-                                <input type="text" class="form-control" id="senderName" value="Thành Lộc Express">
+                                <input type="text" class="form-control" id="senderName" value="Datch Fashion" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="senderPhone" class="form-label">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="senderPhone" value="0911111111">
+                                <input type="text" class="form-control" id="senderPhone" value="0339381785" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="senderAddress" class="form-label">Địa chỉ:</label>
-                                <input type="text" class="form-control" id="senderAddress" value="Thành Lộc Express">
+                                <input type="text" class="form-control" id="senderAddress" value="Ahihi Express" disabled>
                             </div>
                         </div>
                     </div>
@@ -71,15 +69,15 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="receiverName" class="form-label">Tên người nhận:</label>
-                                <input type="text" class="form-control" id="receiverName" placeholder="Nhập tên người nhận">
+                                <input type="text" class="form-control" id="receiverName" value="{{$order->fullname}}">
                             </div>
                             <div class="mb-3">
                                 <label for="receiverPhone" class="form-label">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="receiverPhone" placeholder="SĐT người nhận">
+                                <input type="text" class="form-control" id="receiverPhone" value="{{$order->phone}}">
                             </div>
                             <div class="mb-3">
                                 <label for="receiverAddress" class="form-label">Địa chỉ:</label>
-                                <input type="text" class="form-control" id="receiverAddress" placeholder="Nhập địa chỉ người nhận">
+                                <input type="text" class="form-control" id="receiverAddress" value="{{$order->address}}">
                             </div>
                         </div>
                     </div>
@@ -87,40 +85,35 @@
             </div>
             <div class="card mb-3">
                 <div class="card-header">
-                    <i class="fas fa-info-circle"></i> Thông tin quốc phí
+                    <i class="fas fa-info-circle"></i> Trạng thái đơn hàng
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <label for="payer" class="form-label">Người T.T:</label>
-                            <select class="form-select" id="payer">
-                                <option>Người gửi</option>
-                                <option>Người nhận</option>
+                          <form action="{{route('orders.update', $order)}}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <label for="payer" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="payer" name="status">
+                                <option value="Chờ xác nhận" {{ $order->status == "Chờ xác nhận" ? 'selected' : '' }}>Chờ xác nhận</option>
+                                <option value="Đã xác nhận" {{ $order->status == "Đã xác nhận" ? 'selected' : '' }}>Đã xác nhận</option>
+                                <option value="Đang chuẩn bị hàng" {{ $order->status == "Đang chuẩn bị hàng" ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
+                                <option value="Đang giao hàng" {{ $order->status == "Đang giao hàng" ? 'selected' : '' }}>Đang giao hàng</option>
+                                <option value="Đã giao hàng" {{ $order->status == "Đã giao hàng" ? 'selected' : '' }}>Giao hàng thành công</option>
+                                <option value="Đơn hàng đã hủy" {{ $order->status == "Đơn hàng đã hủy" ? 'selected' : '' }}>Đơn hàng đã hủy</option>
                             </select>
+                            
+                            
                         </div>
-                        <div class="col-md-3">
-                            <label for="paymentMethod" class="form-label">Hình thức T.T:</label>
-                            <select class="form-select" id="paymentMethod">
-                                <option>Trả trước</option>
-                                <option>Trả sau</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="codAmount" class="form-label">Tiền COD:</label>
-                            <input type="text" class="form-control" id="codAmount" value="0">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="deliveryUnit" class="form-label">Chọn bưu cục lấy hàng:</label>
-                            <select class="form-select" id="deliveryUnit">
-                                <option>Bưu cục Hải Phòng</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-success me-2">Tạo đơn hàng</button>
-                        <button class="btn btn-danger">Hủy bỏ</button>
+                        
                     </div>
                 </div>
+                <div class="d-flex  ms-2">
+                    <button type="submit" class="btn btn-success me-2">Cập nhật đơn hàng</button>
+                    <a href="{{route('orders.index')}}"  class="btn btn-danger">Danh sách</a>
+                </div>
+            </div>
+        </form>
             </div>
             
         </div>
