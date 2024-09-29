@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\UserController;
-
-
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -33,6 +31,20 @@ Route::prefix('admin')->group(function () {
     });
     // Kết thúc danh mục sản phẩm
 
+    // Đường dẫn người dùng
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::get('/search', [UserController::class, 'search'])->name('users.search');
+        Route::get('/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/create', [UserController::class, 'store'])->name('users.store');
+        Route::get('/show/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::put('/{user}', [UserController::class, 'stateChange'])->name('users.stateChange');
+        Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    });
+    // Kết thúc người dùng
+
 
     // Đường dẫn sản phẩm
     // Route::prefix('products')->group(function () {
@@ -46,18 +58,6 @@ Route::prefix('admin')->group(function () {
     // });
     // Kết thúc sản phẩm
 
-    // Đường dẫn người dùng
-    Route::prefix('users')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('users.index');
-        Route::get('/create', [UserController::class, 'create'])->name('users.create');
-        Route::post('/create', [UserController::class, 'store'])->name('users.store');
-        Route::get('/show/{user}', [UserController::class, 'show'])->name('users.show');
-        Route::get('/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
-        Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
-        Route::put('/{user}', [UserController::class, 'stateChange'])->name('users.stateChange');
-        Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    });
-    // Kết thúc người dùng
     // Đường dẫn order
         Route::prefix('orders')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('orders.index');

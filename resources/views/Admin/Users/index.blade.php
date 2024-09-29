@@ -25,6 +25,18 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
+          {{-- search --}}
+          <form action="{{route('users.search')}}" method="GET" class="row g-3 mb-1">
+            <div class="d-flex ms-auto">
+              <div class="col-md-8">
+                <input type="text" name="fullname" class="form-control" value="{{ request('fullname') }}" placeholder="Tìm kiếm theo tên">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass me-2"></i>Tìm kiếm</button>
+            </div>
+            </div>
+        </form>
+        {{-- end search --}}
           <table
             class="table table-bordered"
             id="dataTable"
@@ -51,7 +63,7 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->password}}</td>
                 <td>{{$user->phone}}</td>
-                <td><p class="text-{{$user->role=='admin'? 'primary':'warning'}}">{{$user->role}}</p></td>
+                <td><p class="text-{{$user->role=='admin'?'primary':'warning'}}">{{$user->role}}</p></td>
                 <td>
                   <form action="{{route('users.stateChange',$user)}}" method="post">
                     @csrf
