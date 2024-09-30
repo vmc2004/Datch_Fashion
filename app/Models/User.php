@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Foundation\Auth\User as Authenticatable; // Kế thừa lớp này để hỗ trợ xác thực
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
@@ -12,11 +12,14 @@ class User extends Authenticatable
 
     protected $fillable = [
         'fullname',
+        'avatar',
         'phone',
         'address',
         'email',
+        'email_verified_at',
         'password',
-        'role'
+        'role',
+        'status',
     ];
 
     protected $hidden = [
@@ -33,7 +36,11 @@ class User extends Authenticatable
     protected function role(): Attribute
     {
         return new Attribute(
-            get: fn($value) => ["user", "admin"][$value],
+
+           
+
+            get: fn ($value) => ["member", "admin"][$value],
+
         );
     }
 }

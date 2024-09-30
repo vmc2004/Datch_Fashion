@@ -1,5 +1,8 @@
 @extends('Admin.layout.app')
+@section('title', "Đơn hàng")
 
+@section('title-page', "Đơn hàng")
+@section('single-page', "Thêm đơn hàng")
 
 @section('content')
 
@@ -9,7 +12,13 @@
         <div class="card-header pb-0 pt-3 bg-transparent">
            
             <h2 class="text-center  ">Thêm đơn hàng</h2>
-            <input type="text" class="form-control mb-3" placeholder="Tìm hàng hóa">
+                <input type="text" id="search_product" class="form-control mb-3" placeholder="Tìm hàng hóa">
+                <div  class="mt-2">
+                    <form action="" id="search-results">
+                        
+                    </form>
+                </div>
+            
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -47,15 +56,15 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="senderName" class="form-label">Tên người gửi:</label>
-                                <input type="text" class="form-control" id="senderName" value="Thành Lộc Express">
+                                <input type="text" class="form-control" id="senderName" value="Datch Fashion" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="senderPhone" class="form-label">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="senderPhone" value="0911111111">
+                                <input type="text" class="form-control" id="senderPhone" value="0339381785" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="senderAddress" class="form-label">Địa chỉ:</label>
-                                <input type="text" class="form-control" id="senderAddress" value="Thành Lộc Express">
+                                <input type="text" class="form-control" id="senderAddress" value="Ahihi Express" disabled>
                             </div>
                         </div>
                     </div>
@@ -132,4 +141,69 @@
 </div>
 
 
+
+
+@endsection
+
+@section('js')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#search_product').on('keyup', function() {
+            let query = $(this).val();
+
+            if (query.length >= 1) {
+                $.ajax({
+                    url: '{{ route("search.products") }}',
+                    method: 'GET',
+                    data: { query: query },
+                    success: function(data) {
+                        $('#search-results').empty();
+                        if (data.length > 0) {
+                            $.each(data, function(index, product) {
+                                $('#search-results').append(`
+                                    <div class="product-item border p-2 my-1" data-id="${product.id}">
+                                        <img href="${product}" >
+                                        <h5>${product.name}</h5>
+                                       
+                                    </div>
+                                `);
+                            });
+                        } else {
+                            $('#search-results').append('<p class="text-danger">Không tìm thấy sản phẩm nào.</p>');
+                        }
+                    }
+                });
+            } else {
+                $('#search-results').empty();
+            }
+        });
+
+        $(document).on('click', '.add-to-cart', function() {
+            const productId = $(this).closest('.product-item').data('id');
+
+            $.ajax({
+                url: `/products/${productId}`,
+                method: 'GET',
+                success: function(product) {
+                    $('table tbody').append(`
+                        <tr>
+                            <td>1</td>
+                            <td>${product.code}</td>
+                            <td>${product.name}</td>
+                            <td>${product.color}</td>
+                            <td>${product.size}</td>
+                            <td><input type="number" class="form-control" value="1"></td>
+                            <td>${product.price}</td>
+                            <td>${product.price}</td>
+                            <td><i class="fas fa-trash-alt text-danger"></i></td>
+                        </tr>
+                    `);
+                    $('#search-results').empty();
+                }
+            });
+        });
+    });
+</script>
+   
 @endsection
