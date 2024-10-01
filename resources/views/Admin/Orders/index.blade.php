@@ -9,13 +9,24 @@
       <div class="card z-index-2 h-100">
         <div class="card-header pb-0 pt-3 bg-transparent">
            
-
-            <h2 class="text-center">Đơn hàng</h2>
-            <div class="d-flex justify-content-end align-items-center mb-3">
-                
-                    <a href="{{route('orders.create')}}" class="btn btn-success me-1 "> <i class="fa-solid fa-plus"></i>  Bán hàng</a>
-                    <button type="button" class="btn btn-success"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Xuất file</button>
-                
+  @if (session()->has('message'))
+      <div class="alert alert-success text-white">
+        {{session()->get('message')}}
+      </div>
+      @endif
+            <div class="header">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                   <form action="{{route('orders.search')}}" method="GET">
+                    @csrf
+                    <input type="text" name="search-order" placeholder="Tìm kiếm đơn hàng...">
+                   </form>
+                </div>
+                <h1>Đơn hàng</h1>
+                <div>
+                    <button class="btn btn-custom btn-success"><a href="{{route('orders.create')}}" class=" text-white"><i class="fas fa-plus "></i>Bán hàng</a></button>
+                    <button class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</button>
+                </div>
             </div>
             <table class="table table-bordered table-hover">
                 <thead>
@@ -25,9 +36,7 @@
                         <th>Thời gian</th>
                         <th>Khách hàng</th>
                         <th>Tổng tiền hàng</th>
-                        <th>Giảm giá</th>
-                        <th>Khách đã trả</th>
-                        <th>TTTT</th>
+                        <th>Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,16 +47,14 @@
                     <td>{{ $order->created_at }}</td>
                     <td>{{ $order->fullname }}</td>
                     @foreach ($order->OrderDetail as $detail )
-                        <td>{{$detail->price}}</td>
-                    <td>0</td>
-                        <td>{{ $detail->total_price }}</td>
+                        <td>{{number_format($detail->price)}} ₫</td>
                     @endforeach
-                    <td>
-                        <div class="btn {{ $order->payment == 'Thanh toán khi nhận hàng' ? 'btn-danger' : 'btn-primary' }}">
-                            {{ $order->payment == 'Thanh toán khi nhận hàng' ? 'Chưa thanh toán' : 'Đã thanh toán' }}
+                    {{-- <td>
+                        <div class="btn {{ $order->status == 'Đã xác nhận' ? 'btn-danger' : 'btn-primary' }}">
+                            {{ $order->payment == 'Phiếu tạm' ? 'Hoàn thành' : 'Đã hủy' }}
                         </div>
                         
-                    </td>
+                    </td> --}}
                 </tr>
                   @endforeach
                    
@@ -63,4 +70,50 @@
        
                 
 
+@endsection
+
+@section('style')
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .search-box {
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        width: 300px;
+    }
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        padding-left: 5px;
+    }
+    .search-box i {
+        color: #ccc;
+    }
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .header h1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #3a3a3a;
+    }
+    .btn-custom {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-left: 10px;
+    }
+    .btn-custom i {
+        margin-right: 5px;
+    }
+</style>
 @endsection

@@ -16,7 +16,7 @@ class OrderController extends Controller
     public function index()
     {
         
-        $orders = Order::OrderByDesc('id')->paginate(10);
+        $orders = Order::OrderByDesc('id')->paginate(8);
         return view('Admin.Orders.index', compact('orders'));
     }
 
@@ -77,13 +77,18 @@ class OrderController extends Controller
     {
         $query = $request->get('query');
         $products = Product::where('code', 'LIKE', '%' . $query . '%')->get();
-
-        return response()->json($products);
+        $product_id = $products->pluck('id');
+        $variants = ProductVariant::whereIn('product_id' ,$product_id)->get();
+        return response()->json($variants);
     }
 
     public function show_result($id)
     {
         $product = Product::findOrFail($id);
         return response()->json($product);
+    }
+    public function search_order(Request $request){
+        $orders = Order::where('phone', 'LIKE', '%'. $request['search-order']. '%')->paginate(8);
+        return view('Admin.Orders.index', compact('orders'));
     }
 }

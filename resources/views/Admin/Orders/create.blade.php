@@ -41,8 +41,8 @@
                         <td>Đỏ</td>
                         <td>XL</td>
                         <td><input type="number" class="form-control" value="1"></td>
-                        <td>1,995,000</td>
-                        <td>1,995,000</td>
+                        <td>1,995,000 ₫</td>
+                        <td>1,995,000 ₫</td>
                         <td><i class="fas fa-trash-alt text-danger"></i></td>
                     </tr>
                 </tbody>
@@ -118,7 +118,7 @@
                         <div class="col-md-3">
                             <label for="deliveryUnit" class="form-label">Chọn bưu cục lấy hàng:</label>
                             <select class="form-select" id="deliveryUnit">
-                                <option>Bưu cục Hải Phòng</option>
+                                <option>Bưu cục Hà Nội</option>
                             </select>
                         </div>
                     </div>
@@ -160,13 +160,19 @@
                     success: function(data) {
                         $('#search-results').empty();
                         if (data.length > 0) {
-                            $.each(data, function(index, product) {
+                 
+                            $.each(data, function(index, variant) {
+                                console.log(variant);
                                 $('#search-results').append(`
-                                    <div class="product-item border p-2 my-1" data-id="${product.id}">
-                                        <img href="${product}" >
-                                        <h5>${product.name}</h5>
-                                       
+                                 <div class="product-container" data-id="${variant.id}"> 
+                                    <img src="https://placehold.co/50x50" alt="Vinamilk logo" class="product-image">
+                                    <div class="product-details">
+                                        <span class="product-name">${variant.color_id}</span>
+                                        <span class="product-code">${variant.code}</span>
+                                        <span class="product-price  ">${variant.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
                                     </div>
+                                </div>
+                                   
                                 `);
                             });
                         } else {
@@ -178,32 +184,35 @@
                 $('#search-results').empty();
             }
         });
-
-        $(document).on('click', '.add-to-cart', function() {
-            const productId = $(this).closest('.product-item').data('id');
-
-            $.ajax({
-                url: `/products/${productId}`,
-                method: 'GET',
-                success: function(product) {
-                    $('table tbody').append(`
-                        <tr>
-                            <td>1</td>
-                            <td>${product.code}</td>
-                            <td>${product.name}</td>
-                            <td>${product.color}</td>
-                            <td>${product.size}</td>
-                            <td><input type="number" class="form-control" value="1"></td>
-                            <td>${product.price}</td>
-                            <td>${product.price}</td>
-                            <td><i class="fas fa-trash-alt text-danger"></i></td>
-                        </tr>
-                    `);
-                    $('#search-results').empty();
-                }
-            });
-        });
     });
 </script>
    
+@endsection
+
+
+@section('style')
+<style>
+    .product-container {
+             display: flex;
+             align-items: center;
+             padding: 10px;
+         }
+         .product-image {
+             width: 50px;
+             height: 50px;
+             margin-right: 10px;
+         }
+         .product-details {
+             display: flex;
+             flex-direction: column;
+         }
+         .product-name {
+             font-size: 16px;
+             font-weight: bold;
+         }
+         .product-code {
+             font-size: 14px;
+             color: #333;
+         }
+   </style>
 @endsection
