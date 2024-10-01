@@ -11,6 +11,7 @@
     @yield('title')
 
   </title>
+  @yield('style')
   {{-- link bootstrap  --}}
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -33,7 +34,7 @@
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href="https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html" target="_blank">
+      <a class="navbar-brand m-0" href="{{route('admin.index')}}" target="_blank">
         <img src="{{asset('assets/admin/img/Datch.png')}}" class="navbar-brand-img h-100" alt="main_logo" width="50
         ">
         <span class="ms-1 font-weight-bold">Datch Admin</span>
@@ -43,7 +44,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" href="{{url('/admin/dashboard')}}">
+          <a class="nav-link active" href="{{route('admin.index')}}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
             </div>
@@ -120,7 +121,7 @@
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">Sign In</span>
+                <a href="{{ route('logout') }}" class="d-sm-inline d-none">Logout</a>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">

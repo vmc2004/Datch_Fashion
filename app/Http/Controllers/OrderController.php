@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -12,7 +15,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('Admin.Orders.index');
+        
+        $orders = Order::OrderByDesc('id')->paginate(8);
+        return view('Admin.Orders.index', compact('orders'));
     }
 
     /**
@@ -36,7 +41,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+   
     }
 
     /**
@@ -44,7 +49,8 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        return view('Admin.Orders.edit', compact('order'));
+        
     }
 
     /**
@@ -52,7 +58,11 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $data = [
+            'status' => $request['status']
+        ];
+        $order->update($data);
+        return redirect()->back()->with('message', 'Cập nhật thành công !');
     }
 
     /**
@@ -61,5 +71,24 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+        $products = Product::where('code', 'LIKE', '%' . $query . '%')->get();
+        $product_id = $products->pluck('id');
+        $variants = ProductVariant::whereIn('product_id' ,$product_id)->get();
+        return response()->json($variants);
+    }
+
+    public function show_result($id)
+    {
+        $product = Product::findOrFail($id);
+        return response()->json($product);
+    }
+    public function search_order(Request $request){
+        $orders = Order::where('phone', 'LIKE', '%'. $request['search-order']. '%')->paginate(8);
+        return view('Admin.Orders.index', compact('orders'));
     }
 }
