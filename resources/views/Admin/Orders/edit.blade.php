@@ -12,6 +12,11 @@
         <div class="card-header pb-0 pt-3 bg-transparent">
            
             <h2 class="text-center  ">Cập nhật đơn hàng</h2>
+            @if (session()->has('message'))
+            <div class="alert alert-success text-white">
+              {{session()->get('message')}}
+            </div>
+            @endif
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -31,9 +36,9 @@
                         <td style="max-width:400px" class="text-truncate">{{ $detail->variant->product->name }}</td>
                         <td>{{ $detail->variant->color->name }}</td>
                         <td>{{ $detail->variant->size->name }}</td>
-                        <td>{{ number_format($detail->variant->price) }} đ</td>
+                        <td>{{ number_format($detail->variant->price) }} ₫</td>
                         <td>{{$detail->quantity}}</td>
-                        <td>{{ number_format($detail->quantity * $detail->variant->price) }} đ</td>
+                        <td>{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
                     </tr>
                     @endforeach
                     

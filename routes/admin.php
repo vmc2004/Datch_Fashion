@@ -78,6 +78,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
         Route::put('/update/{order}', [OrderController::class, 'update'])->name('orders.update');
         Route::delete('/destroy/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+        Route::get('/search', [OrderController::class, 'search_order'])->name('orders.search');
     });
     // Kết thúc order
 
