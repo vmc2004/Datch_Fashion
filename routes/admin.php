@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 
 
 Route::prefix('admin')->group(function(){
@@ -28,15 +29,15 @@ Route::prefix('admin')->group(function(){
 
 
     // Đường dẫn sản phẩm
-    // Route::prefix('products')->group(function () {
-    //     Route::get('/', [ProductController::class, 'index'])->name('products.index');
-    //     Route::get('/create', [ProductController::class, 'create'])->name('products.create');
-    //     Route::post('/create', [ProductController::class, 'store'])->name('products.store');
-    //     Route::get('/show/{product}', [ProductController::class, 'show'])->name('products.show');
-    //     Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
-    //     Route::put('/edit/{product}', [ProductController::class, 'update'])->name('products.update');
-    //     Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-    // });
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/create', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/show/{id}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+    });
     // Kết thúc sản phẩm
 
     // Đường dẫn order

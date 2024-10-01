@@ -57,7 +57,7 @@
           </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="{{url('/admin/tables')}}">
+            <a class="nav-link " href="{{url('/admin/products')}}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa-solid fa-shirt fa-xl" style="color: #63E6BE;"></i>
               </div>
