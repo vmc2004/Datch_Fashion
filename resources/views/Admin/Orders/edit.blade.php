@@ -20,7 +20,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Mã đơn Hàng</th>
+                        <th>Mã sản phẩm</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
