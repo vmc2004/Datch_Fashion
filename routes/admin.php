@@ -1,16 +1,19 @@
 <?php
 
-
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\UserController;
 
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 
+
+
+
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,12 +22,8 @@ Route::prefix('admin')->group(function () {
     // Route::get('/', [HomeController::class, 'index'])->name('index');
    Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
 
-    //Route dang ki, dang nhap
-       Route::controller(AuthController::class)->group(function(){
-           Route::get('register', 'register')->name('register');
-
-       });
-
+    
+    
     // Đường dẫn danh mục sản phẩm
     Route::prefix('categories')->group(function () {
         // Route::get('/', function(){
@@ -82,6 +81,16 @@ Route::prefix('admin')->group(function () {
         Route::get('/search', [OrderController::class, 'search_order'])->name('orders.search');
     });
     // Kết thúc order
+
+    //Banner
+    Route::prefix('banners')->group(function(){
+        Route::get('/', [BannerController::class, 'index'])->name('banners.index');
+        Route::get('/create', [BannerController::class, 'create'])->name('banners.create');
+        Route::post('/create', [BannerController::class, 'store'])->name('banners.store');
+        Route::get('/edit/{banner}', [BannerController::class, 'edit'])->name('banners.edit');
+        Route::put('/edit/{banner}', [BannerController::class, 'update'])->name('banners.update');
+        Route::delete('/destroy/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
+    });
 
 
 });
