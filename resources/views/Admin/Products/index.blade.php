@@ -17,9 +17,7 @@
                                         <th scope="col">ID</th>
                                         <th scope="col">Mã SKU</th>
                                         <th scope="col">Tên sản phẩm</th>
-                                        <th scope="col">Đường dẫn</th>
                                         <th scope="col">Hình ảnh</th>
-                                        <th scope="col">Mô tả</th>
                                         <th scope="col">Chất liệu</th>
                                         <th scope="col">Trạng thái</th>
                                         <th scope="col">Trạng thái hoạt động</th>
@@ -31,39 +29,27 @@
                                 <tbody>
                                     @foreach ($products as $index => $item)
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $item->id }}</td>
                                             <td>{{ $item->code }}</td>
                                             <td>{{ $item->name }}</td>
-                                            <td>{{ $item->slug }}</td>
                                             <td>
                                                 @if ($item->image)
-                                                    <img src="{{ asset('storage/' . $item->image) }}" width="100px"
-                                                        height="100px" alt="">
+                                                    <img src="{{ asset('storage/' . $item->image) }}" width="100px" alt="">
                                                 @endif
                                             </td>
-                                            <td>{{ $item->description }}</td>
                                             <td>{{ $item->material }}</td>
                                             <td>{!! $item->status
                                                 ? '<span class="badge text-bg-success">Hiển thị</span>'
                                                 : '<span class="badge text-bg-danger">Ẩn</span>' !!}</td>
                                             <td>{!! $item->is_active
-                                                ? '<span class="badge text-bg-success">Hoạt động</span>'
-                                                : '<span class="badge text-bg-danger">Không hoạt động</span>' !!}</td>
+                                                ? '<span class="badge text-bg-success">Còn hàng</span>'
+                                                : '<span class="badge text-bg-danger">Hết hàng</span>' !!}</td>
                                             <td>{{ $item->category->name }}</td>
                                             <td>{{ $item->brand->name }}</td>
                                             <td>
-                                                <div class="btn-group">
-                                                    <a href="{{ route('products.edit', $item->id) }}"><button
-                                                            class="btn btn-warning">Sửa</button></a>
-                                                    <form action="{{ route('products.destroy', $item->id) }}"
-                                                        method="POST"
-                                                        onclick="return confirm('Bạn có muốn xóa sản phẩm??')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-danger">Xóa</button>
-                                                    </form>
-                                                </div>
-                                            </td>
+                                                <a href="" class="btn btn-success">Thêm biến thể</a>
+                                                <a href="" class="btn btn-primary">Danh sách biến thể</a>
+                                                <a href="{{ route('products.edit', $item->id) }}" class="btn btn-warning">Sửa</a>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -74,7 +60,7 @@
 
                     </div> --}}
                     </div>
-                    {{ $products->links()}}
+                    {{ $products->links() }}
                 </div>
             </div>
         </div>
