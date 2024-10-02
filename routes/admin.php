@@ -75,6 +75,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
         Route::post('/create', [OrderController::class, 'store'])->name('orders.store');
+        Route::post('/add_product_order', [OrderController::class, 'add_product_order'])->name('orders.add_product_order');
         Route::get('/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
         Route::put('/update/{order}', [OrderController::class, 'update'])->name('orders.update');
         Route::delete('/destroy/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');

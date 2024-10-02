@@ -22,8 +22,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Mã đơn Hàng</th>
+                        <th>Mã sản phẩm</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
@@ -34,17 +33,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>NU011</td>
-                        <td>Giày nữ màu xanh bóng</td>
-                        <td>Đỏ</td>
-                        <td>XL</td>
-                        <td><input type="number" class="form-control" value="1"></td>
-                        <td>1,995,000 ₫</td>
-                        <td>1,995,000 ₫</td>
-                        <td><i class="fas fa-trash-alt text-danger"></i></td>
-                    </tr>
+                 @if (session()->has('order'))
+                 <?php
+                 $order = session('order');
+               ?>
+                 @foreach ( $order as  $order_detail)
+                 <tr>
+                    {{dd($order_detail)}}
+                     <td>Giày nữ màu xanh bóng</td>
+                     <td>Đỏ</td>
+                     <td>XL</td>
+                     <td><input type="number" class="form-control" value="{{$order_detail['quantity']}}"></td>
+                     <td>1,995,000 ₫</td>
+                     <td>1,995,000 ₫</td>
+                     <td><i class="fas fa-trash-alt text-danger"></i></td>
+                 </tr>
+                 @endforeach
+                 @else
+
+                 @endif
                 </tbody>
             </table>
             <div class="row mb-3">
@@ -143,11 +150,19 @@
 
 
 
+
 @endsection
 
 @section('js')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
+
+ $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $(document).ready(function() {
         $('#search_product').on('keyup', function() {
             let query = $(this).val();
@@ -164,14 +179,18 @@
                             $.each(data, function(index, variant) {
                                 console.log(variant);
                                 $('#search-results').append(`
-                                 <div class="product-container" data-id="${variant.id}"> 
-                                    <img src="https://placehold.co/50x50" alt="Vinamilk logo" class="product-image">
-                                    <div class="product-details">
-                                        <span class="product-name">${variant.color_id}</span>
-                                        <span class="product-code">${variant.code}</span>
-                                        <span class="product-price  ">${variant.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                                
+                                
+                                    <div class="product-container" data-id="${variant.id}"> 
+                                     
+                                        <img src="${variant.image}" alt="Image product" width="70" class="product-image">
+                                        <div class="product-details">
+                                            <span class="product-name">${variant.product.name}</span> 
+                                            <span class="product-code">Mã : ${variant.product.code}</span>
+                                            <span class="product-color"> Màu sắc: ${variant.color.name}</span>
+                                            <span class="product-size">Size :${variant.size.name}</span>
+                                        </div>
                                     </div>
-                                </div>
                                    
                                 `);
                             });
@@ -184,6 +203,31 @@
                 $('#search-results').empty();
             }
         });
+    });
+
+    // Hành động add sản phẩm biến thể vào trong đơn hàng
+
+    $(document).on('click', '.product-container', function(){
+        var variant_id = $(this).data('id');
+        var product_code = $(this).data('product.name');
+
+    $.ajax({
+        url: '{{route('orders.add_product_order')}}',
+        method: 'POST',
+        data: {
+            variant_id :variant_id,
+            code: product_code, 
+            quantity: 1
+        },
+        success: function(response) {
+            // Hiển thị thông báo thành công
+            alert(response.message);
+            // Bạn có thể cập nhật giao diện giỏ hàng ở đây nếu cần
+        },
+        error: function(xhr) {
+            alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
+        }
+    })    ;
     });
 </script>
    
