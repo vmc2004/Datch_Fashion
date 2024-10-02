@@ -6,7 +6,9 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session as FacadesSession;
 
 class OrderController extends Controller
 {
@@ -25,6 +27,8 @@ class OrderController extends Controller
      */
     public function create()
     {
+        FacadesSession::forget('order');
+        
         return view('Admin.Orders.create');
     }
 
@@ -46,29 +50,28 @@ class OrderController extends Controller
     
         // 2. Lấy dữ liệu từ request
         $variant_id = $request->input('variant_id');
-       $code = $request->input('code');
-        $quantity = $request->input('quantity', 1); // Mặc định là 1 nếu không có giá trị
-    
+        $quantity = $request->input('quantity', 1);
+        $variant = ProductVariant::with(['product', 'color', 'size'])->find($variant_id);
+        
         // 3. Lấy giỏ hàng hiện tại từ session hoặc khởi tạo mới
         $order = session()->get('order', []);
-
-    
-        // 4. Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
-        if (isset($order[$variant_id])) {
-            // Tăng số lượng sản phẩm
+        
+        if(isset($order[$variant_id])){
             $order[$variant_id]['quantity'] += $quantity;
+            $order[$variant_id]['total_price'] = $order[$variant_id]['unit_price'] * $order[$variant_id]['quantity'];
         } else {
-            // Thêm sản phẩm mới vào giỏ hàng
             $order[$variant_id] = [
                 'variant_id' => $variant_id,
+                'code' => $variant->product->code,
+                'product_name' => $variant->product->name,
+                'color' => $variant->color->name,
+                'size' => $variant->size->name,
                 'quantity' => $quantity,
+                'unit_price' => $variant->price, // Giả sử có trường price
+                'total_price' => $variant->price * $quantity,
             ];
         }
-    
-        // 5. Cập nhật giỏ hàng vào session
-        session()->put('order', $order);
-    
-        // 6. Trả về phản hồi JSON với giỏ hàng đã cập nhật
+
         return response()->json([
             'message' => 'Sản phẩm đã được thêm vào giỏ hàng!',
             'order' => $order,
@@ -130,7 +133,7 @@ class OrderController extends Controller
     }
     public function search_order(Request $request){
         $orders = Order::where('phone', 'LIKE', '%'. $request['search-order']. '%')
-        // ->orwhere('id', 'LIKE', '%'. $request['search-order']. '%')
+        ->orwhere('id', 'LIKE', '%'. str_replace('HD0', '', $request['search-order']) . '%')
         ->paginate(8);
         return view('Admin.Orders.index', compact('orders'));
     }
