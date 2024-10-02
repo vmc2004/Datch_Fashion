@@ -31,7 +31,7 @@ Route::controller(AuthController::class)->group(function(){
 });
 //user
 Route::middleware(['auth', 'user-access:user'])->group(function(){
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('home', [HomeController::class, 'index'])->name('home');
 });
 
 //admin

@@ -53,7 +53,7 @@
         <li class="nav-item">
           <a class="nav-link " href="{{ route('categories.index')}}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+              <i class="fa-solid fa-calendar-days" style="color: #f70707;" ></i>
             </div>
             <span class="nav-link-text ms-1">Danh mục</span>
           </a>
@@ -61,7 +61,7 @@
         <li class="nav-item">
             <a class="nav-link " href="{{url('/admin/tables')}}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-shirt fa-xl" style="color: #63E6BE;"></i>
+                <i class="fa-solid fa-shirt fa-xl" style="color: #a1d11e;"></i>
               </div>
               <span class="nav-link-text ms-1">Sản phẩm</span>
             </a>
@@ -83,7 +83,14 @@
           </a>
         </li>
 
-        
+        <li class="nav-item">
+          <a class="nav-link " href="{{ route('banners.index') }}">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="fa-regular fa-image" style="color: #020008;"></i>
+            </div>
+            <span class="nav-link-text ms-1">Banner</span>
+          </a>
+        </li>
        
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>

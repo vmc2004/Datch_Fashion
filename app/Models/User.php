@@ -39,8 +39,12 @@ class User extends Authenticatable
 
            
 
-            get: fn ($value) => ["member", "admin"][$value],
+            
+                    get: fn ($value) => $value !== null && in_array($value, [0, 1]) ? ["member", "admin"][$value] : "member",
+                );
+            
+            
 
-        );
+        
     }
 }
