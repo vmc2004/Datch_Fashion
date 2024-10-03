@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('image', 255)->nullable();
             $table->text('description')->nullable();
             $table->string('material')->nullable();
-            $table->boolean('status');
-            $table->boolean('is_active');
+            $table->boolean('status')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('brand_id')->constrained('brands');
             $table->softDeletes();
