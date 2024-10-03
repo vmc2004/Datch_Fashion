@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,10 +42,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    // protected function role(): Attribute
+    // {
+    //     return new Attribute(
+    //         get: fn ($value) => isset(["member", "admin"][$value]) ? ["member", "admin"][$value] : "unknown",
+    //     );
+    // Optional: Modify the role attribute if needed
     protected function role(): Attribute
     {
         return new Attribute(
-            get: fn ($value) => isset(["member", "admin"][$value]) ? ["member", "admin"][$value] : "unknown",
+
+            get: fn($value) => $value !== null && in_array($value, [0, 1]) ? ["member", "admin"][$value] : "member",
         );
     }
 }

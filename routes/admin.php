@@ -1,8 +1,7 @@
 <?php
 
-
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\UserController;
 
 
@@ -25,6 +24,8 @@ Route::prefix('admin')->group(function () {
 
        });
 
+    
+    
     // Đường dẫn danh mục sản phẩm
     Route::prefix('categories')->group(function () {
         // Route::get('/', function(){
@@ -77,12 +78,23 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
         Route::post('/create', [OrderController::class, 'store'])->name('orders.store');
+        Route::post('/add_product_order', [OrderController::class, 'add_product_order'])->name('orders.add_product_order');
         Route::get('/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
         Route::put('/update/{order}', [OrderController::class, 'update'])->name('orders.update');
         Route::delete('/destroy/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
         Route::get('/search', [OrderController::class, 'search_order'])->name('orders.search');
     });
     // Kết thúc order
+
+    //Banner
+    Route::prefix('banners')->group(function(){
+        Route::get('/', [BannerController::class, 'index'])->name('banners.index');
+        Route::get('/create', [BannerController::class, 'create'])->name('banners.create');
+        Route::post('/create', [BannerController::class, 'store'])->name('banners.store');
+        Route::get('/edit/{banner}', [BannerController::class, 'edit'])->name('banners.edit');
+        Route::put('/edit/{banner}', [BannerController::class, 'update'])->name('banners.update');
+        Route::delete('/destroy/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
+    });
 
 
 });

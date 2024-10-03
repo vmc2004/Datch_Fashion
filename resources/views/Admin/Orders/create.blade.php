@@ -22,8 +22,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Mã đơn Hàng</th>
+                        <th>Mã sản phẩm</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
@@ -41,8 +40,8 @@
                         <td>Đỏ</td>
                         <td>XL</td>
                         <td><input type="number" class="form-control" value="1"></td>
-                        <td>1,995,000 ₫</td>
-                        <td>1,995,000 ₫</td>
+                        <td>1,995,000</td>
+                        <td>1,995,000</td>
                         <td><i class="fas fa-trash-alt text-danger"></i></td>
                     </tr>
                 </tbody>
@@ -141,78 +140,4 @@
 </div>
 
 
-
-
-@endsection
-
-@section('js')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#search_product').on('keyup', function() {
-            let query = $(this).val();
-
-            if (query.length >= 1) {
-                $.ajax({
-                    url: '{{ route("search.products") }}',
-                    method: 'GET',
-                    data: { query: query },
-                    success: function(data) {
-                        $('#search-results').empty();
-                        if (data.length > 0) {
-                 
-                            $.each(data, function(index, variant) {
-                                console.log(variant);
-                                $('#search-results').append(`
-                                 <div class="product-container" data-id="${variant.id}"> 
-                                    <img src="https://placehold.co/50x50" alt="Vinamilk logo" class="product-image">
-                                    <div class="product-details">
-                                        <span class="product-name">${variant.color_id}</span>
-                                        <span class="product-code">${variant.code}</span>
-                                        <span class="product-price  ">${variant.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
-                                    </div>
-                                </div>
-                                   
-                                `);
-                            });
-                        } else {
-                            $('#search-results').append('<p class="text-danger">Không tìm thấy sản phẩm nào.</p>');
-                        }
-                    }
-                });
-            } else {
-                $('#search-results').empty();
-            }
-        });
-    });
-</script>
-   
-@endsection
-
-
-@section('style')
-<style>
-    .product-container {
-             display: flex;
-             align-items: center;
-             padding: 10px;
-         }
-         .product-image {
-             width: 50px;
-             height: 50px;
-             margin-right: 10px;
-         }
-         .product-details {
-             display: flex;
-             flex-direction: column;
-         }
-         .product-name {
-             font-size: 16px;
-             font-weight: bold;
-         }
-         .product-code {
-             font-size: 14px;
-             color: #333;
-         }
-   </style>
 @endsection

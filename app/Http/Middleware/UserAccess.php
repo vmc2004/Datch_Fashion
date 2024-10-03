@@ -20,7 +20,7 @@ class UserAccess
     }
     
     // Return a simple JSON response instead of a view
-    return response()->json(['message' => 'You do not have permission to access this page.'. $userRole], 403);
+    return response()->json(['message' => 'You do not have permission to access this page.'], 403);
 }
 
     
