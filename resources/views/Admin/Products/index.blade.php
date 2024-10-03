@@ -14,7 +14,6 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">ID</th>
                                         <th scope="col">Mã SKU</th>
                                         <th scope="col">Tên sản phẩm</th>
                                         <th scope="col">Hình ảnh</th>
@@ -28,8 +27,8 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $index => $item)
+                                        @if ($item->status=='1')
                                         <tr>
-                                            <td>{{ $item->id }}</td>
                                             <td>{{ $item->code }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>
@@ -47,10 +46,13 @@
                                             <td>{{ $item->category->name }}</td>
                                             <td>{{ $item->brand->name }}</td>
                                             <td>
-                                                <a href="" class="btn btn-success">Thêm biến thể</a>
-                                                <a href="" class="btn btn-primary">Danh sách biến thể</a>
+                                                <a href="{{route('productVariants.create',$item->id)}}" class="btn btn-success">Thêm biến thể</a>
+                                                <a href="{{route('productVariants.index',$item->id)}}" class="btn btn-primary">Danh sách biến thể</a>
                                                 <a href="{{ route('products.edit', $item->id) }}" class="btn btn-warning">Sửa</a>
                                         </tr>
+                                        @else
+                                            <div class=""></div>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>

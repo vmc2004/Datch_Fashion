@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\ProductVariantController;
 
 Route::prefix('admin')->group(function(){
     // Route truy cập trang index của admin
@@ -39,6 +39,17 @@ Route::prefix('admin')->group(function(){
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
     // Kết thúc sản phẩm
+
+    // Đường dẫn sản phẩm biến thể
+    Route::prefix('product-variants')->group(function () {
+        Route::get('/{id}', [ProductVariantController::class, 'index'])->name('productVariants.index');
+        Route::get('/create/{id}', [ProductVariantController::class, 'create'])->name('productVariants.create');
+        Route::post('/create', [ProductVariantController::class, 'store'])->name('productVariants.store');
+        Route::get('/show/{id}', [ProductVariantController::class, 'show'])->name('productVariants.show');
+        Route::get('/edit/{id}', [ProductVariantController::class, 'edit'])->name('productVariants.edit');
+        Route::put('/edit/{id}', [ProductVariantController::class, 'update'])->name('productVariants.update');
+        Route::delete('/destroy/{id}', [ProductVariantController::class, 'destroy'])->name('productVariants.destroy');
+    });
 
     // Đường dẫn order
         Route::prefix('orders')->group(function () {

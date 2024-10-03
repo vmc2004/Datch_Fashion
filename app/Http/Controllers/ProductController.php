@@ -62,7 +62,7 @@ class ProductController extends Controller
         // Xử lý upload hình ảnh nếu có
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads/products', 'public');
+            $imagePath = Storage::put('uploads/products',$request->file('image'));
         }
 
         // dd($request->all());
@@ -80,20 +80,6 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'brand_id' => $request->brand_id,
         ]);
-
-
-
-
-        for ($i = 0; $i < count($request['color_id']); $i++) {
-            $variant = [
-                'product_id' => $product->id,
-                'color_id' => $request['color_id'][$i],
-                'size_id' => $request['size_id'][$i],
-                'quantity' => $request['quantity'][$i],
-                'image' => $request['images'][$i]->store('uploads/products', 'public')
-            ];
-            ProductVariant::create($variant);
-        }
 
         return redirect()->route('products.index')->with('success', 'Product added successfully');
     }
@@ -163,7 +149,7 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Product added successfully');
+        return redirect()->route('products.index')->with('success','Product added successfully');
     }
 
     /**
@@ -177,4 +163,6 @@ class ProductController extends Controller
 
         return redirect()->route('products.index');
     }
+
+    
 }
