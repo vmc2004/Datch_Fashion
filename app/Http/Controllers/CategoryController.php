@@ -13,6 +13,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
+        
         $query = Category::query();
 
         // Phân trang 10 danh mục mỗi trang

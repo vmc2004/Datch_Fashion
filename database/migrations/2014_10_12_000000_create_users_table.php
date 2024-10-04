@@ -20,9 +20,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+<<<<<<< HEAD
+            $table->boolean('status');
+            $table->enum('role',['admin','member'])->default('member');
+=======
             $table->enum('role',['member','admin'])->default('member');
             $table->boolean('status')->default(true);
             $table->rememberToken();
+>>>>>>> 180afdd61f0aa4d7c2a248120a3bafb747a2d451
             $table->timestamps();
         });
         
