@@ -1,8 +1,7 @@
 <?php
-
-
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\UserController;
 
 
@@ -11,21 +10,17 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductController;
-use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
 
 Route::prefix('admin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');
    Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
 
-    //Route dang ki, dang nhap
-       Route::controller(AuthController::class)->group(function(){
-           Route::get('register', 'register')->name('register');
-
-       });
-
+    
+    
     // Đường dẫn danh mục sản phẩm
     Route::prefix('categories')->group(function () {
         // Route::get('/', function(){
@@ -46,16 +41,27 @@ Route::prefix('admin')->group(function () {
 
 
     // Đường dẫn sản phẩm
-    // Route::prefix('products')->group(function () {
-    //     Route::get('/', [ProductController::class, 'index'])->name('products.index');
-    //     Route::get('/create', [ProductController::class, 'create'])->name('products.create');
-    //     Route::post('/create', [ProductController::class, 'store'])->name('products.store');
-    //     Route::get('/show/{product}', [ProductController::class, 'show'])->name('products.show');
-    //     Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
-    //     Route::put('/edit/{product}', [ProductController::class, 'update'])->name('products.update');
-    //     Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-    // });
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/create', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/show/{id}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+    });
     // Kết thúc sản phẩm
+
+    // Đường dẫn sản phẩm biến thể
+    Route::prefix('product-variants')->group(function () {
+        Route::get('/{id}', [ProductVariantController::class, 'index'])->name('productVariants.index');
+        Route::get('/create/{id}', [ProductVariantController::class, 'create'])->name('productVariants.create');
+        Route::post('/create', [ProductVariantController::class, 'store'])->name('productVariants.store');
+        Route::get('/show/{id}', [ProductVariantController::class, 'show'])->name('productVariants.show');
+        Route::get('/edit/{id}', [ProductVariantController::class, 'edit'])->name('productVariants.edit');
+        Route::put('/edit/{id}', [ProductVariantController::class, 'update'])->name('productVariants.update');
+        Route::delete('/destroy/{id}', [ProductVariantController::class, 'destroy'])->name('productVariants.destroy');
+    });
 
     // Đường dẫn người dùng
     Route::prefix('users')->group(function () {
@@ -83,6 +89,16 @@ Route::prefix('admin')->group(function () {
         Route::get('/search', [OrderController::class, 'search_order'])->name('orders.search');
     });
     // Kết thúc order
+
+    //Banner
+    Route::prefix('banners')->group(function(){
+        Route::get('/', [BannerController::class, 'index'])->name('banners.index');
+        Route::get('/create', [BannerController::class, 'create'])->name('banners.create');
+        Route::post('/create', [BannerController::class, 'store'])->name('banners.store');
+        Route::get('/edit/{banner}', [BannerController::class, 'edit'])->name('banners.edit');
+        Route::put('/edit/{banner}', [BannerController::class, 'update'])->name('banners.update');
+        Route::delete('/destroy/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
+    });
 
 
         // Đường dẫn mã giảm giá
