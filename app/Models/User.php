@@ -33,18 +33,10 @@ class User extends Authenticatable
     ];
 
     // Optional: Modify the role attribute if needed
-    protected function role(): Attribute
-    {
-        return new Attribute(
-
-           
-
-            
-                    get: fn ($value) => $value !== null && in_array($value, [0, 1]) ? ["member", "admin"][$value] : "member",
-                );
+    
             
             
 
         
     }
-}
+

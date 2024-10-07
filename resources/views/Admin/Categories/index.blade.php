@@ -1,5 +1,6 @@
 @extends('Admin.layout.app')
 
+
 @section('content')
     <div class="row m-4 vh-90">
         <div class="col-lg-12 mb-lg-0 mb-4">
