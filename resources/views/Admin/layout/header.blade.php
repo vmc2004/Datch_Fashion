@@ -61,7 +61,7 @@
           </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="{{url('/admin/tables')}}">
+            <a class="nav-link " href="{{url('/admin/products')}}">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                 <i class="fa-solid fa-shirt fa-xl" style="color: #a1d11e;"></i>
               </div>
@@ -86,6 +86,11 @@
         </li>
 
         <li class="nav-item">
+          <a class="nav-link " href="{{route('coupons.index')}}">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="fa-solid fa-ticket fa-xl" ></i>
+            </div>
+            <span class="nav-link-text ms-1">Giảm giá</span>
           <a class="nav-link " href="{{ route('banners.index') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fa-regular fa-image" style="color: #020008;"></i>
