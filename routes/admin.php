@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\OrderController;
@@ -18,12 +19,7 @@ Route::prefix('admin')->group(function () {
     // Route::get('/', [HomeController::class, 'index'])->name('index');
    Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
 
-    //Route dang ki, dang nhap
-       Route::controller(AuthController::class)->group(function(){
-           Route::get('register', 'register')->name('register');
-
-       });
-
+  
     
     
     // Đường dẫn danh mục sản phẩm
@@ -120,4 +116,20 @@ Route::prefix('admin')->group(function () {
     });
 
 
+
 });
+        // Đường dẫn mã giảm giá
+        Route::prefix('coupons')->group(function () {
+            Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
+            Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
+            Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
+            Route::get('/edit/{order}', [CouponController::class, 'edit'])->name('coupons.edit');
+            Route::put('/update/{order}', [CouponController::class, 'update'])->name('coupons.update');
+            Route::delete('/destroy/{order}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+            Route::get('/search', [CouponController::class, 'search_order'])->name('coupons.search');
+        });
+        // Kết thúc mã giảm giá
+
+
+});
+
