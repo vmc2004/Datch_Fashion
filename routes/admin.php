@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\UserController;
@@ -9,9 +9,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductController;
-use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
 
 Route::prefix('admin')->group(function () {
     // Route truy cập trang index của admin
@@ -60,17 +60,40 @@ Route::prefix('admin')->group(function () {
 
 
     // Đường dẫn sản phẩm
-    // Route::prefix('products')->group(function () {
-    //     Route::get('/', [ProductController::class, 'index'])->name('products.index');
-    //     Route::get('/create', [ProductController::class, 'create'])->name('products.create');
-    //     Route::post('/create', [ProductController::class, 'store'])->name('products.store');
-    //     Route::get('/show/{product}', [ProductController::class, 'show'])->name('products.show');
-    //     Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('products.edit');
-    //     Route::put('/edit/{product}', [ProductController::class, 'update'])->name('products.update');
-    //     Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-    // });
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('products.index');
+        Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/create', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/show/{id}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+    });
     // Kết thúc sản phẩm
 
+    // Đường dẫn sản phẩm biến thể
+    Route::prefix('product-variants')->group(function () {
+        Route::get('/{id}', [ProductVariantController::class, 'index'])->name('productVariants.index');
+        Route::get('/create/{id}', [ProductVariantController::class, 'create'])->name('productVariants.create');
+        Route::post('/create', [ProductVariantController::class, 'store'])->name('productVariants.store');
+        Route::get('/show/{id}', [ProductVariantController::class, 'show'])->name('productVariants.show');
+        Route::get('/edit/{id}', [ProductVariantController::class, 'edit'])->name('productVariants.edit');
+        Route::put('/edit/{id}', [ProductVariantController::class, 'update'])->name('productVariants.update');
+        Route::delete('/destroy/{id}', [ProductVariantController::class, 'destroy'])->name('productVariants.destroy');
+    });
+
+    // Đường dẫn người dùng
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::get('/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/create', [UserController::class, 'store'])->name('users.store');
+        Route::get('/show/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::put('/{user}', [UserController::class, 'stateChange'])->name('users.stateChange');
+        Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    });
+    // Kết thúc người dùng
     // Đường dẫn order
         Route::prefix('orders')->group(function () {
         Route::get('/search/products', [OrderController::class, 'search'])->name('search.products');
@@ -85,7 +108,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/search', [OrderController::class, 'search_order'])->name('orders.search');
     });
     // Kết thúc order
-
+    
     //Banner
     Route::prefix('banners')->group(function(){
         Route::get('/', [BannerController::class, 'index'])->name('banners.index');
