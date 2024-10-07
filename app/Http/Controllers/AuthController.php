@@ -11,62 +11,63 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+   public function login() {
+    return view('login');
+   }
+
+   public function postLogin(Request $request) {
+    $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+    
+    if(Auth::attempt([
+        'email' => $request->email,
+        'password' => $request->password
+
+    ])){
+        
+        if(Auth::user()->role == 'admin'){
+            return redirect()->route('admin.index')->with(['message' => 'Đăng nhập thành công']);
+
+        }else{
+
+        }
+        
+    }else{
+        return redirect()->back()->with(['message' => 'Email hoặc password không đúng']);
+
     }
 
-    public function register(){
-        return view('auth/register');
-    }
+   }
 
-    public function registerSave(Request $request){
-        Validator::make($request->all(), [
-            'fullname' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed'
-            
-        ])->validate();
+   public function logout() {
+        Auth::logout();
+        return redirect()->route('login')->with(['message' => 'Đăng xuất thành công']);
+   }
 
-        User::create([
+   public function register(){
+    return view('register');
+   }
+
+   public function postRegister(Request $request){
+    $check = User::where('email', $request->email)->exists();
+    if($check){
+        return redirect()->back()->with([
+            'message' => 'Tài khoản email đã tồn tại'
+        ]);
+    }else{
+        $data = [
             'fullname' => $request->fullname,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => "0"
-
+            'password' =>Hash::make($request->password)
+        ];
+        $newUser = User::create($data);
+        return redirect()->route('login')->with([
+            'message' => 'Đăng kí thành công. Vui lòng đăng nhập'
         ]);
-        return redirect()->route('login');
-    }
-    public function login(){
-        return view('auth/login');
     }
 
-    public function loginAction(Request $request){
-        Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required'
-        ])->validate();
 
-        if (!Auth::attempt($request->only('email', 'password'))){
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed')
-
-            ]);
-    }
-    $request->session()->regenerate();
- 
-    if (auth()->user()->role == 'admin') {
-        return redirect()->route('admin/home');
-    } else {
-        return redirect()->route('home');
-    }
-     
-    return redirect()->route('admin/home');
-}
-
-    public function logout(Request $request){
-        Auth::guard('web')->logout();
-        $request->session()->invalidate();
-        return redirect('/login');
-    }
+   }
 }

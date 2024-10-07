@@ -23,7 +23,13 @@
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Create and account
                     </h1>
-                    <form action="{{ route('register.save') }}" method="POST" class="space-y-4 md:space-y-6">
+                    @if (session('message'))
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <strong class="font-bold"></strong>
+                        <span class="block sm:inline">{{ session('message') }}</span>
+                    </div>
+                @endif
+                    <form action="{{ route('postRegister') }}" method="POST" class="space-y-4 md:space-y-6">
                         @csrf
                         <div>
                             <label for="fullname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your name</label>
