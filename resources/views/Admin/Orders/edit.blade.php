@@ -20,7 +20,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Mã sản phẩm</th>
+                        <th>Mã đơn Hàng</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
@@ -132,5 +132,7 @@
     </div>
 </div>
 
+
+@endsection
 
 @endsection
