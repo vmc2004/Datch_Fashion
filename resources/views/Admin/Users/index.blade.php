@@ -48,7 +48,6 @@
                 <th>ID</th>
                 <th>Họ và tên</th>
                 <th>Email</th>
-                <th>Mật khẩu</th>
                 <th>Số điện thoại</th>
                 <th>Vai trò</th>
                 <th>Trạng thái</th>
@@ -61,14 +60,13 @@
                 <td>{{$user->id}}</td>
                 <td>{{$user->fullname}}</td>
                 <td>{{$user->email}}</td>
-                <td>{{$user->password}}</td>
                 <td>{{$user->phone}}</td>
                 <td><p class="text-{{$user->role=='admin'?'primary':'warning'}}">{{$user->role}}</p></td>
                 <td>
                   <form action="{{route('users.stateChange',$user)}}" method="post">
                     @csrf
                     @method('PUT')
-                    <button class="btn btn-sm {{$user->status?'btn-warning':'btn-success'}}">{{$user->status?'Ngừng kích hoạt':'kích hoạt'}}</button>
+                    <button class="btn btn-sm {{$user->status?'btn-success':'btn-warning'}}">{{$user->status?'Đang kích hoạt':'Ngừng kích hoạt'}}</button>
                   </form>
                 </td>
                 <td>

@@ -12,7 +12,8 @@ class CouponController extends Controller
      */
     public function index()
     {
-        return view('Admin.Coupons.index');
+        $coupons = Coupon::query()->paginate(8);
+        return view('Admin.Coupons.index',compact('coupons'));
     }
 
     /**
@@ -20,7 +21,7 @@ class CouponController extends Controller
      */
     public function create()
     {
-        //
+        return view('Admin.Coupons.create');
     }
 
     /**
@@ -28,7 +29,10 @@ class CouponController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $coupon = $request->all();
+        // dd($coupon);
+        Coupon::query()->create($coupon);
+        return redirect()->route('coupons.index')->with('message','Thêm mã giảm giá thành công');
     }
 
     /**
@@ -61,5 +65,13 @@ class CouponController extends Controller
     public function destroy(Coupon $coupon)
     {
         //
+    }
+
+    public function stateChangeCoupon(Coupon $coupon){
+        if ($coupon) {
+            $coupon->is_active = !$coupon->is_active;
+            $coupon->save();
+            return redirect()->route('coupons.index')->with('message',"Cập nhật trạng thái mã giảm giá thành công");
+        }
     }
 }

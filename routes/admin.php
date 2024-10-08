@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
@@ -17,11 +18,11 @@ use App\Http\Controllers\ProductVariantController;
 Route::prefix('admin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');
-   Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
+    Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
 
-  
-    
-    
+
+
+
     // Đường dẫn danh mục sản phẩm
     Route::prefix('categories')->group(function () {
         // Route::get('/', function(){
@@ -91,7 +92,7 @@ Route::prefix('admin')->group(function () {
     });
     // Kết thúc người dùng
     // Đường dẫn order
-        Route::prefix('orders')->group(function () {
+    Route::prefix('orders')->group(function () {
         Route::get('/search/products', [OrderController::class, 'search'])->name('search.products');
         Route::get('/products/{id}', [OrderController::class, 'show_result']);
         Route::get('/', [OrderController::class, 'index'])->name('orders.index');
@@ -104,9 +105,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/search', [OrderController::class, 'search_order'])->name('orders.search');
     });
     // Kết thúc order
-    
+
     //Banner
-    Route::prefix('banners')->group(function(){
+    Route::prefix('banners')->group(function () {
         Route::get('/', [BannerController::class, 'index'])->name('banners.index');
         Route::get('/create', [BannerController::class, 'create'])->name('banners.create');
         Route::post('/create', [BannerController::class, 'store'])->name('banners.store');
@@ -115,21 +116,17 @@ Route::prefix('admin')->group(function () {
         Route::delete('/destroy/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
     });
 
-
-
-});
         // Đường dẫn mã giảm giá
-        Route::prefix('coupons')->group(function () {
-            Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
-            Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
-            Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
-            Route::get('/edit/{order}', [CouponController::class, 'edit'])->name('coupons.edit');
-            Route::put('/update/{order}', [CouponController::class, 'update'])->name('coupons.update');
-            Route::delete('/destroy/{order}', [CouponController::class, 'destroy'])->name('coupons.destroy');
-            Route::get('/search', [CouponController::class, 'search_order'])->name('coupons.search');
-        });
-        // Kết thúc mã giảm giá
-
+    Route::prefix('coupons')->group(function () {
+        Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
+        Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
+        Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
+        Route::get('/edit/{order}', [CouponController::class, 'edit'])->name('coupons.edit');
+        Route::put('/update/{order}', [CouponController::class, 'update'])->name('coupons.update');
+        Route::delete('/destroy/{order}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+        Route::put('/{coupon}', [CouponController::class, 'stateChangeCoupon'])->name('coupons.stateChangeCoupon');
+        Route::get('/search', [CouponController::class, 'search_order'])->name('coupons.search');
+    });
+            // Kết thúc mã giảm giá
 
 });
-
