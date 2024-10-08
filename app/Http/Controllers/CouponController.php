@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendCoupon;
 use App\Models\Coupon;
+use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Mail;
 class CouponController extends Controller
 {
     /**
@@ -48,7 +50,7 @@ class CouponController extends Controller
      */
     public function edit(Coupon $coupon)
     {
-        //
+        return view('Admin.Coupons.edit', compact('coupon'));
     }
 
     /**
@@ -56,7 +58,15 @@ class CouponController extends Controller
      */
     public function update(Request $request, Coupon $coupon)
     {
-        //
+        {
+            $data = $request->all();
+
+            $coupon->update($data);
+
+            return redirect()->back()->with('message', 'Cập nhật thành công');
+            
+        }
+    
     }
 
     /**
@@ -73,5 +83,10 @@ class CouponController extends Controller
             $coupon->save();
             return redirect()->route('coupons.index')->with('message',"Cập nhật trạng thái mã giảm giá thành công");
         }
+    }
+    public function send_coupon(Coupon $coupon){
+        $email = User::query()->where('role' ,'admin')->pluck('email');
+        Mail::to($email)->send(new SendCoupon($coupon));
+        return redirect()->back()->with('message', 'Email đã được gửi thành công!');
     }
 }
