@@ -24,7 +24,6 @@
                 </div>
                 <h1>Đơn hàng</h1>
                 <div>
-                    <button class="btn btn-custom btn-success"><a href="{{route('orders.create')}}" class=" text-white"><i class="fas fa-plus "></i>Bán hàng</a></button>
                     <button class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</button>
                 </div>
             </div>
@@ -41,87 +40,30 @@
                 </thead>
                 <tbody>
                   
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028222</td>
-                        <td>29/12/2017 13:47</td>
-                        <td>Khách lẻ</td>
-                        <td>113,000</td>
-                        <td>0</td>
-                        <td>113,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028103</td>
-                        <td>24/12/2017 21:32</td>
-                        <td>Khách lẻ</td>
-                        <td>800,000</td>
-                        <td>400,000</td>
-                        <td>400,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028067</td>
-                        <td>24/12/2017 12:21</td>
-                        <td>Khách lẻ</td>
-                        <td>282,000</td>
-                        <td>0</td>
-                        <td>282,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028036</td>
-                        <td>23/12/2017 18:51</td>
-                        <td>Khách lẻ</td>
-                        <td>1,066,000</td>
-                        <td>0</td>
-                        <td>1,066,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028021</td>
-                        <td>23/12/2017 15:33</td>
-                        <td>Khách lẻ</td>
-                        <td>188,000</td>
-                        <td>0</td>
-                        <td>188,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD027616</td>
-                        <td>30/11/2017 11:48</td>
-                        <td>Khách lẻ</td>
-                        <td>217,500</td>
-                        <td>0</td>
-                        <td>217,500</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD027554</td>
-                        <td>27/11/2017 21:36</td>
-                        <td>Khách lẻ</td>
-                        <td>375,000</td>
-                        <td>0</td>
-                        <td>375,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class=""></td>
-                        <td>HD027496</td>
-                        <td>26/11/2017 19:17</td>
-                        <td>Khách lẻ</td>
-                        <td>188,000</td>
-                        <td>0</td>
-                        <td>188,000</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>113,000</td>
-                        <td>0</td>
-                        <td>113,000</td>
-                    </tr>
+                  @foreach ($orders as  $order)
+                  <tr>
+                    <td><a href="{{route('orders.edit', $order->id)}}"  class="d-flex justify-content-center" > HD0{{ $order->id }}</a></td>
+                    <td >{{ $order->created_at }}</td>
+                    <td  class="d-flex justify-content-center">{{ $order->fullname }}</td>
+                    @foreach ($order->OrderDetail as $detail )
+                        <td >{{number_format($detail->price)}} ₫</td>
+                    @endforeach
+                    <td>
+                        @if ($order->status == 'Đã giao hàng')
+                            <p class="text-success">Hoàn thành</p>
+                        @elseif ($order->status == 'Đơn hàng đã hủy')
+                            <p class="text-danger">Hủy đơn hàng</p>
+                        @elseif($order->status == 'Chờ xác nhận')
+                        <p>Đơn hàng mới</p>
+                        @else
+                        <p class="text-primary">Đang xử lý</p>
+                            
+                        @endif
+                        
+                    </td>
+                </tr>
+                  @endforeach
+                   
                 </tbody>
             </table>
             <div class="d-flex justify-content-between align-items-center">
