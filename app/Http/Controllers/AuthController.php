@@ -27,16 +27,13 @@ class AuthController extends Controller
 
     ])){
         
-        if(Auth::user()->role == 'admin'){
+        if(Auth::user()->role == 'admin'&& Auth::user()->status == 1){
             return redirect()->route('admin.index')->with(['message' => 'Đăng nhập thành công']);
-
+        }elseif (Auth::user()->role == 'member'&& Auth::user()->status == 1) {
+            return redirect()->route('home')->with(['message' => 'Đăng nhập thành công']);
         }else{
-
-        }
-        
-    }else{
-        return redirect()->back()->with(['message' => 'Email hoặc password không đúng']);
-
+            return redirect()->back()->with(['message' => 'Email hoặc password không đúng']);
+        } 
     }
 
    }

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
-            $table->decimal('discount_percentage', 5, 2)->nullable(); // Giảm giá theo phần trăm
-            $table->decimal('discount_amount', 10, 2)->nullable(); // Giảm giá theo số tiền
+            $table->string('code')->unique(); // mã giảm giá
+            $table->decimal('discount', 10, 2); // số tiền hoặc số % giảm giá
+            $table->enum('discount_type', ['fixed', 'percent']); // Loại giảm giá
             $table->integer('usage_limit')->nullable(); // Giới hạn sử dụng
             $table->integer('used_count')->default(0); // Số lần đã sử dụng
             $table->dateTime('start_date')->nullable(); // Ngày bắt đầu
