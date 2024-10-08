@@ -86,16 +86,28 @@
         </li>
 
         <li class="nav-item">
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 618d2eb867065ddaf8bf35c5b46d29ec8a0c36e1
           <a class="nav-link " href="{{route('coupons.index')}}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fa-solid fa-ticket fa-xl" ></i>
             </div>
             <span class="nav-link-text ms-1">Giảm giá</span>
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 618d2eb867065ddaf8bf35c5b46d29ec8a0c36e1
           <a class="nav-link " href="{{ route('banners.index') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="fa-regular fa-image" style="color: #020008;"></i>
             </div>
             <span class="nav-link-text ms-1">Banner</span>
+<<<<<<< HEAD
+>>>>>>> 5f6e103d43f2af46e64f2ec436b85e5a4fda0a29
+=======
+>>>>>>> 618d2eb867065ddaf8bf35c5b46d29ec8a0c36e1
           </a>
         </li>
        
