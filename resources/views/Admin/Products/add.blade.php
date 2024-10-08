@@ -120,20 +120,19 @@
                                 @enderror
                             </div>
 
-                            <h3>Biến thể sản phẩm</h3>
+                            {{-- <h3>Biến thể sản phẩm</h3>
                             <div class="mb-3">
                                 <button class="btn btn-primary" id="add_variant">Thêm biến thể</button>
                             </div>
                             <div id="variant">
 
                             </div>
-
-
+                            --}}
                             <div class="mb-3 d-flex justify-content-center">
                                 <button type="submit" class="btn btn-success">Thêm mới</button>
                             </div>
                         </form>
-                        <script>
+                        {{-- <script>
                             var add_variant = document.querySelector('#add_variant');
                             var variant = document.querySelector('#variant');
                             var html = ``;
@@ -197,7 +196,7 @@
                                     colorPreview.style.backgroundColor = colorCode;
                                 }
                             });
-                        </script>
+                        </script> --}}
                     </div>
                 </div>
             </div>

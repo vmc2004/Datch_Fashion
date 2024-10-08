@@ -63,7 +63,7 @@ class ProductController extends Controller
         // Xử lý upload hình ảnh nếu có
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads/products', 'public');
+            $imagePath = Storage::put('uploads/products',$request->file('image'));
         }
 
         // dd($request->all());
@@ -82,20 +82,6 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'brand_id' => $request->brand_id,
         ]);
-
-
-
-
-        for ($i = 0; $i < count($request['color_id']); $i++) {
-            $variant = [
-                'product_id' => $product->id,
-                'color_id' => $request['color_id'][$i],
-                'size_id' => $request['size_id'][$i],
-                'quantity' => $request['quantity'][$i],
-                'image' => $request['images'][$i]->store('uploads/products', 'public')
-            ];
-            ProductVariant::create($variant);
-        }
 
         return redirect()->route('products.index')->with('success', 'Product added successfully');
     }
@@ -169,39 +155,7 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
         ]);
 
-        foreach ($request['color_id'] as $index => $color_id) {
-
-            if (isset($request->images[$index])) {
-                // Lưu ảnh tương ứng với từng biến thể
-                $imagePath = $request->images[$index]->store('uploads/products/variants', 'public');
-            } else {
-                // Nếu không có ảnh mới, giữ nguyên ảnh cũ nếu đang ở chế độ chỉnh sửa
-                $imagePath = $request->existing_images[$index] ?? null;
-            }
-            $data_variant = [
-                'product_id' => $product->id,
-                'color_id' => $color_id,
-                'size_id' => $request['size_id'][$index],
-                'quantity' => $request['quantity'][$index],
-                // 'image' => $imagePath
-            ];
-        }
-        // dd($data_variant);
-        $find_variant = ProductVariant::query()
-            ->where('product_id', $product->id)
-            ->where('color_id', $color_id)
-            ->where('size_id', $request['size_id'][$index])
-            ->first();
-
-        // dd($find_variant);
-
-        if ($find_variant) {
-            $find_variant->update($data_variant);
-        } else {
-            // 
-            dd('Không update đc');
-        }
-        return redirect()->route('products.index')->with('success', 'Product added successfully');
+        return redirect()->route('products.index')->with('success','Product added successfully');
     }
 
     /**
@@ -215,4 +169,6 @@ class ProductController extends Controller
 
         return redirect()->route('products.index');
     }
+
+    
 }

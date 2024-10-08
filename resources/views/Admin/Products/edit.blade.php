@@ -50,8 +50,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-lable">Mô tả sản phẩm:</label>
-                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" cols="30"
-                                    rows="3">{{ old('description', $product['description']) }}</textarea>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" cols="30" rows="3">{{ old('description', $product['description']) }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -88,8 +87,8 @@
                                 {{-- <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" value="{{old('image')}}"> --}}
                                 <select id="is_active" name="is_active"
                                     class="form-select @error('is_active') is-invalid @enderror">
-                                    <option value="1" {{ $product->is_active ? 'selected' : '' }}>Hoạt động</option>
-                                    <option value="0" {{ !$product->is_active ? 'selected' : '' }}>Không hoạt động</option>
+                                    <option value="1" {{ $product->is_active ? 'selected' : '' }}>Còn hàng</option>
+                                    <option value="0" {{ !$product->is_active ? 'selected' : '' }}>Hết hàng</option>
                                 </select>
                                 @error('is_active')
                                     <div class="invalid-feedback">
@@ -138,6 +137,8 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+
+                                <input type="color" name="mamau">
                             </div>
                             <div class="mb-3 d-flex justify-content-center">
                                 <button class="btn btn-success">Sửa</button>
