@@ -14,7 +14,7 @@ class Brand extends Model
 
     protected $fillable = ['name', 'logo'];
 
-    public $timestamps = false;
+    // public $timestamps = false;
     
     protected $dates = ['deleted_at'];
 }

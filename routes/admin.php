@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -39,6 +40,17 @@ Route::prefix('admin')->group(function(){
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
     // Kết thúc sản phẩm
+
+    // Đường dẫn thương hiệu
+    Route::prefix('brands')->group(function () {
+        Route::get('/', [BrandController::class, 'index'])->name('brands.index');
+        Route::get('/create', [BrandController::class, 'create'])->name('brands.create');
+        Route::post('/create', [BrandController::class, 'store'])->name('brands.store');
+        Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
+        Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('brands.edit');
+        Route::put('/edit/{id}', [BrandController::class, 'update'])->name('brands.update');
+        Route::delete('/destroy/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    });
 
     // Đường dẫn order
         Route::prefix('orders')->group(function () {

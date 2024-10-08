@@ -44,6 +44,7 @@ class ProductController extends Controller
             'code' => 'required|string|max:9|unique:products,code',
             'name' => 'required|string|max:199',
             'image' => 'nullable|image|max:2048',
+            'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'material' => 'nullable|string',
             'status' => 'required|boolean',
@@ -73,6 +74,7 @@ class ProductController extends Controller
             'name' => $request->name,
             'slug' => $slug,
             'image' => $imagePath,
+            'price' => $request->price,
             'description' => $request->description,
             'material' => $request->material,
             'status' => $request->status,
@@ -114,7 +116,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $categories = Category::all();
         $brands = Brand::all();
-        return view('Admin.Products.edit', compact('product', 'categories', 'brands'));
+        $colors = Color::all();
+        $sizes = Size::all();
+        return view('Admin.Products.edit', compact('product', 'categories', 'brands', 'sizes', 'colors'));
     }
 
     /**
@@ -126,6 +130,7 @@ class ProductController extends Controller
             'code' => 'required|string|max:9|unique:products,code,' . $id,
             'name' => 'required|string|max:199',
             'image' => 'nullable|image|max:2048',
+            'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'material' => 'nullable|string',
             'status' => 'required|boolean',
@@ -155,6 +160,7 @@ class ProductController extends Controller
             'name' => $request->name,
             'slug' => $slug,
             'image' => $imagePath,
+            'price' => $request->price,
             'description' => $request->description,
             'material' => $request->material,
             'status' => $request->status,
@@ -163,6 +169,38 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
         ]);
 
+        foreach ($request['color_id'] as $index => $color_id) {
+
+            if (isset($request->images[$index])) {
+                // Lưu ảnh tương ứng với từng biến thể
+                $imagePath = $request->images[$index]->store('uploads/products/variants', 'public');
+            } else {
+                // Nếu không có ảnh mới, giữ nguyên ảnh cũ nếu đang ở chế độ chỉnh sửa
+                $imagePath = $request->existing_images[$index] ?? null;
+            }
+            $data_variant = [
+                'product_id' => $product->id,
+                'color_id' => $color_id,
+                'size_id' => $request['size_id'][$index],
+                'quantity' => $request['quantity'][$index],
+                // 'image' => $imagePath
+            ];
+        }
+        // dd($data_variant);
+        $find_variant = ProductVariant::query()
+            ->where('product_id', $product->id)
+            ->where('color_id', $color_id)
+            ->where('size_id', $request['size_id'][$index])
+            ->first();
+
+        // dd($find_variant);
+
+        if ($find_variant) {
+            $find_variant->update($data_variant);
+        } else {
+            // 
+            dd('Không update đc');
+        }
         return redirect()->route('products.index')->with('success', 'Product added successfully');
     }
 
