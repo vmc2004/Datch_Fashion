@@ -12,7 +12,8 @@ class SizeController extends Controller
      */
     public function index()
     {
-        //
+        $sizes = Size::query()->latest('id')->paginate(10);
+        return view('Admin.Sizes.index',compact('sizes'));
     }
 
     /**
@@ -20,7 +21,7 @@ class SizeController extends Controller
      */
     public function create()
     {
-        //
+        return view('Admin.Sizes.create');
     }
 
     /**
@@ -28,7 +29,12 @@ class SizeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|unique:sizes|max:25',
+        ]);
+
+        Size::query()->create($validated);
+        return redirect()->route('sizes.index')->with('message','Thêm mới thành công');
     }
 
     /**
@@ -44,7 +50,7 @@ class SizeController extends Controller
      */
     public function edit(Size $size)
     {
-        //
+        return view('Admin.Sizes.edit',compact('size'));
     }
 
     /**
@@ -52,7 +58,12 @@ class SizeController extends Controller
      */
     public function update(Request $request, Size $size)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|unique:sizes|max:25',
+        ]);
+
+        $size->update($validated);
+        return redirect()->back()->with('message','Cập nhật thành công');
     }
 
     /**
@@ -60,6 +71,7 @@ class SizeController extends Controller
      */
     public function destroy(Size $size)
     {
-        //
+        $size->delete();
+        return redirect()->route('sizes.index')->with('success','Xóa thành công');
     }
 }
