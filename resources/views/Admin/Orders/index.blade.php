@@ -24,7 +24,6 @@
                 </div>
                 <h1>Đơn hàng</h1>
                 <div>
-                    <button class="btn btn-custom btn-success"><a href="{{route('orders.create')}}" class=" text-white"><i class="fas fa-plus "></i>Bán hàng</a></button>
                     <button class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</button>
                 </div>
             </div>

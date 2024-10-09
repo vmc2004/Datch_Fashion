@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -57,6 +58,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->all();
+        // dd($data);
         $user->update($data);
         return redirect()->route('users.index')->with('message','Cập nhật người dùng thành công');
     }
@@ -76,5 +78,10 @@ class UserController extends Controller
             $user->save();
             return redirect()->route('users.index')->with('message',"Cập nhật trạng thái người dùng $user->fullname thành công");
         }
+    }
+
+    public function search(Request $request){
+        $users = User::where('fullname', 'like', '%' .$request->input('fullname'). '%')->paginate(8);
+        return view('Admin.users.index', compact('users'));
     }
 }
