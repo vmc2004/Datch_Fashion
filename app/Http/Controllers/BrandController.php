@@ -13,7 +13,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        
+        $brands = Brand::all();
+        return view("Admin.Brands.index", compact('brands'));
     }
 
     /**
@@ -29,7 +30,24 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:199',
+            'logo' => 'required|image|max:2048',
+        ]);
+
+        $logoPath = null;
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('uploads/products', 'public');
+        }
+        // dd($logoPath);
+
+        $brand = Brand::create([
+            'name' => $request->name,
+            'logo' => $logoPath
+        ]);
+
+        return redirect()->route('brands.index')->with('success', 'Thêm mới thương hiệu thành công');
+
     }
 
     /**
@@ -45,7 +63,9 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand, $id)
     {
-        //
+        $brand = Brand::FindorFail($id);
+        return view('Admin.Brands.edit', compact('brand'));
+
     }
 
     /**
@@ -53,7 +73,32 @@ class BrandController extends Controller
      */
     public function update(Request $request, Brand $brand, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:199',
+            'logo' => 'required|image|max:2048',
+        ]);
+
+        $brand = Brand::FindorFail($id);
+
+        $logoPath = $brand->logo;
+        if ($request->hasFile('logo')) {
+            if ($brand->logo) {
+                Storage::disk('public')->delete('logo');
+            }
+            $logoPath = $request->file('logo')->store('uploads/products', 'public');
+        } else {
+            $logoPath = $brand->logo;
+        }
+        // dd($logoPath);
+
+        $brand->update([
+            'name' => $request->name,
+            'logo' => $logoPath
+        ]);
+        // dd($brand);
+
+        return redirect()->route('brands.index')->with('success', 'Brand updated successfully');
+
     }
 
     /**
@@ -61,6 +106,11 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand, $id)
     {
-        //
+        $brand = Brand::FindorFail($id);
+
+        $brand->delete();
+
+        return redirect()->route('brands.index');
+
     }
 }
