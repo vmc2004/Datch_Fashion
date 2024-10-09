@@ -27,8 +27,7 @@
         </div>
     @endif
 
-    <div class="container" style="width: 60%">
-        <h2>Thêm mới mã giảm giá</h2>
+        <h2 class="text-center">Thêm mới mã giảm giá</h2>
         <form method="POST" action="{{ route('coupons.store') }}" enctype="multipart/form-data">
             @csrf
 
@@ -37,10 +36,6 @@
                 <input type="text" name="code" class="form-control" id="">
             </div>
             
-            <div class="mb-3">
-                <label for="" class="form-label">Giảm giá</label>
-                <input type="number" name="discount" class="form-control" id="">
-            </div>
             
             <div class="form-group">
                 <label for="my-select">Loại giảm giá</label>
@@ -49,17 +44,37 @@
                     <option value="percent">Phần trăm</option>
                 </select>
             </div>
+            
+            <div class="mb-3">
+                <label for="" class="form-label">Giảm giá</label>
+                <input type="number" name="discount" class="form-control" id="">
+            </div>
 
             <div class="mb-3">
-                <label for="" class="form-label">Giới hạn sử dụng</label>
+                <label for="" class="form-label">Số lượng mã</label>
                 <input type="number" name="usage_limit" class="form-control" id="">
             </div>
 
             <div class="mb-3">
-                <label for="" class="form-label">Đã sử dụng</label>
-                <input type="number" name="used_count" class="form-control" id="">
+                <label for="" class="form-label">Giới hạn số lượng mã cho người dùng </label>
+                <input type="number" name="usage_limit_per_user" class="form-control" id="">
             </div>
 
+            {{-- <div class="mb-3">
+                <label for="" class="form-label">Đã sử dụng</label>
+                <input type="number" name="used_count" class="form-control" id="">
+            </div> --}}
+
+
+            <div class="mb-3">
+                <label for="" class="form-label">Tổng tiền tối thiểu</label>
+                <input type="number" name="minimum_amount" class="form-control" id="">
+            </div>
+
+            <div class="mb-3">
+                <label for="" class="form-label">Tổng tiền tối đa</label>
+                <input type="number" name="maximum_amount" class="form-control" id="">
+            </div>
 
             <div class="mb-3">
                 <label for="" class="form-label">Ngày bắt đầu</label>
@@ -67,7 +82,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="" class="form-label">Ngày bắt đầu</label>
+                <label for="" class="form-label">Ngày kết thúc</label>
                 <input type="datetime-local" name="end_date" class="form-control" id="">
             </div>
 
@@ -80,7 +95,6 @@
   <div class="chart">
     <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
   </div>
-</div>
 </div>
 </div>
 </div>
