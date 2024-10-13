@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
@@ -71,6 +72,17 @@ Route::prefix('admin')->group(function () {
     });
     // Kết thúc sản phẩm
 
+    // Đường dẫn thương hiệu
+    Route::prefix('brands')->group(function () {
+        Route::get('/', [BrandController::class, 'index'])->name('brands.index');
+        Route::get('/create', [BrandController::class, 'create'])->name('brands.create');
+        Route::post('/create', [BrandController::class, 'store'])->name('brands.store');
+        Route::get('/show/{id}', [BrandController::class, 'show'])->name('brands.show');
+        Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('brands.edit');
+        Route::put('/edit/{id}', [BrandController::class, 'update'])->name('brands.update');
+        Route::delete('/destroy/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    });
+
     // Đường dẫn sản phẩm biến thể
     Route::prefix('product-variants')->group(function () {
         Route::get('/{id}', [ProductVariantController::class, 'index'])->name('productVariants.index');
@@ -138,14 +150,16 @@ Route::prefix('admin')->group(function () {
         Route::delete('/destroy/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
     });
 });
-// Đường dẫn mã giảm giá
-Route::prefix('coupons')->group(function () {
-    Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
-    Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
-    Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
-    Route::get('/edit/{order}', [CouponController::class, 'edit'])->name('coupons.edit');
-    Route::put('/update/{order}', [CouponController::class, 'update'])->name('coupons.update');
-    Route::delete('/destroy/{order}', [CouponController::class, 'destroy'])->name('coupons.destroy');
-    Route::get('/search', [CouponController::class, 'search_order'])->name('coupons.search');
-});
-        // Kết thúc mã giảm giá
+     // Đường dẫn mã giảm giá
+     Route::prefix('coupons')->group(function () {
+        Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
+        Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
+        Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
+        Route::post('/send_coupon/{coupon}', [CouponController::class, 'send_coupon'])->name('coupons.send_coupon');
+        Route::get('/edit/{coupon}', [CouponController::class, 'edit'])->name('coupons.edit');
+        Route::put('/update/{coupon}', [CouponController::class, 'update'])->name('coupons.update');
+        Route::delete('/destroy/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+        Route::put('/{coupon}', [CouponController::class, 'stateChangeCoupon'])->name('coupons.stateChangeCoupon');
+        Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
+    });
+            // Kết thúc mã giảm giá
