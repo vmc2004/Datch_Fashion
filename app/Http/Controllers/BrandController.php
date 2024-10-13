@@ -14,8 +14,7 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::all();
-        return view('Admin.Brands.index', compact('brands'));
-
+        return view("Admin.Brands.index", compact('brands'));
     }
 
     /**
@@ -56,7 +55,7 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        //
+        
     }
 
     /**
