@@ -45,7 +45,7 @@
                     <td><a href="{{route('orders.edit', $order->id)}}"  class="d-flex justify-content-center" > HD0{{ $order->id }}</a></td>
                     <td >{{ $order->created_at }}</td>
                     <td  class="d-flex justify-content-center">{{ $order->fullname }}</td>
-                    @foreach ($order->OrderDetail as $detail )
+                    @foreach ($order->OrderDetails as $detail )
                         <td >{{number_format($detail->price)}} ₫</td>
                     @endforeach
                     <td>
