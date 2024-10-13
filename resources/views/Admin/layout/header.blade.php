@@ -115,14 +115,12 @@
                             <i class="fa-solid fa-ticket fa-xl"></i>
                         </div>
                         <span class="nav-link-text ms-1">Giảm giá</span>
-
                         <a class="nav-link " href="{{ route('banners.index') }}">
                             <div
                                 class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                                 <i class="fa-regular fa-image" style="color: #020008;"></i>
                             </div>
                             <span class="nav-link-text ms-1">Banner</span>
-
                         </a>
                 </li>
 
@@ -131,7 +129,7 @@
                       <div
                           class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                           {{-- <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i> --}}
-                          <i class="fa-solid fa-copyright fa-xl" style="color: chocolate"></i>
+                          <i class="fa-solid fa-copyright" style="color: coral"></i>
                       </div>
                       <span class="nav-link-text ms-1">Thương hiệu</span>
                   </a>
