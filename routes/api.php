@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\UserController as ApiUserController;
 
 
 /*
@@ -25,3 +26,5 @@ Route::apiResource('products', ProductController::class);
 Route::get('order/{user_id}', [OrderController::class, 'order_user']);
 Route::get('orders', [OrderController::class, 'index']);
 Route::get('detailOrder/{order}', [OrderController::class,'show']);
+
+Route::apiResource('users',ApiUserController::class);

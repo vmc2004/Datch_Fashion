@@ -35,6 +35,12 @@
                 <label for="" class="form-label">Họ và tên</label>
                 <input type="text" value="{{$user->fullname}}" name="fullname" class="form-control" id="">
             </div>
+
+            <div class="mb-3">
+                <label for="" class="form-label">Ảnh đại diện</label>
+                <input type="file" name="avatar" class="form-control" id="">
+                <img src="{{asset('storage/'.$user->avatar)}}" width="100px" alt="">
+            </div>
             
             <div class="mb-3">
                 <label for="" class="form-label">Số điện thoại</label>
@@ -51,7 +57,9 @@
                 <input type="email" name="email" value="{{$user->email}}" class="form-control" id="">
             </div>
 
-
+            @if ($user->email == Auth::user()->email)
+                <div class=""></div>
+            @else
             <div class="mb-3">
                 <label for="" class="form-label">password</label>
                 <input type="text" name="password" value="{{$user->password}}" class="form-control" id="">
@@ -64,6 +72,7 @@
                     <option value="admin" {{$user->role=='admin'?'selected':''}}>Admin</option>
                 </select>
             </div>
+            @endif
             <button type="submit" class="btn btn-primary">Cập nhật</button>
             <a href="{{route('users.index')}}" class="btn btn-success">Quay lại</a>
         </form>
