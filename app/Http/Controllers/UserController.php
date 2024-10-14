@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -31,7 +32,10 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $user = $request->all();
+        $user = $request->except('avatar');
+        if ($request->hasFile('avatar')) {
+            $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
+        }
         User::query()->create($user);
         return redirect()->route('users.index')->with('message','Thêm mới người dùng thành công');
     }
@@ -57,8 +61,15 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $data = $request->all();
-        // dd($data);
+        $data = $request->except('avatar');
+        if ($request->hasFile('avatar')) {
+            $oldAvatar = $user->avatar;
+            if (Storage::exists($oldAvatar)) {
+                Storage::delete($oldAvatar);
+            }
+            $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
+        }
+
         $user->update($data);
         return redirect()->route('users.index')->with('message','Cập nhật người dùng thành công');
     }

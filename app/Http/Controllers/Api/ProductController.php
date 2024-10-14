@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Brand;
 use App\Models\Product;
-use App\Models\Category;
-use App\Models\Color;
-use App\Models\ProductVariant;
-use App\Models\Size;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -20,19 +16,10 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::orderByDesc('id')->paginate(10);
-        return view('Admin.Products.index', compact('products'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $categories = Category::all();
-        $colors = Color::all();
-        $sizes = Size::all();
-        $brands = Brand::all();
-        return view('Admin.Products.add', compact('categories', 'colors', 'sizes', 'brands'));
+        return response()->json([
+            'success' => true,
+            'data' => $products,
+        ]);
     }
 
     /**
@@ -46,29 +33,19 @@ class ProductController extends Controller
             'image' => 'nullable|image|max:2048',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'material' => 'nullable|string',
             'status' => 'required|boolean',
             'is_active' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
-            'color_id.*' => 'required|exists:colors,id',
-            'size_id.*' => 'required|exists:sizes,id',
-            'quantity.*' => 'required|integer|min:0',
-            'images.*' => 'nullable|image|max:2048',
         ]);
 
-        // Tạo slug từ tên sản phẩm
         $slug = Str::slug($request->name, '-');
-
-        // Xử lý upload hình ảnh nếu có
         $imagePath = null;
+
         if ($request->hasFile('image')) {
-            $imagePath = Storage::put('uploads/products',$request->file('image'));
+            $imagePath = Storage::put('uploads/products', $request->file('image'));
         }
 
-        // dd($request->all());
-
-        // Tạo sản phẩm mới
         $product = Product::create([
             'code' => $request->code,
             'name' => $request->name,
@@ -76,41 +53,35 @@ class ProductController extends Controller
             'image' => $imagePath,
             'price' => $request->price,
             'description' => $request->description,
-            'material' => $request->material,
             'status' => $request->status,
             'is_active' => $request->is_active,
             'category_id' => $request->category_id,
             'brand_id' => $request->brand_id,
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Product added successfully');
+        return response()->json([
+            'success' => true,
+            'data' => $product,
+            'message' => 'Product created successfully',
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function show(string $id)
     {
         $product = Product::findOrFail($id);
-        $categories = Category::all();
-        $brands = Brand::all();
-        $colors = Color::all();
-        $sizes = Size::all();
-        return view('Admin.Products.edit', compact('product', 'categories', 'brands', 'sizes', 'colors'));
+        return response()->json([
+            'success' => true,
+            'data' => $product,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product, $id)
+    public function update(Request $request, string $id)
     {
         $request->validate([
             'code' => 'required|string|max:9|unique:products,code,' . $id,
@@ -118,29 +89,23 @@ class ProductController extends Controller
             'image' => 'nullable|image|max:2048',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
-            'material' => 'nullable|string',
             'status' => 'required|boolean',
             'is_active' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
         ]);
 
-        $product = Product::FindorFail($id);
-        // Tạo slug từ tên sản phẩm
+        $product = Product::findOrFail($id);
         $slug = Str::slug($request->name, '-');
 
-        // Xử lý upload hình ảnh nếu có
-        $imagePath = null;
+        $imagePath = $product->image;
         if ($request->hasFile('image')) {
             if ($product->image) {
-                Storage::disk('public')->delete('image');
+                Storage::disk('public')->delete($product->image);
             }
             $imagePath = $request->file('image')->store('uploads/products', 'public');
-        } else {
-            $imagePath = $product->image;
         }
 
-        // Tạo sản phẩm mới
         $product->update([
             'code' => $request->code,
             'name' => $request->name,
@@ -148,27 +113,33 @@ class ProductController extends Controller
             'image' => $imagePath,
             'price' => $request->price,
             'description' => $request->description,
-            'material' => $request->material,
             'status' => $request->status,
             'is_active' => $request->is_active,
             'category_id' => $request->category_id,
             'brand_id' => $request->brand_id,
         ]);
 
-        return redirect()->route('products.index')->with('success','Product added successfully');
+        return response()->json([
+            'success' => true,
+            'data' => $product,
+            'message' => 'Product updated successfully',
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product, $id)
+    public function destroy(string $id)
     {
-        $product = Product::FindorFail($id);
-
+        $product = Product::findOrFail($id);
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
         $product->delete();
 
-        return redirect()->route('products.index');
+        return response()->json([
+            'success' => true,
+            'message' => 'Product deleted successfully',
+        ]);
     }
-
-    
 }

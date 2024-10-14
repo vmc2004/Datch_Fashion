@@ -30,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($order->OrderDetail as $detail)
+                    @foreach ($order->OrderDetails as $detail)
                     <tr>
                         <td>{{$detail->variant->product->code}}</td>
                         <td style="max-width:400px" class="text-truncate">{{ $detail->variant->product->name }}</td>
@@ -132,7 +132,5 @@
     </div>
 </div>
 
-
-@endsection
 
 @endsection
