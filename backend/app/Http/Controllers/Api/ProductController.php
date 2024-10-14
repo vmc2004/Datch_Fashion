@@ -15,11 +15,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderByDesc('id')->paginate(10);
-        return response()->json([
-            'success' => true,
-            'data' => $products,
-        ]);
+        $products = Product::all();
+        return response()->json(['success' => true, 'data' => $products]);
     }
 
     /**
@@ -142,15 +139,9 @@ class ProductController extends Controller
             'message' => 'Product deleted successfully',
         ]);
     }
-
     public function search(Request $request)
     {
-        $keyword = $request->input('keyword');
-        $products = Product::where('name', 'LIKE', '%' . $keyword . '%')->get();
-        return response()->json([
-            'success' => true,
-            'message' => 'Products retrieved successfully',
-            'data' => $products,
-        ]);
+        $keyword = $request->query('keyword');
+        return Product::where('name', 'LIKE', "%{$keyword}%")->get(['id', 'name', 'image']);
     }
 }
