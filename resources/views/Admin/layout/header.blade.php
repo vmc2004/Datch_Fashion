@@ -126,16 +126,16 @@
                         </a>
                 </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                   <a class="nav-link " href="{{ route('brands.index') }}">
                       <div
                           class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                          {{-- <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i> --}}
+                          <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i>
                           <i class="fa-solid fa-copyright fa-xl" style="color: chocolate"></i>
                       </div>
                       <span class="nav-link-text ms-1">Thương hiệu</span>
                   </a>
-              </li>
+              </li> --}}
 
                 <li class="nav-item mt-3">
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>

@@ -10,7 +10,19 @@ class Category extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'image', 'is_active'];
+    protected $fillable = ['name', 'image', 'is_active','parent_id'];
+
+    // Quan hệ danh mục con
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    // Quan hệ danh mục cha
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
 
     public $timestamps = false;
     

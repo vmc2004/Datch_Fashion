@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,10 @@ class CategoryController extends Controller
         // Lấy các danh mục cha (parent_id = null) và load các danh mục con
         $categories = Category::whereNull('parent_id')->with('children')->paginate(10);
 
-        return view('Admin.Categories.index', compact('categories'));
+        return response()->json([
+            'success' => true,
+            'data' => $categories
+        ], 200);
     }
 
     /**
@@ -25,7 +29,10 @@ class CategoryController extends Controller
     public function search(Request $request)
     {
         $categories = Category::where('name', 'like', '%' . $request->input('name') . '%')->with('children')->paginate(10);
-        return view('Admin.Categories.index', compact('categories'));
+        return response()->json([
+            'success' => true,
+            'data' => $categories
+        ], 200);
     }
 
     /**
@@ -47,17 +54,10 @@ class CategoryController extends Controller
 
         $categories = $query->whereNull('parent_id')->with('children')->paginate(10);
 
-        return view('Admin.Categories.index', compact('categories'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Lấy tất cả các danh mục (kể cả danh mục cha và con)
-        $categories = Category::with('children')->get();
-        return view('Admin.Categories.create', compact('categories'));
+        return response()->json([
+            'success' => true,
+            'data' => $categories
+        ], 200);
     }
 
     /**
@@ -80,9 +80,13 @@ class CategoryController extends Controller
             $data['image'] = 'storage/' . $pathFile;
         }
 
-        Category::create($data);
+        $category = Category::create($data);
 
-        return redirect()->route('categories.index')->with('success', 'Danh mục đã được tạo thành công.');
+        return response()->json([
+            'success' => true,
+            'data' => $category,
+            'message' => 'Danh mục đã được tạo thành công.'
+        ], 201);
     }
 
     /**
@@ -90,10 +94,21 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        // Lấy tất cả các danh mục (kể cả danh mục cha và con)
-        $categories = Category::with('children')->get();
+        // Lấy danh sách các danh mục cha (trừ chính nó và các con của nó)
+        $categories = Category::whereNull('parent_id')->where('id', '!=', $category->id)->get();
 
-        return view('Admin.Categories.edit', compact('category', 'categories'));
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'category' => $category,
+                'categories' => $categories
+            ]
+        ], 200);
+    }
+
+    public function show(Category $category)
+    {
+        return response()->json($category);
     }
 
     /**
@@ -102,7 +117,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
-            'name' => 'required|max:255' . $category->id,
+            'name' => 'required|max:255|unique:categories,name,' . $category->id,
             'image' => 'nullable|image',
             'is_active' => 'boolean',
             'parent_id' => 'nullable|exists:categories,id'
@@ -123,7 +138,11 @@ class CategoryController extends Controller
 
         $category->update($data);
 
-        return redirect()->back()->with('success', 'Danh mục đã được cập nhật thành công.');
+        return response()->json([
+            'success' => true,
+            'data' => $category,
+            'message' => 'Danh mục đã được cập nhật thành công.'
+        ], 200);
     }
 
     /**
@@ -134,7 +153,10 @@ class CategoryController extends Controller
         // Xóa danh mục
         $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Danh mục đã được xóa thành công.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Danh mục đã được xóa thành công.'
+        ], 200);
     }
 
     /**
@@ -146,6 +168,10 @@ class CategoryController extends Controller
         $category->is_active = !$category->is_active;
         $category->save();
 
-        return redirect()->route('categories.index')->with('success', 'Trạng thái danh mục đã được thay đổi.');
+        return response()->json([
+            'success' => true,
+            'data' => $category,
+            'message' => 'Trạng thái danh mục đã được thay đổi.'
+        ], 200);
     }
 }
