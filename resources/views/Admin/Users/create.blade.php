@@ -36,6 +36,11 @@
                 <label for="" class="form-label">Họ và tên</label>
                 <input type="text" name="fullname" class="form-control" id="">
             </div>
+
+            <div class="mb-3">
+                <label for="" class="form-label">Ảnh đại diện</label>
+                <input type="file" name="avatar" class="form-control" id="">
+            </div>
             
             <div class="mb-3">
                 <label for="" class="form-label">Số điện thoại</label>
