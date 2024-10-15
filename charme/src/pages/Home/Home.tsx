@@ -162,7 +162,7 @@ const Home = () => {
                   </div>
                   <div className="main-body">
                     <div className="main-body-item">
-                      <Link to={`/products/${item.id}`}>
+                      <Link to={`/products/${item._id}`}>
                         {" "}
                         <h6 className="main-body-title">{item.name}</h6>
                       </Link>

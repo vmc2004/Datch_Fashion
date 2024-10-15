@@ -45,8 +45,8 @@
           >
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Họ và tên</th>
+                <th>Ảnh đại diện</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
                 <th>Vai trò</th>
@@ -57,25 +57,29 @@
             <tbody>
               @foreach ($users as $user )
               <tr>
-                <td>{{$user->id}}</td>
                 <td>{{$user->fullname}}</td>
+                <td><img src="{{asset('storage/'.$user->avatar)}}" style="width: 120px" alt=""></td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->phone}}</td>
                 <td><p class="text-{{$user->role=='admin'?'primary':'warning'}}">{{$user->role}}</p></td>
                 <td>
+                  @if ($user['email'] == Auth::user()->email)
+                  <p class="text-primary font-weight-bold">Đang đăng nhập</p>
+                  @else
                   <form action="{{route('users.stateChange',$user)}}" method="post">
                     @csrf
                     @method('PUT')
                     <button class="btn btn-sm {{$user->status?'btn-success':'btn-warning'}}">{{$user->status?'Đang kích hoạt':'Ngừng kích hoạt'}}</button>
                   </form>
+                  @endif
                 </td>
                 <td>
                   <a href="{{route('users.edit',$user)}}" class="btn btn-warning">Cập nhật</a>
-                  <form class="d-inline" action="{{route('users.destroy',$user->id)}}" method="post">
+                  {{-- <form class="d-inline" action="{{route('users.destroy',$user->id)}}" method="post">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger" type="submit">Xóa</button>
-                  </form>
+                  </form> --}}
                 </td>
               </tr>
               @endforeach

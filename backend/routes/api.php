@@ -3,7 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
-
+use App\Http\Controllers\Api\UserController as ApiUserController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('products', ProductController::class);
+
 Route::get('/search-products', [ProductController::class, 'search']);
+
+Route::get('order/{user_id}', [OrderController::class, 'order_user']);
+Route::get('orders', [OrderController::class, 'index']);
+Route::get('detailOrder/{order}', [OrderController::class, 'show']);
+
+Route::apiResource('users', ApiUserController::class);

@@ -85,7 +85,7 @@ class CouponController extends Controller
         }
     }
     public function send_coupon(Coupon $coupon){
-        $email = User::query()->where('role' ,'admin')->pluck('email');
+        $email = User::query()->where('role' ,'member')->pluck('email');
         Mail::to($email)->send(new SendCoupon($coupon));
         return redirect()->back()->with('message', 'Email đã được gửi thành công!');
     }
