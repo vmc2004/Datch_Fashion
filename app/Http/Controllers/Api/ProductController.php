@@ -145,12 +145,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $keyword = $request->input('keyword');
-        $products = Product::where('name', 'LIKE', '%' . $keyword . '%')->get();
-        return response()->json([
-            'success' => true,
-            'message' => 'Products retrieved successfully',
-            'data' => $products,
-        ]);
+        $keyword = $request->query('keyword');
+        return Product::where('name', 'LIKE', "%{$keyword}%")->get();
     }
 }
