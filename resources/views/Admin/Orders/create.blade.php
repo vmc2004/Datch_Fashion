@@ -33,25 +33,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                 @if (session()->has('order'))
-                 <?php
-                 $order = session('order');
-               ?>
-                 @foreach ( $order as  $order_detail)
-                 <tr>
-                    {{dd($order_detail)}}
-                     <td>Giày nữ màu xanh bóng</td>
-                     <td>Đỏ</td>
-                     <td>XL</td>
-                     <td><input type="number" class="form-control" value="{{$order_detail['quantity']}}"></td>
-                     <td>1,995,000 ₫</td>
-                     <td>1,995,000 ₫</td>
-                     <td><i class="fas fa-trash-alt text-danger"></i></td>
-                 </tr>
-                 @endforeach
-                 @else
-
-                 @endif
+                    @if (session()->has('order'))
+        <?php
+            $order = session('order');
+        ?>
+        @if (!empty($order))
+            @foreach ($order as $order_detail)
+                <tr>
+                    <td>{{ $order_detail['code'] }}</td>
+                    <td>{{ $order_detail['product_name'] }}</td>
+                    <td>{{ $order_detail['color'] }}</td>
+                    <td>{{ $order_detail['size'] }}</td>
+                    <td>
+                        <input type="number" class="form-control quantity" data-id="{{ $order_detail['variant_id'] }}" value="{{ $order_detail['quantity'] }}" min="1">
+                    </td>
+                    <td>{{ number_format($order_detail['unit_price'], 0, ',', '.') }} ₫</td>
+                    <td>{{ number_format($order_detail['total_price'], 0, ',', '.') }} ₫</td>
+                    <td><i class="fas fa-trash-alt text-danger remove-item" data-id="{{ $order_detail['variant_id'] }}" style="cursor: pointer;"></i></td>
+                </tr>
+            @endforeach
+        @else
+            <tr>
+                <td colspan="8" class="text-center">Chưa có sản phẩm nào.</td>
+            </tr>
+        @endif
+    @else
+        <tr>
+            <td colspan="8" class="text-center">Chưa có sản phẩm nào.</td>
+        </tr>
+    @endif
                 </tbody>
             </table>
             <div class="row mb-3">
@@ -204,9 +214,6 @@
             }
         });
     });
-
-    // Hành động add sản phẩm biến thể vào trong đơn hàng
-
     $(document).on('click', '.product-container', function(){
         var variant_id = $(this).data('id');
         var product_code = $(this).data('product.name');
@@ -229,6 +236,9 @@
         }
     })    ;
     });
+
+
+ 
 </script>
    
 @endsection
