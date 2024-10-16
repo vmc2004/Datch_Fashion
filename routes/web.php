@@ -28,6 +28,23 @@ Route::post('post-login', [AuthController::class, 'postLogin'])->name('postLogin
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('post-register', [AuthController::class, 'postRegister'])->name('postRegister');
+// Hiển thị form yêu cầu reset password
+Route::get('forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+// Xử lý form yêu cầu reset password
+Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])->middleware('guest')->name('password.email');
+
+// Hiển thị form nhập mật khẩu mới
+Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->middleware('guest')->name('password.reset');
+
+// Xử lý form nhập mật khẩu mới
+Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
+//OTP
+Route::get('/otp/confirm', [AuthController::class, 'showOtpConfirmationForm'])->name('otp.confirm');
+Route::get('verify-otp', function () {
+    return view('verifyOtp');
+})->name('verifyOtpForm');
+Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
 
 Route::group([
@@ -116,4 +133,4 @@ Route::group([
         
     });
 
-///abc
+    
