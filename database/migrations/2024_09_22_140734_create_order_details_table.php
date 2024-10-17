@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('variant_id')->constrained('product_variants');
             $table->double('price', 10, 2);
             $table->integer('quantity');
-            $table->double('unit_price', 10, 2);
+            $table->double('total_price', 10, 2);
             $table->primary(['order_id','variant_id']);
             $table->softDeletes();
             $table->timestamps();

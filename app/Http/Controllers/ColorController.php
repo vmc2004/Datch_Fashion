@@ -12,7 +12,8 @@ class ColorController extends Controller
      */
     public function index()
     {
-        //
+        $colors = Color::query()->latest('id')->paginate(10);
+        return view('Admin.colors.index',compact('colors'));
     }
 
     /**
@@ -20,7 +21,7 @@ class ColorController extends Controller
      */
     public function create()
     {
-        //
+        return view('Admin.Colors.create');
     }
 
     /**
@@ -28,7 +29,13 @@ class ColorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|unique:colors|max:255',
+            'color_code' => 'required'
+        ]);
+
+        Color::query()->create($validated);
+        return redirect()->route('colors.index')->with('message','Thêm mới thành công');
     }
 
     /**
@@ -44,7 +51,7 @@ class ColorController extends Controller
      */
     public function edit(Color $color)
     {
-        //
+        return view('Admin.Colors.edit',compact('color'));
     }
 
     /**
@@ -52,7 +59,13 @@ class ColorController extends Controller
      */
     public function update(Request $request, Color $color)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|unique:colors|max:255',
+            'color_code' => 'required'
+        ]);
+        
+        $color->update($validated);
+        return redirect()->back()->with('message','Cập nhật thành công');
     }
 
     /**
@@ -60,6 +73,7 @@ class ColorController extends Controller
      */
     public function destroy(Color $color)
     {
-        //
+        $color ->delete();
+        return redirect()->route('colors.index')->with('success','Xóa thành công');
     }
 }

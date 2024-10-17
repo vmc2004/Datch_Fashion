@@ -1,5 +1,6 @@
 @include('Admin.layout.header')
 
 @yield('content')
-     
-      @include('Admin.layout.footer')
+    
+@yield('js')
+@include('Admin.layout.footer')
