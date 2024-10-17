@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\Api\ColorController;
+use App\Http\Controllers\Api\SizeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
@@ -21,6 +24,10 @@ use App\Http\Controllers\Api\UserController as ApiUserController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResource('colors', ColorController::class);
+Route::apiResource('sizes', SizeController::class);
+Route::apiResource('categories', CategoryController::class);
 
 Route::apiResource('products', ProductController::class);
 Route::get('order/{user_id}', [OrderController::class, 'order_user']);

@@ -29,6 +29,23 @@ Route::post('post-login', [AuthController::class, 'postLogin'])->name('postLogin
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('post-register', [AuthController::class, 'postRegister'])->name('postRegister');
+// Hiển thị form yêu cầu reset password
+Route::get('forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+// Xử lý form yêu cầu reset password
+Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])->middleware('guest')->name('password.email');
+
+// Hiển thị form nhập mật khẩu mới
+Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->middleware('guest')->name('password.reset');
+
+// Xử lý form nhập mật khẩu mới
+Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
+//OTP
+Route::get('/otp/confirm', [AuthController::class, 'showOtpConfirmationForm'])->name('otp.confirm');
+Route::get('verify-otp', function () {
+    return view('verifyOtp');
+})->name('verifyOtpForm');
+Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
 
 Route::group([
@@ -117,28 +134,6 @@ Route::group([
         
     });
 
-///abc
 
-Route::get('/', function () {
-    return view('Welcome');
-});
-
-Route::controller(AuthController::class)->group(function(){
-    Route::get('register', 'register')->name('register');
-    Route::post('register', 'registerSave')->name('register.save');
-    Route::get('login', 'login')->name('login');
-    Route::post('login', 'loginAction')->name('login.action');
-
-    Route::get('logout', 'logout')->middleware('auth')->name('logout');
-
-});
-//user
-Route::middleware(['auth', 'user-access:user'])->group(function(){
-    Route::get('home', [HomeController::class, 'index'])->name('home');
-});
-
-//admin
-Route::middleware(['auth', 'user-access:admin'])->group(function(){
-    Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin/home');
     
-});
+
