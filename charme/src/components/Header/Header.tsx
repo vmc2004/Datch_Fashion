@@ -1,7 +1,7 @@
 import "./Header.scss";
 import logo from "../../assets/images/Datch Fashion.png";
 import { Link } from "react-router-dom";
-import ProductSearch from "../ProductSearch/ProductSearch";
+// import ProductSearch from "../ProductSearch/ProductSearch";
 const Header = () => {
   return (
     <>
@@ -14,7 +14,7 @@ const Header = () => {
           <div className="header__top__right">
             <div className="header__top__links">
               <Link to={"/register"}>Sign in</Link>
-              <Link to={"/register"}>FAQs</Link>
+              <Link to={"/myaccount"}>Myaccount</Link>
             </div>
             <div className="header__top__hover">
               <span>
@@ -88,10 +88,10 @@ const Header = () => {
                 </a>
                 <div className="price">$0.00</div>
               </div>
-              <div className="App">
+              {/* <div className="App">
                 <h1>Product Search</h1>
                 <ProductSearch />
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="canvas__open">
