@@ -1,9 +1,40 @@
 import "./Danhmux.scss";
 import product1 from "../../assets/images/product-1.jpg";
-import { useState } from "react";
+
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Category } from "../../types/Product";
+import { instance } from "../../apis";
+import { Size } from "../../types/Size";
 const Danhmuc = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [category, setCategory] = useState<Category[]>([]);
+  const getCategory = async () => {
+    try {
+      const response = await instance.get("/products");
+      console.log(response); // Kiểm tra phản hồi API
+
+      setCategory(response.data.data); // Chỉ đặt products nếu nó là mảng
+    } catch (error) {
+      console.error("There was an error fetching the products!", error);
+    }
+  };
+  useEffect(() => {
+    getCategory();
+  }, []);
+  const [size, setSize] = useState<Size[]>([]);
+  const getZize = async () => {
+    try {
+      const response = await instance.get("/sizes");
+      console.log(response); // Kiểm tra phản hồi API
+
+      setSize(response.data.data); // Chỉ đặt products nếu nó là mảng
+    } catch (error) {
+      console.error("There was an error fetching the products!", error);
+    }
+  };
+  useEffect(() => {
+    getZize();
+  }, []);
   return (
     <>
       {/* <!-- Breadcrumb Section Begin --> */}
@@ -163,6 +194,7 @@ const Danhmuc = () => {
                           Size
                         </a>
                       </div>
+
                       <div
                         id="collapseFour"
                         className="collapse show"
@@ -170,37 +202,12 @@ const Danhmuc = () => {
                       >
                         <div className="card-body">
                           <div className="shop__sidebar__size">
-                            <label>
-                              <input type="radio" />
-                              XS
-                            </label>
-                            <label>
-                              <input type="radio" />S
-                            </label>
-                            <label>
-                              {" "}
-                              <input type="radio" />M
-                            </label>
-                            <label>
-                              <input type="radio" />
-                              XL
-                            </label>
-                            <label>
-                              <input type="radio" />
-                              2XL
-                            </label>
-                            <label>
-                              <input type="radio" />
-                              XXL
-                            </label>
-                            <label>
-                              <input type="radio" />
-                              3XL
-                            </label>
-                            <label>
-                              <input type="radio" />
-                              4XL
-                            </label>
+                            {size.map((item, index) => (
+                              <label key={index}>
+                                <input type="radio" />
+                                {item.name}
+                              </label>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -301,474 +308,48 @@ const Danhmuc = () => {
               <div className="secssion-main-category">
                 <div className="secssion-main-left">
                   <div className="main-center">
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
+                    {category.map((item, index) => (
+                      <div className="main-item" key={index}>
+                        <div className="card-inner">
+                          <div className="card-front">
+                            <img src={item.name} alt="" />
                           </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
+                          <div className="cart-popup">
+                            <div className="cart-popup-favourite">
+                              <i className="ti-heart"></i>
                             </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
+                            <div className="cart-popup-cart">
+                              <i className="ti-shopping-cart"></i>
+                            </div>
+                            <div className="cart-popup-search">
+                              <i className="ti-search"></i>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
+                        <div className="main-body">
+                          <div className="main-body-item">
+                            <Link to={`/products/${item.id}`}>
+                              {" "}
+                              <h6 className="main-body-title">{item.name}</h6>
+                            </Link>
+                            <div className="main-body-price">
+                              <div className="main-body-price1">
+                                <span>$450.000</span>
+                              </div>
+                              <div className="main-body-price2">
+                                <span>$590.000</span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
+                        <div className="main-check-mau">
+                          <div className="check-mau1"></div>
+                          <div className="check-mau2"></div>
+                          <div className="check-mau3"></div>
+                          <div className="check-mau4"></div>
                         </div>
                       </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
-                    <div className="main-item">
-                      <div className="card-inner">
-                        <div className="card-front">
-                          <img src={product1} alt="" />
-                        </div>
-                        <div className="cart-popup">
-                          <div className="cart-popup-favourite">
-                            <i className="ti-heart"></i>
-                          </div>
-                          <div className="cart-popup-cart">
-                            <i className="ti-shopping-cart"></i>
-                          </div>
-                          <div className="cart-popup-search">
-                            <i className="ti-search"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-body">
-                        <div className="main-body-item">
-                          <h6 className="main-body-title">
-                            Cool & Comfy Onlala
-                          </h6>
-                          <div className="main-body-price">
-                            <div className="main-body-price1">
-                              <span>$450.000</span>
-                            </div>
-                            <div className="main-body-price2">
-                              <span>$590.000</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="main-check-mau">
-                        <div className="check-mau1"></div>
-                        <div className="check-mau2"></div>
-                        <div className="check-mau3"></div>
-                        <div className="check-mau4"></div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>

@@ -1,11 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Myaccount.scss";
+import { Order } from "../../types/Order";
+import { instance } from "../../apis";
 
 type Props = {};
 
 const Myaccount = (props: Props) => {
-  const [activeSection, setActiveSection] = useState("accountpage");
+  const [order, setOrder] = useState<Order[]>([]);
 
+  const getOrder = async () => {
+    try {
+      const response = await instance.get("/orders");
+      setOrder(response.data.data);
+      console.log(response);
+    } catch (error) {
+      console.error("There was an error fetching the products!", error);
+    }
+  };
+  useEffect(() => {
+    getOrder();
+  }, []);
+  const [activeSection, setActiveSection] = useState("accountpage");
   const renderContent = () => {
     switch (activeSection) {
       case "accountpage":
@@ -26,7 +41,15 @@ const Myaccount = (props: Props) => {
           </div>
         );
       case "order":
-        return <div>abcdxyz</div>;
+        return (
+          <div>
+            {order.map((order, index) => (
+              <div key={index}>
+                <div>{order.email}</div>
+              </div>
+            ))}
+          </div>
+        );
       case "download":
         return <div>abcdxyzss</div>;
       case "address":

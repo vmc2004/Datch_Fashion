@@ -89,7 +89,7 @@ const Cart = () => {
                         <i className="ti-close"></i>
                       </td>
                     </tr>
-                    <tr>
+                    <tr>  
                       <td className="product__cart__item">
                         <div className="product__cart__item__pic">
                           <img src={product1} alt="" />

@@ -230,31 +230,21 @@
   text-decoration: line-through;
   margin-top: 7px;
 }
-
+.main-mau {
+  width: 20px;
+}
 .main-check-mau {
   display: flex;
   gap: 10px;
   justify-content: end;
 }
-.check-mau1,
-.check-mau2,
-.check-mau3,
-.check-mau4 {
-  background-color: #ddd;
+.check-mau1 {
   border: 1px solid #ddd;
   border-radius: 50%;
   width: 20px;
   height: 20px;
 }
-.check-mau2 {
-  background-color: black;
-}
-.check-mau3 {
-  background-color: blue;
-}
-.check-mau4 {
-  background-color: #b9976a;
-}
+
 /* <!-- Product Section End --> */
 
 /* <!-- Categories Section Begin --> */

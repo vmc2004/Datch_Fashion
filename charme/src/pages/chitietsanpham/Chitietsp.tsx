@@ -4,6 +4,7 @@ import { instance } from "../../apis";
 import { Product } from "../../types/Product";
 import { Link, useParams } from "react-router-dom";
 import anh from "../../assets/images/product-1.jpg";
+import { Size } from "../../types/Size";
 const Chitietsp = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | undefined>();
@@ -29,6 +30,42 @@ const Chitietsp = () => {
     if (!id) return;
     getProductDetail(id);
   }, [id]);
+  const [size, setSize] = useState<Size[]>([]);
+  const getZize = async () => {
+    try {
+      const response = await instance.get("/sizes");
+      console.log(response); // Kiểm tra phản hồi API
+
+      setSize(response.data.data); // Chỉ đặt products nếu nó là mảng
+    } catch (error) {
+      console.error("There was an error fetching the products!", error);
+    }
+  };
+  useEffect(() => {
+    getZize();
+  }, []);
+  const [colors, setColors] = useState<Colors[]>([]);
+  // Hàm để làm sạch mã màu
+  const cleanColorCode = (colorCode) => {
+    // Sử dụng regex để chỉ giữ lại các ký tự hợp lệ
+    const cleanedCode = colorCode.match(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
+    return cleanedCode ? cleanedCode[0] : "#000000"; // Mặc định là đen nếu mã màu không hợp lệ
+  };
+  const getColor = async () => {
+    try {
+      const response = await instance.get("/colors");
+      const cleanedColors = response.data.data.map((color) => ({
+        ...color,
+        color_code: cleanColorCode(color.color_code), // Làm sạch mã màu
+      }));
+      setColors(cleanedColors);
+    } catch (error) {
+      console.error("There was an error fetching the products!", error);
+    }
+  };
+  useEffect(() => {
+    getColor();
+  }, []);
   return (
     <>
       <section className="breadcrumb-option">
@@ -92,40 +129,24 @@ const Chitietsp = () => {
                     <div className="product__details__option">
                       <div className="product__details__option__size">
                         <span>Size:</span>
-                        <label>
-                          xxl
-                          <input type="radio" id="xxl" />
-                        </label>
-                        <label className="active">
-                          xl
-                          <input type="radio" id="xl" />
-                        </label>
-                        <label>
-                          l
-                          <input type="radio" id="l" />
-                        </label>
-                        <label>
-                          s
-                          <input type="radio" id="sm" />
-                        </label>
+                        {size.map((item, index) => (
+                          <label key={index}>
+                            {item.name}
+                            <input type="radio" id="xxl" />
+                          </label>
+                        ))}
                       </div>
                       <div className="product__details__option__color">
                         <span>Color:</span>
-                        <label className="c-1">
-                          <input type="radio" id="sp-1" />
-                        </label>
-                        <label className="c-2">
-                          <input type="radio" id="sp-2" />
-                        </label>
-                        <label className="c-3">
-                          <input type="radio" id="sp-3" />
-                        </label>
-                        <label className="c-4">
-                          <input type="radio" id="sp-4" />
-                        </label>
-                        <label className="c-9">
-                          <input type="radio" id="sp-9" />
-                        </label>
+                        {colors.map((color, index) => (
+                          <label
+                            className="c-1"
+                            key={index}
+                            style={{ backgroundColor: color.color_code }}
+                          >
+                            <input type="radio" id="sp-1" />({color.color_code})
+                          </label>
+                        ))}
                       </div>
                     </div>
                     <div className="product__details__cart__option">

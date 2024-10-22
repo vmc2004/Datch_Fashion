@@ -28,6 +28,7 @@ import images from "../../data/images";
 
 import CustomSlider from "../../components/slider/custom.slider";
 import moment from "moment";
+import { Colors } from "../../types/Colors";
 const Home = () => {
   const [time, setTime] = useState({
     hours: moment().format("HH"),
@@ -51,7 +52,7 @@ const Home = () => {
   const getProduct = async () => {
     try {
       const response = await instance.get("/products");
-      console.log(response); // Kiểm tra phản hồi API
+
       if (response && Array.isArray(response.data.data)) {
         setProducts(response.data.data); // Chỉ đặt products nếu nó là mảng
       } else {
@@ -63,6 +64,28 @@ const Home = () => {
   };
   useEffect(() => {
     getProduct();
+  }, []);
+  const [colors, setColors] = useState<Colors[]>([]);
+  // Hàm để làm sạch mã màu
+  const cleanColorCode = (colorCode) => {
+    // Sử dụng regex để chỉ giữ lại các ký tự hợp lệ
+    const cleanedCode = colorCode.match(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
+    return cleanedCode ? cleanedCode[0] : "#000000"; // Mặc định là đen nếu mã màu không hợp lệ
+  };
+  const getColor = async () => {
+    try {
+      const response = await instance.get("/colors");
+      const cleanedColors = response.data.data.map((color) => ({
+        ...color,
+        color_code: cleanColorCode(color.color_code), // Làm sạch mã màu
+      }));
+      setColors(cleanedColors);
+    } catch (error) {
+      console.error("There was an error fetching the products!", error);
+    }
+  };
+  useEffect(() => {
+    getColor();
   }, []);
   return (
     <>
@@ -146,7 +169,7 @@ const Home = () => {
                 <div className="main-item">
                   <div className="card-inner">
                     <div className="card-front">
-                      <img src={item.image} alt="" />
+                      <img src={item.image} alt={item.name} />
                     </div>
                     <div className="cart-popup">
                       <div className="cart-popup-favourite">
@@ -162,7 +185,7 @@ const Home = () => {
                   </div>
                   <div className="main-body">
                     <div className="main-body-item">
-                      <Link to={`/products/${item._id}`}>
+                      <Link to={`/products/${item.id}`}>
                         {" "}
                         <h6 className="main-body-title">{item.name}</h6>
                       </Link>
@@ -176,11 +199,17 @@ const Home = () => {
                       </div>
                     </div>
                   </div>
+
                   <div className="main-check-mau">
-                    <div className="check-mau1"></div>
-                    <div className="check-mau2"></div>
-                    <div className="check-mau3"></div>
-                    <div className="check-mau4"></div>
+                    {colors.map((color, index) => (
+                      <div
+                        className="check-mau1"
+                        key={index}
+                        style={{ backgroundColor: color.color_code }}
+                      >
+                        ({color.color_code})
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
