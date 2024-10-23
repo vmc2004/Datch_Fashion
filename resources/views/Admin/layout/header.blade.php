@@ -133,7 +133,7 @@
                       </div>
                       <span class="nav-link-text ms-1">Thương hiệu</span>
                   </a>
-              </li>
+              </li> --}}
 
                 <li class="nav-item mt-3">
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
@@ -175,10 +175,19 @@
                     </div>
                     <ul class="navbar-nav  justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
-                                <i class="fa fa-user me-sm-1"></i>
-                                <a href="{{ route('logout') }}" class="d-sm-inline d-none">Logout</a>
-                            </a>
+                          @if(Auth::check())
+                          <img src="{{ Auth::user()->avatar }}" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+                          <a href="{{ route('logout') }}" class="nav-link text-white font-weight-bold px-0">
+                             
+                              {{ Auth::user()->fullname }} <!-- Hiển thị tên người dùng -->
+                          </a>
+                          <a href="{{ route('logout') }}" class="d-sm-inline d-none"></a>
+                      @else
+                          <a href="{{ route('login') }}" class="nav-link text-white font-weight-bold px-0">
+                              <i class="fa fa-user me-sm-1"></i>
+                              Đăng nhập
+                          </a>
+                      @endif
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
