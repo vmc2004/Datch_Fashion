@@ -1,0 +1,45 @@
+{
+  "name": "web209-base",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "concurrently \"json-server --watch db.json -m ./node_modules/json-server-auth\" \"vite --open\"",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "axios": "^1.7.2",
+    "concurrently": "^8.2.2",
+    "font-awesome": "^4.7.0",
+    "json-server": "^0.17.4",
+    "json-server-auth": "^2.1.0",
+    "moment": "^2.30.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.51.5",
+    "react-modal": "^3.16.1",
+    "react-router-dom": "^6.23.1",
+    "react-toastify": "^10.0.5",
+    "simple-parallax-js": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-modal": "^3.16.3",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "sass": "^1.79.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.4"
+  }
+}
