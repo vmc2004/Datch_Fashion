@@ -55,6 +55,7 @@
             <div class="mb-3">
                 <label for="" class="form-label">email</label>
                 <input type="email" name="email" value="{{$user->email}}" class="form-control" id="">
+                
             </div>
 
             @if ($user->email == Auth::user()->email)

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\Api\ColorController;
@@ -25,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+
 Route::apiResource('colors', ColorController::class);
 Route::apiResource('sizes', SizeController::class);
 Route::apiResource('categories', CategoryController::class);
@@ -35,3 +38,7 @@ Route::get('orders', [OrderController::class, 'index']);
 Route::get('detailOrder/{order}', [OrderController::class,'show']);
 
 Route::apiResource('users',ApiUserController::class);
+
+Route::post('login', [AuthController::class, 'postLogin'])->name('api.postLogin');
+Route::post('logout', [AuthController::class, 'logout'])->name('api.logout');
+Route::post('register', [AuthController::class, 'postRegister'])->name('api.postRegister');
