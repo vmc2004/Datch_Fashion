@@ -27,7 +27,6 @@ class UpdateUserRequest extends FormRequest
                 'email' => "required|email|unique:users,email,$userID",
                 'address' => 'required|string',
                 'phone' => "required|numeric|unique:users,phone,$userID",
-                'password' => "required|min:10|unique:users,password,$userID",
         ];
     }
 
