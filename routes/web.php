@@ -22,6 +22,24 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+Route::get('/', function(){
+    return view('Client.home');
+});
+Route::get('/cua-hang', function(){
+    return view('Client.category.index');
+});
+Route::get('/gio-hang', function(){
+    return view('Client.cart.index');
+});
+Route::get('/chi-tiet-san-pham', function(){
+    return view('Client.product.show');
+});
+Route::get('/tai-khoan', function(){
+    return view('Client.account.profile');
+});
+Route::get('/account/orders', function(){
+    return view('Client.order.index');
+});
 
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
