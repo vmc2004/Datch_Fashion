@@ -34,6 +34,12 @@ Route::get('/gio-hang', function(){
 Route::get('/chi-tiet-san-pham', function(){
     return view('Client.product.show');
 });
+Route::get('/tai-khoan', function(){
+    return view('Client.account.profile');
+});
+Route::get('/account/orders', function(){
+    return view('Client.order.index');
+});
 
 
 Route::get('login', [AuthController::class, 'login'])->name('login');

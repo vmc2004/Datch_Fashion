@@ -1,6 +1,6 @@
 @extends('Client.layout.layout')
 
-@section('title', "Cửa hàng")
+@section('title', "Giỏ hàng")
 @section('content')
 <hr>
 <div class="max-w-screen-xl mx-auto ">

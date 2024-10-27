@@ -42,7 +42,7 @@
                   <i class="fa-solid fa-shop"></i>
                     <span class="text-sm">Cửa hàng</span>
                 </a>
-                <a href="#" class="flex flex-col items-center text-gray-800">
+                <a href="/tai-khoan" class="flex flex-col items-center text-gray-800">
                     <i class="fas fa-user text-xl"></i>
                     <span class="text-sm">Tài khoản</span>
                 </a>
