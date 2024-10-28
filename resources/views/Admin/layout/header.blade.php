@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/admin/img/apple-icon.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('assets/admin/assets/img/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logDatch.png') }}">
     <title>
 
         @yield('title')
@@ -40,7 +40,7 @@
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
                 aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="{{ route('admin.index') }}" target="_blank">
-                <img src="{{ asset('assets/admin/img/Datch.png') }}" class="navbar-brand-img h-100" alt="main_logo"
+                <img src="{{ asset('assets/admin/img/Datch.png') }}" class="navbar-brand-img" alt="main_logo"
                     width="50
         ">
         <span class="ms-1 font-weight-bold">Datch Admin</span>
@@ -125,15 +125,15 @@
                 </li>
 
                 <li class="nav-item">
-                  {{-- <a class="nav-link " href="{{ route('brands.index') }}"> --}}
+                  <a class="nav-link " href="{{ route('brands.index') }}">
                       <div
                           class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                          {{-- <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i> --}}
+                          <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i>
                           <i class="fa-solid fa-copyright" style="color: coral"></i>
                       </div>
                       <span class="nav-link-text ms-1">Thương hiệu</span>
                   </a>
-              </li> --}}
+              </li> 
 
                 <li class="nav-item mt-3">
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>

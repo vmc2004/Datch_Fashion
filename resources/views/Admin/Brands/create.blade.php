@@ -1,4 +1,8 @@
 @extends('Admin.layout.app')
+@section('title', "Thương hiệu")
+
+@section('title-page', "Thương hiệu")
+@section('single-page', "Thêm thương hiệu")
 
 @section('content')
     <div class="row m-4 vh-90">
