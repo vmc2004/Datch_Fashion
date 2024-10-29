@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Clinet;
+namespace App\Http\Controllers\Client;
 
-use App\Models\Cart;
-use App\Models\CartItem;
-use Illuminate\Http\Request;
-use App\Models\ProductVariant;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
+use App\Models\ProductVariant;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
