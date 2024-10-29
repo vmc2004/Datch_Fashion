@@ -1,14 +1,17 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BannerController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\BannerController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Clinet\CartController;
+use App\Http\Controllers\Clinet\HomeController as ClinetHomeController;
+use App\Http\Controllers\Clinet\OrderController as ClinetOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +25,31 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+Route::get('/', [ClinetHomeController::class, 'index']);
+Route::get('/account/orders/{user_id}', [ClinetOrderController::class, 'index']);
+Route::get('/product/{slug}', [ClinetHomeController::class,'show']);  
+
+Route::get('/cua-hang', function(){
+    return view('Client.category.index');
+});
+// Route::get('/gio-hang', function(){
+//     return view('Client.cart.index');
+// });
+// Route::middleware('auth')->group(function () {
+//     Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
+//     Route::get('/gio-hang', [CartController::class, 'index'])->name('cart.index');
+//     Route::post('/gio-hang/update', [CartController::class, 'update'])->name('cart.update');
+//     Route::post('/gio-hang/remove', [CartController::class, 'remove'])->name('cart.remove');
+// });
+Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
+
+Route::get('/tai-khoan', function(){
+    return view('Client.account.profile');
+});
+Route::get('/account/orders', function(){
+    return view('Client.order.index');
+});
 
 
 Route::get('login', [AuthController::class, 'login'])->name('login');

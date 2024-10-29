@@ -1,6 +1,5 @@
 <?php
 
-// app/Models/Cart.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,11 +9,11 @@ class Cart extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id', 'status'];
 
-    public function details()
+    public function items()
     {
-        return $this->hasMany(CartDetail::class);
+        return $this->hasMany(CartItem::class);
     }
 
     public function user()
@@ -22,4 +21,3 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 }
-

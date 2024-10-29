@@ -1,0 +1,130 @@
+body {
+    color: #666;
+    font-family: 'Roboto';
+}
+
+*:focus {
+    outline: none;
+}
+
+.container {
+    max-width: 1170px !important;
+}
+
+.vmr-input {
+    border: solid 1px #CCC;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+}
+
+.vmr-button {
+    background-color: #BB0000;
+    color: #FFF;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.nav .dropdown:hover .dropdown-content {
+    display: block !important;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 0;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #e9f0fc;
+}
+
+@media only screen and (max-width: 500px) {
+    .logo{
+        height: auto !important;
+    }
+
+    .auth{
+        display: none !important;
+    }
+
+    .vmr-button{
+        width: 90px;
+        padding: 7px 15px;
+        font-size: 12px;
+    }
+
+    .btn-box{
+        margin-left: 60px !important;
+    }
+
+    .search-mobile{
+        display: block !important;
+    }
+
+    .icon-mobile{
+        display: block !important;
+    }
+
+    .search-desktop{
+        display: none !important;
+    }
+    
+    .nav{
+        display: none;
+    }
+
+    .main > .container{
+        flex-direction: column;
+    }
+}
+
+.office::after {
+    display: block;
+    background: #BB0000;
+    content: "";
+    width: 70px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -40px;
+    height: 3px;
+}
+
+.search-button {
+    background-color: #BB0000;
+    color: white;
+}
+
+.svg-vertical {
+    vertical-align: -.125rem
+}
+
+.year {
+    font-size: 9px;
+    line-height: 15px;
+}
+
+.sidebar-nav::before{
+    width: 4px;
+    height: 35px;
+    background: none;
+    content: "";
+    display: inline-block;
+}
+
+.sidebar-nav-active::before{
+    background: linear-gradient(180deg, #0d47a1, #0ee8e7);
+}
+.hide-scroll::-webkit-scrollbar{
+    display: none;
+}
+.can-mini{
+    transition: 1s ease-in;
+}

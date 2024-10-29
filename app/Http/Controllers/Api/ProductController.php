@@ -143,9 +143,5 @@ class ProductController extends Controller
         ]);
     }
 
-    public function search(Request $request)
-    {
-        $keyword = $request->query('keyword');
-        return Product::where('name', 'LIKE', "%{$keyword}%")->get();
-    }
+    
 }
