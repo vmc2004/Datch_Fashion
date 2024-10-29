@@ -63,7 +63,7 @@ class ProductController extends Controller
         // Xử lý upload hình ảnh nếu có
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = Storage::put('uploads/products',$request->file('image'));
+            $imagePath = Storage::put('uploads/products', $request->file('image'));
         }
 
         // dd($request->all());
@@ -89,9 +89,9 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(Product $product, $id)
     {
-        //
+        
     }
 
     /**
@@ -155,7 +155,7 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
         ]);
 
-        return redirect()->route('products.index')->with('success','Product added successfully');
+        return redirect()->route('products.index')->with('success', 'Product added successfully');
     }
 
     /**
@@ -169,6 +169,4 @@ class ProductController extends Controller
 
         return redirect()->route('products.index');
     }
-
-    
 }

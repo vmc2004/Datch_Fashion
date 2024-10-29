@@ -134,7 +134,9 @@ class ProductsSeeder extends Seeder
             DB::table('product_variants')->insert([
                 'product_id' => fake()->randomElement($products),  
                 'color_id' => fake()->randomElement($colors),      
-                'size_id' => fake()->randomElement($sizes),        
+                'size_id' => fake()->randomElement($sizes),
+                'price' => $price = fake()->numberBetween(10000, 1000000),
+                'sale_price' => round($price * 0.9, 2),
                 'quantity' => fake()->numberBetween(1, 100),      
                 'image' => fake()->imageUrl(400, 400, 'product'),
                 'created_at' => Carbon::now(),

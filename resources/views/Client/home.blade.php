@@ -60,7 +60,8 @@
                         </div>
                         <div class="space-y-2">
                             <p class="font-semibold text-slate-800">
-                                {{number_format($new->ProductVariants->first()->price)}} đ </p>
+                                {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
+                            </p>
                             <div class="flex gap-2 text-xs text-slate-700">
                                 <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                      stroke="currentColor" class="size-4">
@@ -119,7 +120,8 @@
                         </div>
                         <div class="space-y-2">
                             <p class="font-semibold text-slate-800">
-                                {{number_format($view->ProductVariants->first()->price)}} đ </p>
+                                {{ number_format($view->ProductVariants->first()?->price ?? 0) }} đ
+                            </p>
                             <div class="flex gap-2 text-xs text-slate-700">
                                 <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                      stroke="currentColor" class="size-4">
