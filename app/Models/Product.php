@@ -23,11 +23,13 @@ class Product extends Model
     ];
 
     // quan hệ 1 nhiều 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function brand() {
+    public function brand()
+    {
         return $this->belongsTo(Brand::class);
     }
 
@@ -36,11 +38,11 @@ class Product extends Model
         return $this->hasMany(ProductGallery::class);
     }
 
-    public function ProductVariants() {
+    public function ProductVariants()
+    {
         return $this->hasMany(ProductVariant::class);
     }
 
     public $timestamps = false;
     protected $dates = ['deleted_at'];
-    
 }

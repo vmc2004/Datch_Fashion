@@ -15,6 +15,16 @@
   <link rel="stylesheet" href="{{asset('assets/client/assets/css/styles-be.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
+  <style>
+    .border-blue-500 {
+        border-color: #3B82F6; /* Màu xanh lam */
+    }
+    .color-option:hover,
+    .size-option:hover {
+        cursor: pointer;
+        opacity: 0.8; /* Hiệu ứng khi di chuột */
+    }
+</style>
 
 </head>
 
