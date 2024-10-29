@@ -176,7 +176,8 @@
                     <ul class="navbar-nav  justify-content-end">
                         <li class="nav-item d-flex align-items-center">
                           @if(Auth::check())
-                          <img src="{{ Auth::user()->avatar }}" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+                          <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px;">
+
                           <a href="{{ route('logout') }}" class="nav-link text-white font-weight-bold px-0">
                              
                               {{ Auth::user()->fullname }} <!-- Hiển thị tên người dùng -->

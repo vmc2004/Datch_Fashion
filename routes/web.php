@@ -1,7 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BannerController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Clinet\HomeController as ClinetHomeController;
+use App\Http\Controllers\Clinet\OrderController as ClinetOrderController;
+use App\Http\Controllers\Clinet\UserController as ClinetUserController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
+
+
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
@@ -45,7 +59,16 @@ Route::get('/account/orders', function(){
     return view('Client.order.index');
 });
 
+//USER
+Route::get('/Client/home', [ClinetUserController::class, 'homeClient'])->name('Client.home');
+Route::get('/Client/account/login', [ClinetUserController::class, 'login'])->name('Client.account.login');
+Route::post('/Client/account/showLoginForm', [ClinetUserController::class, 'showLoginForm'])->name('showLoginForm');
+Route::get('/Client/account/register', [ClinetUserController::class, 'register'])->name('Client.account.register');
+Route::post('/Client/account/showRegisterForm', [ClinetUserController::class, 'showRegisterForm'])->name('showRegisterForm');
 
+
+
+//ADMIN
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('post-login', [AuthController::class, 'postLogin'])->name('postLogin');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
