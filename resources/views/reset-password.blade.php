@@ -14,6 +14,8 @@
                     <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white justify-center">
                         Đặt lại mật khẩu
                     </div>
+
+
                     <form class="space-y-4 md:space-y-6" method="POST" action="{{ route('password.update') }}">
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">

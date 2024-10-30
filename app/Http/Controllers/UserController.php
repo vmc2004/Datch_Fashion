@@ -64,7 +64,7 @@ class UserController extends Controller
         $data = $request->except('avatar');
         if ($request->hasFile('avatar')) {
             $oldAvatar = $user->avatar;
-            if (Storage::exists($oldAvatar)) {
+            if ($oldAvatar && Storage::exists($oldAvatar)) {
                 Storage::delete($oldAvatar);
             }
             $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
