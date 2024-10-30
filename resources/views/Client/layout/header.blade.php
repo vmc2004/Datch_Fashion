@@ -50,10 +50,18 @@
                     <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
                 
+                @if (Auth::check())
                 <a href="/tai-khoan" class="flex flex-col items-center text-gray-800">
                     <i class="fas fa-user text-xl"></i>
                     <span class="text-sm">Tài khoản</span>
                 </a>
+            @else
+                <a href="{{ route('Client.account.login') }}" class="flex flex-col items-center text-gray-800">
+                    <i class="fas fa-user text-xl"></i>
+                    <span class="text-sm">Đăng nhập</span>
+                </a>
+            @endif
+            
                 <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
                     <i class="fas fa-shopping-bag text-xl"></i>
                     <span class="text-sm">Giỏ hàng</span>
