@@ -5,13 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
-// use App\Http\Controllers\Clinet\HomeController as ClinetHomeController;
-// use App\Http\Controllers\Clinet\OrderController as ClinetOrderController;
-// use App\Http\Controllers\Clinet\UserController as ClinetUserController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
+
 
 
 use Illuminate\Support\Facades\Route;
@@ -21,11 +15,7 @@ use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
-use App\Http\Controllers\Client\HomeController as ClientHomeController;
-use App\Http\Controllers\Client\OrderController as ClientOrderController;
-use App\Http\Controllers\Client\UserController as ClientUserController;
-use App\Http\Controllers\Client\ProductController as ClientProductController;
-
+use App\Http\Controllers\Client\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,9 +29,9 @@ use App\Http\Controllers\Client\ProductController as ClientProductController;
 */
 
 
-Route::get('/', [ClientHomeController::class, 'index']);
-Route::get('/account/orders/{user_id}', [ClientOrderController::class, 'index']);
-Route::get('/product/{slug}', [ClientProductController::class,'show']);  
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/account/orders/{user_id}', [OrderController::class, 'index']);
+Route::get('/product/{slug}', [ProductController::class,'show']);  
 
 Route::get('/cua-hang', function(){
     return view('Client.category.index');
@@ -67,11 +57,11 @@ Route::get('/account/orders', function(){
 });
 
 //USER
-Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
-Route::get('/Client/account/login', [ClientUserController::class, 'login'])->name('Client.account.login');
-Route::post('/Client/account/showLoginForm', [ClientUserController::class, 'showLoginForm'])->name('showLoginForm');
-Route::get('/Client/account/register', [ClientUserController::class, 'register'])->name('Client.account.register');
-Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
+Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
+Route::get('/Client/account/login', [UserController::class, 'login'])->name('Client.account.login');
+Route::post('/Client/account/showLoginForm', [UserController::class, 'showLoginForm'])->name('showLoginForm');
+Route::get('/Client/account/register', [UserController::class, 'register'])->name('Client.account.register');
+Route::post('/Client/account/showRegisterForm', [UserController::class, 'showRegisterForm'])->name('showRegisterForm');
 
 
 
