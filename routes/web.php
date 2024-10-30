@@ -48,8 +48,8 @@ Route::get('/cua-hang', function(){
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
-Route::post('/done', [CheckoutController::class, 'post_checkout'])->name('done');
-Route::get('/thank-you', [CheckoutController::class, 'thankyou'])->name('thankyou');
+Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
+Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
 
 Route::get('/tai-khoan', function(){
     return view('Client.account.profile');

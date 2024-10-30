@@ -19,7 +19,7 @@
         </div>
         <h1 class="text-center p-5 border shadow-2xl rounded-lg text-2xl font-bold ">Thanh toán</h1>
         <div class="max-w-7xl mx-auto p-4">
-            <form action="{{route('done')}}" method="POST" >
+            <form action="{{route('post_checkout')}}" method="POST">
                 @csrf
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Left Column -->
@@ -78,7 +78,9 @@
                         </div>
                     </div>
                     <button class="w-full bg-red-600 text-white p-4 rounded-lg mt-4" type="submit">Thanh toán</button>
+                </form>
                 </div>
+                
 
                 <!-- Right Column -->
                 <div class="bg-white p-6 rounded-lg shadow-md">
@@ -92,9 +94,10 @@
                     @php
                         $subtotal += $item['price_at_purchase'] * $item['quantity']; // Cộng dồn giá trị
                     @endphp
-                    <input type="hidden" name="quantity" value="{{$item['quantity']}}"> 
-                    <input type="hidden" name="variant_id" value="{{$item['variant_id']}}"> 
-                    <input type="hidden" name="price" value="{{$item['price_at_purchase']}}"> 
+                   <input type="hidden" name="quantity[]" value="{{ $item['quantity'] }}">
+                   <input type="hidden" name="variant_id[]" value="{{ $item['variant_id'] }}">
+                   <input type="hidden" name="price[]" value="{{ $item['price_at_purchase'] }}">
+                
                     <div class="flex items-center mb-4">
                         <img alt="Ảnh sản phẩm" class="w-20 h-20 rounded-lg" height="80" src="" width="80"/>
                         <div class="ml-4">
@@ -127,7 +130,7 @@
                 </div>
                 </div>
             </div>
-            </form>
+            
         </div>
     </div>
 </div>

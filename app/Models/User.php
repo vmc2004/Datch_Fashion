@@ -54,6 +54,6 @@ class User extends Authenticatable
     // app/Models/User.php
     public function cart()
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasMany(Cart::class);
     }
 }

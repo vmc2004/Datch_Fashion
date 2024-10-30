@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -44,7 +45,7 @@ class CartController extends Controller
     {
         // Lấy giỏ hàng của người dùng (user_id là 1 theo yêu cầu)
         $cart = Cart::with('items.variant.product', 'items.variant.color', 'items.variant.size')
-            ->where('user_id', 1)
+            ->where('user_id', Auth::id())
             ->where('status', 'active')
             ->first();
 
