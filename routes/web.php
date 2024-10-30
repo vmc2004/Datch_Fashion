@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
@@ -37,6 +38,7 @@ Route::get('/cua-hang', function(){
 // });
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
+Route::get('/mua-hang', [CheckoutController::class, 'show']);
 
 Route::get('/tai-khoan', function(){
     return view('Client.account.profile');

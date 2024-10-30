@@ -7,7 +7,7 @@
 <hr>
 <div class="max-w-screen-xl mx-auto ">
    <div class="container flex mx-auto flex">
-         <div>
+         <div class="mb-5">
             <ul class="flex container mx-auto pt-2 pb-2 text-sm ">
                <li>
                      <a class="hover:underline cursor-pointer" href="/">
@@ -25,104 +25,111 @@
             </ul>
          </div>
    </div>
-<div class="flex">
+
+<div class="flex  shadow p-4 rounded">
     <!-- Left Section: Product Images -->
-    <div class="w-1/2">
-     <div class="relative">
-      <img alt="Ảnh sản phẩm" class="w-full" height="800" src="{{asset('/storage/'. $product->image)}}" width="600"/>
-      <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-       <i class="fas fa-chevron-left">
-       </i>
-      </button>
-      <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-       <i class="fas fa-chevron-right">
-       </i>
-      </button>
-     </div>
-     <div class="flex mt-4 space-x-2">
-        @php
-        // Loại bỏ các biến thể có màu trùng lặp bằng cách chỉ lấy các biến thể có id màu sắc duy nhất
-        $uniqueVariants = $product->ProductVariants->unique('color_id');
-    @endphp
-    @foreach ($uniqueVariants as $variant)
-        <img alt="Ảnh biến thể" class="w-20 h-20 border" src="{{ asset('/storage/' . $variant->image) }}" width="100" height="100"/>
-    @endforeach
-     </div>
-    </div>
-    <!-- Right Section: Product Details -->
-    <div class="w-1/2 pl-8">
-     <h1 class="text-2xl font-bold">
-      {{$product->name}}
-     </h1>
-     <p class="text-gray-500">
-      Mã sản phẩm: {{$product->code}}
-     </p>
-     <p class="text-2xl font-bold text-red-600 mt-2">
-        {{ number_format($product->ProductVariants->first()?->price ?? 0) }} đ
-     </p>
-     @if($product->ProductVariants->first()->price > 599000)
-     <div class="bg-red-600 text-white text-center py-2 mt-4">
-        <i class="fas fa-shipping-fast">
-        </i>
-        FREESHIP TOÀN BỘ ĐƠN HÀNG Khi chọn mua sản phẩm
-       </div>
-     @endif
-     <div class="mt-4">
-        <p class="font-bold">
-            Màu sắc:
-            <span id="selectedColorName" class="text-gray-500">
-                {{$product->ProductVariants->first()->color->name}}
-            </span>
-        </p>
-        
-        <div class="flex space-x-2 mt-2">
-            @php
-            // Loại bỏ các màu trùng lặp bằng cách chỉ lấy các biến thể có id màu sắc duy nhất
-            $uniqueColors = $product->ProductVariants->unique('color_id');
-        @endphp
-        
-        @foreach ($uniqueColors as $variant)
-            <label class="cursor-pointer">
-                <input type="radio" name="color" value="{{ $variant->color->id }}" class="hidden color-radio" data-color-name="{{ $variant->color->name }}" onchange="highlightColor(this)">
-                <div class="color-option w-8 h-8 border border-gray-300 rounded-full" 
-                     style="background-color: {{ $variant->color->color_code }}">
-                </div>
-            </label>
-        @endforeach
-        
-        </div>
-     </div>
-     <div class="mt-4">
-      <p class="font-bold">
-       Kích cỡ:
-      </p>
-      <div class="flex space-x-2 mt-2">
-        @foreach ($product->ProductVariants as $variant)
-        <input type="button" 
-               class="size-option w-10 h-10 border border-gray-300 rounded" 
-               value="{{ $variant->size->name }}" 
-               onclick="highlightSize(this)">
-        @endforeach
-      </div>
-     </div>
-     <p class="font-bold">
-        Số lượng:
-       </p>
-       <div class="flex items-center space-x-4">
-        <div class="flex items-center border rounded-lg px-1 py-1">
-            <button class="text-gray-500" onclick="decrement()">−</button>
-            <input type="number" id="quantity" value="1" min="0" class="mx-2 w-10 text-center appearance-none   ">
-            <button class="text-gray-500" onclick="increment()">+</button>
-        </div>
-    </div>
-    
-    
-     <div class="mt-4 flex space-x-4 ">
-        <button class="border border-red-500 rounded-lg px-4 py-2 text-black">Thêm vào giỏ hàng</button>
-      <button class="bg-red-600 text-white py-2 px-4 rounded">
-       Mua ngay
-      </button>
-     </div>
+                    <div class="w-1/2">
+                        <div class="relative">
+                         <img alt="Ảnh sản phẩm" class="w-full border" height="800" src="{{asset('/storage/'. $product->image)}}" width="600"/>
+                         <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
+                          <i class="fas fa-chevron-left">
+                          </i>
+                         </button>
+                         <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
+                          <i class="fas fa-chevron-right">
+                          </i>
+                         </button>
+                        </div>
+                        <div class="flex mt-4 space-x-2">
+                           @php
+                           // Loại bỏ các biến thể có màu trùng lặp bằng cách chỉ lấy các biến thể có id màu sắc duy nhất
+                           $uniqueVariants = $product->ProductVariants->unique('color_id');
+                       @endphp
+                       @foreach ($uniqueVariants as $variant)
+                           <img alt="Ảnh biến thể" class="w-20 h-20 border" src="{{ asset('/storage/' . $variant->image) }}" width="100" height="100"/>
+                       @endforeach
+                        </div>
+                       </div>
+                       <!-- Right Section: Product Details -->
+                       <div class="w-1/2 pl-8">
+                        <h1 class="text-2xl font-bold">
+                         {{$product->name}}
+                        </h1>
+                        <p class="text-gray-500">
+                         Mã sản phẩm: {{$product->code}}
+                        </p>
+                        <p class="text-2xl font-bold text-red-600 mt-2">
+                           {{ number_format($product->ProductVariants->first()?->price ?? 0) }} đ
+                        </p>
+                        @if($product->ProductVariants->first()->price > 599000)
+                        <div class="bg-red-600 text-white text-center py-2 mt-4">
+                           <i class="fas fa-shipping-fast">
+                           </i>
+                           FREESHIP TOÀN BỘ ĐƠN HÀNG Khi chọn mua sản phẩm
+                          </div>
+                        @endif
+                        <form action="{{ route('cart.add') }}" method="POST">
+                            @csrf
+                            <!-- Trường ẩn chứa ID của sản phẩm -->
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <div class="mt-4">
+                           <p class="font-bold">
+                               Màu sắc:
+                               <span id="selectedColorName" class="text-gray-500">
+                                   {{$product->ProductVariants->first()->color->name}}
+                               </span>
+                           </p>
+                           
+                           <div class="flex space-x-2 mt-2">
+                               @php
+                               // Loại bỏ các màu trùng lặp bằng cách chỉ lấy các biến thể có id màu sắc duy nhất
+                               $uniqueColors = $product->ProductVariants->unique('color_id');
+                           @endphp
+                           
+                           @foreach ($uniqueColors as $variant)
+                               <label class="cursor-pointer">
+                                   <input type="radio" name="color" value="{{ $variant->color->id }}" class="hidden color-radio" data-color-name="{{ $variant->color->name }}" onchange="highlightColor(this)">
+                                   <div class="color-option w-8 h-8 border border-gray-300 rounded-full" 
+                                        style="background-color: {{ $variant->color->color_code }}">
+                                   </div>
+                               </label>
+                           @endforeach
+                           
+                           </div>
+                        </div>
+                        <div class="mt-4">
+                         <p class="font-bold">
+                          Kích cỡ:
+                         </p>
+                         <div class="flex space-x-2 mt-2">
+                           @foreach ($product->ProductVariants as $variant)
+                           <input type="button" name="size" 
+                                  class="size-option w-10 h-10 border border-gray-300 rounded" 
+                                  value="{{ $variant->size->name }}" 
+                                  onclick="highlightSize(this)">
+                           @endforeach
+                         </div>
+                        </div>
+                        <p class="font-bold">
+                           Số lượng:
+                          </p>
+                          <div class="flex items-center space-x-4">
+                           <div class="flex items-center border rounded-lg px-1 py-1">
+                               <button class="text-gray-500" onclick="decrement()">−</button>
+                               <input type="number" id="quantity" value="1" min="0" class="mx-2 w-10 text-center appearance-none   ">
+                               <button class="text-gray-500" onclick="increment()">+</button>
+                           </div>
+                       </div>
+                       
+                       
+                        <div class="mt-4 flex space-x-4 ">
+                           <button class="border border-red-500 rounded-lg px-4 py-2 text-black" type="submit">Thêm vào giỏ hàng</button>
+                         <button class="bg-red-600 text-white py-2 px-4 rounded">
+                          Mua ngay
+                         </button>
+                        </div>
+                </form>
+     
      <div class="mt-4">
       <h2 class="font-bold">
        Mô tả
@@ -275,5 +282,6 @@
             quantityInput.value = currentValue - 1;
         }
     }
+    
 </script>
 @endsection
