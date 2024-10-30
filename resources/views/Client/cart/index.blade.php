@@ -18,7 +18,7 @@
             </div>
             <div class="flex md:mt-16">
                 <div class="flex-1 md:mr-8">
-                    <div class="bg-white md:px-6 md:py-10 py-4 px-2 rounded-lg">
+                    {{-- <div class="bg-white md:px-6 md:py-10 py-4 px-2 rounded-lg">
                         <h2 class="md:mb-6 mb-2 text-slate-800 font-semibold text-xl">2 Sản phẩm trong giỏ hàng</h2>
                         <div>
                             <div id="paymentBtn" class="cursor-pointer select-none">
@@ -39,7 +39,7 @@
                                             <div class="flex items-center border-b py-4">
                                                 <!-- Cột 1: Ảnh sản phẩm -->
                                                 <div class="flex-shrink-0 w-1/5 text-center">
-                                                    
+
                                                     <img src="{{ asset($item->variant->product->image) }}"
                                                         alt="{{ $item->variant->product->name }}"
                                                         class="w-50 h-24 object-cover rounded">
@@ -74,12 +74,13 @@
 
                                                 <!-- Cột 5: Nút xóa -->
                                                 <div class="flex-shrink-0 w-1/5 text-center">
-                                                    <form action="" method="POST"
-                                                        style="display:inline;">
+                                                    <form action="" method="POST" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="text-red-600 hover:text-red-800 focus:outline-none">
-                                                            <i class="fas fa-trash-alt"></i> <!-- Biểu tượng xóa từ Font Awesome -->
+                                                        <button type="submit"
+                                                            class="text-red-600 hover:text-red-800 focus:outline-none">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                            <!-- Biểu tượng xóa từ Font Awesome -->
                                                         </button>
                                                 </div>
                                             </div>
@@ -103,7 +104,7 @@
                                     let currentQuantity = parseInt(quantityInput.value);
                                     currentQuantity = Math.max(1, currentQuantity + change); // Không cho phép số lượng nhỏ hơn 1
                                     quantityInput.value = currentQuantity;
-                            
+
                                     // Cập nhật giá
                                     const priceAtPurchase = {{ $item->price_at_purchase }}; // Thay thế giá sản phẩm cụ thể
                                     const priceElement = quantityInput.closest('.flex').querySelector('p');
@@ -111,7 +112,7 @@
                                 }
                             </script>
                         </div>
-                    </div>
+                    </div> --}}
                     <div>
                         <div class="bg-white md:mt-10 mt-4 rounded-lg">
                             <div class="py-6 md:px-6 px-2 border-b flex items-center justify-between">
@@ -189,95 +190,88 @@
                                 </div>
                             </div>
                             <div class="py-4">
-                                <div class="flex md:px-6 px-2 py-4 relative">
-                                    <label class="md:mr-10 mr-2 flex items-center w-[170px]">
-                                        <div class="itemsBtn cursor-pointer select-none">
-                                            <span class="itemsBtnClose">
-                                                <svg class="w-4 h-4 inline-block svg-vertical"
-                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                    <path fill="currentColor"
-                                                        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm216 248c0 118.7-96.1 216-216 216-118.7 0-216-96.1-216-216 0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216z">
-                                                    </path>
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <img src="./assets/images/Hoangtube.jpg"
-                                            class="md:ml-8 ml-2 rounded-lg w-[135px] h-[135px]" alt="hoang tu be">
-                                    </label>
-                                    <div class="flex-1 relative text-sm">
-                                        <div class="md:mb-4 mb-2 flex items-center justify-between">
-                                            <div class="text-slate-700 ">
-                                                <a href="">Sách thiếu nhi Hoàng Tử Bé</a>
+                                @foreach ($cart->items as $item)
+                                    <div class="flex md:px-6 px-2 py-4 relative cart-item" data-id="{{ $item->id }}">
+                                        <label class="md:mr-10 mr-2 flex items-center w-[170px]">
+                                            <div class="itemsBtn cursor-pointer select-none">
+                                                <span class="itemsBtnClose">
+                                                    <svg class="w-4 h-4 inline-block svg-vertical"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                        <path fill="currentColor"
+                                                            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm216 248c0 118.7-96.1 216-216 216-118.7 0-216-96.1-216-216 0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216z">
+                                                        </path>
+                                                    </svg>
+                                                </span>
                                             </div>
-                                            <svg class="cursor-pointer text-slate-700 z-10 overflow-visible inline-block w-3 h-3.5 hidden md:block"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                                <path fill="currentColor"
-                                                    d="M336 64l-33.6-44.8C293.3 7.1 279.1 0 264 0h-80c-15.1 0-29.3 7.1-38.4 19.2L112 64H24C10.7 64 0 74.7 0 88v2c0 3.3 2.7 6 6 6h26v368c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V96h26c3.3 0 6-2.7 6-6v-2c0-13.3-10.7-24-24-24h-88zM184 32h80c5 0 9.8 2.4 12.8 6.4L296 64H152l19.2-25.6c3-4 7.8-6.4 12.8-6.4zm200 432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V96h320v368zm-176-44V156c0-6.6 5.4-12 12-12h8c6.6 0 12 5.4 12 12v264c0 6.6-5.4 12-12 12h-8c-6.6 0-12-5.4-12-12zm-80 0V156c0-6.6 5.4-12 12-12h8c6.6 0 12 5.4 12 12v264c0 6.6-5.4 12-12 12h-8c-6.6 0-12-5.4-12-12zm160 0V156c0-6.6 5.4-12 12-12h8c6.6 0 12 5.4 12 12v264c0 6.6-5.4 12-12 12h-8c-6.6 0-12-5.4-12-12z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                        <div class="md:mb-4 mb-2 text-slate-700"><span>
-                                                <div class="flex">
-                                                    <span>Tình trạng: Mới</span>
-                                                    <div class="md:ml-6 ml-4">
-                                                        <div class="cursor-pointer">
-                                                            <svg class="w-4 h-4 overflow-visible inline-block svg-vertical"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                                                <path fill="currentColor"
-                                                                    d="M256 340c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28zm7.67-24h-16c-6.627 0-12-5.373-12-12v-.381c0-70.343 77.44-63.619 77.44-107.408 0-20.016-17.761-40.211-57.44-40.211-29.144 0-44.265 9.649-59.211 28.692-3.908 4.98-11.054 5.995-16.248 2.376l-13.134-9.15c-5.625-3.919-6.86-11.771-2.645-17.177C185.658 133.514 210.842 116 255.67 116c52.32 0 97.44 29.751 97.44 80.211 0 67.414-77.44 63.849-77.44 107.408V304c0 6.627-5.373 12-12 12zM256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8z">
-                                                                </path>
-                                                            </svg>
-                                                        </div>
-                                                    </div>
+                                            <img src="{{ $item->variant->product->image }}"
+                                                class="md:ml-8 ml-2 rounded-lg w-[135px] h-[135px]"
+                                                alt="{{ $item->variant->product->name }}">
+                                        </label>
+                                        <div class="flex-1 relative text-sm">
+                                            <div class="md:mb-4 mb-2 flex items-center justify-between">
+                                                <div class="text-slate-700">
+                                                    <a
+                                                        href="#">{{ Str::words($item->variant->product->name, 10, ' ...') }}</a>
                                                 </div>
-                                                Màu: Xám thỏ
-                                            </span>
-                                        </div>
-                                        <div class="mb-2">
-                                            <span class="font-semibold mr-12 text-slate-700 hidden md:block">
-                                                Shop name
-                                            </span>
-                                            <span class="mr-2">
-                                                <svg class="w-3 h-3.5 mr-2 overflow-visible inline-block svg-vertical"
-                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                                                    <path fill="currentColor"
-                                                        d="M192 96c-52.935 0-96 43.065-96 96s43.065 96 96 96 96-43.065 96-96-43.065-96-96-96zm0 160c-35.29 0-64-28.71-64-64s28.71-64 64-64 64 28.71 64 64-28.71 64-64 64zm0-256C85.961 0 0 85.961 0 192c0 77.413 26.97 99.031 172.268 309.67 9.534 13.772 29.929 13.774 39.465 0C357.03 291.031 384 269.413 384 192 384 85.961 298.039 0 192 0zm0 473.931C52.705 272.488 32 256.494 32 192c0-42.738 16.643-82.917 46.863-113.137S149.262 32 192 32s82.917 16.643 113.137 46.863S352 149.262 352 192c0 64.49-20.692 80.47-160 281.931z">
-                                                    </path>
-                                                </svg>
-                                                Nam Định
-                                            </span>
-                                        </div>
-                                        <div class="flex flex-col md:items-center">
-                                            <p class="mr-auto flex items-center mb-2">
+                                                <form action="{{ route('cart.destroy', $item->id) }}" method="POST"
+                                                    class="delete-form">
+                                                    @csrf
+                                                    @method('DELETE') <!-- Đây là cách chỉ định phương thức DELETE -->
+                                                    <button type="submit" class="itemsBtn cursor-pointer select-none"
+                                                        title="Xóa sản phẩm">
+                                                        <span class="itemsBtnClose">
+                                                            <i class="fas fa-trash-alt text-red-600"></i>
+                                                        </span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="md:mb-4 mb-2 text-slate-700">
+                                                <span>
+                                                    <div class="flex">
+                                                        <span>Size: {{ $item->variant->size->name }} </span>
+                                                    </div>
+                                                    Màu: {{ $item->variant->color->name }}
+                                                </span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <span class="font-semibold mr-12 text-slate-700 hidden md:block">
+                                                    {{ $item->variant->product->shop_name }}
+                                                </span>
                                                 <span class="font-semibold text-slate-700 mr-4 text-lg">
-                                                    500,000vnđ
-                                                    <span>
-                                            </p>
-                                            <div class="md:ml-auto flex items-center">
-                                                <span id="dec"
-                                                    class="w-8 h-8 hover:scale-125 bg-slate-100 rounded-full flex justify-center items-center mr-4 cursor-pointer cursor-not-allowed">
-                                                    -
+                                                    {{ number_format($item->price_at_purchase, 0, ',', '.') }} vnđ
                                                 </span>
-                                                <span id="count" class="text-black-400">
-                                                    1
-                                                </span>
-                                                <span class="flex">
-                                                    <span id="inc"
-                                                        class="w-8 h-8 hover:scale-125 bg-slate-100 rounded-full flex justify-center items-center ml-4 cursor-pointer text-black-600 cursor-pointer mr-2">
-                                                        +
+
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center">
+                                                    <button
+                                                        class="w-8 h-8 bg-slate-100 rounded-full flex justify-center items-center mr-4 decrease-quantity"
+                                                        data-id="{{ $item->id }}">
+                                                        -
+                                                    </button>
+                                                    <span class="text-black-400 quantity"
+                                                        id="quantity-{{ $item->id }}">
+                                                        {{ $item->quantity }}
                                                     </span>
-                                                </span>
-                                                <svg class="cursor-pointer text-slate-700 z-10 overflow-visible inline-block w-3 h-3.5 md:hidden"
-                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                                    <path fill="currentColor"
-                                                        d="M336 64l-33.6-44.8C293.3 7.1 279.1 0 264 0h-80c-15.1 0-29.3 7.1-38.4 19.2L112 64H24C10.7 64 0 74.7 0 88v2c0 3.3 2.7 6 6 6h26v368c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V96h26c3.3 0 6-2.7 6-6v-2c0-13.3-10.7-24-24-24h-88zM184 32h80c5 0 9.8 2.4 12.8 6.4L296 64H152l19.2-25.6c3-4 7.8-6.4 12.8-6.4zm200 432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V96h320v368zm-176-44V156c0-6.6 5.4-12 12-12h8c6.6 0 12 5.4 12 12v264c0 6.6-5.4 12-12 12h-8c-6.6 0-12-5.4-12-12zm-80 0V156c0-6.6 5.4-12 12-12h8c6.6 0 12 5.4 12 12v264c0 6.6-5.4 12-12 12h-8c-6.6 0-12-5.4-12-12zm160 0V156c0-6.6 5.4-12 12-12h8c6.6 0 12 5.4 12 12v264c0 6.6-5.4 12-12 12h-8c-6.6 0-12-5.4-12-12z">
-                                                    </path>
-                                                </svg>
+                                                    <button
+                                                        class="w-8 h-8 bg-slate-100 rounded-full flex justify-center items-center ml-4 increase-quantity"
+                                                        data-id="{{ $item->id }}">
+                                                        +
+                                                    </button>
+                                                </div>
+                                                <p class="flex items-center mb-0">
+                                                    <span class="font-bold text-slate-700 mr-4 text-lg total-price"
+                                                        id="total-price-{{ $item->id }}">
+                                                        {{ number_format($item->variant->price * $item->quantity, 0, ',', '.') }}
+                                                        vnđ
+                                                    </span>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -547,6 +541,72 @@
                     </div>
                 </div>
             </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    $('.increase-quantity').click(function() {
+                        const itemId = $(this).data('id');
+                        const quantityElement = $('#quantity-' + itemId);
+                        let quantity = parseInt(quantityElement.text());
+                        quantity++;
+
+                        updateQuantity(itemId, quantity);
+                    });
+
+                    $('.decrease-quantity').click(function() {
+                        const itemId = $(this).data('id');
+                        const quantityElement = $('#quantity-' + itemId);
+                        let quantity = parseInt(quantityElement.text());
+                        if (quantity > 1) {
+                            quantity--;
+                            updateQuantity(itemId, quantity);
+                        }
+                    });
+
+                    function updateQuantity(itemId, quantity) {
+                        $.ajax({
+                            url: '{{ route('cart.update') }}',
+                            method: 'POST',
+                            data: {
+                                cart_item_id: itemId,
+                                quantity: quantity,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                $('#quantity-' + itemId).text(response.new_quantity);
+                                $('#total-price-' + itemId).text(response.new_total_price);
+                            },
+                            error: function(xhr) {
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    }
+                });
+
+                $(document).ready(function() {
+                    // Xóa sản phẩm khỏi giỏ hàng
+                    $('.delete-form').on('submit', function(e) {
+                        e.preventDefault(); // Ngăn tải lại trang
+                        let form = $(this);
+                        let itemId = form.closest('.cart-item').data('id');
+
+                        $.ajax({
+                            url: form.attr('action'), // Lấy URL từ form
+                            type: 'DELETE',
+                            data: form.serialize(),
+                            success: function(response) {
+                                // Xóa phần tử DOM của sản phẩm
+                                $(`.cart-item[data-id="${itemId}"]`).remove();
+                                // Cập nhật lại tổng giỏ hàng nếu cần thiết
+                                updateCartTotal();
+                            },
+                            error: function(xhr) {
+                                alert('Lỗi khi xóa sản phẩm');
+                            }
+                        });
+                    });
+                });
+            </script>
 
 
         @endsection

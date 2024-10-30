@@ -63,4 +63,37 @@ class CartController extends Controller
             'cart' => $cart,
         ]);
     }
+
+    public function updateQuantity(Request $request)
+    {
+        // Kiểm tra tính hợp lệ của dữ liệu
+        $validatedData = $request->validate([
+            'cart_item_id' => 'required|exists:cart_items,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        // Cập nhật số lượng sản phẩm trong giỏ
+        $cartItem = CartItem::find($validatedData['cart_item_id']);
+        $cartItem->quantity = $validatedData['quantity'];
+        $cartItem->save();
+
+        // Trả về phản hồi
+        return response()->json([
+            'success' => true,
+            'new_total_price' => number_format($cartItem->variant->price * $cartItem->quantity, 0, ',', '.') . ' vnđ',
+            'new_quantity' => $cartItem->quantity,
+        ]);
+    }
+    public function destroy($id)
+    {
+        $cartItem = CartItem::find($id);
+
+        if (!$cartItem) {
+            return response()->json(['message' => 'Không tìm thấy sản phẩm'], 404);
+        }
+
+        $cartItem->delete();
+
+        return response()->json(['message' => 'Sản phẩm đã được xóa khỏi giỏ hàng']);
+    }
 }

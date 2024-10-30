@@ -43,6 +43,8 @@ Route::get('/cua-hang', function(){
 // });
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
+Route::post('/gio-hang/update', [CartController::class, 'updateQuantity'])->name('cart.update');
+Route::delete('/gio-hang/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 Route::get('/tai-khoan', function(){
     return view('Client.account.profile');
