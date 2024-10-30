@@ -55,13 +55,11 @@
 
                                                 <!-- Cột 3: Số lượng -->
                                                 <div class="flex items-center border rounded-lg">
-                                                    <button onclick="changeQuantity({{ $item->id }}, -1)" class="px-2">
-                                                     -
-                                                    </button>
-                                                    <input class="w-8 text-center border-l border-r" type="text" value="1"/>
-                                                    <button onclick="changeQuantity({{ $item->id }}, 1)" class="px-2">
-                                                     +
-                                                    </button>
+                                                    <button onclick="changeQuantity({{ $item->id }}, -1)"
+                                                        class="px-2">-</button>
+                                                    <input class="w-8 text-center border-l border-r" id="quantity-{{ $item->id }}" type="text" value="{{$item->quantity}}" readonly />
+                                                    <button onclick="changeQuantity({{ $item->id }}, 1)"
+                                                        class="px-2">+</button>
                                                    </div>
                                                 <!-- Cột 4: Giá -->
                                                 <div class="flex-shrink-0 w-1/5 text-center">
@@ -137,9 +135,15 @@
                                 <div class="ml-auto">{{ number_format($cart->items->sum('price_at_purchase') ) }} đ</div>
                             </div>                            
                         </div>
-                        <div class="p-5 flex items-center justify-between">
-                            <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full"><a href="/mua-hang">Mua hàng</a></button>
-                        </div>
+                        
+                            <div class="p-5 flex items-center justify-between">
+                                <?php 
+                                $user_id = 1 ;
+                                ?>
+                                <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a href="/mua-hang/{{$user_id}}">Thanh toán</a></button>
+                            </div>
+                        
+                        
                     </div>
                 </div>
             </div>
