@@ -21,23 +21,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::get('/', function(){
+Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('products.autocomplete');
+Route::get('/', function () {
     return view('Client.home');
 });
-Route::get('/cua-hang', function(){
+Route::get('/cua-hang', function () {
     return view('Client.category.index');
 });
-Route::get('/gio-hang', function(){
+Route::get('/gio-hang', function () {
     return view('Client.cart.index');
 });
-Route::get('/chi-tiet-san-pham', function(){
+Route::get('/chi-tiet-san-pham', function () {
     return view('Client.product.show');
 });
-Route::get('/tai-khoan', function(){
+Route::get('/tai-khoan', function () {
     return view('Client.account.profile');
 });
-Route::get('/account/orders', function(){
+Route::get('/account/orders', function () {
     return view('Client.order.index');
 });
 
@@ -70,77 +70,77 @@ Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
     'middleware' => ['auth', 'checkAdmin']
-], function(){
-        //user
-        Route::group([
-            'prefix' => 'users',
-            'as' => 'users.',
-        ], function(){
-                Route::get('/', [UserController::class, 'index'])->name('users.index');
-                Route::get('/create', [UserController::class, 'create'])->name('users.create');
-                Route::post('/create', [UserController::class, 'store'])->name('users.store');
-                Route::get('/show/{user}', [UserController::class, 'show'])->name('users.show');
-                Route::get('/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
-                Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
-                Route::put('/{user}', [UserController::class, 'stateChange'])->name('users.stateChange');
-                Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-            });
+], function () {
+    //user
+    Route::group([
+        'prefix' => 'users',
+        'as' => 'users.',
+    ], function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::get('/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/create', [UserController::class, 'store'])->name('users.store');
+        Route::get('/show/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::put('/{user}', [UserController::class, 'stateChange'])->name('users.stateChange');
+        Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    });
 
-        //categories
-        Route::group([
-            'prefix' => 'categories',
-            'as' => 'categories.',
-        ], function(){
-            
-                //     return view('Admin.Categories.index');
-                // })->name('categories.index');
-                Route::get('/', [CategoryController::class, 'index'])->name('categories.index');
-                Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');  // Tìm kiếm
-                Route::get('/categories/filter', [CategoryController::class, 'filter'])->name('categories.filter');  // Lọc và sắp xếp
-                Route::patch('/categories/{id}/hide', [CategoryController::class, 'hide'])->name('categories.hide');  // Ẩn/Hiển thị  
-                Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
-                Route::post('/create', [CategoryController::class, 'store'])->name('categories.store');
-                Route::get('/edit/{category}', [CategoryController::class, 'edit'])->name('categories.edit');
-                Route::put('/edit/{category}', [CategoryController::class, 'update'])->name('categories.update');
-                Route::delete('/destroy/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-                // Route::get('/show/{category}', [CategoryController::class, 'show'])->name('categories.show');
-            });
+    //categories
+    Route::group([
+        'prefix' => 'categories',
+        'as' => 'categories.',
+    ], function () {
 
-        //orders
-        Route::group([
-            'prefix' => 'orders',
-            'as' => 'orders.',
-        ], function(){
-            
-            Route::get('/search/products', [OrderController::class, 'search'])->name('search.products');
-            Route::get('/products/{id}', [OrderController::class, 'show_result']);
-            Route::get('/', [OrderController::class, 'index'])->name('orders.index');
-            Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
-            Route::post('/create', [OrderController::class, 'store'])->name('orders.store');
-            Route::post('/add_product_order', [OrderController::class, 'add_product_order'])->name('orders.add_product_order');
-            Route::get('/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
-            Route::put('/update/{order}', [OrderController::class, 'update'])->name('orders.update');
-            Route::delete('/destroy/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
-            Route::get('/search', [OrderController::class, 'search_order'])->name('orders.search');
-        });
+        //     return view('Admin.Categories.index');
+        // })->name('categories.index');
+        Route::get('/', [CategoryController::class, 'index'])->name('categories.index');
+        Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');  // Tìm kiếm
+        Route::get('/categories/filter', [CategoryController::class, 'filter'])->name('categories.filter');  // Lọc và sắp xếp
+        Route::patch('/categories/{id}/hide', [CategoryController::class, 'hide'])->name('categories.hide');  // Ẩn/Hiển thị  
+        Route::get('/create', [CategoryController::class, 'create'])->name('categories.create');
+        Route::post('/create', [CategoryController::class, 'store'])->name('categories.store');
+        Route::get('/edit/{category}', [CategoryController::class, 'edit'])->name('categories.edit');
+        Route::put('/edit/{category}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('/destroy/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+        // Route::get('/show/{category}', [CategoryController::class, 'show'])->name('categories.show');
+    });
 
-        Route::group([
-            'prefix' => 'banners',
-            'as' => 'banners.',
-        ], function(){
-            Route::get('/', [BannerController::class, 'index'])->name('banners.index');
-            Route::get('/create', [BannerController::class, 'create'])->name('banners.create');
-            Route::post('/create', [BannerController::class, 'store'])->name('banners.store');
-            Route::get('/edit/{banner}', [BannerController::class, 'edit'])->name('banners.edit');
-            Route::put('/edit/{banner}', [BannerController::class, 'update'])->name('banners.update');
-            Route::delete('/destroy/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
-        });
+    //orders
+    Route::group([
+        'prefix' => 'orders',
+        'as' => 'orders.',
+    ], function () {
 
-        
-         Route::group([
-            'prefix' => 'products',
-            'as' => 'products.',
-        ], function(){
+        Route::get('/search/products', [OrderController::class, 'search'])->name('search.products');
+        Route::get('/products/{id}', [OrderController::class, 'show_result']);
+        Route::get('/', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/create', [OrderController::class, 'create'])->name('orders.create');
+        Route::post('/create', [OrderController::class, 'store'])->name('orders.store');
+        Route::post('/add_product_order', [OrderController::class, 'add_product_order'])->name('orders.add_product_order');
+        Route::get('/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
+        Route::put('/update/{order}', [OrderController::class, 'update'])->name('orders.update');
+        Route::delete('/destroy/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+        Route::get('/search', [OrderController::class, 'search_order'])->name('orders.search');
+    });
+
+    Route::group([
+        'prefix' => 'banners',
+        'as' => 'banners.',
+    ], function () {
+        Route::get('/', [BannerController::class, 'index'])->name('banners.index');
+        Route::get('/create', [BannerController::class, 'create'])->name('banners.create');
+        Route::post('/create', [BannerController::class, 'store'])->name('banners.store');
+        Route::get('/edit/{banner}', [BannerController::class, 'edit'])->name('banners.edit');
+        Route::put('/edit/{banner}', [BannerController::class, 'update'])->name('banners.update');
+        Route::delete('/destroy/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
+    });
+
+
+    Route::group([
+        'prefix' => 'products',
+        'as' => 'products.',
+    ], function () {
         Route::get('/', [ProductController::class, 'index'])->name('products.index');
         Route::get('/create', [ProductController::class, 'create'])->name('products.create');
         Route::post('/create', [ProductController::class, 'store'])->name('products.store');
@@ -149,9 +149,4 @@ Route::group([
         Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
-        
-    });
-
-
-    
-
+});
