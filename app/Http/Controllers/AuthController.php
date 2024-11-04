@@ -104,7 +104,7 @@ class AuthController extends Controller
        );
 
        return $status === Password::RESET_LINK_SENT
-           ? back()->with(['status' => __($status)])
+           ? back()->with('status', 'Chúng tôi đã gửi email liên kết đặt lại mật khẩu cho bạn.')
            : back()->withErrors(['email' => __($status)]);
    }
 

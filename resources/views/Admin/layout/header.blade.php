@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/admin/img/apple-icon.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('assets/admin/assets/img/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logDatch.png') }}">
     <title>
 
         @yield('title')
@@ -40,72 +40,90 @@
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
                 aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="{{ route('admin.index') }}" target="_blank">
-                <img src="{{ asset('assets/admin/img/Datch.png') }}" class="navbar-brand-img h-100" alt="main_logo"
+                <img src="{{ asset('assets/admin/img/Datch.png') }}" class="navbar-brand-img" alt="main_logo"
                     width="50
         ">
-        <span class="ms-1 font-weight-bold">Datch Admin</span>
-      </a>
-    </div>
-    <hr class="horizontal dark mt-0">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" href="{{route('admin.index')}}">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="{{ route('categories.index')}}">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="fa-solid fa-calendar-days" style="color: #f70707;" ></i>
-            </div>
-            <span class="nav-link-text ms-1">Danh mục</span>
-          </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link " href="{{url('/admin/products')}}">
-              <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                <i class="fa-solid fa-shirt fa-xl" style="color: #a1d11e;"></i>
-              </div>
-              <span class="nav-link-text ms-1">Sản phẩm</span>
+                <span class="ms-1 font-weight-bold">Datch Admin</span>
             </a>
-          </li>
-        <li class="nav-item">
-          <a class="nav-link " href="{{route('orders.index')}}">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Đơn hàng</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="{{route('users.index')}}">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i>
-            </div>
-            <span class="nav-link-text ms-1">Người dùng</span>
-          </a>
-        </li>
+        </div>
+        <hr class="horizontal dark mt-0">
+        <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ route('admin.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ route('categories.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-calendar-days" style="color: #f70707;"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Danh mục</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ url('/admin/products') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-shirt fa-xl" style="color: #a1d11e;"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Sản phẩm</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ route('orders.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Đơn hàng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ route('users.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Người dùng</span>
+                    </a>
+                </li>
 
-        <li class="nav-item">
-          <a class="nav-link " href="{{route('colors.index')}}">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-world fa-xl" style="color: #67ce23;"></i>
-            </div>
-            <span class="nav-link-text ms-1">Màu sắc</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="{{route('sizes.index')}}">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-tag fa-xl" style="color: #da1709;"></i>
-            </div>
-            <span class="nav-link-text ms-1">Kích thước</span>
-          </a>
-        </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ route('colors.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-world fa-xl" style="color: #67ce23;"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Màu sắc</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ route('sizes.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-tag fa-xl" style="color: #da1709;"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Kích thước</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link " href="{{ route('comments.index') }}">
+                      <div
+                          class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="ni ni-tag fa-xl" style="color: #da1709;"></i>
+                      </div>
+                      <span class="nav-link-text ms-1">Bình luận</span>
+                  </a>
+              </li>
 
                 <li class="nav-item">
 
@@ -125,15 +143,15 @@
                 </li>
 
                 <li class="nav-item">
-                  {{-- <a class="nav-link " href="{{ route('brands.index') }}"> --}}
-                      <div
-                          class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                          {{-- <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i> --}}
-                          <i class="fa-solid fa-copyright" style="color: coral"></i>
-                      </div>
-                      <span class="nav-link-text ms-1">Thương hiệu</span>
-                  </a>
-              </li> --}}
+                    <a class="nav-link " href="{{ route('brands.index') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i>
+                            <i class="fa-solid fa-copyright" style="color: coral"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Thương hiệu</span>
+                    </a>
+                </li>
 
                 <li class="nav-item mt-3">
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
@@ -175,19 +193,21 @@
                     </div>
                     <ul class="navbar-nav  justify-content-end">
                         <li class="nav-item d-flex align-items-center">
-                          @if(Auth::check())
-                          <img src="{{ Auth::user()->avatar }}" alt="" class="rounded-circle me-2" style="width: 30px; height: 30px;">
-                          <a href="{{ route('logout') }}" class="nav-link text-white font-weight-bold px-0">
-                             
-                              {{ Auth::user()->fullname }} <!-- Hiển thị tên người dùng -->
-                          </a>
-                          <a href="{{ route('logout') }}" class="d-sm-inline d-none"></a>
-                      @else
-                          <a href="{{ route('login') }}" class="nav-link text-white font-weight-bold px-0">
-                              <i class="fa fa-user me-sm-1"></i>
-                              Đăng nhập
-                          </a>
-                      @endif
+                            @if (Auth::check())
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt=""
+                                    class="rounded-circle me-2" style="width: 30px; height: 30px;">
+
+                                <a href="{{ route('logout') }}" class="nav-link text-white font-weight-bold px-0">
+
+                                    {{ Auth::user()->fullname }} <!-- Hiển thị tên người dùng -->
+                                </a>
+                                <a href="{{ route('logout') }}" class="d-sm-inline d-none"></a>
+                            @else
+                                <a href="{{ route('login') }}" class="nav-link text-white font-weight-bold px-0">
+                                    <i class="fa fa-user me-sm-1"></i>
+                                    Đăng nhập
+                                </a>
+                            @endif
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">

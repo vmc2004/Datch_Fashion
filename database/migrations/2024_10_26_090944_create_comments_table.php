@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->text('content');                                              
+            $table->unsignedTinyInteger('rating')->default(0);                    
+            $table->enum('status', ['approved', 'pending', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

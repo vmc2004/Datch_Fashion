@@ -37,10 +37,8 @@ class BrandController extends Controller
 
         $logoPath = null;
         if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('uploads/products', 'public');
+            $logoPath = $request->file('logo')->store('brands', 'public');
         }
-        // dd($logoPath);
-
         $brand = Brand::create([
             'name' => $request->name,
             'logo' => $logoPath
