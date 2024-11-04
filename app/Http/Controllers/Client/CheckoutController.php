@@ -36,6 +36,7 @@ class CheckoutController extends Controller
             if (!Auth::check()) {
                 return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
             }
+    
             $order = new Order();
             $order->user_id = Auth::id(); 
             $order->fullname = $request->name;
@@ -44,34 +45,41 @@ class CheckoutController extends Controller
             $order->address = $request->address;
             $order->save(); 
     
+            
             foreach ($request->input('variant_id') as $index => $variantId) {
-                $orderDetail = new OrderDetail();
-                $orderDetail->order_id = $order->id; 
-                $orderDetail->variant_id = $variantId;
-                $orderDetail->quantity = $request->input('quantity')[$index]; 
-                $orderDetail->price = $request->input('price')[$index]; 
-                $orderDetail->total_price = $orderDetail->price * $orderDetail->quantity; 
-                if ($orderDetail->price < 0 || $orderDetail->quantity < 0) {
+                $quantity = $request->input('quantity')[$index]; 
+                $price = $request->input('price')[$index];
+    
+                if ($price < 0 || $quantity < 0) {
                     return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
                 }
     
+                $orderDetail = new OrderDetail();
+                $orderDetail->order_id = $order->id; 
+                $orderDetail->variant_id = $variantId;
+                $orderDetail->quantity = $quantity; 
+                $orderDetail->price = $price; 
+                $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
             }
+    
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
-                $cart->items()->delete(); // Xóa tất cả các cart item
-                $cart->delete(); // Sau đó xóa giỏ hàng
+                $cart->items()->delete(); 
+                $cart->delete(); 
             }
+    
             return redirect()->route('thankyou');
            
         } catch (\Exception $e) {
-            // Ghi log lỗi hoặc hiển thị lỗi
+            // Ghi log lỗi
             \Log::error('Error creating order: ' . $e->getMessage(), [
                 'request_data' => $request->all(),
             ]);
             return back()->withErrors(['message' => 'Có lỗi xảy ra. Vui lòng thử lại.']);
         }
     }
+    
     public function thankyou(){
         return view('Client.checkout.done');
     }
