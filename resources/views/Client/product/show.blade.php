@@ -52,12 +52,19 @@
                        </div>
                        <!-- Right Section: Product Details -->
                        <div class="w-1/2 pl-8">
-                        <h1 class="text-2xl font-bold">
-                         {{$product->name}}
+                        
+                       
+                        <h1 class="text-2xl font-bold flex">
+                         {{$product->name}} 
+                         <button class="action action-wishlist action towishlist action towishlist ml-8	">
+                            <i class="fa-regular fa-heart fa-xl"></i>
+                        </button>
                         </h1>
                         <p class="text-gray-500">
                          Mã sản phẩm: {{$product->code}}
                         </p>
+                    
+                        
                         <p class="text-2xl font-bold text-red-600 mt-2">
                            {{ number_format($product->ProductVariants->first()?->price ?? 0) }} đ
                         </p>

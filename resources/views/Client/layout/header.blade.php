@@ -52,6 +52,12 @@
                 </div>
                 
                 @if (Auth::check())
+                <a href="/tai-khoan" class="flex flex-col items-center text-gray-800">
+                    <i class="fas fa-user text-xl"></i>
+                    <span class="text-sm">Tài khoản</span>
+                </a>
+            @else
+                @if (Auth::check())
                 <a href="{{ route('Client.account.login') }}" class="flex flex-col items-center text-gray-800">
                     <i class="fas fa-user text-xl"></i>
                     <span class="text-sm">{{Auth::user()->fullname}}</span>
@@ -61,6 +67,8 @@
                     <i class="fas fa-user text-xl"></i>
                     <span class="text-sm">Đăng nhập</span>
                 </a>
+            @endif
+            
                 @endif
                 <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
                     <i class="fas fa-shopping-bag text-xl"></i>
