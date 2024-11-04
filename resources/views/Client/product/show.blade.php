@@ -169,45 +169,92 @@
        </div>   
     </div>
    </div>
-   
-      
-        {{-- Gợi ý mua cùng  --}}
-        <div class="container mx-auto p-4 pt-10">
-            <h2 class="text-2xl font-semibold mb-4">
-                Gợi ý mua cùng
-            </h2>
-            <div class="grid grid-cols-4 gap-4">
-                <!-- Product 1 -->
-                @foreach ($related_products as $hihi)
-                    <div class="text-center">
-                        <img alt="Ảnh sản phẩm gợi ý" class="w-full" height="400"
-                            src="{{ asset('/storage/' . $hihi->image) }}" width="300" />
-                        <div class="flex justify-center mt-2">
-                            <div class="w-4 h-4 bg-blue-800 rounded-full border border-gray-300">
-                            </div>
-                        </div>
-                        <p class="mt-2 text-gray-700">
-                            {{ $hihi->name }}
-                        </p>
-                        @if ($hihi->ProductVariants->first()?->sale_price != 0)
-                            <p class="text-lg font-semibold">
-                                {{ number_format($hihi->ProductVariants->first()?->sale_price ?? 0) }} đ
-                            </p>
-                            <p class="text-gray-500 line-through">
-                                {{ number_format($hihi->ProductVariants->first()?->price ?? 0) }} đ
-                            </p>
-                        @else
-                            <p class="text-gray-500 ">
-                                {{ number_format($hihi->ProductVariants->first()?->price ?? 0) }} đ
-                            </p>
-                        @endif
 
-                        <p class="text-red-600">
-                            -50%
-                        </p>
-                    </div>
-                @endforeach
+   <div class="container mx-auto p-4 pt-10">
+    <div id="toast" class="toast">Bình luận của bạn đã được gửi thành công!</div>
+    <h2 class="text-2xl font-semibold mb-4 t">
+        Bình luận sản phẩm
+    </h2>
+
+    <p class="mt-2"><span class="font-bold">Đánh giá trung bình:</span> {{round($avgRating,1)}}/5 <i class="fa-solid fa-star text-warning"></i></p>
+
+        <div class="row">
+            @foreach ($comments as $comment)
+            @if ($comment->status=='approved')
+            <div class="comment my-2 col-sm-4 col-md-4">
+                <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày {{ $comment->created_at->format('d/m/Y') }}</p>
+                <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
+                <p><span class="font-bold">Đánh giá:</span> {{ $comment->rating }} sao</p> 
             </div>
+            @else
+                <div></div>
+            @endif
+        @endforeach
+        {{$comments->links()}}
+        </div>
+        <hr class="mb-3">
+
+    @if (Auth::check())
+    <form action="{{route('comments.sendComment',$product->id)}}" method="POST" class="comment-form w-100">
+        @csrf
+        <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5" />
+            <label for="star5">&#9733;</label>
+            <input type="radio" id="star4" name="rating" value="4" />
+            <label for="star4">&#9733;</label>
+            <input type="radio" id="star3" name="rating" value="3" />
+            <label for="star3">&#9733;</label>
+            <input type="radio" id="star2" name="rating" value="2" />
+            <label for="star2">&#9733;</label>
+            <input type="radio" id="star1" name="rating" value="1" />
+            <label for="star1">&#9733;</label>
+        </div>
+
+        <textarea name="content" placeholder="Viết bình luận của bạn..." required></textarea>
+        <button type="submit" class="submit-button">Gửi bình luận</button>
+    </form>
+    @else
+        <div class=""></div>
+    @endif
+</div>
+   
+    
+{{-- gợi ý mua cùng --}}
+    <div class="container mx-auto p-4 pt-10">
+        <h2 class="text-2xl font-semibold mb-4">
+            Gợi ý mua cùng
+        </h2>
+        <div class="grid grid-cols-4 gap-4">
+            <!-- Product 1 -->
+            @foreach ($related_products as $hihi)
+                <div class="text-center">
+                    <img alt="Ảnh sản phẩm gợi ý" class="w-full" height="400"
+                        src="{{ asset('/storage/' . $hihi->image) }}" width="300" />
+                    <div class="flex justify-center mt-2">
+                        <div class="w-4 h-4 bg-blue-800 rounded-full border border-gray-300">
+                        </div>
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        {{ $hihi->name }}
+                    </p>
+                    @if ($hihi->ProductVariants->first()?->sale_price != 0)
+                        <p class="text-lg font-semibold">
+                            {{ number_format($hihi->ProductVariants->first()?->sale_price ?? 0) }} đ
+                        </p>
+                        <p class="text-gray-500 line-through">
+                            {{ number_format($hihi->ProductVariants->first()?->price ?? 0) }} đ
+                        </p>
+                    @else
+                        <p class="text-gray-500 ">
+                            {{ number_format($hihi->ProductVariants->first()?->price ?? 0) }} đ
+                        </p>
+                    @endif
+
+                    <p class="text-red-600">
+                        -50%
+                    </p>
+                </div>
+            @endforeach
         </div>
     </div>
 
@@ -258,8 +305,24 @@
             }
         }
 
-    
-    
+        function handleSubmit(event) {
+        event.preventDefault(); // Ngăn chặn form gửi bình luận theo cách mặc định
+
+        // Gửi bình luận bằng AJAX hoặc xử lý logic tại đây, nếu cần
+
+        // Hiển thị thông báo thành công
+        showToast();
+    }
+
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+
+        // Tự động ẩn thông báo sau 3 giây
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
 </script>
 @endsection
- 
+

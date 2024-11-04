@@ -6,12 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="{{asset('assets/admin/img/logDatch.png')}}" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{{asset('assets/clinet/css/styles.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <title>@yield('title') - Datch</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{asset('assets/client//assets/css/styles.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/client/css/styles.css')}}">
   <link rel="stylesheet" href="{{asset('assets/client/assets/css/styles-be.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
@@ -56,12 +57,19 @@
                     <span class="text-sm">Tài khoản</span>
                 </a>
             @else
+                @if (Auth::check())
+                <a href="{{ route('Client.account.login') }}" class="flex flex-col items-center text-gray-800">
+                    <i class="fas fa-user text-xl"></i>
+                    <span class="text-sm">{{Auth::user()->fullname}}</span>
+                </a>
+                @else
                 <a href="{{ route('Client.account.login') }}" class="flex flex-col items-center text-gray-800">
                     <i class="fas fa-user text-xl"></i>
                     <span class="text-sm">Đăng nhập</span>
                 </a>
             @endif
             
+                @endif
                 <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
                     <i class="fas fa-shopping-bag text-xl"></i>
                     <span class="text-sm">Giỏ hàng</span>

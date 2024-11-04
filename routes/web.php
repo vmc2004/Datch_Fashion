@@ -91,3 +91,6 @@ Route::get('verify-otp', function () {
 })->name('verifyOtpForm');
 Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
+Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
+
+
