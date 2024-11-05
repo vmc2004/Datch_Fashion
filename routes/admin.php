@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 
@@ -56,6 +57,15 @@ Route::prefix('admin')->group(function () {
         Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
         Route::put('/{user}', [UserController::class, 'stateChange'])->name('users.stateChange');
         Route::delete('/destroy/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    });
+    // Kết thúc người dùng
+
+     // Đường dẫn bình luận
+     Route::prefix('comments')->group(function () {
+        Route::get('/', [CommentController::class, 'index'])->name('comments.index');
+        Route::post('/send-comment/{product_id}', [CommentController::class, 'sendComment'])->name('comments.sendComment');
+        Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('comments.edit');
+        Route::put('/edit/{comment}', [CommentController::class, 'update'])->name('comments.update');
     });
     // Kết thúc người dùng
 
