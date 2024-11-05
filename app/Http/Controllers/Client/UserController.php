@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Clinet;
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -76,4 +76,34 @@ public function showRegisterForm(Request $request)
 
     return redirect()->route('Client.account.login')->with(['message' => 'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.', 'message_type' => 'success']);
 }
+
+public function profile()
+{
+    // Get the currently authenticated user
+    $user = Auth::user();
+
+    // Return the profile view with the user data
+    return view('Client.account.profile', compact('user'));
+}
+
+public function updateProfile(Request $request)
+{
+    $user = Auth::user();
+
+    // Validate the request data
+    $request->validate([
+        'fullname' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        'password' => 'nullable|string|min:8|confirmed', // Password is optional
+    ]);
+
+    User::create([
+        'fullname' => $request->fullname,
+        'email' => $request->email,
+        'password' => Hash::make($request->password), 
+    ]);
+
+    return redirect()->route('Client.profile')->with(['message' => 'Profile updated successfully', 'message_type' => 'success']);
+}
+
 }

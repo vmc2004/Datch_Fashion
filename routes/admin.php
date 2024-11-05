@@ -25,8 +25,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
 
 
-
-
+   
+   
     // Đường dẫn danh mục sản phẩm
     Route::prefix('categories')->group(function () {
         // Route::get('/', function(){
@@ -163,3 +163,4 @@ Route::prefix('admin')->group(function () {
         Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
     });
             // Kết thúc mã giảm giá
+       
