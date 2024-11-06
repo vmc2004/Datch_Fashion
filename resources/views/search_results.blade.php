@@ -4,7 +4,133 @@
 
 
 @section('content')
+<div class="flex p-4">
+    <button id="dropdownDefault" data-dropdown-toggle="dropdown"
+        class="locgiasp"
+        type="button">
+        Filter by category
+        <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
 
+    <!-- Dropdown menu -->
+    <div id="dropdown" class="z-10 hidden w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+        <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">
+            Category
+        </h6>
+        <ul class="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+            <li class="flex items-center">
+                <input id="apple" type="checkbox" value=""
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="apple" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Apple (56)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="fitbit" type="checkbox" value=""
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="fitbit" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Fitbit (56)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="dell" type="checkbox" value=""
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="dell" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Dell (56)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="asus" type="checkbox" value="" checked
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="asus" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Asus (97)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="logitech" type="checkbox" value="" checked
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="logitech" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Logitech (97)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="msi" type="checkbox" value="" checked
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="msi" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    MSI (97)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="bosch" type="checkbox" value="" checked
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="bosch" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Bosch (176)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="sony" type="checkbox" value=""
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="sony" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Sony (234)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="samsung" type="checkbox" value="" checked
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="samsung" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Samsung (76)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="canon" type="checkbox" value=""
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="canon" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Canon (49)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="microsoft" type="checkbox" value=""
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="microsoft" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Microsoft (45)
+                </label>
+            </li>
+
+            <li class="flex items-center">
+                <input id="razor" type="checkbox" value=""
+                    class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                <label for="razor" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Razor (49)
+                </label>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="container flex mx-auto flex">
     <div class="mb-5">
         <ul class="flex container mx-auto pt-2 pb-2 text-sm">
@@ -24,34 +150,25 @@
         </p>
     </div>
 </div>
-@if($products->isEmpty())
-<p>No products found.</p>
-@else
-<div class="max-w-screen-xl mx-auto py-8">
+<form id="price-filter">
+    <input type="number" id="min_price" placeholder="Min Price" />
+    <input type="number" id="max_price" placeholder="Max Price" />
+    <button type="submit">Lọc</button>
+</form>
 
+<div class="max-w-screen-xl mx-auto py-8">
+    @if($products->isEmpty())
+    <p>No products found.</p>
+    @else
     <div class="relative">
         <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6" id="products-grid">
             @foreach ($products as $new)
-            <div class="h-full rounded-lg relative shadow-xl">
-                <div class="absolute -left-[3.2px] top-2 z-10">
-                    <div
-                        class="text-white text-xs bg-[#06a5a8] border border-solid border-transparent rounded-sm inline-block px-2">
-                        <svg class="overflow-visible w-4 inline-block" viewBox="0 0 640 512">
-                            <path fill="currentColor"
-                                d="M632 384h-24V275.9c0-16.8-6.8-33.3-18.8-45.2l-83.9-83.9c-11.8-12-28.3-18.8-45.2-18.8H416V78.6c0-25.7-22.2-46.6-49.4-46.6H49.4C22.2 32 0 52.9 0 78.6v290.8C0 395.1 22.2 416 49.4 416h16.2c-1.1 5.2-1.6 10.5-1.6 16 0 44.2 35.8 80 80 80s80-35.8 80-80c0-5.5-.6-10.8-1.6-16h195.2c-1.1 5.2-1.6 10.5-1.6 16 0 44.2 35.8 80 80 80s80-35.8 80-80c0-5.5-.6-10.8-1.6-16H632c4.4 0 8-3.6 8-8v-16c0-4.4-3.6-8-8-8zM460.1 160c8.4 0 16.7 3.4 22.6 9.4l83.9 83.9c.8.8 1.1 1.9 1.8 2.8H416v-96h44.1zM144 480c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm63.6-96C193 364.7 170 352 144 352s-49 12.7-63.6 32h-31c-9.6 0-17.4-6.5-17.4-14.6V78.6C32 70.5 39.8 64 49.4 64h317.2c9.6 0 17.4 6.5 17.4 14.6V384H207.6zM496 480c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm0-128c-26.1 0-49 12.7-63.6 32H416v-96h160v96h-16.4c-14.6-19.3-37.5-32-63.6-32z">
-                            </path>
-                        </svg>
-                        Freeship
-                    </div>
-                    <div
-                        class="size-0 border-2 border-[#098E91] border-l-transparent border-b-transparent">
-                    </div>
-                </div>
+            <div class="h-full rounded-lg relative shadow-xl product-item">
                 <div class="h-full rounded-lg overflow-hidden flex flex-col">
                     <div class="overflow-hidden h-48">
                         <a href="/product/{{$new->slug}}">
@@ -85,8 +202,100 @@
             @endforeach
         </div>
     </div>
+    @endif
 </div>
-@endif
-
 
 @endsection
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Sự kiện submit form lọc giá
+        $('#price-filter').submit(function(e) {
+            e.preventDefault(); // Ngăn không để form submit mặc định
+
+            // Lấy giá trị từ các input
+            var minPrice = $('#min_price').val();
+            var maxPrice = $('#max_price').val();
+
+            // Kiểm tra giá trị đã nhập
+            if (minPrice === "" || maxPrice === "") {
+                alert("Please enter both min and max price.");
+                return;
+            }
+
+            console.log("Min Price: " + minPrice);
+            console.log("Max Price: " + maxPrice);
+
+            // Gửi yêu cầu AJAX để lọc sản phẩm
+            $.ajax({
+                url: '/products/filter', // URL của API
+                method: 'GET',
+                data: {
+                    min_price: minPrice,
+                    max_price: maxPrice
+                },
+                success: function(response) {
+                    console.log("Response from server:", response); // Kiểm tra dữ liệu trả về
+
+                    var productsGrid = $('#products-grid');
+                    productsGrid.empty(); // Xóa danh sách sản phẩm cũ
+
+                    if (response.length === 0) {
+                        productsGrid.append('<div>No products found in this price range.</div>');
+                        return;
+                    }
+
+                    // Lặp qua các sản phẩm và hiển thị
+                    response.forEach(function(product) {
+                        console.log("Product:", product); // Kiểm tra từng sản phẩm trả về từ server
+
+                        // Kiểm tra xem sản phẩm có variant không và có giá không
+                        if (product.variants && product.variants.length > 0) {
+                            var variant = product.variants[0]; // Lấy variant đầu tiên
+                            var price = variant.price || 'Price not available'; // Kiểm tra nếu giá không có thì hiển thị 'Price not available'
+                            productsGrid.append('<div class="h-full rounded-lg relative shadow-xl product-item">' +
+                                '<div class="h-full rounded-lg overflow-hidden flex flex-col">' +
+                                '<div class="overflow-hidden h-48"><a href="/product/' + product.slug + '">' +
+                                '<img class="hover:scale-110 duration-100" src="' + product.image + '" alt="' + product.slug + '">' +
+                                '</a></div>' +
+                                '<div class="bg-white p-2 flex flex-col space-y-2">' +
+                                '<div class=""><a class="text-slate-800" href="/product/' + product.slug + '">' + product.name + '</a></div>' +
+                                '<div class="space-y-2">' +
+                                '<p class="font-semibold text-slate-800">' + price + ' đ</p>' +
+                                '<div class="flex gap-2 text-xs text-slate-700">' +
+                                '<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">' +
+                                '<path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />' +
+                                '<path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />' +
+                                '</svg> Hà Nội</div>' +
+                                '</div></div></div></div>');
+                        } else {
+                            // Trường hợp không có variants
+                            var price = 'Price not available'; // Không có giá
+                            productsGrid.append('<div class="h-full rounded-lg relative shadow-xl product-item">' +
+                                '<div class="h-full rounded-lg overflow-hidden flex flex-col">' +
+                                '<div class="overflow-hidden h-48"><a href="/product/' + product.slug + '">' +
+                                '<img class="hover:scale-110 duration-100" src="' + product.image + '" alt="' + product.slug + '">' +
+                                '</a></div>' +
+                                '<div class="bg-white p-2 flex flex-col space-y-2">' +
+                                '<div class=""><a class="text-slate-800" href="/product/' + product.slug + '">' + product.name + '</a></div>' +
+                                '<div class="space-y-2">' +
+                                '<p class="font-semibold text-slate-800">' + price + ' đ</p>' +
+                                '<div class="flex gap-2 text-xs text-slate-700">' +
+                                '<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">' +
+                                '<path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />' +
+                                '<path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />' +
+                                '</svg> Hà Nội</div>' +
+                                '</div></div></div></div>');
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error: " + status + ": " + error);
+                    console.error("Response Text: " + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

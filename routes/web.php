@@ -27,7 +27,7 @@ use App\Http\Controllers\Client\UserController;
 |
 */
 
-
+Route::get('/products/filter', [ProductController::class, 'getProducts']);
 Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('autocomplete');
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -50,5 +52,30 @@ class ProductController extends Controller
 
         // Trả về view hiển thị kết quả tìm kiếm
         return view('search_results', compact('products', 'query', 'totalResults'));
+    }
+    public function getProducts(Request $request)
+    {
+        // Lọc và lấy sản phẩm kèm theo variants
+        $products = Product::with('variants') // Eager load variants
+            ->when($request->min_price, function ($query) use ($request) {
+                return $query->whereHas('variants', function ($q) use ($request) {
+                    $q->where('price', '>=', $request->min_price); // Lọc theo giá tối thiểu
+                });
+            })
+            ->when($request->max_price, function ($query) use ($request) {
+                return $query->whereHas('variants', function ($q) use ($request) {
+                    $q->where('price', '<=', $request->max_price); // Lọc theo giá tối đa
+                });
+            })
+            ->get();
+
+        // Trả về sản phẩm dưới dạng JSON
+        return response()->json($products);
+    }
+
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class, 'product_id', 'id'); // Đảm bảo tên cột khóa ngoại đúng
     }
 }
