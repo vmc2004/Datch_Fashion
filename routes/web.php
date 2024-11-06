@@ -15,6 +15,7 @@ use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
 
 /*
@@ -36,6 +37,8 @@ Route::get('/product/{slug}', [ProductController::class,'show']);
 Route::get('/cua-hang', function(){
     return view('Client.category.index');
 });
+Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
+Route::get('/product/{slug}', [StoreController::class,'show'])->name('Client.category.index');
 // Route::get('/gio-hang', function(){
 //     return view('Client.cart.index');
 // });
