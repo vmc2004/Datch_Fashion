@@ -142,16 +142,4 @@ class ProductController extends Controller
             'message' => 'Product deleted successfully',
         ]);
     }
-    public function autocomplete(Request $request)
-    {
-        $query = $request->input('query');
-
-        // Lấy các sản phẩm có tên chứa từ khóa
-        $products = Product::where('name', 'like', '%' . $query . '%')
-            ->take(5) // Giới hạn 5 kết quả gợi ý
-            ->get();
-
-        // Trả về JSON chứa tên sản phẩm
-        return response()->json($products);
-    }
 }

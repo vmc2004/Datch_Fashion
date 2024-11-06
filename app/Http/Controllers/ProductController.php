@@ -40,22 +40,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'code' => 'required|string|max:9|unique:products,code',
-            'name' => 'required|string|max:199',
-            'image' => 'nullable|image|max:2048',
-            'price' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'material' => 'nullable|string',
-            'status' => 'required|boolean',
-            'is_active' => 'required|boolean',
-            'category_id' => 'required|exists:categories,id',
-            'brand_id' => 'required|exists:brands,id',
-            'color_id.*' => 'required|exists:colors,id',
-            'size_id.*' => 'required|exists:sizes,id',
-            'quantity.*' => 'required|integer|min:0',
-            'images.*' => 'nullable|image|max:2048',
-        ]);
+        // $request->validate([
+        //     'code' => 'required|string|max:9|unique:products,code',
+        //     'name' => 'required|string|max:199',
+        //     'image' => 'nullable|image|max:2048',
+        //     'price' => 'required|numeric|min:0',
+        //     'description' => 'nullable|string',
+        //     'material' => 'nullable|string',
+        //     'status' => 'required|boolean',
+        //     'is_active' => 'required|boolean',
+        //     'category_id' => 'required|exists:categories,id',
+        //     'brand_id' => 'required|exists:brands,id',
+        //     'color_id.*' => 'required|exists:colors,id',
+        //     'size_id.*' => 'required|exists:sizes,id',
+        //     'quantity.*' => 'required|integer|min:0',
+        //     'images.*' => 'nullable|image|max:2048',
+        // ]);
 
         // Tạo slug từ tên sản phẩm
         $slug = Str::slug($request->name, '-');
@@ -63,7 +63,7 @@ class ProductController extends Controller
         // Xử lý upload hình ảnh nếu có
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = Storage::put('uploads/products',$request->file('image'));
+            $imagePath = Storage::put('uploads/products', $request->file('image'));
         }
 
         // dd($request->all());
@@ -89,10 +89,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
-    {
-        //
-    }
+    public function show(Product $product, $id) {}
 
     /**
      * Show the form for editing the specified resource.
@@ -155,7 +152,7 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
         ]);
 
-        return redirect()->route('products.index')->with('success','Product added successfully');
+        return redirect()->route('products.index')->with('success', 'Product added successfully');
     }
 
     /**
@@ -170,5 +167,16 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-    
+    public function autocomplete(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Lấy các sản phẩm có tên chứa từ khóa
+        $products = Product::where('name', 'like', '%' . $query . '%')
+            ->take(5) // Giới hạn 5 kết quả gợi ý
+            ->get();
+
+        // Trả về JSON chứa tên sản phẩm
+        return response()->json($products);
+    }
 }

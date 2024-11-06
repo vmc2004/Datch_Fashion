@@ -17,11 +17,37 @@
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+  <style>
+    .border-blue-500 {
+      border-color: #3B82F6;
+      /* Màu xanh lam */
+    }
+
+    .color-option:hover,
+    .size-option:hover {
+      cursor: pointer;
+      opacity: 0.8;
+      /* Hiệu ứng khi di chuột */
+    }
+
+    .bird-container {
+      width: 100%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      pointer-events: none;
+    }
+  </style>
+
 </head>
 
 <body>
 
   <div class="max-w-screen-xl mx-auto ">
+
     <div class="header">
       <nav class="flex items-center justify-between">
         <div class="flex items-center space-x-8">
@@ -30,27 +56,36 @@
               <img src="{{asset('assets/admin/img/Datch.png')}}" alt="" width="150px">
             </a>
           </div>
-          <a href="#" class="text-gray-800 font-semibold">SALE</a>
-          <a href="#" class="text-gray-800 font-semibold">SẢN PHẨM MỚI</a>
-          <a href="#" class="text-gray-800 font-semibold">NỮ</a>
-          <a href="#" class="text-gray-800 font-semibold">NAM</a>
-          <a href="#" class="text-gray-800 font-semibold">BÉ GÁI</a>
-          <a href="#" class="text-gray-800 font-semibold">BÉ TRAI</a>
+          <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
+          <a href="/cua-hang" class="text-gray-800 font-semibold">Danh mục sản phẩm</a>
+          <a href="#" class="text-gray-800 font-semibold">Sale</a>
+          <a href="/blog" class="text-gray-800 font-semibold">Tin hot</a>
+          <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
         </div>
         <div class="flex items-center space-x-4">
-          <div class="relative">
-            <input type="text" id="search-input" placeholder="Tìm kiếm sản phẩm..." autocomplete="off" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300">
-            <div id="suggestions" style="border: 1px solid #ccc; max-width: 300px;"></div>
-            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-          </div>
-          <a href="/cua-hang" class="flex flex-col items-center text-gray-800 mt-2">
-            <i class="fa-solid fa-shop"></i>
-            <span class="text-sm">Cửa hàng</span>
-          </a>
+          <form action="{{ route('search') }}" method="GET">
+            <div class="relative">
+              <input type="text" placeholder="Tìm kiếm" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300" id="search-box" name="query" autocomplete="off">
+              <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              <button type="submit">Tìm kiếm</button>
+
+            </div>
+          </form>
+
+
+          <div id="suggestions" style="border: 1px solid #ccc; max-width: 300px;"></div>
+          @if (Auth::check())
           <a href="/tai-khoan" class="flex flex-col items-center text-gray-800">
             <i class="fas fa-user text-xl"></i>
             <span class="text-sm">Tài khoản</span>
           </a>
+          @else
+          <a href="{{ route('Client.account.login') }}" class="flex flex-col items-center text-gray-800">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-sm">Đăng nhập</span>
+          </a>
+          @endif
+
           <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
             <i class="fas fa-shopping-bag text-xl"></i>
             <span class="text-sm">Giỏ hàng</span>
@@ -59,41 +94,42 @@
         </div>
       </nav>
     </div>
+
+
+    </nav>
+  </div>
   </div>
 
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
-      $('#search-input').on('keyup', function() {
+      $('#search-box').on('keyup', function() {
         let query = $(this).val();
-        if (query.length > 1) { // Gợi ý sau khi người dùng nhập từ 2 ký tự trở lên
+
+        if (query.length > 1) {
           $.ajax({
-            url: "{{ route('products.autocomplete') }}",
-            type: 'GET',
+            url: "{{ route('autocomplete') }}",
+            type: "GET",
             data: {
               query: query
             },
             success: function(data) {
-              $('#suggestions').empty(); // Xóa gợi ý cũ
+              let suggestions = $('#suggestions');
+              suggestions.empty().show();
+
               if (data.length > 0) {
-                data.forEach(product => {
-                  $('#suggestions').append(`<p>${product.name}</p>`);
+                data.forEach(function(product) {
+                  suggestions.append(`<div><a href="/product/${product.id}">${product.name}</a></div>`);
                 });
               } else {
-                $('#suggestions').append('<p>Không có kết quả</p>');
+                suggestions.append('<div>Không tìm thấy sản phẩm</div>');
               }
             }
           });
         } else {
-          $('#suggestions').empty(); // Xóa gợi ý nếu từ khóa quá ngắn
-        }
-      });
-
-      // Ẩn gợi ý khi nhấn ngoài vùng tìm kiếm
-      $(document).on('click', function(event) {
-        if (!$(event.target).closest('#search-input').length) {
-          $('#suggestions').empty();
+          $('#suggestions').hide();
         }
       });
     });
