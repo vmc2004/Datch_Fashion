@@ -169,7 +169,7 @@
                                     </div>
                                     <div class="space-y-2">
                                        <p class="font-semibold text-slate-800">
-                                             {{$pd->price}} </p>
+                                             {{ number_format($pd->ProductVariants->first()?->price ?? 0) }} đ </p>
                                        <div class="flex gap-2 text-xs text-slate-700">
                                              <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                                 stroke="currentColor" class="size-4">
