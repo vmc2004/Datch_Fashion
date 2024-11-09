@@ -5,6 +5,10 @@
 
 @section('content')
 @include('Client.layout.slide')
+<div class="bird-container">
+    <img src="https://chillnfree.vn/assets/images/bird-animation-desktop-1.gif" alt="chillnfree" class="bird-animation bird-desktop" id="birdAnimation">
+    {{-- <img src="https://chillnfree.vn/assets/images/bird-animation-mobile.gif" alt="chillnfree" class="bird-animation bird-mobile" id="birdAnimation"> --}}
+</div>
 <div class="max-w-screen-xl mx-auto py-8">
     <h2 class="text-2xl font-semibold text-left">Danh mục bạn yêu thích</h2>
     <div class="relative">

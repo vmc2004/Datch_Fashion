@@ -12,6 +12,10 @@ class CartController extends Controller
 {
     public function addToCart(Request $request)
     {
+
+        dd($request->all()); 
+
+        
         // Kiểm tra tính hợp lệ của dữ liệu
         $validatedData = $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -19,6 +23,7 @@ class CartController extends Controller
             'size_id' => 'required|exists:sizes,id',
             'quantity' => 'required|integer|min:1',
         ]);
+        
 
         // Tìm biến thể dựa trên ID sản phẩm, màu sắc và kích cỡ
         $variant = ProductVariant::where('product_id', $validatedData['product_id'])
