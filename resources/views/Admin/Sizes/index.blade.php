@@ -1,7 +1,7 @@
 @extends('Admin.layout.app')
-@section('title', 'Màu sắc')
-@section('title-page', 'Màu sắc')
-@section('single-page', 'Danh sách màu sắc')
+@section('title', 'Kích thước')
+@section('title-page', 'Kích thước')
+@section('single-page', 'Danh sách kích thước')
 @section('content')
 
     <div class="row m-4 vh-90">
