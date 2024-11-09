@@ -42,7 +42,7 @@
                 <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
                 <a href="/cua-hang" class="text-gray-800 font-semibold">Danh mục sản phẩm</a>
                 <a href="#" class="text-gray-800 font-semibold">Sale</a>
-                <a href="/blog" class="text-gray-800 font-semibold">Tin hot</a>
+                <a href="{{route('client.blog')}}" class="text-gray-800 font-semibold">Tin hot</a>
                 <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
             </div>
             <div class="flex items-center space-x-4">
