@@ -50,10 +50,10 @@ class User extends Authenticatable
     //         get: fn ($value) => isset(["member", "admin"][$value]) ? ["member", "admin"][$value] : "unknown",
     //     );
     // Optional: Modify the role attribute if needed
-    
-            
-            
 
-        
+    // app/Models/User.php
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
     }
-
+}

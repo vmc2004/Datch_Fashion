@@ -24,7 +24,7 @@ class StoreProductVariantRequest extends FormRequest
         return [
             'quantity' => 'required|integer|min:1',  
             'price' => 'required|numeric|min:0',     
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image',
         ];
     }
 }

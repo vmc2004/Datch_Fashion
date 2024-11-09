@@ -1,13 +1,13 @@
 @extends('Client.layout.layout')
 
-@section('title', "Chi tiết sản phẩm")
+@section('title', 'Chi tiết sản phẩm')
 
 
 @section('content')
 <hr>
 <div class="max-w-screen-xl mx-auto ">
    <div class="container flex mx-auto flex">
-         <div>
+         <div class="mb-5">
             <ul class="flex container mx-auto pt-2 pb-2 text-sm ">
                <li>
                      <a class="hover:underline cursor-pointer" href="/">
@@ -16,111 +16,141 @@
                </li>
                <li>
                 <span class="mx-4">&gt;</span>
-                <a class="hover:underline cursor-pointer" href="">Danh mục</a>
+                <a class="hover:underline cursor-pointer" href="">{{$product->category->name}}</a>
                 </li>
                 <li>
                     <span class="mx-4">&gt;</span>
-                    <a class="hover:underline cursor-pointer" href="">Tên sản phẩm</a>
+                    <a class="hover:underline cursor-pointer" href="">{{$product->name}}</a>
                     </li>
             </ul>
          </div>
    </div>
-<div class="flex">
+
+<div class="flex  shadow p-4 rounded">
     <!-- Left Section: Product Images -->
-    <div class="w-1/2">
-     <div class="relative">
-      <img alt="Men's Pajama Set - Navy Blue Top and Plaid Bottom" class="w-full" height="800" src="https://storage.googleapis.com/a1aa/image/j54k2qhP484TKFkrNxHgwTiQFQUfHJGlclpWwQoeqCf7hZWnA.jpg" width="600"/>
-      <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-       <i class="fas fa-chevron-left">
-       </i>
-      </button>
-      <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-       <i class="fas fa-chevron-right">
-       </i>
-      </button>
-     </div>
-     <div class="flex mt-4 space-x-2">
-      <img alt="Thumbnail 1" class="w-20 h-20 border" height="100" src="https://storage.googleapis.com/a1aa/image/Hqw3oYq6PHYLClEzBTLgCPZHSiTkWautoX4xCzuKa7JQMz6E.jpg" width="100"/>
-      <img alt="Thumbnail 2" class="w-20 h-20 border" height="100" src="https://storage.googleapis.com/a1aa/image/4dxlZxj00RYEDlrkGsQcsuXnQQvi2Z3xOeBwyQyKMIf8wMrTA.jpg" width="100"/>
-      <img alt="Thumbnail 3" class="w-20 h-20 border" height="100" src="https://storage.googleapis.com/a1aa/image/OTLPYtklyIoSOdcP38ekcua52AmydmDffsWSubaZAEd8hZWnA.jpg" width="100"/>
-      <img alt="Thumbnail 4" class="w-20 h-20 border" height="100" src="https://storage.googleapis.com/a1aa/image/6d1uNCPB5Np4HpKOUAFQklnXen8n4ZM1VLcoPfWLjg5CxMrTA.jpg" width="100"/>
-      <img alt="Thumbnail 5" class="w-20 h-20 border" height="100" src="https://storage.googleapis.com/a1aa/image/egxzgfObV1pBqkfGASTE4eGo6YEw22PBmZOZsr4ln5bHEzsOB.jpg" width="100"/>
-     </div>
-    </div>
-    <!-- Right Section: Product Details -->
-    <div class="w-1/2 pl-8">
-     <h1 class="text-2xl font-bold">
-      Bộ mặc nhà nam
-     </h1>
-     <p class="text-gray-500">
-      Mã sp: 8LS24W001-SB060
-     </p>
-     <p class="text-2xl font-bold text-red-600 mt-2">
-      599.000 đ
-     </p>
-     <div class="bg-red-600 text-white text-center py-2 mt-4">
-      <i class="fas fa-shipping-fast">
-      </i>
-      FREESHIP TOÀN BỘ ĐƠN HÀNG Khi chọn mua sản phẩm
-     </div>
-     <div class="mt-4">
-      <p class="font-bold">
-       Màu sắc:
-       <span class="text-gray-500">
-        SB060
-       </span>
-      </p>
-      <div class="flex space-x-2 mt-2">
-       <div class="w-8 h-8 border border-gray-300 rounded-full bg-gray-800">
-       </div>
-       <div class="w-8 h-8 border border-gray-300 rounded-full bg-gray-200">
-       </div>
-      </div>
-     </div>
-     <div class="mt-4">
-      <p class="font-bold">
-       Kích cỡ:
-      </p>
-      <div class="flex space-x-2 mt-2">
-       <button class="w-10 h-10 border border-gray-300 rounded">
-        S
-       </button>
-       <button class="w-10 h-10 border border-gray-300 rounded">
-        M
-       </button>
-       <button class="w-10 h-10 border border-gray-300 rounded">
-        L
-       </button>
-       <button class="w-10 h-10 border border-gray-300 rounded">
-        XL
-       </button>
-       <button class="w-10 h-10 border border-gray-300 rounded">
-        XXL
-       </button>
-      </div>
-     </div>
-     <div class="mt-4 flex space-x-4">
-      <button class="bg-red-600 text-white py-2 px-4 rounded">
-       Thêm vào giỏ
-      </button>
-      <button class="bg-gray-200 text-gray-700 py-2 px-4 rounded">
-       Tìm tại cửa hàng
-      </button>
-     </div>
+                    <div class="w-1/2">
+                        <div class="relative">
+                         <img alt="Ảnh sản phẩm" class="w-full border" height="800" src="{{asset('/storage/'. $product->image)}}" width="600"/>
+                         <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
+                          <i class="fas fa-chevron-left">
+                          </i>
+                         </button>
+                         <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
+                          <i class="fas fa-chevron-right">
+                          </i>
+                         </button>
+                        </div>
+                        <div class="flex mt-4 space-x-2">
+                           @php
+                           // Loại bỏ các biến thể có màu trùng lặp bằng cách chỉ lấy các biến thể có id màu sắc duy nhất
+                           $uniqueVariants = $product->ProductVariants->unique('color_id');
+                       @endphp
+                       @foreach ($uniqueVariants as $variant)
+                           <img alt="Ảnh biến thể" class="w-20 h-20 border" src="{{ asset('/storage/' . $variant->image) }}" width="100" height="100"/>
+                       @endforeach
+                        </div>
+                       </div>
+                       <!-- Right Section: Product Details -->
+                       <div class="w-1/2 pl-8">
+                        
+                       
+                        <h1 class="text-2xl font-bold flex">
+                         {{$product->name}} 
+                         <button class="action action-wishlist action towishlist action towishlist ml-8	">
+                            <i class="fa-regular fa-heart fa-xl"></i>
+                        </button>
+                        </h1>
+                        <p class="text-gray-500">
+                         Mã sản phẩm: {{$product->code}}
+                        </p>
+                    
+                        
+                        <p class="text-2xl font-bold text-red-600 mt-2">
+                           {{ number_format($product->ProductVariants->first()?->price ?? 0) }} đ
+                        </p>
+                        @if($product->ProductVariants->first()->price > 599000)
+                        <div class="bg-red-600 text-white text-center py-2 mt-4">
+                           <i class="fas fa-shipping-fast">
+                           </i>
+                           FREESHIP TOÀN BỘ ĐƠN HÀNG Khi chọn mua sản phẩm
+                          </div>
+                        @endif
+                        <form action="{{ route('cart.add') }}" method="POST">
+                            @csrf
+                            <!-- Trường ẩn chứa ID của sản phẩm -->
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <div class="mt-4">
+                           <p class="font-bold">
+                               Màu sắc:
+                               <span id="selectedColorName" class="text-gray-500">
+                                   {{$product->ProductVariants->first()->color->name}}
+                               </span>
+                           </p>
+                           
+                           <div class="flex space-x-2 mt-2">
+                               @php
+                               // Loại bỏ các màu trùng lặp bằng cách chỉ lấy các biến thể có id màu sắc duy nhất
+                               $uniqueColors = $product->ProductVariants->unique('color_id');
+                           @endphp
+                           
+                           @foreach ($uniqueColors as $variant)
+                               <label class="cursor-pointer">
+                                   <input type="radio" name="color" value="{{ $variant->color->id }}" class="hidden color-radio" data-color-name="{{ $variant->color->name }}" onchange="highlightColor(this)">
+                                   <div class="color-option w-8 h-8 border border-gray-300 rounded-full" 
+                                        style="background-color: {{ $variant->color->color_code }}">
+                                   </div>
+                               </label>
+                           @endforeach
+                           
+                           </div>
+                        </div>
+                        <div class="mt-4">
+                         <p class="font-bold">
+                          Kích cỡ:
+                         </p>
+                         <div class="flex space-x-2 mt-2">
+                           @foreach ($product->ProductVariants as $variant)
+                           <input type="button" name="size" 
+                                  class="size-option w-10 h-10 border border-gray-300 rounded" 
+                                  value="{{ $variant->size->name }}" 
+                                  onclick="highlightSize(this)">
+                           @endforeach
+                         </div>
+                        </div>
+                        <p class="font-bold">
+                           Số lượng:
+                          </p>
+                          <div class="flex items-center space-x-4">
+                           <div class="flex items-center border rounded-lg px-1 py-1">
+                               <button class="text-gray-500" onclick="decrement()">−</button>
+                               <input type="number" id="quantity" value="1" min="0" class="mx-2 w-10 text-center appearance-none   ">
+                               <button class="text-gray-500" onclick="increment()">+</button>
+                           </div>
+                       </div>
+                       
+                       
+                        <div class="mt-4 flex space-x-4 ">
+                           <button class="border border-red-500 rounded-lg px-4 py-2 text-black" type="submit">Thêm vào giỏ hàng</button>
+                         <button class="bg-red-600 text-white py-2 px-4 rounded">
+                          Mua ngay
+                         </button>
+                        </div>
+                </form>
+     
      <div class="mt-4">
       <h2 class="font-bold">
        Mô tả
       </h2>
       <p class="text-gray-700 mt-2">
-       Bộ mặc nhà nam thiết kế vừa vặn một cách hoàn hảo, với chất liệu cotton spandex mềm mại mang lại sự thoải mái, dễ chịu cho người mặc.
-      </p>
+        {{$product->description}}
+    </p>
      </div>
      <div class="mt-4">
         <h2 class="font-bold">
          Chất liệu
         </h2>
         <p class="text-gray-700 mt-2">
-         Bộ mặc nhà nam thiết kế vừa vặn một cách hoàn hảo, với chất liệu cotton spandex mềm mại mang lại sự thoải mái, dễ chịu cho người mặc.
+        {{$product->material}}
         </p>
        </div>
        <div class="mt-4">
@@ -139,121 +169,160 @@
        </div>   
     </div>
    </div>
-   
-    {{-- Ưu đãi cảm kết  --}}
-    <div class="flex justify-between items-center space-x-12 py-8 ">
-        <!-- First Item -->
-        <div class="flex items-center space-x-4">
-            <div class="bg-red-100 p-2 rounded">
-                <i class="fas fa-hand-holding-usd text-red-500"></i>
-            </div>
-            <div>
-                <p class="font-semibold text-gray-800">Thanh toán khi nhận hàng (COD)</p>
-                <p class="text-gray-500">Giao hàng toàn quốc.</p>
-            </div>
-        </div>
-        <div class="border-r border-gray-300 h-12"></div>
-        <!-- Second Item -->
-        <div class="flex items-center space-x-4">
-            <div class="bg-red-100 p-2 rounded">
-                <i class="fas fa-truck text-red-500"></i>
-            </div>
-            <div>
-                <p class="font-semibold text-gray-800">Miễn phí giao hàng</p>
-                <p class="text-gray-500">Với đơn hàng trên 599.000 đ.</p>
-            </div>
-        </div>
-        <div class="border-r border-gray-300 h-12"></div>
-        <!-- Third Item -->
-        <div class="flex items-center space-x-4">
-            <div class="bg-red-100 p-2 rounded">
-                <i class="fas fa-box-open text-red-500"></i>
-            </div>
-            <div>
-                <p class="font-semibold text-gray-800">Đổi hàng miễn phí</p>
-                <p class="text-gray-500">Trong 30 ngày kể từ ngày mua.</p>
-            </div>
-        </div>
-    </div>
-   {{-- Gợi ý mua cùng  --}}
+
    <div class="container mx-auto p-4 pt-10">
-    <h2 class="text-2xl font-semibold mb-4">
-     Gợi ý mua cùng
+    <div id="toast" class="toast">Bình luận của bạn đã được gửi thành công!</div>
+    <h2 class="text-2xl font-semibold mb-4 t">
+        Bình luận sản phẩm
     </h2>
-    <div class="grid grid-cols-4 gap-4">
-     <!-- Product 1 -->
-     <div class="text-center">
-      <img alt="Blue shorts" class="w-full" height="400" src="https://storage.googleapis.com/a1aa/image/52NeunZ9h3T3H6B21OSOe9ORccAIfpExFG4R781opB3feoZdC.jpg" width="300"/>
-      <div class="flex justify-center mt-2">
-       <div class="w-4 h-4 bg-blue-800 rounded-full border border-gray-300">
-       </div>
-      </div>
-      <p class="mt-2 text-gray-700">
-       Quần mặc nhà nam cạp chun dáng suông
-      </p>
-      <p class="text-lg font-semibold">
-       99.000 đ
-      </p>
-      <p class="text-gray-500 line-through">
-       139.000 đ
-      </p>
-      <p class="text-red-600">
-       -50%
-      </p>
-     </div>
-     <!-- Product 2 -->
-     <div class="text-center">
-      <img alt="Boy wearing a long sleeve raglan shirt" class="w-full" height="400" src="https://storage.googleapis.com/a1aa/image/ZaFeLEDqWBwzS60abY9RjCraDvW7o1BeavZKurUBRdqtHNrTA.jpg" width="300"/>
-      <div class="flex justify-center mt-2">
-       <div class="w-4 h-4 bg-gray-300 rounded-full border border-gray-300">
-       </div>
-      </div>
-      <p class="mt-2 text-gray-700">
-       Áo phông dài tay bé trai cotton USA raglan
-      </p>
-      <p class="text-lg font-semibold">
-       249.000 đ
-      </p>
-     </div>
-     <!-- Product 3 -->
-     <div class="text-center">
-      <img alt="Woman wearing a green turtleneck" class="w-full" height="400" src="https://storage.googleapis.com/a1aa/image/oLAZufBFHvxsVC33B3gusDkUoBqQw8OvAJxfPM7ePqHcPaWnA.jpg" width="300"/>
-      <div class="flex justify-center mt-2 space-x-2">
-       <div class="w-4 h-4 bg-green-800 rounded-full border border-gray-300">
-       </div>
-       <div class="w-4 h-4 bg-pink-200 rounded-full border border-gray-300">
-       </div>
-       <div class="w-4 h-4 bg-gray-300 rounded-full border border-gray-300">
-       </div>
-       <div class="w-4 h-4 bg-black rounded-full border border-gray-300">
-       </div>
-      </div>
-      <p class="mt-2 text-gray-700">
-       Áo giữ nhiệt nữ cổ cao
-      </p>
-      <p class="text-lg font-semibold">
-       299.000 đ
-      </p>
-      
-     </div>
-     <!-- Product 4 -->
-     <div class="text-center">
-      <img alt="Man wearing a blue long sleeve shirt" class="w-full" height="400" src="https://storage.googleapis.com/a1aa/image/F8YCjfkEoyWUF63emxmEwMDtvSUtOf0ofMjfAlMQtmca9oZdC.jpg" width="300"/>
-      <div class="flex justify-center mt-2 space-x-2">
-       <div class="w-4 h-4 bg-blue-800 rounded-full border border-gray-300">
-       </div>
-       <div class="w-4 h-4 bg-black rounded-full border border-gray-300">
-       </div>
-      </div>
-      <p class="mt-2 text-gray-700">
-       Áo body nam cổ tròn
-      </p>
-      <p class="text-lg font-semibold">
-       279.000 đ
-      </p>
-     </div>
+
+    <p class="mt-2"><span class="font-bold">Đánh giá trung bình:</span> {{round($avgRating,1)}}/5 <i class="fa-solid fa-star text-warning"></i></p>
+
+        <div class="row">
+            @foreach ($comments as $comment)
+            @if ($comment->status=='approved')
+            <div class="comment my-2 col-sm-4 col-md-4">
+                <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày {{ $comment->created_at->format('d/m/Y') }}</p>
+                <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
+                <p><span class="font-bold">Đánh giá:</span> {{ $comment->rating }} sao</p> 
+            </div>
+            @else
+                <div></div>
+            @endif
+        @endforeach
+        {{$comments->links()}}
+        </div>
+        <hr class="mb-3">
+
+    @if (Auth::check())
+    <form action="{{route('comments.sendComment',$product->id)}}" method="POST" class="comment-form w-100">
+        @csrf
+        <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5" />
+            <label for="star5">&#9733;</label>
+            <input type="radio" id="star4" name="rating" value="4" />
+            <label for="star4">&#9733;</label>
+            <input type="radio" id="star3" name="rating" value="3" />
+            <label for="star3">&#9733;</label>
+            <input type="radio" id="star2" name="rating" value="2" />
+            <label for="star2">&#9733;</label>
+            <input type="radio" id="star1" name="rating" value="1" />
+            <label for="star1">&#9733;</label>
+        </div>
+
+        <textarea name="content" placeholder="Viết bình luận của bạn..." required></textarea>
+        <button type="submit" class="submit-button">Gửi bình luận</button>
+    </form>
+    @else
+        <div class=""></div>
+    @endif
+</div>
+   
+    
+{{-- gợi ý mua cùng --}}
+    <div class="container mx-auto p-4 pt-10">
+        <h2 class="text-2xl font-semibold mb-4">
+            Gợi ý mua cùng
+        </h2>
+        <div class="grid grid-cols-4 gap-4">
+            <!-- Product 1 -->
+            @foreach ($related_products as $hihi)
+                <div class="text-center">
+                    <img alt="Ảnh sản phẩm gợi ý" class="w-full" height="400"
+                        src="{{ asset('/storage/' . $hihi->image) }}" width="300" />
+                    <div class="flex justify-center mt-2">
+                        <div class="w-4 h-4 bg-blue-800 rounded-full border border-gray-300">
+                        </div>
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        {{ $hihi->name }}
+                    </p>
+                    @if ($hihi->ProductVariants->first()?->sale_price != 0)
+                        <p class="text-lg font-semibold">
+                            {{ number_format($hihi->ProductVariants->first()?->sale_price ?? 0) }} đ
+                        </p>
+                        <p class="text-gray-500 line-through">
+                            {{ number_format($hihi->ProductVariants->first()?->price ?? 0) }} đ
+                        </p>
+                    @else
+                        <p class="text-gray-500 ">
+                            {{ number_format($hihi->ProductVariants->first()?->price ?? 0) }} đ
+                        </p>
+                    @endif
+
+                    <p class="text-red-600">
+                        -50%
+                    </p>
+                </div>
+            @endforeach
+        </div>
     </div>
-   </div>
-  </div>
 
 @endsection
+
+@section('javascript')
+    <script>
+        // Hiệu ứng chọn cho màu 
+        function highlightColor(selectedInput) {
+            const colorName = selectedInput.getAttribute('data-color-name');
+            document.getElementById('selectedColorName').textContent = colorName;
+            // Loại bỏ viền từ tất cả các tùy chọn màu
+            document.querySelectorAll('.color-option').forEach(element => {
+                element.classList.remove('border-4', 'border-gray-500', 'p-2'); // bỏ border khi không được chọn
+            });
+
+            // Thêm viền cho tùy chọn màu đã chọn
+            selectedInput.nextElementSibling.classList.add('border-4', 'border-gray-500', 'p-2');
+        }
+        // Hiệu ứng chọn cho size 
+        function highlightSize(selectedButton) {
+            // Loại bỏ viền nổi bật từ tất cả các nút kích thước
+            document.querySelectorAll('.size-option').forEach(element => {
+                element.classList.remove('border-4', 'border-blue-500'); // loại bỏ border khi không được chọn
+            });
+
+            // Thêm viền nổi bật cho nút kích thước đã chọn
+            selectedButton.classList.add('border-4', 'border-blue-500');
+        }
+
+        function increment() {
+            // Lấy giá trị hiện tại của ô nhập
+            let quantityInput = document.getElementById('quantity');
+            let currentValue = parseInt(quantityInput.value);
+
+            // Tăng giá trị lên 1
+            quantityInput.value = currentValue + 1;
+        }
+
+        function decrement() {
+            // Lấy giá trị hiện tại của ô nhập
+            let quantityInput = document.getElementById('quantity');
+            let currentValue = parseInt(quantityInput.value);
+
+            // Kiểm tra nếu giá trị lớn hơn 0 thì mới giảm
+            if (currentValue > 0) {
+                quantityInput.value = currentValue - 1;
+            }
+        }
+
+        function handleSubmit(event) {
+        event.preventDefault(); // Ngăn chặn form gửi bình luận theo cách mặc định
+
+        // Gửi bình luận bằng AJAX hoặc xử lý logic tại đây, nếu cần
+
+        // Hiển thị thông báo thành công
+        showToast();
+    }
+
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+
+        // Tự động ẩn thông báo sau 3 giây
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+</script>
+@endsection
+
