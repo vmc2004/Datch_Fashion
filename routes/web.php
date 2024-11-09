@@ -5,9 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
-
-
-
+use App\Http\Controllers\Client\BlogController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Client\CartController;
@@ -95,5 +93,6 @@ Route::get('verify-otp', function () {
 Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
 Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
+Route::get('/Client/blog', [BlogController::class, 'index'])->name('client.blog');
 
 
