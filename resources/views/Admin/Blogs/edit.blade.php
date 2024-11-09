@@ -43,12 +43,12 @@
                             <div class="form-group">
                                 <label for="title">Tiêu Đề</label>
                                 <input type="text" class="form-control" id="title" name="title"
-                                    value="{{ $blog->title }}">
+                                    value="{{ $blog->title }}" onkeyup="ChangeToSlug()">
                             </div>
                             <div class="form-group">
                                 <label for="slug">Slug</label>
                                 <input type="text" class="form-control" id="slug" name="slug"
-                                    value="{{ $blog->slug }}" onkeyup="ChangeToSlug()">
+                                    value="{{ $blog->slug }}" >
                             </div>
                             <div class="form-group">
                                 <label for="image">Ảnh</label>

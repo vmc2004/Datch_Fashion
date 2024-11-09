@@ -93,6 +93,6 @@ Route::get('verify-otp', function () {
 Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
 Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
-Route::get('/Client/blog', [BlogController::class, 'index'])->name('client.blog');
+Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
 
 

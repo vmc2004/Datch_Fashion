@@ -36,11 +36,11 @@
                             @csrf
                             <div class="form-group">
                                 <label for="title">Tiêu Đề</label>
-                                <input type="text" class="form-control" id="title" name="title">
+                                <input type="text" class="form-control" id="title" name="title" onkeyup="ChangeToSlug();">
                             </div>
                             <div class="form-group">
                                 <label for="slug">Slug</label>
-                                <input type="text" class="form-control" id="slug" name="slug" onkeyup="ChangeToSlug()">
+                                <input type="text" class="form-control" id="slug" name="slug" >
                             </div>
                             <div class="form-group">
                                 <label for="image">Ảnh</label>

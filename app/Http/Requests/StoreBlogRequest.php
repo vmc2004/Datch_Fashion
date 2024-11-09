@@ -20,7 +20,7 @@ class StoreBlogRequest extends FormRequest
             'title' => 'string|max:255',
             'content' => 'string',
             'slug' => 'string|unique:blogs,slug',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable',
             'status' => 'boolean',
             'category_id' => 'exists:categories,id',
             'user_id' => 'exists:users,id',
