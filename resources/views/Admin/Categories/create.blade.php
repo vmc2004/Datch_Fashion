@@ -20,7 +20,7 @@
                                 </ul>
                             </div>
                         @endif
-                        
+
                         <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
@@ -37,6 +37,12 @@
                                         @if ($parent->children)
                                             @foreach ($parent->children as $child)
                                                 <option value="{{ $child->id }}">-- {{ $child->name }}</option>
+                                                @if ($child->children)
+                                                    @foreach ($child->children as $grandchild)
+                                                        <option value="{{ $grandchild->id }}">---- {{ $grandchild->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
                                             @endforeach
                                         @endif
                                     @endforeach
