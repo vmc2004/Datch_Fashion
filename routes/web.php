@@ -5,9 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
-
-
-
+use App\Http\Controllers\Client\BlogController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Client\CartController;
@@ -38,7 +36,11 @@ Route::get('/cua-hang', function(){
     return view('Client.category.index');
 });
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
+<<<<<<< HEAD
 // Route::get('/product/{slug}', [StoreController::class,'index'])->name('Client.category.index');
+=======
+
+>>>>>>> d992d9b8f4bb5b3a5cee2b8c5a894eb96c187446
 // Route::get('/gio-hang', function(){
 //     return view('Client.cart.index');
 // });
@@ -98,5 +100,6 @@ Route::get('verify-otp', function () {
 Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
 Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
+Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
 
 
