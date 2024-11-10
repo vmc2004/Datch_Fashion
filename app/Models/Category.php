@@ -10,7 +10,7 @@ class Category extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'image', 'is_active','parent_id'];
+    protected $fillable = ['name', 'image', 'is_active', 'parent_id'];
 
     // Quan hệ danh mục con
     public function children()
@@ -25,6 +25,6 @@ class Category extends Model
     }
 
     public $timestamps = false;
-    
+
     protected $dates = ['deleted_at'];
 }

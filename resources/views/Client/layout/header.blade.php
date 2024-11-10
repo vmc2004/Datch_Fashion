@@ -40,6 +40,25 @@
       z-index: 9999;
       pointer-events: none;
     }
+
+    #suggestions {
+      position: absolute;
+      /* Đặt vị trí tuyệt đối */
+      top: 100%;
+      /* Để nó nằm ngay dưới ô tìm kiếm */
+      left: 0;
+      width: 100%;
+      /* Đảm bảo độ rộng bằng với ô tìm kiếm */
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      max-height: 200px;
+      /* Giới hạn chiều cao */
+      overflow-y: auto;
+      /* Cuộn khi có quá nhiều kết quả */
+      z-index: 10;
+      /* Đảm bảo nó nằm trên các phần tử khác */
+    }
   </style>
 
 </head>
@@ -66,14 +85,14 @@
           <form action="{{ route('search') }}" method="GET">
             <div class="relative">
               <input type="text" placeholder="Tìm kiếm" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300" id="search-box" name="query" autocomplete="off">
-              <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-              <button type="submit">Tìm kiếm</button>
-
+              <button type="submit">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              </button>
+              <!-- Gợi ý hiển thị dưới ô tìm kiếm -->
+              <div id="suggestions" class="absolute bg-white border border-gray-200 rounded-lg mt-1 w-full max-h-60 overflow-y-auto z-10 hidden"></div>
             </div>
           </form>
 
-
-          <div id="suggestions" style="border: 1px solid #ccc; max-width: 300px;"></div>
           @if (Auth::check())
           <a href="/tai-khoan" class="flex flex-col items-center text-gray-800">
             <i class="fas fa-user text-xl"></i>
@@ -121,10 +140,26 @@
 
               if (data.length > 0) {
                 data.forEach(function(product) {
-                  suggestions.append(`<div><a href="/product/${product.id}">${product.name}</a></div>`);
+                  // Làm nổi bật từ khóa trong tên sản phẩm
+                  let highlightedName = product.name.replace(
+                    new RegExp(query, "gi"),
+                    (match) => `<strong>${match}</strong>`
+                  );
+
+                  suggestions.append(`
+                  <div style="padding: 10px; border-bottom: 1px solid #eee;">
+                    <a href="/product/${product.id}" class="flex items-center">
+                      <img src="${product.image}" alt="${product.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
+                      <div>
+                        <div class="search-price">${highlightedName}</div>
+                        <div style="color:#d70018">${product.price}đ</div>
+                      </div>
+                    </a>
+                  </div>
+                `);
                 });
               } else {
-                suggestions.append('<div>Không tìm thấy sản phẩm</div>');
+                suggestions.append('<div style="padding: 10px;">Không tìm thấy sản phẩm</div>');
               }
             }
           });

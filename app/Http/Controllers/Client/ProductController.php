@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
@@ -33,13 +34,23 @@ class ProductController extends Controller
     {
         $query = $request->input('query');
 
-        // Lấy các sản phẩm có tên chứa từ khóa và giới hạn 5 kết quả gợi ý
+        // Lấy các sản phẩm có tên chứa từ khóa
         $products = Product::where('name', 'like', '%' . $query . '%')
-            ->take(5)
-            ->get(['id', 'name']);
+            ->take(5) // Giới hạn 5 kết quả gợi ý
+            ->with('variants') // Đảm bảo lấy biến thể (variants) để truy xuất giá
+            ->get();
 
-        // Trả về JSON chứa tên sản phẩm
-        return response()->json($products);
+        // Định dạng dữ liệu JSON với ảnh và giá (giả sử ảnh và giá lấy từ variants)
+        $results = $products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'name' => $product->name,
+                'image' => $product->image, // Giả sử bạn có cột `image` trong bảng products
+                'price' => $product->variants->first()->price ?? 0, // Lấy giá từ biến thể đầu tiên
+            ];
+        });
+
+        return response()->json($results);
     }
 
     public function search(Request $request)
@@ -77,5 +88,18 @@ class ProductController extends Controller
     public function variants()
     {
         return $this->hasMany(ProductVariant::class, 'product_id', 'id'); // Đảm bảo tên cột khóa ngoại đúng
+    }
+
+    public function filterByCategory(Request $request)
+    {
+        $categoryId = $request->input('category_id');
+        $products = Product::where('category_id', $categoryId)->with('variants')->get();
+
+        return response()->json($products);
+    }
+    public function index()
+    {
+        $categories = Category::all(); // Giả sử bạn có model Category cho bảng danh mục
+        return view('search_results', compact('categories'));
     }
 }
