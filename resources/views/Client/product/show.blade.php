@@ -81,6 +81,7 @@
                     @csrf
                     <!-- Trường ẩn chứa ID của sản phẩm -->
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="hidden" id="selectedColorId" name="color_id" value="">
                     <input type="hidden" id="selectedSizeId" name="size_id" value="">
                     <div class="mt-4">
                         <p class="font-bold">
@@ -92,21 +93,16 @@
 
                         <div class="flex space-x-2 mt-2">
                             @php
-                                // Loại bỏ các màu trùng lặp bằng cách chỉ lấy các biến thể có id màu sắc duy nhất
                                 $uniqueColors = $product->ProductVariants->unique('color_id');
                             @endphp
 
                             @foreach ($uniqueColors as $variant)
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="color" value="{{ $variant->color->id }}"
-                                        class="hidden color-radio" data-color-name="{{ $variant->color->name }}"
-                                        onchange="highlightColor(this)">
-                                    <div class="color-option w-8 h-8 border border-gray-300 rounded-full"
-                                        style="background-color: {{ $variant->color->color_code }}">
-                                    </div>
-                                </label>
+                                <button type="button" class="color-button w-8 h-8 border border-gray-300 rounded-full"
+                                    style="background-color: {{ $variant->color->color_code }};"
+                                    data-color-id="{{ $variant->color->id }}"
+                                    data-color-name="{{ $variant->color->name }}" onclick="selectColor(this)">
+                                </button>
                             @endforeach
-
                         </div>
                     </div>
                     <div class="mt-4">
@@ -117,7 +113,7 @@
                             @foreach ($product->ProductVariants as $variant)
                                 <input type="button" name="size"
                                     class="size-option w-10 h-10 border border-gray-300 rounded"
-                                    value="{{ $variant->size->name }}" data-size-id="{{ $variant->size_id }}"
+                                    value="{{ $variant->size->name }}" data-size="{{ $variant->size_id }}"
                                     onclick="highlightSize(this)">
                             @endforeach
                         </div>
@@ -270,15 +266,18 @@
         <script>
             document.querySelector('form[action="{{ route('cart.add') }}"]').addEventListener('submit', handleSubmit);
 
-            function highlightColor(selectedInput) {
-                const colorName = selectedInput.getAttribute('data-color-name');
-                document.getElementById('selectedColorName').textContent = colorName;
+            function selectColor(button) {
+                // Lấy color_id và color name từ thuộc tính của button
+                let selectedColorId = button.getAttribute('data-color-id');
+                let selectedColorName = button.getAttribute('data-color-name');
 
-                document.querySelectorAll('.color-option').forEach(element => {
-                    element.classList.remove('border-4', 'border-gray-500', 'p-2');
-                });
+                // Gán giá trị vào trường ẩn để submit form
+                document.getElementById('selectedColorId').value = selectedColorId;
 
-                selectedInput.nextElementSibling.classList.add('border-4', 'border-gray-500', 'p-2');
+                // Hiển thị tên màu được chọn
+                document.getElementById('selectedColorName').textContent = selectedColorName;
+
+                console.log('Selected color_id:', selectedColorId);
             }
 
             function highlightSize(selectedButton) {
@@ -289,7 +288,7 @@
                 selectedButton.classList.add('border-4', 'border-blue-500');
 
                 // Lấy size_id từ thuộc tính data
-                const sizeId = selectedButton.getAttribute('data-size-id');
+                const sizeId = selectedButton.getAttribute('data-size');
                 console.log('ID kích cỡ đã chọn:', sizeId);
 
                 // Cập nhật giá trị của input ẩn
