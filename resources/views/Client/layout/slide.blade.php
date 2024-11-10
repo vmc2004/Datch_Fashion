@@ -1,20 +1,20 @@
 <div id="default-carousel" class="relative w-full " data-carousel="slide">
     <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
         <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="{{asset('assets/client/images/book-default.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+            <img src="{{asset('assets/client/images/banner1.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
         </div>
         <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="{{asset('assets/client/images/book-default.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+            <img src="{{asset('assets/client/images/banner2.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
         </div>
         <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <img src="{{asset('assets/client/images/book-default.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+            <img src="{{asset('assets/client/images/banner3.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
         </div>
-        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+        {{-- <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img src="{{asset('assets/client/images/book-default.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
         </div>
         <div class="hidden duration-700 ease-in-out" data-carousel-item>
             <img  src="{{asset('assets/client/images/book-default.jpg')}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-        </div>
+        </div> --}}
     </div>
     <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
         <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>

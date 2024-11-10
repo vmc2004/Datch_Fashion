@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+<<<<<<< HEAD
 use App\Models\Category;
+=======
+use App\Models\Comment;
+>>>>>>> bb2eaedb373b40a161075eb4034afec7a872947b
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
@@ -18,18 +22,24 @@ class ProductController extends Controller
             ->firstOrFail(); // Đảm bảo bạn nhận được một instance
         $colors = $product->ProductVariants->unique('color_id')->pluck('color');
         $sizes = $product->ProductVariants->unique('size_id')->pluck('size');
-        $product->increment('views');
+        // $product->increment('views');
         $related_products = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(4) // Giới hạn số lượng sản phẩm liên quan (tùy chỉnh theo ý muốn)
             ->get();
+
+        $comments = Comment::query()->where('product_id',$product->id)->paginate('9');
+        $avgRating = Comment::query()->where('product_id',$product->id)->avg('rating');
         return view('Client.product.show', [
             'product' => $product,
             'colors' => $colors,
             'sizes' => $sizes,
-            'related_products' => $related_products
+            'related_products' => $related_products,
+            'comments' => $comments,
+            'avgRating' => $avgRating,
         ]);
     }
+<<<<<<< HEAD
     public function autocomplete(Request $request)
     {
         $query = $request->input('query');
@@ -107,4 +117,8 @@ class ProductController extends Controller
         $categories = Category::all(); // Giả sử bạn có model Category cho bảng danh mục
         return view('search_results', compact('categories'));
     }
+=======
+
+
+>>>>>>> bb2eaedb373b40a161075eb4034afec7a872947b
 }

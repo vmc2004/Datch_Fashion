@@ -5,9 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
-
-
-
+use App\Http\Controllers\Client\BlogController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Client\CartController;
@@ -15,6 +13,7 @@ use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +38,7 @@ Route::get('/product/{slug}', [ProductController::class, 'show']);
 Route::get('/cua-hang', function () {
     return view('Client.category.index');
 });
+Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 // Route::get('/gio-hang', function(){
 //     return view('Client.cart.index');
 // });
@@ -50,6 +50,9 @@ Route::get('/cua-hang', function () {
 // });
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
+Route::delete('/gio-hang/xoa/{item}', [CartController::class, 'removeItem'])->name('cart.removeItem');
+Route::post('/gio-hang/sua/{itemId}', [CartController::class, 'updateQuantity']);
+
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
@@ -93,3 +96,7 @@ Route::get('verify-otp', function () {
     return view('verifyOtp');
 })->name('verifyOtpForm');
 Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
+
+
+Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
+Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');

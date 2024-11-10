@@ -55,8 +55,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        // Lấy tất cả các danh mục (kể cả danh mục cha và con)
-        $categories = Category::with('children')->get();
+        // Lấy tất cả các danh mục cha và các danh mục con của chúng (bao gồm cả danh mục cháu)
+        $categories = Category::whereNull('parent_id')
+            ->with(['children' => function ($query) {
+                $query->with('children'); // Eager load các danh mục con của danh mục con
+            }])
+            ->get();
         return view('Admin.Categories.create', compact('categories'));
     }
 
@@ -91,7 +95,11 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         // Lấy tất cả các danh mục (kể cả danh mục cha và con)
-        $categories = Category::with('children')->get();
+        $categories = Category::whereNull('parent_id')
+            ->with(['children' => function ($query) {
+                $query->with('children'); // Eager load các danh mục con của danh mục con
+            }])
+            ->get();
 
         return view('Admin.Categories.edit', compact('category', 'categories'));
     }
