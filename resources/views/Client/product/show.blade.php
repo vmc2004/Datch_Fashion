@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="flex  shadow p-4 rounded">
+        <div class="flex p-4 rounded">
             <!-- Left Section: Product Images -->
             <div class="w-1/2">
                 <div class="relative">
@@ -43,7 +43,6 @@
                 </div>
                 <div class="flex mt-4 space-x-2">
                     @php
-                        // Loại bỏ các biến thể có màu trùng lặp bằng cách chỉ lấy các biến thể có id màu sắc duy nhất
                         $uniqueVariants = $product->ProductVariants->unique('color_id');
                     @endphp
                     @foreach ($uniqueVariants as $variant)

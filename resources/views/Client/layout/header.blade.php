@@ -60,7 +60,6 @@
                     <a href="/blog" class="text-gray-800 font-semibold">Tin hot</a>
                     <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
                 </div>
-<<<<<<< HEAD
                 <div class="flex items-center space-x-4">
                     <div class="relative">
                         <input type="text" placeholder="Tìm kiếm"
@@ -68,33 +67,30 @@
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
 
-                    @if (Auth::check())
+                    {{-- @if (Auth::check())
                         <a href="/tai-khoan" class="flex flex-col items-center text-gray-800">
                             <i class="fas fa-user text-xl"></i>
                             <span class="text-sm">Tài khoản</span>
                         </a>
-                    @else
+                    @else --}}
                         @if (Auth::check())
-                            <a href="{{ route('Client.account.login') }}"
-                                class="flex flex-col items-center text-gray-800">
-                                <i class="fas fa-user text-xl"></i>
+                            <a href="/tai-khoan"
+                                class="flex  items-center text-gray-800 ">
+                                <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User" width="30">
                                 <span class="text-sm">{{ Auth::user()->fullname }}</span>
                             </a>
                         @else
                             <a href="{{ route('Client.account.login') }}"
                                 class="flex flex-col items-center text-gray-800">
-                                <i class="fas fa-user text-xl"></i>
-                                <span class="text-sm">Đăng nhập</span>
+                                <button class="text-sm bg-red-500 p-2 rounded-lg px-3 text-white">Đăng nhập</button>
                             </a>
                         @endif
 
-                    @endif
-                    <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
-                        <i class="fas fa-shopping-bag text-xl"></i>
-                        <span class="text-sm">Giỏ hàng</span>
-                        <span class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">0</span>
-                    </a>
-=======
+                        <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
+                            <i class="fas fa-shopping-bag fa-xl"></i>
+                            <span class="absolute bottom-1 left-3 bg-red-600 text-white text-xs rounded-full px-1"> {{$totalCart}} </span>
+                        </a>
+{{-- =======
                 <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
                 <a href="/cua-hang" class="text-gray-800 font-semibold">Danh mục sản phẩm</a>
                 <a href="#" class="text-gray-800 font-semibold">Sale</a>
@@ -105,7 +101,7 @@
                 <div class="relative">
                     <input type="text" placeholder="Tìm kiếm" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300">
                     <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
->>>>>>> d992d9b8f4bb5b3a5cee2b8c5a894eb96c187446
+>>>>>>> d992d9b8f4bb5b3a5cee2b8c5a894eb96c187446 --}}
                 </div>
             </nav>
         </div>

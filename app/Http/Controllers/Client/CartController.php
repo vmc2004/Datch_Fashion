@@ -30,7 +30,7 @@ class CartController extends Controller
 
         // Kiểm tra giỏ hàng của người dùng (nếu chưa có, tạo giỏ hàng mới)
         $cart = Cart::firstOrCreate([
-            'user_id' => 1,
+            'user_id' => Auth::id(),
             'status' => 'active',
         ]);
 
@@ -47,7 +47,7 @@ class CartController extends Controller
     {
         // Lấy giỏ hàng của người dùng (user_id là 1 theo yêu cầu)
         $cart = Cart::with('items.variant.product', 'items.variant.color', 'items.variant.size')
-            ->where('user_id', 1)
+            ->where('user_id', Auth::id())
             ->where('status', 'active')
             ->first();
 
