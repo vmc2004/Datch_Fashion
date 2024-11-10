@@ -53,7 +53,7 @@
                     <div class="overflow-hidden h-48">
                         <a href="/product/{{$new->slug}}">
                             <img class="hover:scale-110 duration-100"
-                                src="{{ asset('public/' . $new->image) }}" alt="{{$new->slug}}">
+                                src="{{ asset('storage/' . $new->image) }}" alt="{{$new->slug}}">
                         </a>
                     </div>
                     <div class="bg-white p-2 flex flex-col space-y-2">

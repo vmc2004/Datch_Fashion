@@ -30,7 +30,7 @@
         <!-- Left Section: Product Images -->
         <div class="w-1/2">
             <div class="relative">
-                <div><img alt="Ảnh sản phẩm" class="image-container" class="w-full border" height="800" src="{{asset('/storage/'. $product->image)}}" width="600" alt="Zoomed Image" class="zoom-image" /></div>
+                <div class="image-container"><img alt="Ảnh sản phẩm" class="zoom-image" class="w-full border" height="800" src="{{asset('/storage/'. $product->image)}}" width="600" alt="Zoomed Image" class="zoom-image" /></div>
                 <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
                     <i class="fas fa-chevron-left">
                     </i>
@@ -215,48 +215,6 @@
 
 @section('javascript')
 <script>
-    // Hiệu ứng chọn cho màu 
-    function highlightColor(selectedInput) {
-        const colorName = selectedInput.getAttribute('data-color-name');
-        document.getElementById('selectedColorName').textContent = colorName;
-        // Loại bỏ viền từ tất cả các tùy chọn màu
-        document.querySelectorAll('.color-option').forEach(element => {
-            element.classList.remove('border-4', 'border-gray-500', 'p-2'); // bỏ border khi không được chọn
-        });
-
-        // Thêm viền cho tùy chọn màu đã chọn
-        selectedInput.nextElementSibling.classList.add('border-4', 'border-gray-500', 'p-2');
-    }
-    // Hiệu ứng chọn cho size 
-    function highlightSize(selectedButton) {
-        // Loại bỏ viền nổi bật từ tất cả các nút kích thước
-        document.querySelectorAll('.size-option').forEach(element => {
-            element.classList.remove('border-4', 'border-blue-500'); // loại bỏ border khi không được chọn
-        });
-
-        // Thêm viền nổi bật cho nút kích thước đã chọn
-        selectedButton.classList.add('border-4', 'border-blue-500');
-    }
-
-    function increment() {
-        // Lấy giá trị hiện tại của ô nhập
-        let quantityInput = document.getElementById('quantity');
-        let currentValue = parseInt(quantityInput.value);
-
-        // Tăng giá trị lên 1
-        quantityInput.value = currentValue + 1;
-    }
-
-    function decrement() {
-        // Lấy giá trị hiện tại của ô nhập
-        let quantityInput = document.getElementById('quantity');
-        let currentValue = parseInt(quantityInput.value);
-
-        // Kiểm tra nếu giá trị lớn hơn 0 thì mới giảm
-        if (currentValue > 0) {
-            quantityInput.value = currentValue - 1;
-        }
-    }
     const imageContainer = document.querySelector('.image-container');
     const zoomImage = document.querySelector('.zoom-image');
     imageContainer.addEventListener('mousemove', (e) => {
@@ -275,9 +233,9 @@
     .image-container {
         position: relative;
         overflow: hidden;
-
-        cursor: url('https://example.com/search-icon.png'), auto;
-        /* Thay đổi biểu tượng trỏ chuột */
+        width: 400px;
+        /* Đặt kích thước của container */
+        height: 200px;
     }
 
     .zoom-image {
