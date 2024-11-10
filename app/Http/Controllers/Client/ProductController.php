@@ -42,27 +42,32 @@ class ProductController extends Controller
 
         // Định dạng dữ liệu JSON với ảnh và giá (giả sử ảnh và giá lấy từ variants)
         $results = $products->map(function ($product) {
+            // Kiểm tra nếu sản phẩm có ít nhất 1 biến thể và lấy giá từ biến thể đầu tiên
+            $price = $product->variants->isNotEmpty() ? $product->variants->first()->price : 0;
+
             return [
                 'id' => $product->id,
+                'slug' => $product->slug, // Thêm slug để tạo liên kết chính xác
                 'name' => $product->name,
                 'image' => $product->image, // Giả sử bạn có cột `image` trong bảng products
-                'price' => $product->variants->first()->price ?? 0, // Lấy giá từ biến thể đầu tiên
+                'price' => $price, // Lấy giá từ biến thể đầu tiên, nếu không có trả về 0
             ];
         });
 
         return response()->json($results);
     }
 
+
     public function search(Request $request)
     {
         $query = $request->input('query');
+        $products = Product::where('name', 'like', '%' . $query . '%')->paginate(5); // Phân trang với 5 sản phẩm mỗi trang
+        $totalResults = $products->total(); // Tổng số kết quả tìm được
 
-        // Tìm kiếm các sản phẩm phù hợp với từ khóa
-        $products = Product::where('name', 'like', '%' . $query . '%')->get();
-        $totalResults = $products->count(); // Đếm tổng số sản phẩm tìm thấy
-
-        // Trả về view hiển thị kết quả tìm kiếm
-        return view('search_results', compact('products', 'query', 'totalResults'));
+        return view('search_results', [
+            'products' => $products,
+            'totalResults' => $totalResults,
+        ]);
     }
     public function getProducts(Request $request)
     {

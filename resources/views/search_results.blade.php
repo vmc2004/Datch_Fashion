@@ -2,7 +2,6 @@
 
 @section('title', "Trang chủ")
 
-
 @section('content')
 <div class="flex p-4">
     <button id="dropdownDefault" data-dropdown-toggle="dropdown" class="locgiasp" type="button">
@@ -48,11 +47,11 @@
             </li>
         </ul>
         <p class="text-sm pt-2">
-
             {{ $totalResults }} Sản phẩm
         </p>
     </div>
 </div>
+
 <div class="max-w-screen-xl mx-auto py-8">
     @if($products->isEmpty())
     <p>No products found.</p>
@@ -69,8 +68,7 @@
                 <div class="h-full rounded-lg overflow-hidden flex flex-col">
                     <div class="overflow-hidden h-48">
                         <a href="/product/{{$new->slug}}">
-                            <img class="hover:scale-110 duration-100"
-                                src="{{ asset('public/' . $new->image) }}" alt="{{$new->slug}}">
+                            <img class="hover:scale-110 duration-100" src="{{ asset('public/' . $new->image) }}" alt="{{$new->slug}}">
                         </a>
                     </div>
                     <div class="bg-white p-2 flex flex-col space-y-2">
@@ -84,11 +82,9 @@
                                 {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
                             </p>
                             <div class="flex gap-2 text-xs text-slate-700">
-                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-4">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                                     <path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    <path
-                                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                                    <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                 </svg>
                                 Hà Nội
                             </div>
@@ -154,37 +150,6 @@
                 error: function(xhr, status, error) {
                     console.error("AJAX Error: " + status + ": " + error);
                     console.error("Response Text: " + xhr.responseText);
-                }
-            });
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('#categorySelect').on('change', function() {
-            let categoryId = $(this).val();
-
-            $.ajax({
-                url: "{{ route('products.filter') }}",
-                type: 'GET',
-                data: {
-                    category_id: categoryId
-                },
-                success: function(products) {
-                    let productHtml = '';
-
-                    if (products.length > 0) {
-                        products.forEach(product => {
-                            productHtml += `<div class="product">
-                                <h4>${product.name}</h4>
-                                <p>Price: ${product.variants.length > 0 ? product.variants[0].price : 'N/A'}</p>
-                            </div>`;
-                        });
-                    } else {
-                        productHtml = '<p>No products found for this category.</p>';
-                    }
-
-                    $('#productList').html(productHtml);
                 }
             });
         });

@@ -34,7 +34,7 @@
         </button>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
             @foreach ($newPro as $new)
-            <div class="h-full rounded-lg relative shadow-xl">
+            <div class="h-full rounded-lg relative shadow-xl product-item">
                 <div class="absolute -left-[3.2px] top-2 z-10">
                     <div
                         class="text-white text-xs bg-[#06a5a8] border border-solid border-transparent rounded-sm inline-block px-2">
@@ -148,5 +148,21 @@
         duration: 1200, // Thời gian chạy hiệu ứng (tính bằng ms)
     });
 </script>
+<style>
+    .product-item {
+        transition: all 0.3s ease-in-out;
+        /* Thêm hiệu ứng mượt mà khi ẩn/hiện */
+    }
 
+    .slick-carousel .product-item {
+        display: block;
+        /* Đảm bảo rằng các phần tử có thể hiển thị */
+    }
+
+    /* Thêm hiệu ứng hover */
+    .product-item:hover {
+        transform: scale(1.05);
+        /* Hiệu ứng phóng to khi hover */
+    }
+</style>
 @endsection

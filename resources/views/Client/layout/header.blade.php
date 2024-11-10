@@ -17,6 +17,13 @@
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <!-- Thêm vào trong <head> -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+
+  <!-- Thêm vào trước thẻ </body> -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
   <style>
     .border-blue-500 {
@@ -129,7 +136,7 @@
 
         if (query.length > 1) {
           $.ajax({
-            url: "{{ route('autocomplete') }}",
+            url: "{{ route('autocomplete') }}", // Đảm bảo đây là đường dẫn đúng tới API autocompletion
             type: "GET",
             data: {
               query: query
@@ -146,9 +153,10 @@
                     (match) => `<strong>${match}</strong>`
                   );
 
+                  // Sử dụng slug thay vì id để tạo đường dẫn
                   suggestions.append(`
                   <div style="padding: 10px; border-bottom: 1px solid #eee;">
-                    <a href="/product/${product.id}" class="flex items-center">
+                    <a href="/product/${product.slug}" class="flex items-center">
                       <img src="${product.image}" alt="${product.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
                       <div>
                         <div class="search-price">${highlightedName}</div>
