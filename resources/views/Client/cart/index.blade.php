@@ -17,7 +17,7 @@
                     </li>
                 </ul>
             </div>
-            <h1 class="text-center p-5 border shadow-2xl rounded-lg text-2xl font-bold">Giỏ hàng</h1>
+         
             <div class="flex md:mt-16">
                 <div class="flex-1 md:mr-8">
                     <div class="bg-white md:px-6 md:py-10 py-4 px-2 rounded-lg">

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Category;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -24,15 +25,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
-        $user_id = Auth::id();
-        $cart = Cart::getCartByUser($user_id);
-        // Kiểm tra nếu có giỏ hàng và có items trong giỏ
-        $totalCart = $cart && $cart->items ? $cart->items->count() : 0;
-
-        // Chia sẻ totalCart với tất cả các view
-        view()->share('totalCart', $totalCart);
-
         $categories = Category::getCategoriesParentAndSub();
         view()->share('categories', $categories);
+        $cart = Cart::getCartByUser();
+ g
+       
     }
 }
