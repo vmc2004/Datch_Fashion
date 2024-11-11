@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Cart;
+use App\Models\Category;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -30,5 +31,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Chia sẻ totalCart với tất cả các view
         view()->share('totalCart', $totalCart);
+
+        $categories = Category::getCategoriesParentAndSub();
+        view()->share('categories', $categories);
     }
 }
