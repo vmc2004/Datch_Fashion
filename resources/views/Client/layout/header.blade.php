@@ -55,7 +55,35 @@
                         </a>
                     </div>
                     <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
-                    <a href="/cua-hang" class="text-gray-800 font-semibold">Danh mục sản phẩm</a>
+                    <div class="relative group">
+                        <!-- Liên kết "Danh mục sản phẩm" -->
+                        <a href="/cua-hang" class="text-gray-800 font-semibold">
+                            Danh mục sản phẩm
+                        </a>
+                    
+                        <!-- Dropdown menu -->
+                        <div class="dropdown-menu hidden absolute bg-white shadow-lg rounded-lg left-0  w-[400px] group-hover:block" id="menu-container" onmouseenter="showDropdownMenu()" onmouseleave="hideDropdownMenu()">
+                            <div class="flex">
+                                <!-- Lề bên trái - Danh mục chính -->
+                                <ul class="py-2 w-1/4 text-sm text-gray-700 border-r border-gray-300">
+                                    @foreach ($categories as $cat)
+                                    <li class="hover:bg-gray-100 relative" onmouseenter="showSubcategories({{ $cat->id }}, '{{ $cat->name }}')">
+                                        <a href="/cua-hang/danh-muc/{{$cat->id}}" class="font-bold block px-4 py-2">
+                                            @if ($cat->parent_id == 0)
+                                                {{$cat->name}}
+                                            @endif
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                                <!-- Lề bên phải - Danh mục con -->
+                                <ul id="subcategory-list" class="py-2 w-3/4">
+                                    <!-- Các danh mục con sẽ được hiển thị tại đây -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <a href="#" class="text-gray-800 font-semibold">Sale</a>
                     <a href="/blog" class="text-gray-800 font-semibold">Tin hot</a>
                     <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
@@ -106,3 +134,49 @@
             </nav>
         </div>
     </div>
+<script>
+      // Hiển thị menu khi di chuột vào "Danh mục sản phẩm"
+document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
+
+// Ẩn menu khi chuột rời khỏi toàn bộ dropdown
+document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
+
+function showDropdownMenu() {
+    document.getElementById('menu-container').classList.remove('hidden');
+}
+
+function hideDropdownMenu() {
+    document.getElementById('menu-container').classList.add('hidden');
+}
+
+// Hiển thị danh mục con khi di chuột vào danh mục cha
+function showSubcategories(categoryId, categoryName) {
+    const subcategoryList = document.getElementById('subcategory-list');
+    subcategoryList.innerHTML = '';
+
+    // Tạo tiêu đề danh mục cha
+    const parentCategoryItem = document.createElement('li');    
+    parentCategoryItem.className = 'font-bold px-4 py-2 text-gray-700';
+    parentCategoryItem.textContent = categoryName;
+    subcategoryList.appendChild(parentCategoryItem);
+
+    // Lấy danh sách danh mục con
+    const categories = @json($categories);
+    const parentCategory = categories.find(cat => cat.id === categoryId);
+    if (parentCategory && parentCategory.sub) {
+        parentCategory.sub.forEach(subcat => {
+            const li = document.createElement('li');
+            li.className = 'hover:bg-gray-100';
+            
+            const a = document.createElement('a');
+            a.href = `/cua-hang/danh-muc/${subcat.id}`;
+            a.className = 'block px-4 py-2 text-gray-700';
+            a.textContent = subcat.name;
+            
+            li.appendChild(a);
+            subcategoryList.appendChild(li);
+        });
+    }
+}
+
+</script>
