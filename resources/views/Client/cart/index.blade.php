@@ -42,14 +42,14 @@
                                                 <div class="flex-shrink-0 w-1/5 text-center">
                                                     <img src="{{ asset($item->variant->product->image) }}"
                                                         alt="ảnh sản phẩm {{ $item->variant->product->name }}"
-                                                        class="w-50 h-24 object-cover rounded">
+                                                        class="w-50 h-24 object-cover rounded border">
                                                 </div>
 
                                                 <!-- Cột 2: Tên sản phẩm và biến thể -->
                                                 <div class="flex-1 ml-4">
                                                     <h2 class="text-lg font-semibold">{{ $item->variant->product->name }}
                                                     </h2>
-                                                    <p class="text-sm text-gray-500">Biến thể:
+                                                    <p class="text-sm text-gray-500">Sản phẩm:
                                                         {{ $item->variant->size->name }} / {{ $item->variant->color->name }}
                                                     </p>
                                                 </div>
