@@ -60,7 +60,6 @@
                     <a href="/blog" class="text-gray-800 font-semibold">Tin hot</a>
                     <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
                 </div>
-<<<<<<< HEAD
                 <div class="flex items-center space-x-4">
                     <div class="relative">
                         <input type="text" placeholder="Tìm kiếm"
@@ -94,18 +93,6 @@
                         <span class="text-sm">Giỏ hàng</span>
                         <span class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1">0</span>
                     </a>
-=======
-                <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
-                <a href="/cua-hang" class="text-gray-800 font-semibold">Danh mục sản phẩm</a>
-                <a href="#" class="text-gray-800 font-semibold">Sale</a>
-                <a href="{{route('client.blog')}}" class="text-gray-800 font-semibold">Tin hot</a>
-                <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="relative">
-                    <input type="text" placeholder="Tìm kiếm" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
->>>>>>> d992d9b8f4bb5b3a5cee2b8c5a894eb96c187446
                 </div>
             </nav>
         </div>
