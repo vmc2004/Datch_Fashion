@@ -332,6 +332,9 @@
 
                     if (response.ok) {
                         showToast1();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
                     } else {
                         console.error('Lỗi khi thêm sản phẩm vào giỏ');
                         let errorData = await response.json();
