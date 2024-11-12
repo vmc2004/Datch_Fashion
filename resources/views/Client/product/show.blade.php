@@ -30,27 +30,32 @@
         <!-- Left Section: Product Images -->
         <div class="w-1/2">
             <div class="relative">
-                <div class="image-container">
-                    <img alt="Ảnh sản phẩm" class="w-full border zoom-image" height="800"
-                        src="{{ asset('/storage/' . $product->image) }}" width="600" />
+                <!-- Ảnh lớn hiển thị chính -->
+                <div class="relative image-container">
+                    <img alt="Ảnh sản phẩm" class="zoom-image" src="{{ asset('/storage/' . $product->image) }}" />
+
+                    <!-- Nút Trái -->
+                    <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md left-arrow">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+
+                    <!-- Nút Phải -->
+                    <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md right-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-                <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-                    <i class="fas fa-chevron-left">
-                    </i>
-                </button>
-                <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md">
-                    <i class="fas fa-chevron-right">
-                    </i>
-                </button>
             </div>
             <div class="flex mt-4 space-x-2">
                 @php
                 $uniqueVariants = $product->ProductVariants->unique('color_id');
                 @endphp
-                @foreach ($uniqueVariants as $variant)
-                <img alt="Ảnh biến thể" class="w-20 h-20 border" src="{{ asset('/storage/' . $variant->image) }}"
-                    width="100" height="100" />
-                @endforeach
+
+                <div class="flex mt-4 space-x-2">
+                    @foreach ($uniqueVariants as $variant)
+                    <img alt="Ảnh biến thể" class="w-20 h-20 border thumbnail"
+                        src="{{ asset('/storage/' . $variant->image) }}" />
+                    @endforeach
+                </div>
             </div>
         </div>
         <!-- Right Section: Product Details -->
@@ -369,6 +374,42 @@
                 toast.classList.remove('show');
             }, 3000);
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const mainImage = document.querySelector(".zoom-image");
+            const thumbnails = document.querySelectorAll(".thumbnail");
+            let currentIndex = 0; // Chỉ số ảnh to hiện tại
+
+            // Hàm cập nhật ảnh chính và ảnh con
+            function updateImages(newIndex) {
+                // Hoán đổi ảnh to và ảnh con tại vị trí mới
+                const tempSrc = mainImage.src;
+                mainImage.src = thumbnails[newIndex].src;
+                thumbnails[newIndex].src = tempSrc;
+
+                // Cập nhật chỉ số ảnh to hiện tại
+                currentIndex = newIndex;
+            }
+
+            // Sự kiện khi nhấn vào ảnh con
+            thumbnails.forEach((thumbnail, index) => {
+                thumbnail.addEventListener("click", () => {
+                    updateImages(index);
+                });
+            });
+
+            // Sự kiện khi nhấn nút trái
+            document.querySelector(".left-arrow").addEventListener("click", () => {
+                const newIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+                updateImages(newIndex);
+            });
+
+            // Sự kiện khi nhấn nút phải
+            document.querySelector(".right-arrow").addEventListener("click", () => {
+                const newIndex = (currentIndex + 1) % thumbnails.length;
+                updateImages(newIndex);
+            });
+        });
     </script>
     <style>
         .image-container {
