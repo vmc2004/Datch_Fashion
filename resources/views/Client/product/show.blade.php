@@ -54,7 +54,7 @@
             <!-- Right Section: Product Details -->
             <div class="w-1/2 pl-8">
 
-
+                <div id="toast1" class="toast">Sản phẩm được thêm vào giỏ hàng thành công!</div>
                 <h1 class="text-2xl font-bold flex">
                     {{ $product->name }}
                     <button class="action action-wishlist action towishlist action towishlist ml-8	">
@@ -331,7 +331,7 @@
                     });
 
                     if (response.ok) {
-                        showToast();
+                        showToast1();
                     } else {
                         console.error('Lỗi khi thêm sản phẩm vào giỏ');
                         let errorData = await response.json();
@@ -342,12 +342,12 @@
                 }
             }
 
-            function showToast() {
-                const toast = document.getElementById('toast');
-                toast.classList.add('show');
+            function showToast1() {
+                const toast1 = document.getElementById('toast1');
+                toast1.classList.add('show');
 
                 setTimeout(() => {
-                    toast.classList.remove('show');
+                    toast1.classList.remove('show');
                 }, 3000);
             }
         </script>
