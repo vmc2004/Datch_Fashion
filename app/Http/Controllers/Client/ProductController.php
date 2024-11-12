@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-<<<<<<< HEAD
 use App\Models\Category;
-=======
 use App\Models\Comment;
->>>>>>> bb2eaedb373b40a161075eb4034afec7a872947b
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
@@ -28,8 +25,8 @@ class ProductController extends Controller
             ->take(4) // Giới hạn số lượng sản phẩm liên quan (tùy chỉnh theo ý muốn)
             ->get();
 
-        $comments = Comment::query()->where('product_id',$product->id)->paginate('9');
-        $avgRating = Comment::query()->where('product_id',$product->id)->avg('rating');
+        $comments = Comment::query()->where('product_id', $product->id)->paginate('9');
+        $avgRating = Comment::query()->where('product_id', $product->id)->avg('rating');
         return view('Client.product.show', [
             'product' => $product,
             'colors' => $colors,
@@ -39,7 +36,6 @@ class ProductController extends Controller
             'avgRating' => $avgRating,
         ]);
     }
-<<<<<<< HEAD
     public function autocomplete(Request $request)
     {
         $query = $request->input('query');
@@ -117,8 +113,4 @@ class ProductController extends Controller
         $categories = Category::all(); // Giả sử bạn có model Category cho bảng danh mục
         return view('search_results', compact('categories'));
     }
-=======
-
-
->>>>>>> bb2eaedb373b40a161075eb4034afec7a872947b
 }

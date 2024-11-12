@@ -38,7 +38,8 @@ Route::get('/product/{slug}', [ProductController::class, 'show']);
 Route::get('/cua-hang', function () {
     return view('Client.category.index');
 });
-Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
+
+
 // Route::get('/gio-hang', function(){
 //     return view('Client.cart.index');
 // });
