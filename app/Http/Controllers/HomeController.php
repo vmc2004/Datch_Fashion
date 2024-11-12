@@ -12,11 +12,11 @@ class HomeController extends Controller
         $from_date = $data['from_date'];
         $to_date = $data['to_date'];
         
-        $get = Order::whereBetween('created_at',[$from_date,$to_date])->orderBy('created_at','ASC')->get();
+        $get = Order::whereBetween('order_date',[$from_date,$to_date])->orderBy('order_date','ASC')->get();
         
         foreach($get as $key => $val){
             $chart_data[] = array(
-                'preiod' => $val->created_at,
+                'preiod' => $val->order_date,
                 
             );
         }

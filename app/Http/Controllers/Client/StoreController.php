@@ -18,6 +18,7 @@ class StoreController extends Controller
         $category = Category::query()->limit(10)->get();
         $size = Size::query()->limit(10)->get();
         $color = Color::query()->limit(10)->get();
+
         return view('Client.category.index', [
             'products' => $products,
             'category' => $category,
@@ -26,3 +27,4 @@ class StoreController extends Controller
         ])->with('i' , (request()->input('page',1)-1)*6);
     } 
 }
+

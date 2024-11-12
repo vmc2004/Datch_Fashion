@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class CartDetail extends Model
 {
@@ -25,5 +26,8 @@ class CartDetail extends Model
     public function product()
     {
         return $this->hasOneThrough(Product::class, ProductVariant::class, 'id', 'id', 'product_variant_id', 'product_id');
+    }
+    public static function getCartItems($cart_id){
+        return DB::table('cartItems')->where('cart_id', $cart_id)->get();
     }
 }
