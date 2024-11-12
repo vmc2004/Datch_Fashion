@@ -119,7 +119,7 @@
                     <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
                         <i class="fas fa-shopping-bag fa-xl"></i>
                         <span class="absolute bottom-1 left-3 bg-red-600 text-white text-xs rounded-full px-1">
-                            {{-- {{ $totalCart > 0 ? $totalCart : 0 }} <!-- Hiển thị số lượng item hoặc 0 nếu không có --> --}}
+                            {{ $totalCart > 0 ? $totalCart : 0 }} <!-- Hiển thị số lượng item hoặc 0 nếu không có -->
                         </span>
                     </a>
                     {{-- 
