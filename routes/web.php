@@ -28,7 +28,7 @@ use App\Http\Controllers\Client\UserController;
 */
 
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/account/orders/{user_id}', [OrderController::class, 'index']);
 Route::get('/product/{slug}', [ProductController::class,'show']);  
 
@@ -37,7 +37,6 @@ Route::get('/cua-hang', function(){
 });
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
-// Route::get('/product/{slug}', [StoreController::class,'index'])->name('Client.category.index');
 // Route::get('/gio-hang', function(){
 //     return view('Client.cart.index');
 // });

@@ -13,9 +13,9 @@ class Cart extends Model
 
     protected $fillable = ['user_id', 'status'];
 
-    public static function getCartByUser($user_id)
+    public static function getCartByUser()
     {
-        return DB::table('carts')->where('user_id', $user_id)->where('status', 'active')->first();
+        return DB::table('carts')->where('user_id', Auth::id())->where('status', 'active')->first();
     }
     public function items()
     {

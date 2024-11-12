@@ -122,7 +122,7 @@
                             {{ $totalCart > 0 ? $totalCart : 0 }} <!-- Hiển thị số lượng item hoặc 0 nếu không có -->
                         </span>
                     </a>
-                    {{-- =======
+                    {{-- 
                 <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
                 <a href="/cua-hang" class="text-gray-800 font-semibold">Danh mục sản phẩm</a>
                 <a href="#" class="text-gray-800 font-semibold">Sale</a>
@@ -144,6 +144,40 @@
         document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
 
         // Ẩn menu khi chuột rời khỏi toàn bộ dropdown
+        document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
+        @if (Auth::check())
+            <
+            a href = "/tai-khoan"
+            class = "flex  items-center text-gray-800 " >
+            <
+            img src =
+                "{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}"
+            alt = "Avatar User"
+            width = "30" >
+                <
+                span class = "text-sm" > {{ Auth::user()->fullname }} < /span> <
+                /a>
+        @else
+            <
+            a href = "{{ route('Client.account.login') }}"
+            class = "flex flex-col items-center text-gray-800" >
+            <
+            button class = "text-sm bg-red-500 p-2 rounded-lg px-3 text-white" > Đăng nhập < /button> <
+                /a>
+        @endif <
+        a href = "/gio-hang"
+        class = "flex flex-col items-center text-gray-800 relative" >
+        <
+        i class = "fas fa-shopping-bag fa-xl" > < /i>
+        {{-- <span class="absolute bottom-1 left-3 bg-red-600 text-white text-xs rounded-full px-1"> {{$totalCart}} </span> --}}
+            <
+            /a> <
+            /nav> <
+            /div> <
+            /div> <
+            script >
+            document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
+
         document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
 
         function showDropdownMenu() {
