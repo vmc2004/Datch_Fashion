@@ -14,10 +14,10 @@
     <h4>Sản phẩm:</h4>
     <ul>
         @foreach ($order->orderDetails as $detail)
-            <li>{{ $detail->variant->product->name }} - Số lượng: {{ $detail->quantity }} - Giá: {{ $detail->price }} VND</li>
+            <li>{{ $detail->variant->product->name }} -Màu sắc:{{ $detail->variant->product->name }} - Số lượng: {{ $detail->quantity }} - Giá: {{ $detail->price }} VND</li>
         @endforeach
     </ul>
-    <p>Tổng giá trị đơn hàng: {{ $order->total }} VND</p>
+    <p>Tổng giá trị đơn hàng: {{ $detail->quantity * $detail->price}} VND</p>
     <p>Mọi thắc mắc xin vui lòng liên hệ với chúng tôi qua email hoặc hotline.</p>
 </body>
 </html>

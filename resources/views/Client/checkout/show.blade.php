@@ -86,7 +86,7 @@
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h2 class="text-xl font-bold mb-4">Thông tin sản phẩm</h2>
                     @php
-                        $subtotal = 0; // Khởi tạo biến tổng tiền tạm tính
+                        $subtotal = 0; 
                     @endphp
                     @foreach ($cartItems->items as $item)
 
@@ -99,7 +99,7 @@
                    <input type="hidden" name="price[]" value="{{ $item['price_at_purchase'] }}">
                 
                     <div class="flex items-center mb-4">
-                        <img alt="Ảnh sản phẩm" class="w-20 h-20 rounded-lg" height="80" src="" width="80"/>
+                        <img alt="Ảnh sản phẩm"  class="w-20 h-20 rounded-lg" height="80" src="{{asset('storage/'.$item->variant->image)}}" width="80"/>
                         <div class="ml-4">
                             <p>{{ $item->variant->product->name }} - {{ $item->variant->color->name }}, {{ $item->variant->size->name }}</p>
                             <p>{{number_format($item['price_at_purchase'])}} đ</p>

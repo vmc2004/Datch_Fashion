@@ -28,7 +28,7 @@ use App\Http\Controllers\Client\UserController;
 */
 
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/account/orders/{user_id}', [OrderController::class, 'index']);
 Route::get('/product/{slug}', [ProductController::class,'show']);  
 

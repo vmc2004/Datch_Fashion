@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
         $categories = Category::getCategoriesParentAndSub();
         view()->share('categories', $categories);
         $cart = Cart::getCartByUser();
- g
        
     }
 }
