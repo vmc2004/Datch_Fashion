@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
 use App\Models\CartDetail;
 use App\Models\Order;
@@ -10,6 +11,8 @@ use App\Models\OrderDetail;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -38,6 +41,7 @@ class CheckoutController extends Controller
             }
     
             $order = new Order();
+            $order->code = strtoupper(Str::random(6)) . rand(100, 999);
             $order->user_id = Auth::id(); 
             $order->fullname = $request->name;
             $order->phone = $request->phone;
@@ -68,7 +72,7 @@ class CheckoutController extends Controller
                 $cart->items()->delete(); 
                 $cart->delete(); 
             }
-    
+            Mail::to($order->email)->send(new OrderSuccessMail($order));
             return redirect()->route('thankyou');
            
         } catch (\Exception $e) {
@@ -76,6 +80,7 @@ class CheckoutController extends Controller
             \Log::error('Error creating order: ' . $e->getMessage(), [
                 'request_data' => $request->all(),
             ]);
+
             return back()->withErrors(['message' => 'Có lỗi xảy ra. Vui lòng thử lại.']);
         }
     }

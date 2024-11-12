@@ -42,7 +42,7 @@ class UserController extends Controller
         Auth::login($user);
 
        
-        return redirect()->route('Client.home')->with(['message' => 'Đăng nhập thành công',
+        return redirect()->route('home')->with(['message' => 'Đăng nhập thành công',
         'message_type' => 'success']); 
     }
 

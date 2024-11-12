@@ -38,7 +38,7 @@
                                                 onclick="return confirm('Bạn có muốn xóa sản phẩm??')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="btn btn-danger">Xóa</button>
+                                                <button class="btn btn-danger ms-2">Xóa</button>
                                             </form>
                                         </div>
                                     </td>

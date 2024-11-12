@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Cart extends Model
 {
@@ -11,6 +13,10 @@ class Cart extends Model
 
     protected $fillable = ['user_id', 'status'];
 
+    public static function getCartByUser()
+    {
+        return DB::table('carts')->where('user_id', Auth::id())->where('status', 'active')->first();
+    }
     public function items()
     {
         return $this->hasMany(CartItem::class);
