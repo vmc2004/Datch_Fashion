@@ -30,7 +30,6 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-dark-subtle">
-                        
                         <th>Mã đơn hàng</th>
                         <th>Thời gian</th>
                         <th>Khách hàng</th>
@@ -40,26 +39,31 @@
                 </thead>
                 <tbody>
                   
-                  @foreach ($orders as  $order)
+                  @foreach ($orders as $order)
                   <tr>
-                    <td><a href="{{route('orders.edit', $order->id)}}"  class="d-flex justify-content-center" > HD0{{ $order->id }}</a></td>
-                    <td >{{ $order->created_at }}</td>
-                    <td  class="d-flex justify-content-center">{{ $order->fullname }}</td>
-                    @foreach ($order->OrderDetails as $detail )
-                        <td >{{number_format($detail->price)}} ₫</td>
-                    @endforeach
+                    <td><a href="{{route('orders.edit', $order->id)}}" class="d-flex justify-content-center"> {{ $order->Code }}</a></td>
+                    <td>{{ $order->created_at }}</td>
+                    <td class="d-flex justify-content-center">{{ $order->fullname }}</td>
+                    
+                    @php
+                        $totalAmount = 0;
+                        foreach ($order->orderDetails as $detail) {
+                            $totalAmount += $detail->price * $detail->quantity;
+                        }
+                    @endphp
+                    
+                    <td>{{ number_format($totalAmount) }} ₫</td>
+                    
                     <td>
                         @if ($order->status == 'Đã giao hàng')
                             <p class="text-success">Hoàn thành</p>
                         @elseif ($order->status == 'Đơn hàng đã hủy')
                             <p class="text-danger">Hủy đơn hàng</p>
                         @elseif($order->status == 'Chờ xác nhận')
-                        <p>Đơn hàng mới</p>
+                            <p>Đơn hàng mới</p>
                         @else
-                        <p class="text-primary">Đang xử lý</p>
-                            
+                            <p class="text-primary">Đang xử lý</p>
                         @endif
-                        
                     </td>
                 </tr>
                   @endforeach
@@ -74,8 +78,6 @@
                     </ul>
                 </nav>
        
-                
-
 @endsection
 
 @section('style')

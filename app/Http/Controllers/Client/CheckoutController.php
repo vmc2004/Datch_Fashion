@@ -12,6 +12,7 @@ use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -40,6 +41,7 @@ class CheckoutController extends Controller
             }
     
             $order = new Order();
+            $order->code = strtoupper(Str::random(6)) . rand(100, 999);
             $order->user_id = Auth::id(); 
             $order->fullname = $request->name;
             $order->phone = $request->phone;

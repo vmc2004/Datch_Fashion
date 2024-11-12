@@ -13,11 +13,18 @@
     <p>Địa chỉ giao hàng: {{ $order->address }}</p>
     <h4>Sản phẩm:</h4>
     <ul>
+        @php
+            $totalAmount = 0;
+        @endphp
         @foreach ($order->orderDetails as $detail)
-            <li>{{ $detail->variant->product->name }} -Màu sắc:{{ $detail->variant->product->name }} - Số lượng: {{ $detail->quantity }} - Giá: {{ $detail->price }} VND</li>
+            @php
+                $itemTotal = $detail->quantity * $detail->price;
+                $totalAmount += $itemTotal;
+            @endphp
+            <li>{{ $detail->variant->product->name }} - Màu sắc: {{ $detail->variant->color->name }} - Số lượng: {{ $detail->quantity }} - Giá: {{ number_format($detail->price, 0, ',', '.') }} VND</li>
         @endforeach
     </ul>
-    <p>Tổng giá trị đơn hàng: {{ $detail->quantity * $detail->price}} VND</p>
+    <p><strong>Tổng giá trị đơn hàng: {{ number_format($totalAmount, 0, ',', '.') }} VND</strong></p>
     <p>Mọi thắc mắc xin vui lòng liên hệ với chúng tôi qua email hoặc hotline.</p>
 </body>
 </html>
