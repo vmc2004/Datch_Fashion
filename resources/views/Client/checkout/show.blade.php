@@ -46,19 +46,9 @@
                         </div>
                     </div>
 
-                    <h2 class="text-xl font-bold mb-4">Phương thức vận chuyển</h2>
+                    <h2 class="text-xl font-bold mb-4">Phương thức thanh toán</h2>
+                   
                     <div class="mb-4">
-                        <label class="block text-gray-700">Tiêu chuẩn</label>
-                        <div class="flex justify-between items-center p-4 border border-gray-300 rounded mt-1">
-                            <div>
-                                <input class="mr-2" name="transport" type="radio"/>
-                                <span>30.000 đ</span>
-                            </div>
-                            <span>Đơn hàng nhận từ 3 - 5 ngày</span>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700">Thẻ tín dụng (VISA)</label>
                         <div class="p-4 border border-gray-300 rounded mt-1">
                             <div class="flex items-center mb-3">
                                 <input class="mr-2" value="Thanh toán khi nhận hàng" name="payment" type="radio"/>
