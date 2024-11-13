@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role',['member','admin'])->default('member');
             $table->boolean('status')->default(true);
+            $table->string('otp')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

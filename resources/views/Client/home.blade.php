@@ -20,7 +20,7 @@
             <div class="text-center">
                 <a href="/thuong-hieu/{{$brand->name}}">
                     <div class="w-24 h-24 mx-auto rounded-full bg-white shadow-lg flex items-center justify-center">
-                        <img src="{{ asset('storage/' . $brand->logo) }}" alt="Ảnh danh mục {{$brand->name}}" class="w-24 h-24 rounded-full">
+                        <img src="{{ asset($brand->logo) }}" alt="Ảnh danh mục {{$brand->name}}" class="w-24 h-24 rounded-full">
                     </div>
                     <p class="mt-2">{{$brand->name}}</p>
                 </a>
@@ -55,10 +55,10 @@
                     </div>
                 </div>
                 <div class="h-full rounded-lg overflow-hidden flex flex-col">
-                    <div class="overflow-hidden h-48">
+                    <div class="overflow-hidden h-72">
                         <a href="/product/{{$new->slug}}">
                             <img class="hover:scale-110 duration-100"
-                                src="{{ asset('storage/' . $new->image) }}" alt="{{$new->slug}}">
+                                src="{{ asset($new->image) }}" alt="{{$new->slug}}" >
                         </a>
                     </div>
                     <div class="bg-white p-2 flex flex-col space-y-2">

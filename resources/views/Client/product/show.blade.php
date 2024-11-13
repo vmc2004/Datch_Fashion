@@ -28,11 +28,11 @@
 
     <div class="flex p-4 rounded">
         <!-- Left Section: Product Images -->
-        <div class="w-1/2">
+        <div class="w-5/12	mr-8">
             <div class="relative">
                 <!-- Ảnh lớn hiển thị chính -->
                 <div class="relative image-container">
-                    <img alt="Ảnh sản phẩm" class="zoom-image" src="{{ asset('/storage/' . $product->image) }}" />
+                    <img alt="Ảnh sản phẩm" class="zoom-image " src="{{ asset( $product->image) }}"  />
 
                     <!-- Nút Trái -->
                     <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md left-arrow">
@@ -45,7 +45,7 @@
                     </button>
                 </div>
             </div>
-            <div class="flex mt-4 space-x-2">
+            <div class="flex mt-4 space-x-2 ml-8">
                 @php
                 $uniqueVariants = $product->ProductVariants->unique('color_id');
                 @endphp
@@ -53,7 +53,7 @@
                 <div class="flex mt-4 space-x-2">
                     @foreach ($uniqueVariants as $variant)
                     <img alt="Ảnh biến thể" class="w-20 h-20 border thumbnail"
-                        src="{{ asset('/storage/' . $variant->image) }}" />
+                        src="{{ asset($variant->image) }}" />
                     @endforeach
                 </div>
             </div>
@@ -114,12 +114,13 @@
                         Kích cỡ:
                     </p>
                     <div class="flex space-x-2 mt-2">
-                        @foreach ($product->ProductVariants as $variant)
+                        @foreach ($product->ProductVariants->unique('size_id') as $variant)
                         <input type="button" name="size"
                             class="size-option w-10 h-10 border border-gray-300 rounded"
                             value="{{ $variant->size->name }}" data-size="{{ $variant->size_id }}"
                             onclick="highlightSize(this)">
-                        @endforeach
+                    @endforeach
+                    
                     </div>
                 </div>
                 <p class="font-bold">Số lượng:</p>

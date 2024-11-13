@@ -56,7 +56,8 @@ Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.a
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
 Route::delete('/gio-hang/xoa/{item}', [CartController::class, 'removeItem'])->name('cart.removeItem');
 Route::post('/gio-hang/sua/{itemId}', [CartController::class, 'updateQuantity']);
-
+Route::post('/vnpay-payment', [CheckoutController::class, 'vnpay_payment'])->name('vnpay_payment');
+Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn']);
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
