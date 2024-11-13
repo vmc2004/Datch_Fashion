@@ -10,14 +10,13 @@ use App\Http\Controllers\Client\HomeController as ClientHomeController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\UserController as ClientUserController;
 
-use App\Http\Controllers\UserController;
-
 
 
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
@@ -58,12 +57,13 @@ Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
 
-Route::get('/tai-khoan', function(){
-    return view('Client.account.profile');
-});
+
 Route::get('/account/orders', function(){
     return view('Client.order.index');
 });
+
+Route::get('/lien-he', [ContactController::class, 'contact'])->name('Client.contact');
+Route::post('/lien-he', [ContactController::class, 'updateContact'])->name('Client.updateContact');
 
 //USER
 
@@ -72,17 +72,9 @@ Route::get('/Client/account/login', [ClientUserController::class, 'login'])->nam
 Route::post('/Client/account/showLoginForm', [ClientUserController::class, 'showLoginForm'])->name('showLoginForm');
 Route::get('/Client/account/register', [ClientUserController::class, 'register'])->name('Client.account.register');
 Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
-Route::get('/Client/account/profile', [ClientUserController::class, 'profile'])->name('Client.account.profile');
-Route::post('/Client/account/profile/update', [ClientUserController::class, 'updateProfile'])->name('Client.profile.update');
-
-
-
-Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
-Route::get('/Client/account/login', [UserController::class, 'login'])->name('Client.account.login');
-Route::post('/Client/account/showLoginForm', [UserController::class, 'showLoginForm'])->name('showLoginForm');
-Route::get('/Client/account/register', [UserController::class, 'register'])->name('Client.account.register');
-Route::post('/Client/account/showRegisterForm', [UserController::class, 'showRegisterForm'])->name('showRegisterForm');
-
+Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
+Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
+Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
 
 
 

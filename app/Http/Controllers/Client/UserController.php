@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -77,33 +78,64 @@ public function showRegisterForm(Request $request)
     return redirect()->route('Client.account.login')->with(['message' => 'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.', 'message_type' => 'success']);
 }
 
+
+
 public function profile()
 {
-    // Get the currently authenticated user
+   
     $user = Auth::user();
 
-    // Return the profile view with the user data
+   
     return view('Client.account.profile', compact('user'));
 }
 
-public function updateProfile(Request $request)
+public function updateProfile(Request $request,  User $user)
 {
-    $user = Auth::user();
-
-    // Validate the request data
     $request->validate([
         'fullname' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-        'password' => 'nullable|string|min:8|confirmed', // Password is optional
+        'gender' => 'required|string',
+        'birthday' => 'required|date',
+        'language' => 'required|string',
+        'address' => 'nullable|string|max:255',
+        'introduction' => 'nullable|string',
     ]);
 
-    User::create([
-        'fullname' => $request->fullname,
-        'email' => $request->email,
-        'password' => Hash::make($request->password), 
-    ]);
+    $user = auth()->user();
+    $user->fullname = $request->input('fullname');
+    $user->gender = $request->input('gender');
+    $user->birthday = $request->input('birthday');
+    $user->language = $request->input('language');
+    $user->address = $request->input('address');
+    $user->introduction = $request->input('introduction');
+    // Cập nhật avatar nếu có
+    $data = $request->except('avatar');
+    if ($request->hasFile('avatar')) {
+        $oldAvatar = $user->avatar;
+        if ($oldAvatar && Storage::exists($oldAvatar)) {
+            Storage::delete($oldAvatar);
+        }
+        $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
+    }
+    $user->save();
 
-    return redirect()->route('Client.profile')->with(['message' => 'Profile updated successfully', 'message_type' => 'success']);
+    return response()->json([
+        'success' => true,
+        'user' => [
+            'fullname' => $user->fullname,
+            'gender' => $user->gender,
+            'birthday' => $user->birthday,
+            'language' => $user->language,
+            'address' => $user->address,
+            'introduction' => $user->introduction,
+           'avatar_url' => $user->avatar ? asset('storage/' . $user->avatar) . '?' . time() : null,  // Đường dẫn ảnh mới
+        ]
+    ]);
 }
 
+
+
+public function logout() {
+    Auth::logout();
+    return redirect()->route('Client.home')->with(['message' => 'Đăng xuất thành công', 'message_type' => 'success']);
+}
 }
