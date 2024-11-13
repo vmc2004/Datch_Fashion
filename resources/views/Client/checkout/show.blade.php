@@ -104,7 +104,7 @@
                         <div class="mb-4">
                             <div class="flex justify-between font-bold">
                                 <span>Tổng thanh toán</span>
-                                <span>{{ number_format($subtotal + 30000) }} đ</span>
+                                <span>{{ number_format($subtotal ) }} đ</span>
                             </div>
                         </div>
                     </div>
