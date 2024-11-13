@@ -16,7 +16,6 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
 use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,10 +29,17 @@ use App\Http\Controllers\Client\UserController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/filter-products', [ProductController::class, 'filterByCategory'])->name('products.filter');
+Route::get('/products/filter', [ProductController::class, 'getProducts']);
+Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('autocomplete');
+Route::get('/search', [ProductController::class, 'search'])->name('search');
+Route::get('/', [HomeController::class, 'index']);
 Route::get('/account/orders/{user_id}', [OrderController::class, 'index']);
-Route::get('/product/{slug}', [ProductController::class,'show']);  
+Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
+
 
 Route::get('/sale', [SaleController::class, 'getSaleProducts'])->name('Client.sale.index');
 
@@ -55,10 +61,10 @@ Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
 
-Route::get('/tai-khoan', function(){
+Route::get('/tai-khoan', function () {
     return view('Client.account.profile');
 });
-Route::get('/account/orders', function(){
+Route::get('/account/orders', function () {
     return view('Client.order.index');
 });
 
@@ -95,7 +101,6 @@ Route::get('verify-otp', function () {
 })->name('verifyOtpForm');
 Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
+
 Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
 Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
-
-

@@ -89,10 +89,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product, $id)
-    {
-        
-    }
+    public function show(Product $product, $id) {}
 
     /**
      * Show the form for editing the specified resource.
