@@ -123,8 +123,10 @@
                 Danh mục sản phẩm
             </a>
 
+            
+
             <!-- Dropdown menu -->
-            <div class="dropdown-menu hidden absolute bg-white shadow-lg rounded-lg left-0  w-[400px] group-hover:block"
+            <div class="dropdown-menu hidden absolute bg-white shadow-lg rounded-lg left-0  w-[400px] group-hover:block z-50"
                 id="menu-container" onmouseenter="showDropdownMenu()" onmouseleave="hideDropdownMenu()">
                 <div class="flex">
                     <!-- Lề bên trái - Danh mục chính -->
@@ -315,4 +317,46 @@
         }
       });
     });
+    document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
+
+document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
+
+function showDropdownMenu() {
+    document.getElementById('menu-container').classList.remove('hidden');
+}
+
+function hideDropdownMenu() {
+    document.getElementById('menu-container').classList.add('hidden');
+}
+
+// Hiển thị danh mục con khi di chuột vào danh mục cha
+function showSubcategories(categoryId, categoryName) {
+    const subcategoryList = document.getElementById('subcategory-list');
+    subcategoryList.innerHTML = '';
+
+    // Tạo tiêu đề danh mục cha
+    const parentCategoryItem = document.createElement('li');    
+    parentCategoryItem.className = 'font-bold px-4 py-2 text-gray-700';
+    parentCategoryItem.textContent = categoryName;
+    subcategoryList.appendChild(parentCategoryItem);
+
+    // Lấy danh sách danh mục con
+    const categories = @json($categories);
+    const parentCategory = categories.find(cat => cat.id === categoryId);
+    if (parentCategory && parentCategory.sub) {
+        parentCategory.sub.forEach(subcat => {
+            const li = document.createElement('li');
+            li.className = 'hover:bg-gray-100';
+            
+            const a = document.createElement('a');
+            a.href = `/cua-hang/danh-muc/${subcat.id}`;
+            a.className = 'block px-4 py-2 text-gray-700';
+            a.textContent = subcat.name;
+            
+            li.appendChild(a);
+            subcategoryList.appendChild(li);
+        });
+    }
+}
+
   </script>

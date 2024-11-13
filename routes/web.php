@@ -67,12 +67,17 @@ Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 Route::get('/tai-khoan', function () {
     return view('Client.account.profile');
 });
+
+
+Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
+
 //USER
 Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
 Route::get('/Client/account/login', [UserController::class, 'login'])->name('Client.account.login');
 Route::post('/Client/account/showLoginForm', [UserController::class, 'showLoginForm'])->name('showLoginForm');
 Route::get('/Client/account/register', [UserController::class, 'register'])->name('Client.account.register');
 Route::post('/Client/account/showRegisterForm', [UserController::class, 'showRegisterForm'])->name('showRegisterForm');
+
 
 
 

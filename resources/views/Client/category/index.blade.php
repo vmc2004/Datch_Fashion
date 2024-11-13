@@ -48,13 +48,13 @@
                                     Tất cả danh mục
                                  </a>
                                  @foreach ($categories as $cat)
-                                 <a class="block ml-7 hover:text-orange-500" href="/danh-muc/{{$cat->id}}">
+                                 <a class="block ml-7 hover:text-orange-500" href="/cua-hang/danh-muc/{{$cat->id}}">
                                      {{$cat->name}}
                                  </a>
                                  @if (!empty($cat->sub))
                                      <div class="ml-10">
                                          @foreach ($cat->sub as $subcat)
-                                             <a class="block hover:text-orange-500" href="/danh-muc/{{$subcat->id}}">
+                                             <a class="block hover:text-orange-500" href="/cua-hang/danh-muc/{{$subcat->id}}">
                                                  {{$subcat->name}}
                                              </a>
                                          @endforeach
@@ -90,63 +90,65 @@
                   </span>
                </div>
             <div class="can-mini pr-5 border-b pb-8">
-               <div class="space-y-3 text-sm">
-                  <div>
-                        <input id="all" type="radio" name="price" value="price_all" />
-                        <label for="all">Tất cả</label>
-                  </div>
-                  <div>
-                        <input id="free" type="radio" name="price" value="free" />
-                        <label for="free">Sản phẩm 0đ</label>
-                  </div>
-                  <div>
-                        <input id="under100" type="radio" name="price" value="price_all" />
-                        <label for="under100">Dưới 100.000đ</label>
-                  </div>
-                  <div>
-                        <input id="price_under_200" type="radio" name="price" value="price_under_200" />
-                        <label for="price_under_200">100.000đ - 200.000đ</label>
-                  </div>
-                  <div>
-                        <input id="price_under_500" type="radio" name="price" value="price_under_500" />
-                        <label for="price_under_500">200.000đ - 500.000đ</label>
-                  </div>
-                  <div>
-                        <input id="price_above_500" type="radio" name="price" value="price_above_500" />
-                        <label for="price_above_500">Trên 500.000đ</label>
-                  </div>
-                  <div class="flex items-start cursor-pointer">
-                        <input type="radio" id="price" name="price" value="aaa">
-                        <label for="price" class="ml-2">
-                           <div class="space-y-3">
-                              <p class=" cursor-pointer">Chọn Khoảng giá</p>
-                              <div class="flex items-center gap-3">
-                                    <div class="relative">
+               <form action="" method="GET" id="filterForm">
+                  <div class="space-y-3 text-sm">
+                     <div>
+                           <input id="all" type="radio" name="price" value="price_all" />
+                           <label for="all">Tất cả</label>
+                     </div>
+                     <div>
+                           <input id="free" type="radio" name="price" value="free" />
+                           <label for="free">Sản phẩm 0đ</label>
+                     </div>
+                     <div>
+                           <input id="under100" type="radio" name="price" value="price_all" />
+                           <label for="under100">Dưới 100.000đ</label>
+                     </div>
+                     <div>
+                           <input id="price_under_200" type="radio" name="price" value="price_under_200" />
+                           <label for="price_under_200">100.000đ - 200.000đ</label>
+                     </div>
+                     <div>
+                           <input id="price_under_500" type="radio" name="price" value="price_under_500" />
+                           <label for="price_under_500">200.000đ - 500.000đ</label>
+                     </div>
+                     <div>
+                           <input id="price_above_500" type="radio" name="price" value="price_above_500" />
+                           <label for="price_above_500">Trên 500.000đ</label>
+                     </div>
+                     <div class="flex items-start cursor-pointer">
+                           <input type="radio" id="price" name="price" value="aaa">
+                           <label for="price" class="ml-2">
+                              <div class="space-y-3">
+                                 <p class=" cursor-pointer">Chọn Khoảng giá</p>
+                                 <div class="flex items-center gap-3">
                                        <div class="relative">
-                                          <input type="text" name="priceMin"
-                                                class="border border-current border-solid rounded-lg w-24 p-2 bg-[#e2e2e2]"
-                                                placeholder="Từ" disabled value="">
-                                          <span
-                                                class="absolute right-3 top-1/2 -translate-y-1/2 color-black-100">đ</span>
+                                          <div class="relative">
+                                             <input type="text" name="priceMin"
+                                                   class="border border-current border-solid rounded-lg w-24 p-2 bg-[#e2e2e2]"
+                                                   placeholder="Từ" disabled value="">
+                                             <span
+                                                   class="absolute right-3 top-1/2 -translate-y-1/2 color-black-100">đ</span>
+                                          </div>
                                        </div>
-                                    </div>
-                                    <div>-</div>
-                                    <div class="relative">
+                                       <div>-</div>
                                        <div class="relative">
-                                          <input type="text" name="priceMax"
-                                                class="border border-current border-solid rounded-lg w-24 p-2 bg-[#e2e2e2]"
-                                                placeholder="Đến" disabled value="">
-                                          <span
-                                                class="absolute right-3 top-1/2 -translate-y-1/2 color-black-100">đ</span>
+                                          <div class="relative">
+                                             <input type="text" name="priceMax"
+                                                   class="border border-current border-solid rounded-lg w-24 p-2 bg-[#e2e2e2]"
+                                                   placeholder="Đến" disabled value="">
+                                             <span
+                                                   class="absolute right-3 top-1/2 -translate-y-1/2 color-black-100">đ</span>
+                                          </div>
                                        </div>
-                                    </div>
+                                 </div>
+                                 <button class="hover:text-blue-700 cursor-pointer">Áp dụng</button>
                               </div>
-                              <button class="hover:text-blue-700 cursor-pointer">Áp dụng</button>
-                           </div>
-                        </label>
+                           </label>
 
+                     </div>
+                  </form>
                   </div>
-               </div>
             </div>
       </div>
             {{-- kết thúc lọc giá  --}}
@@ -204,16 +206,18 @@
                         <div class="ml-auto ">
                            <div class="flex items-center hidden md:flex"><span class="mr-2">Lọc theo:</span>
                                  <div class="inline-block">
-                                    <div class="rounded-full h-full relative">
-                                       <select name="flow_type"
-                                             class="border border-gray-400 border-solid rounded-full p-1.5 text-xs md:py-1 md:px-2.5 md:text-base">
-                                             <option selected>Mặc định</option>
-                                             <option value="-modifiedAt">Mới nhất</option>
-                                             <option value="priceMin">Giá thấp nhất</option>
-                                             <option value="-priceMin">Giá cao nhất</option>
-                                             <option value="-likedCount">Yêu thích nhất</option>
-                                       </select>
-                                    </div>
+                                    <form action="" method="GET">
+                                       <div class="rounded-full h-full relative">
+                                          <select name="flow_type"
+                                          class="border border-gray-400 border-solid rounded-full p-1.5 text-xs md:py-1 md:px-2.5 md:text-base"
+                                          onchange="this.form.submit()">
+                                             <option value="default" @if ($flow_type == 'default') selected @endif>Mặc định</option>
+                                             <option value="-modifiedAt" @if ($flow_type == '-modifiedAt') selected @endif>Mới nhất</option>
+                                             <option value="priceMin" @if ($flow_type == 'priceMin') selected @endif>Giá thấp nhất</option>
+                                             <option value="-priceMin" @if ($flow_type == '-priceMin') selected @endif>Giá cao nhất</option>
+                                          </select>
+                                       </div>
+                                   </form>
                                  </div>
                            </div>
                         </div>
@@ -230,16 +234,7 @@
                         </div>
                      </div>
                      <!-- Hiển thị danh mục đang chọn -->
-                     <div class="flex flex-wrap items-center md:mt-6 gap-4">
-                        <div class="bg-gray-200 py-2 px-3 rounded-full flex items-center gap-2">
-                           <div class="text-slate-600"></div>
-                           <svg xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" stroke="currentColor"
-                                 class="size-6">
-                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                           </svg>
-                        </div>
-                        <span class="cursor-pointer text-slate-800 hover:text-[#BB0000]">Xóa tất cả</span>
-                     </div>
+                     
                      <!-- Kết thúc iển thị danh mục đang chọn -->
 
                      <!-- Sản phẩm -->
@@ -290,9 +285,7 @@
                      <!-- Kết thúc sp -->
 
                      <!-- Chuyển Trang -->
-                     <div class="flex justify-center md:my-16 my-4">
-                        
-                     </div>
+                    
                      <!-- Kết thúc chuyển trang -->
                </div>
             </div>
@@ -301,6 +294,12 @@
    </div>
 </div>
 
-
+<script>
+      document.querySelectorAll('input[type="radio"]').forEach(function(input) {
+        input.addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+    });
+</script>
 
 @endsection
