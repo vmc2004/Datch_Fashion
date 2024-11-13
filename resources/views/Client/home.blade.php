@@ -41,8 +41,8 @@
             @foreach ($newPro as $new)
             <div class="text-center">
                 <a href="/product/{{$new->slug}}">
-                <img alt="Ảnh sản phẩm gợi ý" class="w-full" height="400"
-                    src="{{ asset($new->image) }}" width="300" />
+                    <img alt="Ảnh sản phẩm gợi ý" class="w-full hover:scale-110 duration-100" height="400"
+                        src="{{ asset($new->image) }}" width="300" />
                 </a>
                 <div class="flex justify-center mt-2">
                     @foreach ($new->ProductVariants->unique('color_id') as $variant)
@@ -50,25 +50,24 @@
                             style="background-color: {{ $variant->color->color_code }}">
                         </div>
                     @endforeach
-                
                 </div>
                 <p class="mt-2 text-gray-700">
                     {{ $new->name }}
                 </p>
                 @if ($new->ProductVariants->first()?->sale_price != 0)
-                <p class="text-lg font-semibold">
-                    {{ number_format($new->ProductVariants->first()?->sale_price ?? 0) }} đ
-                </p>
-                <p class="text-gray-500 line-through">
-                    {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
-                </p>
+                    <p class="text-lg font-semibold">
+                        {{ number_format($new->ProductVariants->first()?->sale_price ?? 0) }} đ
+                    </p>
+                    <p class="text-gray-500 line-through">
+                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
+                    </p>
                 @else
-                <p class="text-gray-500 ">
-                    {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
-                </p>
+                    <p class="text-gray-500">
+                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
+                    </p>
                 @endif
             </div>
-            @endforeach
+        @endforeach
         </div>
     </div>
 
@@ -85,8 +84,8 @@
             @foreach ($Proview as $view)
             <div class="text-center">
                 <a href="/product/{{$view->slug}}">
-                <img alt="Ảnh sản phẩm gợi ý" class="w-full" height="400"
-                    src="{{ asset($view->image) }}" width="300" />
+                    <img alt="Ảnh sản phẩm gợi ý" class="w-full hover:scale-110 duration-100" height="400"
+                        src="{{ asset($view->image) }}" width="300" />
                 </a>
                 <div class="flex justify-center mt-2">
                     @foreach ($view->ProductVariants->unique('color_id') as $variant)
@@ -94,25 +93,26 @@
                             style="background-color: {{ $variant->color->color_code }}">
                         </div>
                     @endforeach
-                
                 </div>
                 <p class="mt-2 text-gray-700">
                     {{ $view->name }}
                 </p>
                 @if ($view->ProductVariants->first()?->sale_price != 0)
-                <p class="text-lg font-semibold">
-                    {{ number_format($view->ProductVariants->first()?->sale_price ?? 0) }} đ
-                </p>
-                <p class="text-gray-500 line-through">
-                    {{ number_format($view->ProductVariants->first()?->price ?? 0) }} đ
-                </p>
+                    <p class="text-lg font-semibold">
+                        {{ number_format($view->ProductVariants->first()?->sale_price ?? 0) }} đ
+                    </p>
+                    <p class="text-gray-500 line-through">
+                        {{ number_format($view->ProductVariants->first()?->price ?? 0) }} đ
+                    </p>
                 @else
-                <p class="text-gray-500 ">
-                    {{ number_format($view->ProductVariants->first()?->price ?? 0) }} đ
-                </p>
+                    <p class="text-gray-500">
+                        {{ number_format($view->ProductVariants->first()?->price ?? 0) }} đ
+                    </p>
                 @endif
             </div>
-            @endforeach
+        @endforeach
+        
+       
 </div>
 </div>
 </div>
