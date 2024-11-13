@@ -2,12 +2,12 @@
     <div class="flex items-center mb-4">
         <img
             class="w-16 h-16 object-cover rounded-full"
-            src="/assets/images/no-avatar.svg"
-            alt="Avatar"
+            src="{{asset('storage/'.$user->avatar)}}"
+            alt=""
         >
         <strong class="ml-2.5 text-black"></strong>
     </div>
-    <a class="flex my-1.5 text-black hover:text-blue-700 items-center rounded-r-full bg-white sidebar-nav sidebar-nav-active" href="/account/profile">
+    <a class="flex my-1.5 text-black hover:text-blue-700 items-center rounded-r-full bg-white sidebar-nav sidebar-nav-active" href="/tai-khoan">
         <span class="mr-2.5 ml-4">
             <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="user-circle" class="overflow-visible w-3.5" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm128 421.6c-35.9 26.5-80.1 42.4-128 42.4s-92.1-15.9-128-42.4V416c0-35.3 28.7-64 64-64 11.1 0 27.5 11.4 64 11.4 36.6 0 52.8-11.4 64-11.4 35.3 0 64 28.7 64 64v13.6zm30.6-27.5c-6.8-46.4-46.3-82.1-94.6-82.1-20.5 0-30.4 11.4-64 11.4S204.6 320 184 320c-48.3 0-87.8 35.7-94.6 82.1C53.9 363.6 32 312.4 32 256c0-119.1 96.9-216 216-216s216 96.9 216 216c0 56.4-21.9 107.6-57.4 146.1zM248 120c-48.6 0-88 39.4-88 88s39.4 88 88 88 88-39.4 88-88-39.4-88-88-88zm0 144c-30.9 0-56-25.1-56-56s25.1-56 56-56 56 25.1 56 56-25.1 56-56 56z"></path></svg>
         </span>
@@ -74,7 +74,7 @@
             Đóng góp ý kiến
         </span>
     </a>
-    <a class="flex my-1.5 text-black hover:text-blue-700 items-center sidebar-nav" href="/logout">
+    <a class="flex my-1.5 text-black hover:text-blue-700 items-center sidebar-nav" href="{{ route('Client.account.logout') }}">
         <span class="mr-2.5 ml-4">
             <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="sign-out" class="overflow-visible w-3.5" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M48 64h132c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H48c-8.8 0-16 7.2-16 16v288c0 8.8 7.2 16 16 16h132c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48zm279 19.5l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l132 131.4H172c-6.6 0-12 5.4-12 12v10c0 6.6 5.4 12 12 12h279.9L320 404.4c-4.7 4.7-4.7 12.3 0 17l7.1 7.1c4.7 4.7 12.3 4.7 17 0l164.5-164c4.7-4.7 4.7-12.3 0-17L344 83.5c-4.7-4.7-12.3-4.7-17 0z"></path></svg>
         </span>

@@ -93,7 +93,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
-        {{-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
             @foreach ($Proview as $view)
             <div class="h-full rounded-lg relative shadow-xl">
                 <div class="absolute -left-[3.2px] top-2 z-10">
@@ -141,7 +141,7 @@
                 </div>
             </div>
             @endforeach
-        </div> --}}
+        </div> 
     </div>
 </div>
 
