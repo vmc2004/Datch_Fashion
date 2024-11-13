@@ -59,8 +59,8 @@
                 <th>Người bình luận</th>
                 <th>Nội dung</th>
                 <th>Đánh giá</th>
-                <th>Đánh giá</th>
                 <th>Trạng thái</th>
+                <th>Hành động</th>
               </tr>
             </thead>
             <tbody>
@@ -70,10 +70,22 @@
                 <td>{{$comment->user->fullname}}</td>
                 <td>{{$comment->content}}</td>
                 <td>{{$comment->rating}} sao</td>
-                <td>{{$comment->status}}</td>
                 <td>
-                  <a href="{{route('comments.edit',$comment->id)}}" class="btn btn-warning">Cập nhật trạng thái</a>
+                  <form method="POST" action="{{ route('comments.update', $comment) }}" enctype="multipart/form-data">
+                  @method('PUT')
+                  @csrf
+                  <div class="form-group">
+                      <select id="my-select" class="form-control" name="status">
+                          <option value="pending" >Đang chờ</option>
+                          <option value="approved" {{$comment->status=='approved'?'selected':''}}>Duyệt bình luận</option>
+                          <option value="rejected" {{$comment->status=='rejected'?'selected':''}}>Từ chối</option>
+                      </select>
+                  </div>
+            </td>
+                <td>
+                  <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </td>
+              </form>
               </tr>
               @endforeach
             </tbody>
