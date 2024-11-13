@@ -19,7 +19,7 @@ class ProductController extends Controller
             ->firstOrFail(); // Đảm bảo bạn nhận được một instance
         $colors = $product->ProductVariants->unique('color_id')->pluck('color');
         $sizes = $product->ProductVariants->unique('size_id')->pluck('size');
-        // $product->increment('views');
+        $product->increment('views');
         $related_products = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(4) // Giới hạn số lượng sản phẩm liên quan (tùy chỉnh theo ý muốn)

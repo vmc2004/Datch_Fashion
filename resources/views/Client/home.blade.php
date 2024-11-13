@@ -79,15 +79,16 @@
         </div>
     </div>
 
-    <div class="max-w-screen-xl mx-auto py-8" data-aos="fade-up">
-        <h2 class="text-2xl font-semibold mb-4">Sản phẩm nổi bật</h2>
-        <div class="relative">
-            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
+
+<div class="max-w-screen-xl mx-auto py-8">
+    <h2 class="text-2xl font-semibold mb-4">Sản phẩm nổi bật</h2>
+    <div class="relative">
+        <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
             @foreach ($Proview as $view)
             <div class="h-full rounded-lg relative shadow-xl">
                 <div class="absolute -left-[3.2px] top-2 z-10">
@@ -124,6 +125,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 @endforeach

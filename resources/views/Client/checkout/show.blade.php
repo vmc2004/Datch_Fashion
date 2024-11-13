@@ -55,11 +55,6 @@
                                     <img alt="Banking logo" class="ml-auto" height="20" src="{{ asset('assets/client/images/cod.png') }}" width="50"/>
                                 </div>
                                 <div class="flex items-center mb-3">
-                                    <input class="mr-2" value="Thanh toán bằng thẻ" name="payment" type="radio" id="creditCard"/>
-                                    <span>Thẻ nội địa/Internet Banking</span>
-                                    <img alt="Banking logo" class="ml-auto" height="20" src="{{ asset('assets/client/images/visa.png') }}" width="80"/>
-                                </div>
-                                <div class="flex items-center mb-3">
                                     <input class="mr-2" value="Thanh toán qua VNPay" name="payment" type="radio" id="vnpay"/>
                                     <span>Ví điện tử VNPAY</span>
                                     <img alt="VNPAY logo" class="ml-auto" src="{{ asset('assets/client/images/vnpay.png') }}" width="80"/>
