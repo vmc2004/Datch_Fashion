@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="shortcut icon" href="{{asset('assets/admin/img/logDatch.png')}}" type="image/x-icon">
+  <link rel="shortcut icon" href="{{asset('assets/admin/img/logoDatch.png')}}" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{{asset('assets/clinet/css/styles.css')}}">
@@ -113,7 +113,7 @@
         <div class="flex items-center space-x-8">
           <div class="">
             <a href="/">
-              <img src="{{asset('assets/admin/img/Datch.png')}}" alt="" width="150px">
+              <img src="{{asset('assets/admin/img/Datch.png')}}" alt="" width="50px" class="mb-1">
             </a>
           </div>
           <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
@@ -244,7 +244,7 @@
 
   <!-- Loading overlay -->
   <div id="loading-overlay">
-    <img src="{{asset('assets/admin/img/Datch.png')}}" alt="" width="300px" id="loading-logo">
+    <img src="{{asset('assets/admin/img/logDatch.png')}}" alt="" width="300px" id="loading-logo">
   </div>
 
   <!-- Nội dung trang web -->
