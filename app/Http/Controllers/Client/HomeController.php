@@ -12,18 +12,17 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
-    {
-        $brands = Brand::query()->limit(5)->get();
-        $newPro = Product::query()->latest('id')->limit(5)->get();
-
-        $Proview = Product::query()->Orderby('views')->limit(5)->get();
-        return view('Client.home', compact('category', 'newPro','Proview'));
-
+   
+        public function index()
+        {
+            $brands = Brand::query()->limit(5)->get();
+            $newPro = Product::query()->latest('id')->limit(5)->get();
+            $Proview = Product::query()->orderby('views')->limit(5)->get();
+            $category = Category::all();
         
+            // Kiểm tra lại việc truyền biến vào view
+            return view('Client.home', compact('brands', 'category', 'newPro', 'Proview'));
+        }
         
-        // $Proview = Product::query()->Orderby('views')->limit(5)->get();
-        return view('Client.home', compact('brands', 'newPro'));
-
-    }
+    
 }

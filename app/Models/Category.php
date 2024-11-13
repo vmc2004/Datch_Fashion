@@ -36,9 +36,8 @@ class Category extends Model
     {
         $result = array('' => '');
 
-        $categories = DB::table('categories')
-                ->where('is_active', self::CAT_STATUS_ENABLE)
-                ->get(array('*'));
+        $categories = Category::all();
+
 
         $result = array();
 
