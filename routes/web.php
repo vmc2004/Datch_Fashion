@@ -207,7 +207,8 @@ Route::group([
     });
 
 Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
-Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
 
+Route::get('/bai-viet', [BlogController::class, 'index'])->name('client.blog');
+Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.blog.show');
 
 

@@ -150,9 +150,10 @@
                 </div>
             </div>
         </div>
-          <a href="#" class="text-gray-800 font-semibold">Sale</a>
-          <a href="/blog" class="text-gray-800 font-semibold">Tin hot</a>
-          <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>    
+      
+                    <a href="/sale" class="text-gray-800 font-semibold">Sale</a>
+                    <a href="/bai-viet" class="text-gray-800 font-semibold">Tin hot</a>
+                    <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
                 </div>
                 <div class="flex items-center space-x-4">
                   <form action="{{ route('search') }}" method="GET">

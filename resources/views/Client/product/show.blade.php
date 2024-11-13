@@ -236,11 +236,17 @@
             <!-- Product 1 -->
             @foreach ($related_products as $hihi)
             <div class="text-center">
+                <a href="/product/{{$hihi->slug}}">
                 <img alt="Ảnh sản phẩm gợi ý" class="w-full" height="400"
-                    src="{{ asset('/storage/' . $hihi->image) }}" width="300" />
+                    src="{{ asset($hihi->image) }}" width="300" />
+                </a>
                 <div class="flex justify-center mt-2">
-                    <div class="w-4 h-4 bg-blue-800 rounded-full border border-gray-300">
-                    </div>
+                    @foreach ($hihi->ProductVariants->unique('color_id') as $variant)
+                        <div class="w-4 mr-1 h-4 rounded-full border border-gray-300" 
+                            style="background-color: {{ $variant->color->color_code }}">
+                        </div>
+                    @endforeach
+                
                 </div>
                 <p class="mt-2 text-gray-700">
                     {{ $hihi->name }}
@@ -257,10 +263,6 @@
                     {{ number_format($hihi->ProductVariants->first()?->price ?? 0) }} đ
                 </p>
                 @endif
-
-                <p class="text-red-600">
-                    -50%
-                </p>
             </div>
             @endforeach
         </div>
