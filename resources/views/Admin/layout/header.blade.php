@@ -29,6 +29,11 @@
     <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/admin/css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
+    <!-- datepicker -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.3/css/perfect-scrollbar.min.css">
 </head>
 
 <body class="g-sidenav-show bg-gray-100">

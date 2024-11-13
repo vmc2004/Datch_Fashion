@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Mail;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -12,21 +12,17 @@ class OrderSuccessMail extends Mailable
 
     public $order;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct($order)
+    public function __construct(Order $order)
     {
         $this->order = $order;
     }
 
-    /**
-     * Build the message.
-     */
     public function build()
     {
-        return $this->view('emails.order_success')
-                    ->subject('Xác nhận đơn hàng thành công')
-                    ->with('order', $this->order);
+        return $this->subject('Xác nhận đặt hàng')
+                    ->view('email.order')
+                    ->with([
+                        'order' => $this->order,
+                    ]);
     }
 }

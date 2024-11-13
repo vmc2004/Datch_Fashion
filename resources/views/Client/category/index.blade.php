@@ -2,7 +2,7 @@
 @section('single-page', "Danh sách sản phẩm")
 @section('title', "Cửa hàng")
 @section('content')
-<hr>
+
 <div class="max-w-screen-xl mx-auto ">
    <div class="container flex mx-auto flex">
          <div>
@@ -24,46 +24,155 @@
       <!-- Bên Trái -->
       <div class="flex border-b">
             <div class="mr-12 w-[270px] border-r hidden md:block">
-               <div class="pr-5">
-                     <div
-                        class="box-border border border-current border-solid bg-neutral-100 border border-solid border-transparent rounded-lg h-8 leading-8 text-sm">
-                        <div class="relative">
-                           <input type="text" name="keyword" class="bg-neutral-100 px-2.5"
-                                 placeholder="Tìm trên DATCH" />
-                           <svg class="absolute cursor-pointer overflow-visible w-4 top-1/4 right-2"
-                                 viewBox="0 0 512 512">
-                                 <path fill="currentColor"
-                                    d="M508.5 481.6l-129-129c-2.3-2.3-5.3-3.5-8.5-3.5h-10.3C395 312 416 262.5 416 208 416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c54.5 0 104-21 141.1-55.2V371c0 3.2 1.3 6.2 3.5 8.5l129 129c4.7 4.7 12.3 4.7 17 0l9.9-9.9c4.7-4.7 4.7-12.3 0-17zM208 384c-97.3 0-176-78.7-176-176S110.7 32 208 32s176 78.7 176 176-78.7 176-176 176z">
-                                 </path>
-                           </svg>
+
+                  
+               <div class="border-b pl-6 md:pl-0 pb-8">
+                  <div class="flex justify-between items-center text-[15px] cursor-pointer pr-4 pt-2 pb-3">
+                     <div class="text-slate-800 font-bold flex items-center">
+                        Danh mục
+                     </div>
+                     <span class="dropdownBtn size-8 flex justify-center items-center">
+                        <svg class="w-3" viewBox="0 0 256 512">
+                              <path fill="currentColor"
+                                 d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z">
+                              </path>
+                        </svg>
+                     </span>
+                  </div>
+                  <div class="can-mini pr-5">
+                     <div style="height: auto; overflow: visible" aria-hidden="false"
+                        class="rah-static rah-static--height-auto">
+                        <div>
+                              <div class="space-y-2 text-sm">
+                                 <a class="block hover:text-orange-500" href="">
+                                    Tất cả danh mục
+                                 </a>
+                                 @foreach ($categories as $cat)
+                                 <a class="block ml-7 hover:text-orange-500" href="/danh-muc/{{$cat->id}}">
+                                     {{$cat->name}}
+                                 </a>
+                                 @if (!empty($cat->sub))
+                                     <div class="ml-10">
+                                         @foreach ($cat->sub as $subcat)
+                                             <a class="block hover:text-orange-500" href="/danh-muc/{{$subcat->id}}">
+                                                 {{$subcat->name}}
+                                             </a>
+                                         @endforeach
+                                     </div>
+                                 @endif
+                             @endforeach
+                             
+                                 <p class="flex items-center cursor-pointer ml-12 hover:text-[#007aff]">
+                                    <span class="mr-2">Xem thêm</span>
+                                    <svg class="w-2 mt-2" viewBox="0 0 256 512">
+                                          <path
+                                             d="M119.5 326.9L3.5 209.1c-4.7-4.7-4.7-12.3 0-17l7.1-7.1c4.7-4.7 12.3-4.7 17 0L128 287.3l100.4-102.2c4.7-4.7 12.3-4.7 17 0l7.1 7.1c4.7 4.7 4.7 12.3 0 17L136.5 327c-4.7 4.6-12.3 4.6-17-.1z">
+                                          </path>
+                                    </svg>
+                                 </p>
+                              </div>
                         </div>
                      </div>
+                  </div>
+            </div>
+            {{-- Lọc theo giá  --}}
+            <div class="pl-6 md:pl-0 pb-8">
+               <div class="flex justify-between items-center text-[15px] cursor-pointer pr-4 pt-2 pb-3">
+                  <div class="text-slate-800 font-bold flex items-center">
+                     Giá
+                  </div>
+                  <span class="dropdownBtn size-8 flex justify-center items-center">
+                     <svg class="w-3" viewBox="0 0 256 512">
+                           <path fill="currentColor"
+                              d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z">
+                           </path>
+                     </svg>
+                  </span>
                </div>
-               
-               <!-- Danh mục -->
-               <div class="border-b pl-6 md:pl-0 pb-8 py-3 border-black text-black">
-                  <div class="form-group">
-                     <label class="py-2 font-bold" for="categoryDropdown">Danh mục</label>
-                     <select name="category_id" id="categoryDropdown" class="form-control">
-                     
-                     @foreach($category as $ct)
-                        <option value="{{ $ct->id }}">{{ $ct->name }}</option>
-                     @endforeach
-                     </select>
-                  </div>            
-               </div>
-               <!-- Hết Danh mục đến Size -->
-               <div class="pl-6 md:pl-0 pb-8 border-black font-bold text-black">
-                  <div class="form-group">
-                     <label class="" for="categoryDropdown">Size</label>
-                     <select name="category_id" id="categoryDropdown" class="form-control">
-                     
-                     @foreach($size as $sz)
-                        <option value="{{ $ct->id }}">{{ $sz->name }}</option>
-                     @endforeach
-                     </select>
+            <div class="can-mini pr-5 border-b pb-8">
+               <div class="space-y-3 text-sm">
+                  <div>
+                        <input id="all" type="radio" name="price" value="price_all" />
+                        <label for="all">Tất cả</label>
+                  </div>
+                  <div>
+                        <input id="free" type="radio" name="price" value="free" />
+                        <label for="free">Sản phẩm 0đ</label>
+                  </div>
+                  <div>
+                        <input id="under100" type="radio" name="price" value="price_all" />
+                        <label for="under100">Dưới 100.000đ</label>
+                  </div>
+                  <div>
+                        <input id="price_under_200" type="radio" name="price" value="price_under_200" />
+                        <label for="price_under_200">100.000đ - 200.000đ</label>
+                  </div>
+                  <div>
+                        <input id="price_under_500" type="radio" name="price" value="price_under_500" />
+                        <label for="price_under_500">200.000đ - 500.000đ</label>
+                  </div>
+                  <div>
+                        <input id="price_above_500" type="radio" name="price" value="price_above_500" />
+                        <label for="price_above_500">Trên 500.000đ</label>
+                  </div>
+                  <div class="flex items-start cursor-pointer">
+                        <input type="radio" id="price" name="price" value="aaa">
+                        <label for="price" class="ml-2">
+                           <div class="space-y-3">
+                              <p class=" cursor-pointer">Chọn Khoảng giá</p>
+                              <div class="flex items-center gap-3">
+                                    <div class="relative">
+                                       <div class="relative">
+                                          <input type="text" name="priceMin"
+                                                class="border border-current border-solid rounded-lg w-24 p-2 bg-[#e2e2e2]"
+                                                placeholder="Từ" disabled value="">
+                                          <span
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 color-black-100">đ</span>
+                                       </div>
+                                    </div>
+                                    <div>-</div>
+                                    <div class="relative">
+                                       <div class="relative">
+                                          <input type="text" name="priceMax"
+                                                class="border border-current border-solid rounded-lg w-24 p-2 bg-[#e2e2e2]"
+                                                placeholder="Đến" disabled value="">
+                                          <span
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 color-black-100">đ</span>
+                                       </div>
+                                    </div>
+                              </div>
+                              <button class="hover:text-blue-700 cursor-pointer">Áp dụng</button>
+                           </div>
+                        </label>
+
                   </div>
                </div>
+            </div>
+      </div>
+            {{-- kết thúc lọc giá  --}}
+               <!-- Hết Danh mục đến Size -->
+               <div class="pl-6 md:pl-0 pb-8">
+                  <div class="flex justify-between items-center text-[15px] cursor-pointer pr-4 pt-2 pb-3">
+                     <div class="text-slate-800 font-bold flex items-center">
+                        Size
+                     </div>
+                     <span class="dropdownBtn size-8 flex justify-center items-center">
+                        <svg class="w-3" viewBox="0 0 256 512">
+                              <path fill="currentColor"
+                                 d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z">
+                              </path>
+                        </svg>
+                     </span>
+                  </div>
+                  <div class="can-mini pr-5 border-b pb-8">
+                      <div class="grid grid-cols-5 gap-2">
+                        @foreach($size as $sz)
+                           <input class="border border-gray-300 rounded-md py-2 text-gray-600 text-center" value="{{$sz->name}}">
+                        @endforeach
+                      </div>
+                  </div>
+            </div>
+             
 
           <!-- Hết div 1 : Danh mục , Size -->
           <div class="pl-6 md:pl-0 pb-8">
@@ -146,7 +255,7 @@
                         </div>
                      
                            <div class="absolute -left-[3.2px] top-2 z-10">
-                                 <div
+                                 <!-- <div
                                     class="text-white text-xs bg-[#06a5a8] border border-solid border-transparent rounded-sm inline-block px-2">
                                     <svg class="overflow-visible w-4 inline-block" viewBox="0 0 640 512">
                                        <path fill="currentColor"
@@ -154,7 +263,7 @@
                                        </path>
                                     </svg>
                                     Freeship
-                                 </div>
+                                 </div> -->
                                  <div
                                     class="size-0 border-2 border-[#098E91] border-l-transparent border-b-transparent">
                                  </div>
@@ -168,8 +277,17 @@
                                        </div>
                                     </div>
                                     <div class="space-y-2">
+
+                                    <p class="text-2xl font-bold text-red-600 mt-2 ">
+                                       {{ number_format($pd->productVariants->first()->price ?? 0) }} VNĐ
+ 
+                                       </p>
+                                    <div class="flex flex-cols-2 gap-4">
+                                    </div>
+
                                        <p class="font-semibold text-slate-800">
                                              {{ number_format($pd->ProductVariants->first()?->price ?? 0) }} đ </p>
+
                                        <div class="flex gap-2 text-xs text-slate-700">
                                              <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                                 stroke="currentColor" class="size-4">

@@ -5,16 +5,21 @@
 
 @section('content')
 @include('Client.layout.slide')
+<div class="bird-container">
+    <img src="https://chillnfree.vn/assets/images/bird-animation-desktop-1.gif" alt="chillnfree" class="bird-animation bird-desktop" id="birdAnimation">
+</div>
 <div class="max-w-screen-xl mx-auto py-8">
     <h2 class="text-2xl font-semibold text-left">Danh mục bạn yêu thích</h2>
     <div class="relative">
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          @foreach ($category as $cat)
+          @foreach ($brands as $brand)
           <div class="text-center">
+          <a href="/thuong-hieu/{{$brand->name}}">
             <div class="w-24 h-24 mx-auto rounded-full bg-white shadow-lg flex items-center justify-center">
-                <img src="{{asset($cat->image)}}" alt="Ảnh danh mục {{$cat->name}}" class="w-16 h-16">
+                <img src="{{ asset('storage/' . $brand->logo) }}" alt="Ảnh danh mục {{$brand->name}}" class="w-24 h-24 rounded-full">
             </div>
-            <p class="mt-2">{{$cat->name}}</p>
+            <p class="mt-2">{{$brand->name}}</p>
+          </a>
         </div>
           @endforeach
         </div>
@@ -88,7 +93,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
-        {{-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
             @foreach ($Proview as $view)
             <div class="h-full rounded-lg relative shadow-xl">
                 <div class="absolute -left-[3.2px] top-2 z-10">
@@ -136,7 +141,7 @@
                 </div>
             </div>
             @endforeach
-        </div> --}}
+        </div> 
     </div>
 </div>
 

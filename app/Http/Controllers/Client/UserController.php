@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -42,7 +43,7 @@ class UserController extends Controller
         Auth::login($user);
 
        
-        return redirect()->route('Client.home')->with(['message' => 'Đăng nhập thành công',
+        return redirect()->route('/')->with(['message' => 'Đăng nhập thành công',
         'message_type' => 'success']); 
     }
 
@@ -75,5 +76,66 @@ public function showRegisterForm(Request $request)
     ]);
 
     return redirect()->route('Client.account.login')->with(['message' => 'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.', 'message_type' => 'success']);
+}
+
+
+
+public function profile()
+{
+   
+    $user = Auth::user();
+
+   
+    return view('Client.account.profile', compact('user'));
+}
+
+public function updateProfile(Request $request,  User $user)
+{
+    $request->validate([
+        'fullname' => 'required|string|max:255',
+        'gender' => 'required|string',
+        'birthday' => 'required|date',
+        'language' => 'required|string',
+        'address' => 'nullable|string|max:255',
+        'introduction' => 'nullable|string',
+    ]);
+
+    $user = auth()->user();
+    $user->fullname = $request->input('fullname');
+    $user->gender = $request->input('gender');
+    $user->birthday = $request->input('birthday');
+    $user->language = $request->input('language');
+    $user->address = $request->input('address');
+    $user->introduction = $request->input('introduction');
+    // Cập nhật avatar nếu có
+    $data = $request->except('avatar');
+    if ($request->hasFile('avatar')) {
+        $oldAvatar = $user->avatar;
+        if ($oldAvatar && Storage::exists($oldAvatar)) {
+            Storage::delete($oldAvatar);
+        }
+        $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
+    }
+    $user->save();
+
+    return response()->json([
+        'success' => true,
+        'user' => [
+            'fullname' => $user->fullname,
+            'gender' => $user->gender,
+            'birthday' => $user->birthday,
+            'language' => $user->language,
+            'address' => $user->address,
+            'introduction' => $user->introduction,
+           'avatar_url' => $user->avatar ? asset('storage/' . $user->avatar) . '?' . time() : null,  // Đường dẫn ảnh mới
+        ]
+    ]);
+}
+
+
+
+public function logout() {
+    Auth::logout();
+    return redirect()->route('Client.home')->with(['message' => 'Đăng xuất thành công', 'message_type' => 'success']);
 }
 }
