@@ -103,7 +103,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span>Vận chuyển</span>
-                                <span>30.000 đ</span>
+                                <span>0 đ</span>
                             </div>
                         </div>
                         <div class="mb-4">

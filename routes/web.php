@@ -35,7 +35,7 @@ Route::get('/products/filter', [ProductController::class, 'getProducts']);
 Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('autocomplete');
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);
-Route::get('/account/orders/{user_id}', [OrderController::class, 'index']);
+Route::get('/account/orders', [OrderController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
@@ -61,14 +61,12 @@ Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn']);
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
+Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
+Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 
 Route::get('/tai-khoan', function () {
     return view('Client.account.profile');
 });
-Route::get('/account/orders', function () {
-    return view('Client.order.index');
-});
-
 //USER
 Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
 Route::get('/Client/account/login', [UserController::class, 'login'])->name('Client.account.login');

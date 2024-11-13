@@ -175,25 +175,25 @@
                     <!-- Dropdown Menu -->
                     <div class="menu absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-20 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300">
                       <ul class="py-2">
-                        <li><a href="/ho-so-cua-toi" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                        <li><a href="/tai-khoan" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="user-circle" class="overflow-hidden svg-vertical inline-block w-[14px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
                             <path fill="currentColor" d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm128 421.6c-35.9 26.5-80.1 42.4-128 42.4s-92.1-15.9-128-42.4V416c0-35.3 28.7-64 64-64 11.1 0 27.5 11.4 64 11.4 36.6 0 52.8-11.4 64-11.4 35.3 0 64 28.7 64 64v13.6zm30.6-27.5c-6.8-46.4-46.3-82.1-94.6-82.1-20.5 0-30.4 11.4-64 11.4S204.6 320 184 320c-48.3 0-87.8 35.7-94.6 82.1C53.9 363.6 32 312.4 32 256c0-119.1 96.9-216 216-216s216 96.9 216 216c0 56.4-21.9 107.6-57.4 146.1zM248 120c-48.6 0-88 39.4-88 88s39.4 88 88 88 88-39.4 88-88-39.4-88-88-88zm0 144c-30.9 0-56-25.1-56-56s25.1-56 56-56 56 25.1 56 56-25.1 56-56 56z"></path>
                         </svg>
                           Hồ sơ của tôi</a>
                         </li>
-                        <li><a href="/yeu-thich" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                        <li><a href="/account/favorites" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="heart" class="overflow-hidden svg-vertical inline-block w-[14px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path fill="currentColor" d="M462.3 62.7c-54.5-46.4-136-38.7-186.6 13.5L256 96.6l-19.7-20.3C195.5 34.1 113.2 8.7 49.7 62.7c-62.8 53.6-66.1 149.8-9.9 207.8l193.5 199.8c6.2 6.4 14.4 9.7 22.6 9.7 8.2 0 16.4-3.2 22.6-9.7L472 270.5c56.4-58 53.1-154.2-9.7-207.8zm-13.1 185.6L256.4 448.1 62.8 248.3c-38.4-39.6-46.4-115.1 7.7-161.2 54.8-46.8 119.2-12.9 142.8 11.5l42.7 44.1 42.7-44.1c23.2-24 88.2-58 142.8-11.5 54 46 46.1 121.5 7.7 161.2z"></path>
                         </svg>
                           Yêu thích</a>
                         </li>
-                        <li><a href="/don-mua" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                        <li><a href="/account/orders" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="shopping-cart" class="overflow-hidden svg-vertical inline-block w-[15.75px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M551.991 64H129.28l-8.329-44.423C118.822 8.226 108.911 0 97.362 0H12C5.373 0 0 5.373 0 12v8c0 6.627 5.373 12 12 12h78.72l69.927 372.946C150.305 416.314 144 431.42 144 448c0 35.346 28.654 64 64 64s64-28.654 64-64a63.681 63.681 0 0 0-8.583-32h145.167a63.681 63.681 0 0 0-8.583 32c0 35.346 28.654 64 64 64 35.346 0 64-28.654 64-64 0-17.993-7.435-34.24-19.388-45.868C506.022 391.891 496.76 384 485.328 384H189.28l-12-64h331.381c11.368 0 21.177-7.976 23.496-19.105l43.331-208C578.592 77.991 567.215 64 551.991 64zM240 448c0 17.645-14.355 32-32 32s-32-14.355-32-32 14.355-32 32-32 32 14.355 32 32zm224 32c-17.645 0-32-14.355-32-32s14.355-32 32-32 32 14.355 32 32-14.355 32-32 32zm38.156-192H171.28l-36-192h406.876l-40 192z"></path>
                         </svg>
                           Đơn mua</a>
                         </li>
-                        <li><a href="/danh-gia-cua-toi" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                        <li><a href="/account/reviews" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="star" class="w-[15px] h-[14px] overflow-hidden svg-vertical inline-block mr-2.5" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM405.8 317.9l27.8 162L288 403.5 142.5 480l27.8-162L52.5 203.1l162.7-23.6L288 32l72.8 147.5 162.7 23.6-117.7 114.8z"></path>
                         </svg>
@@ -206,13 +206,13 @@
                         </svg>
                           Trung tâm trợ giúp</a>
                         </li>
-                        <li><a href="/dong-gop-y-kien" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                        <li><a href="/feedback" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="exclamation-triangle" class="overflow-hidden svg-vertical inline-block w-[15.75px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.054-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.952 83.154 0l239.94 416.028zm-27.658 15.991l-240-416c-6.16-10.678-21.583-10.634-27.718 0l-240 416C27.983 466.678 35.731 480 48 480h480c12.323 0 19.99-13.369 13.859-23.996zM288 372c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28zm-11.49-212h22.979c6.823 0 12.274 5.682 11.99 12.5l-7 168c-.268 6.428-5.556 11.5-11.99 11.5h-8.979c-6.433 0-11.722-5.073-11.99-11.5l-7-168c-.283-6.818 5.167-12.5 11.99-12.5zM288 372c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28z"></path>
                         </svg>
                           Đóng góp ý kiến</a>
                         </li>
-                        <li><a href="/log-out" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                        <li><a href="/logout" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="sign-out" class="w-[14px] h-[14px] overflow-hidden svg-vertical inline-block mr-2.5" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path fill="currentColor" d="M48 64h132c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H48c-8.8 0-16 7.2-16 16v288c0 8.8 7.2 16 16 16h132c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48zm279 19.5l-7.1 7.1c-4.7 4.7-4.7 12.3 0 17l132 131.4H172c-6.6 0-12 5.4-12 12v10c0 6.6 5.4 12 12 12h279.9L320 404.4c-4.7 4.7-4.7 12.3 0 17l7.1 7.1c4.7 4.7 12.3 4.7 17 0l164.5-164c4.7-4.7 4.7-12.3 0-17L344 83.5c-4.7-4.7-12.3-4.7-17 0z"></path>
                         </svg>
