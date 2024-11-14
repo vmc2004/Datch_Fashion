@@ -28,7 +28,7 @@ use App\Http\Controllers\Client\UserController;
 */
 
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/account/orders/{user_id}', [OrderController::class, 'index']);
 Route::get('/product/{slug}', [ProductController::class,'show']);  
 
@@ -36,6 +36,7 @@ Route::get('/cua-hang', function(){
     return view('Client.category.index');
 });
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
+
 // Route::get('/gio-hang', function(){
 //     return view('Client.cart.index');
 // });
@@ -47,6 +48,9 @@ Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.categor
 // });
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
+Route::delete('/gio-hang/xoa/{item}', [CartController::class, 'removeItem'])->name('cart.removeItem');
+Route::post('/gio-hang/sua/{itemId}', [CartController::class, 'updateQuantity']);
+
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
