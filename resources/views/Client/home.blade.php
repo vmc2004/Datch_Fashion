@@ -42,7 +42,7 @@
             <div class="text-center">
                 <a href="/product/{{$new->slug}}">
                     <img alt="Ảnh sản phẩm gợi ý" class="w-full hover:scale-110 duration-100" height="400"
-                        src="{{ asset($new->image) }}" width="300" />
+                        src="{{ asset('storage/' .$new->image) }}" width="300" />
                 </a>
                 <div class="flex justify-center mt-2">
                     @foreach ($new->ProductVariants->unique('color_id') as $variant)

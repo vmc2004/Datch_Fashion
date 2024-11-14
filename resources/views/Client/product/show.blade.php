@@ -53,7 +53,7 @@
                 <div class="flex mt-4 space-x-2">
                     @foreach ($uniqueVariants as $variant)
                     <img alt="Ảnh biến thể" class="w-20 h-20 border thumbnail"
-                        src="{{ asset($variant->image) }}" />
+                        src="{{ asset('storage/' .$variant->image) }}" />
                     @endforeach
                 </div>
             </div>
