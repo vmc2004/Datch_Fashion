@@ -1,0 +1,162 @@
+<?php
+
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Color;
+use App\Models\Comment;
+use App\Models\Product;
+use App\Models\Size;
+use Illuminate\Http\Request;
+
+class StoreController extends Controller
+{
+    public function index(Request $request)
+    {
+        $category = Category::query()->limit(10)->get();
+        $size = Size::query()->limit(10)->get();
+        $color = Color::query()->limit(10)->get();
+        $flow_type = $request->input('flow_type', 'default');
+        $price_filter = $request->input('price', 'price_all');
+        $query = Product::query();
+
+        $query->when($price_filter == 'free', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->where('price', 0);
+            });
+        })
+        ->when($price_filter == 'price_under_100', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->where('price', '<', 100000);
+            });
+        })
+        ->when($price_filter == 'price_under_200', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->whereBetween('price', [100000, 200000]);
+            });
+        })
+        ->when($price_filter == 'price_under_500', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->whereBetween('price', [200000, 500000]);
+            });
+        })
+        ->when($price_filter == 'price_above_500', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->where('price', '>', 500000);
+            });
+        });
+
+        $query->when($flow_type == '-modifiedAt', function ($query) {
+            $query->orderBy('created_at', 'desc');
+        })
+        ->when($flow_type == 'priceMin', function ($query) {
+            $query->with(['productVariants' => function($q) {
+                $q->orderBy('price', 'asc'); // Sắp xếp các variants theo giá tăng dần
+            }])
+            ->orderBy(function ($query) {
+                $query->select('price')
+                      ->from('product_variants') // Thay 'productVariants' thành 'product_variants'
+                      ->whereColumn('product_variants.product_id', 'products.id') // Cập nhật tên bảng
+                      ->limit(1); // Đảm bảo lấy giá trị của price từ variants
+            }, 'asc'); // Sắp xếp sản phẩm theo giá của variants
+        })
+        
+       ->when($flow_type == '-priceMin', function ($query) {
+            $query->with(['productVariants' => function($q) {
+                $q->orderBy('price', 'desc'); // Sắp xếp các variants theo giá giảm dần
+            }])
+            ->orderBy(function ($query) {
+                $query->select('price')
+                    ->from('product_variants') // Thay 'productVariants' thành 'product_variants'
+                    ->whereColumn('product_variants.product_id', 'products.id') // Cập nhật tên bảng
+                    ->limit(1); // Đảm bảo lấy giá trị của price từ variants
+            }, 'desc'); // Sắp xếp sản phẩm theo giá của variants giảm dần
+        });
+
+        $products = $query->where('is_active', 1)->paginate(9);
+        
+        return view('Client.category.index', [
+            'products' => $products,
+            'category' => $category,
+            'size' => $size,
+            'color' => $color,
+            'flow_type' =>$flow_type,
+        ]);
+    } 
+    public function getById(Request $request, $id)
+    {
+        $category = Category::query()->limit(10)->get();
+        $size = Size::query()->limit(10)->get();
+        $color = Color::query()->limit(10)->get();
+        $flow_type = request()->input('flow_type', 'default');
+        $price_filter = $request->input('price', 'price_all');
+        // Khởi tạo truy vấn cho sản phẩm
+        $query = Product::query()->where('category_id', $id);
+    
+        $query->when($price_filter == 'free', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->where('price', 0);
+            });
+        })
+        ->when($price_filter == 'price_under_100', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->where('price', '<', 100000);
+            });
+        })
+        ->when($price_filter == 'price_under_200', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->whereBetween('price', [100000, 200000]);
+            });
+        })
+        ->when($price_filter == 'price_under_500', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->whereBetween('price', [200000, 500000]);
+            });
+        })
+        ->when($price_filter == 'price_above_500', function ($query) {
+            $query->whereHas('productItems', function ($q) {
+                $q->where('price', '>', 500000);
+            });
+        });
+        // Thêm điều kiện sắp xếp theo flow_type
+        $query->when($flow_type == '-modifiedAt', function ($query) {
+            $query->orderBy('created_at', 'desc');
+        })
+        ->when($flow_type == 'priceMin', function ($query) {
+            $query->with(['productVariants' => function($q) {
+                $q->orderBy('price', 'asc'); // Sắp xếp các variants theo giá tăng dần
+            }])
+            ->orderBy(function ($query) {
+                $query->select('price')
+                    ->from('product_variants') // Thay 'productVariants' thành 'product_variants'
+                    ->whereColumn('product_variants.product_id', 'products.id') // Cập nhật tên bảng
+                    ->limit(1); // Đảm bảo lấy giá trị của price từ variants
+            }, 'asc'); // Sắp xếp sản phẩm theo giá của variants
+        })
+        ->when($flow_type == '-priceMin', function ($query) {
+            $query->with(['productVariants' => function($q) {
+                $q->orderBy('price', 'desc'); // Sắp xếp các variants theo giá giảm dần
+            }])
+            ->orderBy(function ($query) {
+                $query->select('price')
+                    ->from('product_variants') // Thay 'productVariants' thành 'product_variants'
+                    ->whereColumn('product_variants.product_id', 'products.id') // Cập nhật tên bảng
+                    ->limit(1); // Đảm bảo lấy giá trị của price từ variants
+            }, 'desc'); // Sắp xếp sản phẩm theo giá của variants giảm dần
+        });
+    
+        // Phân trang và lấy sản phẩm
+        $products = $query->where('is_active', 1)->paginate(9);
+    
+        return view('Client.category.index', [
+            'products' => $products,
+            'category' => $category,
+            'size' => $size,
+            'color' => $color,
+            'flow_type' => $flow_type,
+        ]);
+    }
+    
+}
+

@@ -38,7 +38,7 @@
                     <a href="">Đăng ký</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
-                    <a href="">Đăng nhập</a>
+                    <a href="{{route('Client.account.login')}}">Đăng nhập</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
                     <a href="">Yêu thích</a>
@@ -202,5 +202,5 @@
 </div>  
 </div>
 </body>
-
+@yield('javascript')
 </html>

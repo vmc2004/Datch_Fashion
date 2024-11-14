@@ -1,5 +1,5 @@
 @include('Client.layout.header')
-
-@yield('content')
+<hr>
+    @yield('content')
 
 @include('Client.layout.footer')

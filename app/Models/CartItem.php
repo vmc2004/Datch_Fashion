@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CartItem extends Model
 {
@@ -21,5 +22,8 @@ class CartItem extends Model
     public function variant()
     {
         return $this->belongsTo(ProductVariant::class);
+    }
+    public static function getCartItems($cart_id){
+        return DB::table('cart_items')->where('cart_id', $cart_id)->get();
     }
 }
