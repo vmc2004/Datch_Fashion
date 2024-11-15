@@ -142,27 +142,34 @@
                 </div>
             </form>
 
-            <div class="mt-4">
-                <h2 class="font-bold">
-                    Mô tả
-                </h2>
-                <p class="text-gray-700 mt-2">
+            <div class="mt-4 motaan">
+                <h2 class="font-bold">Mô tả</h2>
+                <p id="description" class="text-gray-700 mt-2 description-collapse">
                     {{ $product->description }}
                 </p>
+                <div id="toggleButton">
+                    <i class="fas fa-plus"></i>
+                </div>
+
             </div>
-            <div class="mt-4">
+
+
+            <div class="mt-4 chatlieuan">
                 <h2 class="font-bold">
                     Chất liệu
                 </h2>
-                <p class="text-gray-700 mt-2">
+                <p id="material" class="text-gray-700 mt-2 material-collapse">
                     {{ $product->material }}
                 </p>
+                <div id="toggleMaterialButton">
+                    <i class="fas fa-plus"></i>
+                </div>
             </div>
-            <div class="mt-4">
+            <div class="mt-4 hdspan">
                 <h2 class="font-bold">
                     Hướng dẫn sử dụng
                 </h2>
-                <p class="text-gray-700 mt-2">
+                <p id="usage" class="text-gray-700 mt-2 usage-collapse">
                     Giặt máy ở chế độ nhẹ, nhiệt độ thường.
                     Không sử dụng hóa chất tẩy có chứa Clo.
                     Phơi trong bóng mát.
@@ -171,6 +178,9 @@
                     Giặt với sản phẩm cùng màu.
                     Không là lên chi tiết trang trí.
                 </p>
+                <div id="toggleUsageButton">
+                    <i class="fas fa-plus"></i>
+                </div>
             </div>
         </div>
     </div>
@@ -410,6 +420,52 @@
                 updateImages(newIndex);
             });
         });
+
+        document.getElementById('toggleButton').addEventListener('click', function() {
+            var description = document.getElementById('description');
+            var button = document.getElementById('toggleButton');
+
+            // Kiểm tra trạng thái của mô tả và thay đổi
+            if (description.classList.contains('description-collapse')) {
+                description.classList.remove('description-collapse');
+                description.classList.add('description-expanded');
+                button.innerHTML = '<i class="fas fa-minus"></i>'; // Thay đổi thành dấu trừ
+            } else {
+                description.classList.remove('description-expanded');
+                description.classList.add('description-collapse');
+                button.innerHTML = '<i class="fas fa-plus"></i>'; // Thay đổi thành dấu cộng
+            }
+        });
+
+        document.getElementById('toggleMaterialButton').addEventListener('click', function() {
+            var material = document.getElementById('material');
+            var button = document.getElementById('toggleMaterialButton');
+
+            if (material.classList.contains('material-collapse')) {
+                material.classList.remove('material-collapse');
+                material.classList.add('material-expanded');
+                button.innerHTML = '<i class="fas fa-minus"></i>'; // Thay đổi thành dấu trừ
+            } else {
+                material.classList.remove('material-expanded');
+                material.classList.add('material-collapse');
+                button.innerHTML = '<i class="fas fa-plus"></i>'; // Thay đổi thành dấu cộng
+            }
+        });
+
+        document.getElementById('toggleUsageButton').addEventListener('click', function() {
+            var usage = document.getElementById('usage');
+            var button = document.getElementById('toggleUsageButton');
+
+            if (usage.classList.contains('usage-collapse')) {
+                usage.classList.remove('usage-collapse');
+                usage.classList.add('usage-expanded');
+                button.innerHTML = '<i class="fas fa-minus"></i>'; // Thay đổi thành dấu trừ
+            } else {
+                usage.classList.remove('usage-expanded');
+                usage.classList.add('usage-collapse');
+                button.innerHTML = '<i class="fas fa-plus"></i>'; // Thay đổi thành dấu cộng
+            }
+        });
     </script>
     <style>
         .image-container {
@@ -438,6 +494,97 @@
 
         .rounded {
             padding: 0;
+        }
+
+        .motaan {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #toggleButton {
+            position: absolute;
+            margin-left: 55px;
+        }
+
+        #description {
+            margin-right: 40px;
+            /* Khoảng cách từ mô tả đến nút */
+        }
+
+
+
+        .description-collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        .description-expanded {
+            max-height: 500px;
+            /* Hoặc giá trị lớn hơn nếu bạn muốn mô tả dài */
+        }
+
+        .chatlieuan {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #material {
+            margin-right: 40px;
+            /* Khoảng cách từ mô tả đến nút */
+        }
+
+
+
+        .material-collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        .material-expanded {
+            max-height: 500px;
+            /* Hoặc giá trị lớn hơn nếu bạn muốn chất liệu dài */
+        }
+
+        #toggleMaterialButton {
+            position: absolute;
+            margin-left: 75px;
+        }
+
+
+        .hdspan {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #usage {
+            margin-right: 40px;
+            /* Khoảng cách từ hướng dẫn đến nút */
+        }
+
+        #toggleUsageButton {
+            position: absolute;
+
+            margin-left: 160px;
+        }
+
+        .usage-collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        .usage-expanded {
+            max-height: 500px;
+            /* Hoặc giá trị lớn hơn nếu bạn muốn hướng dẫn dài */
+        }
+
+        .rounded {
+            padding: 10px;
         }
     </style>
     @endsection

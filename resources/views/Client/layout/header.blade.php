@@ -156,7 +156,6 @@
               <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User" width="30">
               <span class="text-sm">{{ Auth::user()->fullname }}</span>
             </a>
-
             <!-- Dropdown Menu -->
             <div class="menu absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-20 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300">
               <ul class="py-2">
