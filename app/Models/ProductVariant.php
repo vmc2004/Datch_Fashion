@@ -35,6 +35,7 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Size::class, 'size_id');
     }
+
     public function variants()
     {
         return $this->hasMany(ProductVariant::class, 'product_id', 'id'); // 'product_id' là cột khóa ngoại trong bảng product_variants

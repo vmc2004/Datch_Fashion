@@ -40,13 +40,35 @@
                         </div>
                         <hr>
 
+<<<<<<< HEAD
                         <div class="mb-4">
                             <label class="block text-gray-700 text-bold">Địa chỉ của bạn</label>
                             <div class="mb-4">
                                 <input class="w-full p-2 border border-gray-300 rounded mt-1" name="address" placeholder="Nhập địa chỉ (VD: Số 10 Nguyễn Tuân)" type="text" />
+=======
+                    <h2 class="text-xl font-bold mb-4">Phương thức thanh toán</h2>
+                   
+                    <div class="mb-4">
+                        <div class="p-4 border border-gray-300 rounded mt-1">
+                            <div class="flex items-center mb-3">
+                                <input class="mr-2" value="Thanh toán khi nhận hàng" name="payment" type="radio"/>
+                                <span>Thanh toán khi nhận hàng</span>
+                                <img alt="Banking logo" class="ml-auto" height="20" src="{{ asset('assets/client/images/cod.png') }}" width="50"/>
+                            </div>
+                            <div class="flex items-center mb-3">
+                                <input class="mr-2" value="Thanh toán bằng thẻ" name="payment" type="radio"/>
+                                <span>Thẻ nội địa/Internet Banking</span>
+                                <img alt="Banking logo" class="ml-auto" height="20" src="{{ asset('assets/client/images/visa.png') }}" width="80"/>
+                            </div>
+                            <div class="flex items-center mb-3">
+                                <input class="mr-2" value="Thanh toán qua VNPay" name="payment" type="radio"/>
+                                <span>Ví điện tử VNPAY</span>
+                                <img alt="VNPAY logo" class="ml-auto" src="{{ asset('assets/client/images/vnpay.png') }}" width="80"/>
+>>>>>>> 51f31216d118f424c010998fae2c9f38e1451637
                             </div>
                         </div>
 
+<<<<<<< HEAD
                         <h2 class="text-xl font-bold mb-4">Phương thức vận chuyển</h2>
                         <div class="mb-4">
                             <label class="block text-gray-700">Tiêu chuẩn</label>
@@ -57,6 +79,30 @@
                                 </div>
                                 <span>Đơn hàng nhận từ 3 - 5 ngày</span>
                             </div>
+=======
+                <!-- Right Column -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4">Thông tin sản phẩm</h2>
+                    @php
+                        $subtotal = 0; 
+                    @endphp
+                    @foreach ($cartItems->items as $item)
+
+
+                    @php
+                        $subtotal += $item['price_at_purchase'] * $item['quantity']; // Cộng dồn giá trị
+                    @endphp
+                   <input type="hidden" name="quantity[]" value="{{ $item['quantity'] }}">
+                   <input type="hidden" name="variant_id[]" value="{{ $item['variant_id'] }}">
+                   <input type="hidden" name="price[]" value="{{ $item['price_at_purchase'] }}">
+                
+                    <div class="flex items-center mb-4">
+                        <img alt="Ảnh sản phẩm"  class="w-20 h-20 rounded-lg" height="80" src="{{asset('storage/'.$item->variant->image)}}" width="80"/>
+                        <div class="ml-4">
+                            <p>{{ $item->variant->product->name }} - {{ $item->variant->color->name }}, {{ $item->variant->size->name }}</p>
+                            <p>{{number_format($item['price_at_purchase'])}} đ</p>
+                            <p>x{{$item['quantity']}}</p>
+>>>>>>> 51f31216d118f424c010998fae2c9f38e1451637
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700">Thẻ tín dụng (VISA)</label>

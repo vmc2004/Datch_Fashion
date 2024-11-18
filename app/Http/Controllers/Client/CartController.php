@@ -59,6 +59,8 @@ class CartController extends Controller
             ]);
         }
 
+
+
         // $cart = Cart::with('items.variant.product', 'items.variant.color', 'items.variant.size')
         //     ->where('user_id', 1)
         //     ->where('status', 'active')
@@ -69,8 +71,12 @@ class CartController extends Controller
         // }
 
         // Trả về view hiển thị giỏ hàng
+        $totalCart = $cart->items->count();
+
+        // Trả về view hiển thị giỏ hàng với tổng số lượng item
         return view('client.cart.index', [
             'cart' => $cart,
+            'totalCart' => $totalCart,
         ]);
     }
     public function removeItem($itemId)

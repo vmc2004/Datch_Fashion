@@ -48,4 +48,8 @@ class Product extends Model
     }
     public $timestamps = false;
     protected $dates = ['deleted_at'];
+    public function usersWhoFavorited()
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'product_id', 'user_id');
+    }
 }

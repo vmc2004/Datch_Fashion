@@ -175,6 +175,36 @@ if (win && document.querySelector('#sidenav-scrollbar')) {
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="{{asset('assets/admin/js/argon-dashboard.min.js?v=2.0.4')}}"></script>
+
+<!-- Morris -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<!-- date -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.3/perfect-scrollbar.min.js"></script>
+<script src="path/to/argon-dashboard.min.js?v=2.0.4"></script>
+
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker({
+      prevText : "Tháng trước",
+      nextText : "Tháng sau",
+      dateformat : "yy-mm-dd",
+      dayNamesMin : ["Thứ 2" , "Thứ 3" , "Thứ 4" , "Thứ 5" , "Thứ 6" , "Thứ 7" , "Chủ Nhật"],
+      duration : "slow"
+    });
+
+    $( "#datepicker2" ).datepicker({
+      prevText : "Tháng trước",
+      nextText : "Tháng sau",
+      dateformat : "yy-mm-dd",
+      dayNamesMin : ["Thứ 2" , "Thứ 3" , "Thứ 4" , "Thứ 5" , "Thứ 6" , "Thứ 7" , "Chủ Nhật"],
+      duration : "slow"
+    });
+  } );
+  </script>
 </body>
 
 </html>

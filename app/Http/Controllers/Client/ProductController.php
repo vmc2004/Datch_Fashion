@@ -10,6 +10,7 @@ use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+
 class ProductController extends Controller
 {
     public function show($slug)
@@ -112,5 +113,65 @@ class ProductController extends Controller
     {
         $categories = Category::all(); // Giả sử bạn có model Category cho bảng danh mục
         return view('search_results', compact('categories'));
+    }
+    public function filter(Request $request)
+    {
+        $query = Product::query();
+
+        if ($request->has('min_price') && $request->has('max_price')) {
+            $minPrice = $request->input('min_price');
+            $maxPrice = $request->input('max_price');
+
+            if ($minPrice && $maxPrice) {
+                $query->whereHas('variants', function ($q) use ($minPrice, $maxPrice) {
+                    $q->where('price', '>=', $minPrice)
+                        ->where('price', '<=', $maxPrice);
+                });
+            }
+        }
+
+        $products = $query->get();
+
+        return response()->json($products);
+    }
+
+    public function filterBySize(Request $request)
+    {
+        // Lấy dữ liệu kích thước từ request
+        $sizes = $request->input('sizes', []);
+
+        if (empty($sizes)) {
+            return response()->json([], 200); // Nếu không có kích thước nào, trả về mảng rỗng
+        }
+
+        try {
+            // Lọc sản phẩm theo kích thước trong variants
+            $products = Product::whereHas('variants', function ($query) use ($sizes) {
+                $query->whereIn('size', $sizes); // Giả sử bạn lưu kích thước trong cột 'size'
+            })->get();
+
+            // Trả về kết quả sản phẩm dưới dạng HTML
+            return response()->json(view('client.products', compact('products'))->render());
+        } catch (\Exception $e) {
+            \Log::error('Lỗi khi lọc sản phẩm: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+    // lọc color
+    public function filterByColor(Request $request)
+    {
+        // Lấy ID màu sắc từ yêu cầu
+        $colorId = $request->input('color');
+
+        // Lọc sản phẩm theo màu sắc
+        $products = Product::whereHas('variants', function ($query) use ($colorId) {
+            // Lọc theo màu sắc nếu có
+            if ($colorId) {
+                $query->where('color_id', $colorId);
+            }
+        })->get();
+
+        // Trả về dữ liệu sản phẩm dưới dạng JSON
+        return response()->json($products);
     }
 }
