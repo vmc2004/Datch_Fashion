@@ -392,18 +392,31 @@
       });
    });
    // Lọc size
-   $.ajax({
-      url: '/products/filter-by-size',
-      method: 'GET',
-      data: {
-         sizes: selectedSizes // Mảng các kích thước đã chọn
-      },
-      success: function(response) {
-         $('#products-grid').html(response);
-      },
-      error: function(xhr, status, error) {
-         console.error('Lỗi khi lọc sản phẩm: ' + error);
-      }
+   $(document).ready(function() {
+      // Xử lý sự kiện thay đổi checkbox
+      $('.size-filter').on('change', function() {
+         // Lấy tất cả các kích thước đã chọn
+         let sizes = [];
+         $('.size-filter:checked').each(function() {
+            sizes.push($(this).val());
+         });
+
+         // Gửi yêu cầu Ajax tới server
+         $.ajax({
+            url: '/products/filter-by-size',
+            method: 'GET',
+            data: {
+               sizes: sizes // Gửi danh sách kích thước đã chọn
+            },
+            success: function(response) {
+               // Cập nhật lại danh sách sản phẩm với dữ liệu trả về
+               $('#products-grid').html(response);
+            },
+            error: function() {
+               console.log('Lỗi khi lọc sản phẩm');
+            }
+         });
+      });
    });
 
    // Lọc màu

@@ -137,25 +137,18 @@ class ProductController extends Controller
 
     public function filterBySize(Request $request)
     {
-        // Lấy dữ liệu kích thước từ request
-        $sizes = $request->input('sizes', []);
+        // Lấy các kích thước đã chọn
+        $sizes = $request->get('sizes', []);
 
-        if (empty($sizes)) {
-            return response()->json([], 200); // Nếu không có kích thước nào, trả về mảng rỗng
-        }
+        // Lọc sản phẩm theo các kích thước đã chọn
+        $products = Product::whereHas('variants', function ($query) use ($sizes) {
+            if (!empty($sizes)) {
+                $query->whereIn('size', $sizes);
+            }
+        })->get();
 
-        try {
-            // Lọc sản phẩm theo kích thước trong variants
-            $products = Product::whereHas('variants', function ($query) use ($sizes) {
-                $query->whereIn('size', $sizes); // Giả sử bạn lưu kích thước trong cột 'size'
-            })->get();
-
-            // Trả về kết quả sản phẩm dưới dạng HTML
-            return response()->json(view('client.products', compact('products'))->render());
-        } catch (\Exception $e) {
-            \Log::error('Lỗi khi lọc sản phẩm: ' . $e->getMessage());
-            return response()->json(['error' => 'Internal Server Error'], 500);
-        }
+        // Trả về kết quả dưới dạng view hoặc phần HTML đã thay đổi
+        return view('client.products-grid', compact('products'));
     }
     // lọc color
     public function filterByColor(Request $request)
