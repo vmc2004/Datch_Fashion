@@ -126,32 +126,13 @@
 
             {{-- kết thúc lọc giá  --}}
             <!-- Hết Danh mục đến Size -->
-            <div class="pl-6 md:pl-0 pb-8">
-               <div class="flex justify-between items-center text-[15px] cursor-pointer pr-4 pt-2 pb-3">
-                  <div class="text-slate-800 font-bold flex items-center">
-                     Size
-                  </div>
-                  <span class="dropdownBtn size-8 flex justify-center items-center">
-                     <svg class="w-3" viewBox="0 0 256 512">
-                        <path fill="currentColor" d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z"></path>
-                     </svg>
-                  </span>
-               </div>
-               <div class="can-mini pr-5 border-b pb-8">
-                  <div class="grid grid-cols-5 gap-2">
-                     @foreach($size as $sz)
-                     <label for="size-{{$sz->id}}" aria-label="Select size {{$sz->name}}">
-                        <input type="checkbox" id="size-{{$sz->id}}" class="size-filter" value="{{$sz->name}}" data-id="{{$sz->id}}">
-                        <span>{{$sz->name}}</span>
-                     </label>
-                     @endforeach
-                  </div>
-               </div>
-            </div>
-
-
-
-
+            <select id="size" class="border rounded px-4 py-2">
+               <option value="">Chọn kích thước</option>
+               <option value="1">S</option>
+               <option value="2">M</option>
+               <option value="3">L</option>
+               <option value="4">XXL</option>
+            </select>
             <!-- Hết div 1 : Danh mục , Color -->
             <div class="mb-4">
                <label for="color-filter" class="text-lg font-semibold">Chọn màu sắc:</label>
@@ -176,16 +157,18 @@
                   <div class="ml-auto ">
                      <div class="flex items-center hidden md:flex"><span class="mr-2">Lọc theo:</span>
                         <div class="inline-block">
-                           <div class="rounded-full h-full relative">
-                              <select name="flow_type"
-                                 class="border border-gray-400 border-solid rounded-full p-1.5 text-xs md:py-1 md:px-2.5 md:text-base">
-                                 <option selected>Mặc định</option>
-                                 <option value="-modifiedAt">Mới nhất</option>
-                                 <option value="priceMin">Giá thấp nhất</option>
-                                 <option value="-priceMin">Giá cao nhất</option>
-                                 <option value="-likedCount">Yêu thích nhất</option>
-                              </select>
-                           </div>
+                           <form action="" method="GET">
+                              <div class="rounded-full h-full relative">
+                                 <select name="flow_type"
+                                    class="border border-gray-400 border-solid rounded-full p-1.5 text-xs md:py-1 md:px-2.5 md:text-base"
+                                    onchange="this.form.submit()">
+                                    <option value="default" @if ($flow_type=='default' ) selected @endif>Mặc định</option>
+                                    <option value="-modifiedAt" @if ($flow_type=='-modifiedAt' ) selected @endif>Mới nhất</option>
+                                    <option value="priceMin" @if ($flow_type=='priceMin' ) selected @endif>Giá thấp nhất</option>
+                                    <option value="-priceMin" @if ($flow_type=='-priceMin' ) selected @endif>Giá cao nhất</option>
+                                 </select>
+                              </div>
+                           </form>
                         </div>
                      </div>
                   </div>
@@ -220,11 +203,7 @@
                   <p>No products found.</p>
                   @else
                   <div class="relative">
-                     <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                     </button>
+
                      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="products-grid">
                         @foreach ($products as $new)
                         <div class="h-full rounded-lg relative shadow-xl product-item transform hover:scale-105 transition duration-300 ease-in-out">
@@ -393,31 +372,65 @@
    });
    // Lọc size
    $(document).ready(function() {
-      // Xử lý sự kiện thay đổi checkbox
-      $('.size-filter').on('change', function() {
-         // Lấy tất cả các kích thước đã chọn
-         let sizes = [];
-         $('.size-filter:checked').each(function() {
-            sizes.push($(this).val());
-         });
+      $('#size').on('change', function() {
+         const sizeId = $(this).val(); // Lấy size được chọn
 
-         // Gửi yêu cầu Ajax tới server
          $.ajax({
-            url: '/products/filter-by-size',
-            method: 'GET',
+            url: '/filter-by-size', // Route API
+            type: 'GET',
             data: {
-               sizes: sizes // Gửi danh sách kích thước đã chọn
-            },
+               size: sizeId
+            }, // Gửi sizeId lên server
             success: function(response) {
-               // Cập nhật lại danh sách sản phẩm với dữ liệu trả về
-               $('#products-grid').html(response);
+               // Làm mới danh sách sản phẩm
+               $('#products-grid').empty();
+
+               if (response.length === 0) {
+                  $('#products-grid').html('<p>No products found for this size.</p>');
+               } else {
+                  // Thêm sản phẩm mới
+                  response.forEach(function(product) {
+                     let productHTML = `
+                            <div class="h-full rounded-lg shadow-xl product-item transform hover:scale-105 transition duration-300 ease-in-out">
+                                <div class="h-full rounded-lg overflow-hidden flex flex-col">
+                                    <div class="overflow-hidden h-64 w-full">
+                                        <a href="/product/${product.slug}">
+                                            <img class="hover:scale-110 duration-200 transition-transform"
+                                                 src="${product.image || '/default-image.jpg'}" alt="${product.name}">
+                                        </a>
+                                    </div>
+                                    <div class="bg-white p-4 flex flex-col space-y-4">
+                                        <div class="text-xl font-semibold text-slate-800">
+                                            <a href="/product/${product.slug}" class="hover:text-blue-600">${product.name}</a>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <p class="font-bold text-lg text-slate-800">
+                                                ${new Intl.NumberFormat().format(product.variants[0]?.price || 0)} đ
+                                            </p>
+                                               <div class="flex gap-2 text-xs text-slate-700">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                     <path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                     <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  Hà Nội
+               </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                     $('#products-grid').append(productHTML);
+                  });
+               }
             },
-            error: function() {
-               console.log('Lỗi khi lọc sản phẩm');
-            }
+            error: function(xhr) {
+               console.error(xhr.responseText);
+               $('#products-grid').html('<p>Failed to load products. Please try again later.</p>');
+            },
          });
       });
    });
+
 
    // Lọc màu
    $(document).ready(function() {
@@ -439,31 +452,31 @@
                if (response.length > 0) {
                   response.forEach(function(product) {
                      productsGrid.append(`
-                            <div class="h-full rounded-lg relative shadow-xl product-item transform hover:scale-105 transition duration-300 ease-in-out">
-                                <div class="h-full rounded-lg overflow-hidden flex flex-col">
-                                    <div class="overflow-hidden h-64 w-full">
-                                        <a href="/product/${product.slug}">
-                                            <img class="hover:scale-110 duration-200 transition-transform" src="${product.image}" alt="${product.slug}">
-                                        </a>
-                                    </div>
-                                    <div class="bg-white p-4 flex flex-col space-y-4">
-                                        <div class="text-xl font-semibold text-slate-800">
-                                            <a class="text-slate-800 hover:text-blue-600 transition-colors" href="/product/${product.slug}">${product.name}</a>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <p class="font-bold text-lg text-slate-800">${product.price} đ</p>
-                                            <div class="flex gap-2 text-xs text-slate-700">
-                                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                                    <path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                    <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                                </svg>
-                                                Hà Nội
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
+   <div class="h-full rounded-lg relative shadow-xl product-item transform hover:scale-105 transition duration-300 ease-in-out">
+      <div class="h-full rounded-lg overflow-hidden flex flex-col">
+         <div class="overflow-hidden h-64 w-full">
+            <a href="/product/${product.slug}">
+               <img class="hover:scale-110 duration-200 transition-transform" src="${product.image}" alt="${product.slug}">
+            </a>
+         </div>
+         <div class="bg-white p-4 flex flex-col space-y-4">
+            <div class="text-xl font-semibold text-slate-800">
+               <a class="text-slate-800 hover:text-blue-600 transition-colors" href="/product/${product.slug}">${product.name}</a>
+            </div>
+            <div class="space-y-2">
+               <p class="font-bold text-lg text-slate-800">${product.variants[0]?.price || 'Liên hệ'} đ</p>
+               <div class="flex gap-2 text-xs text-slate-700">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                     <path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                     <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  Hà Nội
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+`);
                   });
                } else {
                   productsGrid.append('<p>No products found.</p>');

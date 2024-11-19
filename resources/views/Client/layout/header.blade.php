@@ -113,6 +113,10 @@
       opacity: 1;
       visibility: visible;
     }
+
+    .headerContainer {
+      margin-bottom: 10px;
+    }
   </style>
 
 </head>
@@ -136,23 +140,22 @@
       document.getElementById("content").style.display = "block";
     });
   </script>
-  <div class="max-w-screen-xl mx-auto ">
+  <div class="max-w-screen-xl mx-auto headerContainer">
     <div class="header">
       <nav class="flex items-center justify-between">
         <div class="flex items-center space-x-8">
           <div class="">
             <a href="/">
-              <img src="{{asset('assets/admin/img/Datch.png')}}" alt="" width="150px">
+              <img src="{{asset('assets/admin/img/Datch.png')}}" alt="" width="40%">
             </a>
           </div>
-          <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
-          <a href="/cua-hang" class="text-gray-800 font-semibold">Danh mục sản phẩm</a>
-          <a href="#" class="text-gray-800 font-semibold">Sale</a>
-          <a href="/blog" class="text-gray-800 font-semibold">Tin hot</a>
-          <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
+          <a href="/" class="text-gray-800 font-semibold hover:text-red-600 hover:border-b-2 hover:border-red-600 hover:mb-1">Trang chủ</a>
+          <a href="/cua-hang" class="text-gray-800 font-semibold hover:text-red-600 hover:border-b-2 hover:border-red-600 hover:mb-1">Danh mục sản phẩm</a>
+          <a href="#" class="text-gray-800 font-semibold hover:text-red-600 hover:border-b-2 hover:border-red-600 hover:mb-1">Sale</a>
+          <a href="/blog" class="text-gray-800 font-semibold hover:text-red-600 hover:border-b-2 hover:border-red-600 hover:mb-1">Tin hot</a>
+          <a href="/lien-he" class="text-gray-800 font-semibold hover:text-red-600 hover:border-b-2 hover:border-red-600 hover:mb-1">Liên hệ</a>
 
-          <div class="max-w-screen-xl mx-auto ">
-
+          <div class="max-w-screen-xl mx-auto">
             <div class="flex items-center space-x-4">
               <form action="{{ route('search') }}" method="GET">
                 <div class="relative">
@@ -192,25 +195,17 @@
               </a>
               @endif
 
-
-
-
               <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
                 <i class="fas fa-shopping-bag fa-xl"></i>
                 <span class="absolute bottom-1 left-3 bg-red-600 text-white text-xs rounded-full px-1"> {{$totalCart}} </span>
               </a>
             </div>
+          </div>
+        </div>
       </nav>
     </div>
-
-
-
-    </nav>
   </div>
   </div>
-
-
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {

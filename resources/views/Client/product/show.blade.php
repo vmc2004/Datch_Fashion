@@ -28,11 +28,11 @@
 
     <div class="flex p-4 rounded">
         <!-- Left Section: Product Images -->
-        <div class="w-1/2">
+        <div class="w-5/12	mr-8">
             <div class="relative">
                 <!-- Ảnh lớn hiển thị chính -->
                 <div class="relative image-container">
-                    <img alt="Ảnh sản phẩm" class="zoom-image" src="{{ asset('/storage/' . $product->image) }}" />
+                    <img alt="Ảnh sản phẩm" class="zoom-image " src="{{ asset( $product->image) }}" />
 
                     <!-- Nút Trái -->
                     <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md left-arrow">
@@ -45,7 +45,7 @@
                     </button>
                 </div>
             </div>
-            <div class="flex mt-4 space-x-2">
+            <div class="flex mt-4 space-x-2 ml-8">
                 @php
                 $uniqueVariants = $product->ProductVariants->unique('color_id');
                 @endphp
@@ -53,15 +53,13 @@
                 <div class="flex mt-4 space-x-2">
                     @foreach ($uniqueVariants as $variant)
                     <img alt="Ảnh biến thể" class="w-20 h-20 border thumbnail"
-                        src="{{ asset('/storage/' . $variant->image) }}" />
+                        src="{{ asset($variant->image) }}" />
                     @endforeach
                 </div>
             </div>
         </div>
-        <!-- Right Section: Product Details -->
+        <!-- Right Section: Product Details  2-->
         <div class="w-1/2 pl-8">
-
-
             <h1 class="text-2xl font-bold flex">
                 {{ $product->name }}
                 <button class="action action-wishlist action towishlist action towishlist ml-8	">
@@ -116,12 +114,13 @@
                         Kích cỡ:
                     </p>
                     <div class="flex space-x-2 mt-2">
-                        @foreach ($product->ProductVariants as $variant)
+                        @foreach ($product->ProductVariants->unique('size_id') as $variant)
                         <input type="button" name="size"
                             class="size-option w-10 h-10 border border-gray-300 rounded"
                             value="{{ $variant->size->name }}" data-size="{{ $variant->size_id }}"
                             onclick="highlightSize(this)">
                         @endforeach
+
                     </div>
                 </div>
                 <p class="font-bold">Số lượng:</p>
@@ -138,7 +137,7 @@
                 <div class="mt-4 flex space-x-4">
                     <button class="border border-red-500 rounded-lg px-4 py-2 text-black" type="submit">Thêm vào giỏ
                         hàng</button>
-                    <button class="bg-red-600 text-white py-2 px-4 rounded">Mua ngay</button>
+                    <button class="bg-red-600 text-white rounded-lg px-4 py-2">Mua ngay</button>
                 </div>
             </form>
 
@@ -238,6 +237,7 @@
     </div>
 
 
+
     {{-- gợi ý mua cùng --}}
     <div class="container mx-auto p-4 pt-10">
         <h2 class="text-2xl font-semibold mb-4">
@@ -247,11 +247,17 @@
             <!-- Product 1 -->
             @foreach ($related_products as $hihi)
             <div class="text-center">
-                <img alt="Ảnh sản phẩm gợi ý" class="w-full" height="400"
-                    src="{{ asset('/storage/' . $hihi->image) }}" width="300" />
+                <a href="/product/{{$hihi->slug}}">
+                    <img alt="Ảnh sản phẩm gợi ý" class="w-full" height="400"
+                        src="{{ asset($hihi->image) }}" width="300" />
+                </a>
                 <div class="flex justify-center mt-2">
-                    <div class="w-4 h-4 bg-blue-800 rounded-full border border-gray-300">
+                    @foreach ($hihi->ProductVariants->unique('color_id') as $variant)
+                    <div class="w-4 mr-1 h-4 rounded-full border border-gray-300"
+                        style="background-color: {{ $variant->color->color_code }}">
                     </div>
+                    @endforeach
+
                 </div>
                 <p class="mt-2 text-gray-700">
                     {{ $hihi->name }}
@@ -268,10 +274,6 @@
                     {{ number_format($hihi->ProductVariants->first()?->price ?? 0) }} đ
                 </p>
                 @endif
-
-                <p class="text-red-600">
-                    -50%
-                </p>
             </div>
             @endforeach
         </div>
@@ -365,7 +367,10 @@
                 });
 
                 if (response.ok) {
-                    showToast();
+                    showToast1();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
                 } else {
                     console.error('Lỗi khi thêm sản phẩm vào giỏ');
                     let errorData = await response.json();
@@ -376,15 +381,14 @@
             }
         }
 
-        function showToast() {
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
+        function showToast1() {
+            const toast1 = document.getElementById('toast1');
+            toast1.classList.add('show');
 
             setTimeout(() => {
-                toast.classList.remove('show');
+                toast1.classList.remove('show');
             }, 3000);
         }
-
         document.addEventListener("DOMContentLoaded", () => {
             const mainImage = document.querySelector(".zoom-image");
             const thumbnails = document.querySelectorAll(".thumbnail");
@@ -476,6 +480,7 @@
             cursor: url('https://example.com/search-icon.png'), auto;
             /* Thay đổi biểu tượng trỏ chuột */
         }
+
 
         .zoom-image {
             width: 100%;
@@ -587,4 +592,3 @@
             padding: 10px;
         }
     </style>
-    @endsection

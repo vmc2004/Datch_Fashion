@@ -1,10 +1,11 @@
 <div class="text-sm hidden md:block">
     <div class="flex items-center mb-4">
-        <img
+        {{-- <img
             class="w-16 h-16 object-cover rounded-full"
-            src="{{asset('storage/'.$user->avatar)}}"
+            src="{{ $user->avatar ? asset('storage/'.Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}"
             alt=""
-        >
+        > --}}
+
         <strong class="ml-2.5 text-black"></strong>
     </div>
     <a class="flex my-1.5 text-black hover:text-blue-700 items-center rounded-r-full bg-white sidebar-nav sidebar-nav-active" href="/tai-khoan">

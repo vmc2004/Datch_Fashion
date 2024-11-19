@@ -33,11 +33,7 @@
 <div class="max-w-screen-xl mx-auto py-8 " data-aos="fade-up">
     <h2 class="text-2xl font-semibold mb-4">Sản phẩm mới đăng</h2>
     <div class="relative">
-        <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-        </button>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
             @foreach ($newPro as $new)
             <div class="h-full rounded-lg relative shadow-xl">
@@ -57,7 +53,7 @@
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <p class="font-semibold text-slate-800">
+                            <p class="font-semibold text-slate-800 font-semibold-price">
                                 {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
                             </p>
                             <div class="flex gap-2 text-xs text-slate-700">
@@ -82,11 +78,7 @@
     <div class="max-w-screen-xl mx-auto py-8" data-aos="fade-up">
         <h2 class="text-2xl font-semibold mb-4">Sản phẩm nổi bật</h2>
         <div class="relative">
-            <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
+
             {{-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
  
 <div class="max-w-screen-xl mx-auto py-8">
@@ -174,6 +166,12 @@
     .product-item:hover {
         transform: scale(1.05);
         /* Hiệu ứng phóng to khi hover */
+    }
+
+    .font-semibold-price {
+        color: #e2231a;
+        font-weight: 600;
+        font-size: 16px;
     }
 </style>
 @endsection

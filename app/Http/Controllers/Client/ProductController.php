@@ -20,7 +20,7 @@ class ProductController extends Controller
             ->firstOrFail(); // Đảm bảo bạn nhận được một instance
         $colors = $product->ProductVariants->unique('color_id')->pluck('color');
         $sizes = $product->ProductVariants->unique('size_id')->pluck('size');
-        // $product->increment('views');
+        $product->increment('views');
         $related_products = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(4) // Giới hạn số lượng sản phẩm liên quan (tùy chỉnh theo ý muốn)
@@ -137,34 +137,35 @@ class ProductController extends Controller
 
     public function filterBySize(Request $request)
     {
-        // Lấy các kích thước đã chọn
-        $sizes = $request->get('sizes', []);
+        $sizeId = $request->input('size'); // Nhận size từ request
 
-        // Lọc sản phẩm theo các kích thước đã chọn
-        $products = Product::whereHas('variants', function ($query) use ($sizes) {
-            if (!empty($sizes)) {
-                $query->whereIn('size', $sizes);
-            }
-        })->get();
+        // Lấy sản phẩm theo size đã chọn
+        $products = Product::whereHas('variants', function ($query) use ($sizeId) {
+            $query->where('size_id', $sizeId); // Điều kiện lọc theo size
+        })
+            ->with(['variants' => function ($query) {
+                $query->select('product_id', 'price', 'size_id'); // Lấy thêm size nếu cần
+            }])
+            ->get();
 
-        // Trả về kết quả dưới dạng view hoặc phần HTML đã thay đổi
-        return view('client.products-grid', compact('products'));
+        // Trả về danh sách sản phẩm dạng JSON
+        return response()->json($products);
     }
     // lọc color
     public function filterByColor(Request $request)
     {
-        // Lấy ID màu sắc từ yêu cầu
         $colorId = $request->input('color');
 
-        // Lọc sản phẩm theo màu sắc
+        // Lấy sản phẩm theo màu đã chọn
         $products = Product::whereHas('variants', function ($query) use ($colorId) {
-            // Lọc theo màu sắc nếu có
-            if ($colorId) {
-                $query->where('color_id', $colorId);
-            }
-        })->get();
+            $query->where('color_id', $colorId);
+        })
+            ->with(['variants' => function ($query) {
+                $query->select('product_id', 'price'); // Đảm bảo lấy 'price'
+            }])
+            ->get();
 
-        // Trả về dữ liệu sản phẩm dưới dạng JSON
+        // Đảm bảo trả về dữ liệu JSON với giá
         return response()->json($products);
     }
 }

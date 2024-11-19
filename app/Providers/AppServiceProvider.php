@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+        Paginator::useTailwind();
         $categories = Category::getCategoriesParentAndSub();
         view()->share('categories', $categories);
 
@@ -32,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
         $totalCart = $cart ? count($cart->items) : 0;
         $view->with('totalCart', $totalCart);
     });
+
     }
 }

@@ -17,7 +17,7 @@ class HomeController extends Controller
     {
         $brands = Brand::query()->limit(5)->get();
         $newPro = Product::query()->latest('id')->limit(5)->get();
-        $Proview = Product::query()->orderby('views')->limit(5)->get();
+        $Proview = Product::query()->orderBy('views', 'desc')->limit(5)->get();
         $category = Category::all();
 
         // Kiểm tra lại việc truyền biến vào view
