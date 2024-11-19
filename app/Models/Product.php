@@ -23,6 +23,7 @@ class Product extends Model
     ];
 
     // quan hệ 1 nhiều 
+    
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -43,6 +44,11 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class);
     }
 
+    public function Order()
+    {
+        return $this->hasMany(Order::class);
+    }
+    
     public $timestamps = false;
     protected $dates = ['deleted_at'];
 }
