@@ -111,11 +111,14 @@ public function updateProfile(Request $request,  User $user)
     $data = $request->except('avatar');
     if ($request->hasFile('avatar')) {
         $oldAvatar = $user->avatar;
-        if ($oldAvatar && Storage::exists($oldAvatar)) {
-            Storage::delete($oldAvatar);
+        // Kiểm tra và xóa avatar cũ
+        if ($oldAvatar && Storage::disk('public')->exists($oldAvatar)) {
+            Storage::disk('public')->delete($oldAvatar);
         }
-        $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
+        // Lưu ảnh mới
+        $user->avatar = $request->file('avatar')->store('uploads/users', 'public');
     }
+    
     $user->save();
 
     return response()->json([

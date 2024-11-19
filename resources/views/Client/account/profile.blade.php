@@ -159,6 +159,11 @@
         // Thu thập dữ liệu từ form
         const formData = new FormData(document.getElementById('profileForm'));
 
+        const avatarInput = document.getElementById('avatarInput');
+            if (avatarInput.files[0]) {
+                formData.append('avatar', avatarInput.files[0]);
+            }
+
         // Gửi yêu cầu AJAX
         fetch("{{ route('Client.account.updateProfile') }}", {
             method: "POST",
