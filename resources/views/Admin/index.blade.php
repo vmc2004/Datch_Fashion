@@ -89,13 +89,13 @@
                               <th>Tình Trạng Đơn Hàng</th>
                               <th>Số Lượng</th>
                         </thead>
-                        @foreach ($results as $result)
+                        @foreach ($orderStatus as $od)
                         <tr>
-                            <td>{{ $result->name }}</td>
-                            <td><img src="{{ $result->image }}" width="50"></td>
-                            <td>{{ $result->payment }}</td>
-                            <td>{{ $result->status }}</td>
-                            <td>{{ $result->total_quantity }}</td>
+                            <td>{{ $od->name }}</td>
+                            <td><img src="{{ $od->image }}" width="50"></td>
+                            <td>{{ $od->payment }}</td>
+                            <td>{{ $od->status }}</td>
+                            <td>{{ $od->total_quantity }}</td>
                         </tr>
                         @endforeach
                     </table>
