@@ -8,24 +8,62 @@
                     <div class="container">
                         <h2>Thêm mới danh mục</h2>
                         <a href="{{ route('categories.index') }}" class="btn btn-secondary mb-2">
-                            <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang danh sách</a>
-                        <form action="{{route('categories.store')}}" method="POST" enctype="multipart/form-data">
+                            <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang danh sách
+                        </a>
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger ">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="name" class="form-label">Tên danh mục</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
+                                <input type="text" class="form-control" id="name" name="name">
                             </div>
+
+                            <div class="mb-3">
+                                <label for="parent_id" class="form-label">Danh mục cha</label>
+                                <select class="form-select" id="parent_id" name="parent_id">
+                                    <option value="">Không có danh mục cha</option>
+                                    @foreach ($categories as $parent)
+                                        <option value="{{ $parent->id }}">{{ $parent->name }}</option>
+                                        @if ($parent->children)
+                                            @foreach ($parent->children as $child)
+                                                <option value="{{ $child->id }}">-- {{ $child->name }}</option>
+                                                @if ($child->children)
+                                                    @foreach ($child->children as $grandchild)
+                                                        <option value="{{ $grandchild->id }}">---- {{ $grandchild->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="image" class="form-label">Ảnh danh mục</label>
                                 <input type="file" class="form-control" id="image" name="image">
                             </div>
+
+                            {{-- <div class="mb-3">
+                                <label for="is_active" class="form-label">Trạng thái</label>
+                                <select class="form-select" id="is_active" name="is_active">
+                                    <option value="1">Hiển thị</option>
+                                    <option value="0">Ẩn</option>
+                                </select>
+                            </div> --}}
+
                             <button type="submit" class="btn btn-primary">Thêm mới</button>
                         </form>
-                    </div>                    
-                </div>
-                <div class="card-body p-3">
-                    <div class="chart">
-                        <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
                     </div>
                 </div>
             </div>

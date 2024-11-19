@@ -1,6 +1,7 @@
 @extends('Admin.layout.app')
 @section('title', "Đơn hàng")
-
+@section('title-page', "Đơn hàng")
+@section('single-page', "Danh sách đơn hàng")
 @section('content')
 
 <div class="row m-4 vh-90">
@@ -8,126 +9,119 @@
       <div class="card z-index-2 h-100">
         <div class="card-header pb-0 pt-3 bg-transparent">
            
-
-            <h2>Đơn hàng</h2>
-            <div class="d-flex justify-content-end align-items-center mb-3">
-                
-                    <a href="{{route('orders.create')}}" class="btn btn-success me-1 "> <i class="fa-solid fa-plus"></i>  Bán hàng</a>
-                    <button type="button" class="btn btn-success"> <i class="fa-solid fa-arrow-right-from-bracket"></i> Xuất file</button>
-                
+  @if (session()->has('message'))
+      <div class="alert alert-success text-white">
+        {{session()->get('message')}}
+      </div>
+      @endif
+            <div class="header">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                   <form action="{{route('orders.search')}}" method="GET">
+                    @csrf
+                    <input type="text" name="search-order" placeholder="Tìm kiếm đơn hàng...">
+                   </form>
+                </div>
+                <h1>Đơn hàng</h1>
+                <div>
+                    <button class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</button>
+                </div>
             </div>
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-dark-subtle">
-                        <th><input type="checkbox" ></th>
                         <th>Mã đơn hàng</th>
                         <th>Thời gian</th>
                         <th>Khách hàng</th>
                         <th>Tổng tiền hàng</th>
-                        <th>Giảm giá</th>
-                        <th>Khách đã trả</th>
+                        <th>Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody>
                   
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028222</td>
-                        <td>29/12/2017 13:47</td>
-                        <td>Khách lẻ</td>
-                        <td>113,000</td>
-                        <td>0</td>
-                        <td>113,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028103</td>
-                        <td>24/12/2017 21:32</td>
-                        <td>Khách lẻ</td>
-                        <td>800,000</td>
-                        <td>400,000</td>
-                        <td>400,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028067</td>
-                        <td>24/12/2017 12:21</td>
-                        <td>Khách lẻ</td>
-                        <td>282,000</td>
-                        <td>0</td>
-                        <td>282,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028036</td>
-                        <td>23/12/2017 18:51</td>
-                        <td>Khách lẻ</td>
-                        <td>1,066,000</td>
-                        <td>0</td>
-                        <td>1,066,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD028021</td>
-                        <td>23/12/2017 15:33</td>
-                        <td>Khách lẻ</td>
-                        <td>188,000</td>
-                        <td>0</td>
-                        <td>188,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD027616</td>
-                        <td>30/11/2017 11:48</td>
-                        <td>Khách lẻ</td>
-                        <td>217,500</td>
-                        <td>0</td>
-                        <td>217,500</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>HD027554</td>
-                        <td>27/11/2017 21:36</td>
-                        <td>Khách lẻ</td>
-                        <td>375,000</td>
-                        <td>0</td>
-                        <td>375,000</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class=""></td>
-                        <td>HD027496</td>
-                        <td>26/11/2017 19:17</td>
-                        <td>Khách lẻ</td>
-                        <td>188,000</td>
-                        <td>0</td>
-                        <td>188,000</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>113,000</td>
-                        <td>0</td>
-                        <td>113,000</td>
-                    </tr>
+                  @foreach ($orders as $order)
+                  <tr>
+                    <td><a href="{{route('orders.edit', $order->id)}}" class="d-flex justify-content-center"> {{ $order->Code }}</a></td>
+                    <td>{{ $order->created_at }}</td>
+                    <td class="d-flex justify-content-center">{{ $order->fullname }}</td>
+                    
+                    @php
+                        $totalAmount = 0;
+                        foreach ($order->orderDetails as $detail) {
+                            $totalAmount += $detail->price * $detail->quantity;
+                        }
+                    @endphp
+                    
+                    <td>{{ number_format($totalAmount) }} ₫</td>
+                    
+                    <td>
+                        @if ($order->status == 'Đã giao hàng')
+                            <p class="text-success">Hoàn thành</p>
+                        @elseif ($order->status == 'Đơn hàng đã hủy')
+                            <p class="text-danger">Hủy đơn hàng</p>
+                        @elseif($order->status == 'Chờ xác nhận')
+                            <p>Đơn hàng mới</p>
+                        @else
+                            <p class="text-primary">Đang xử lý</p>
+                        @endif
+                    </td>
+                </tr>
+                  @endforeach
+                   
                 </tbody>
             </table>
             <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <p>Hiển thị 1 - 10 trên tổng số 518 hóa đơn</p>
-                </div>
+                
                 <nav>
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                        <li class="page-item"><a class="page-link" href="#">...</a></li>
+                        <li>{{$orders->links()}}</li>
                     </ul>
                 </nav>
        
-                
+@endsection
 
+@section('style')
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .search-box {
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        width: 300px;
+    }
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        padding-left: 5px;
+    }
+    .search-box i {
+        color: #ccc;
+    }
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .header h1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #3a3a3a;
+    }
+    .btn-custom {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-left: 10px;
+    }
+    .btn-custom i {
+        margin-right: 5px;
+    }
+</style>
 @endsection

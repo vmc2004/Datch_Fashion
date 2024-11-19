@@ -1,5 +1,8 @@
 @extends('Admin.layout.app')
+@section('title', "Đơn hàng")
 
+@section('title-page', "Đơn hàng")
+@section('single-page', "Thêm đơn hàng")
 
 @section('content')
 
@@ -9,12 +12,17 @@
         <div class="card-header pb-0 pt-3 bg-transparent">
            
             <h2 class="text-center  ">Thêm đơn hàng</h2>
-            <input type="text" class="form-control mb-3" placeholder="Tìm hàng hóa">
+                <input type="text" id="search_product" class="form-control mb-3" placeholder="Tìm hàng hóa">
+                <div  class="mt-2">
+                    <form action="" id="search-results">
+                        
+                    </form>
+                </div>
+            
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Mã đơn Hàng</th>
+                        <th>Mã sản phẩm</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
@@ -25,17 +33,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>NU011</td>
-                        <td>Giày nữ màu xanh bóng</td>
-                        <td>Đỏ</td>
-                        <td>XL</td>
-                        <td><input type="number" class="form-control" value="1"></td>
-                        <td>1,995,000</td>
-                        <td>1,995,000</td>
-                        <td><i class="fas fa-trash-alt text-danger"></i></td>
-                    </tr>
+                    @if (session()->has('order'))
+        <?php
+            $order = session('order');
+        ?>
+        @if (!empty($order))
+            @foreach ($order as $order_detail)
+                <tr>
+                    <td>{{ $order_detail['code'] }}</td>
+                    <td>{{ $order_detail['product_name'] }}</td>
+                    <td>{{ $order_detail['color'] }}</td>
+                    <td>{{ $order_detail['size'] }}</td>
+                    <td>
+                        <input type="number" class="form-control quantity" data-id="{{ $order_detail['variant_id'] }}" value="{{ $order_detail['quantity'] }}" min="1">
+                    </td>
+                    <td>{{ number_format($order_detail['unit_price'], 0, ',', '.') }} ₫</td>
+                    <td>{{ number_format($order_detail['total_price'], 0, ',', '.') }} ₫</td>
+                    <td><i class="fas fa-trash-alt text-danger remove-item" data-id="{{ $order_detail['variant_id'] }}" style="cursor: pointer;"></i></td>
+                </tr>
+            @endforeach
+        @else
+            <tr>
+                <td colspan="8" class="text-center">Chưa có sản phẩm nào.</td>
+            </tr>
+        @endif
+    @else
+        <tr>
+            <td colspan="8" class="text-center">Chưa có sản phẩm nào.</td>
+        </tr>
+    @endif
                 </tbody>
             </table>
             <div class="row mb-3">
@@ -47,15 +73,15 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="senderName" class="form-label">Tên người gửi:</label>
-                                <input type="text" class="form-control" id="senderName" value="Thành Lộc Express">
+                                <input type="text" class="form-control" id="senderName" value="Datch Fashion" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="senderPhone" class="form-label">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="senderPhone" value="0911111111">
+                                <input type="text" class="form-control" id="senderPhone" value="0339381785" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="senderAddress" class="form-label">Địa chỉ:</label>
-                                <input type="text" class="form-control" id="senderAddress" value="Thành Lộc Express">
+                                <input type="text" class="form-control" id="senderAddress" value="Ahihi Express" disabled>
                             </div>
                         </div>
                     </div>
@@ -109,7 +135,7 @@
                         <div class="col-md-3">
                             <label for="deliveryUnit" class="form-label">Chọn bưu cục lấy hàng:</label>
                             <select class="form-select" id="deliveryUnit">
-                                <option>Bưu cục Hải Phòng</option>
+                                <option>Bưu cục Hà Nội</option>
                             </select>
                         </div>
                     </div>
@@ -132,4 +158,115 @@
 </div>
 
 
+
+
+
+@endsection
+
+@section('js')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+
+ $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(document).ready(function() {
+        $('#search_product').on('keyup', function() {
+            let query = $(this).val();
+
+            if (query.length >= 1) {
+                $.ajax({
+                    url: '{{ route("search.products") }}',
+                    method: 'GET',
+                    data: { query: query },
+                    success: function(data) {
+                        $('#search-results').empty();
+                        if (data.length > 0) {
+                 
+                            $.each(data, function(index, variant) {
+                                console.log(variant);
+                                $('#search-results').append(`
+                                
+                                
+                                    <div class="product-container" data-id="${variant.id}"> 
+                                     
+                                        <img src="${variant.image}" alt="Image product" width="70" class="product-image">
+                                        <div class="product-details">
+                                            <span class="product-name">${variant.product.name}</span> 
+                                            <span class="product-code">Mã : ${variant.product.code}</span>
+                                            <span class="product-color"> Màu sắc: ${variant.color.name}</span>
+                                            <span class="product-size">Size :${variant.size.name}</span>
+                                        </div>
+                                    </div>
+                                   
+                                `);
+                            });
+                        } else {
+                            $('#search-results').append('<p class="text-danger">Không tìm thấy sản phẩm nào.</p>');
+                        }
+                    }
+                });
+            } else {
+                $('#search-results').empty();
+            }
+        });
+    });
+    $(document).on('click', '.product-container', function(){
+        var variant_id = $(this).data('id');
+        var product_code = $(this).data('product.name');
+
+    $.ajax({
+        url: '{{route('orders.add_product_order')}}',
+        method: 'POST',
+        data: {
+            variant_id :variant_id,
+            code: product_code, 
+            quantity: 1
+        },
+        success: function(response) {
+            // Hiển thị thông báo thành công
+            alert(response.message);
+            // Bạn có thể cập nhật giao diện giỏ hàng ở đây nếu cần
+        },
+        error: function(xhr) {
+            alert('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.');
+        }
+    })    ;
+    });
+
+
+ 
+</script>
+   
+@endsection
+
+
+@section('style')
+<style>
+    .product-container {
+             display: flex;
+             align-items: center;
+             padding: 10px;
+         }
+         .product-image {
+             width: 50px;
+             height: 50px;
+             margin-right: 10px;
+         }
+         .product-details {
+             display: flex;
+             flex-direction: column;
+         }
+         .product-name {
+             font-size: 16px;
+             font-weight: bold;
+         }
+         .product-code {
+             font-size: 14px;
+             color: #333;
+         }
+   </style>
 @endsection
