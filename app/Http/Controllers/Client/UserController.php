@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
@@ -17,10 +18,11 @@ class UserController extends Controller
     public function homeClient()
     {
         // Lấy danh sách danh mục từ cơ sở dữ liệu
+        $brands = Brand::query()->limit(5)->get();
         $category = Category::query()->limit(5)->get();
         $newPro = Product::query()->latest('id')->limit(5)->get();
-        $Proview = Product::query()->Orderby('views')->limit(5)->get();
-        return view('Client.home', compact('category', 'newPro', 'Proview'));
+        $Proview = Product::query()->orderBy('views', 'desc')->limit(5)->get();
+        return view('Client.home', compact('category', 'newPro','brands', 'Proview'));
     }
     public function login() {
         return view('Client.account.login');
@@ -43,7 +45,7 @@ class UserController extends Controller
         Auth::login($user);
 
        
-        return redirect()->route('/')->with(['message' => 'Đăng nhập thành công',
+        return redirect()->route('Client.home')->with(['message' => 'Đăng nhập thành công',
         'message_type' => 'success']); 
     }
 
