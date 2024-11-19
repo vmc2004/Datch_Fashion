@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="bg-white rounded-lg border shadow-2xl">
-                        {{-- @if ($cart && $cart->items->count() > 0) --}}
+                        @if ($cart && $cart->items->count() > 0)
                         <div class="p-5 border-b text-lg uppercase text-slate-700">
                             Tóm tắt đơn hàng
                         </div>
@@ -139,7 +139,7 @@
                             <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
                                     href="/mua-hang/1">Thanh toán</a></button>
                         </div>
-                        {{-- @endif --}}
+                        @endif
                     </div>
                 </div>
             </div>

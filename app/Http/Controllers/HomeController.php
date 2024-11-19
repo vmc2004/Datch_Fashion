@@ -133,7 +133,25 @@ public function get30DaysOrderData(Request $request)
     public function indexAdmin()
 {
     
-    return view('Admin.index');
+        
+    // Truy vấn dữ liệu đơn hàng, sản phẩm và thông tin thanh toán
+    $results = Product::select('products.name', 'products.image', 'orders.payment', 'orders.status')
+        ->join('order_details', 'products.id', '=', 'order_details.product_id')
+        ->join('orders', 'order_details.order_id', '=', 'orders.id')
+        ->groupBy('products.name', 'products.image', 'orders.payment', 'orders.status') // Group theo tất cả các trường không sử dụng hàm tổng hợp
+        ->selectRaw('SUM(order_details.quantity) as total_quantity')
+        ->orderByDesc('total_quantity')
+        ->get();
+
+        $topSellingProducts = DB::table('products')
+        ->join('order_details', 'products.id', '=', 'order_details.product_id')  // Kết nối bảng products với order_details
+        ->select('products.name', 'products.image', 'order_details.price', DB::raw('SUM(order_details.quantity) as total_sales'))
+        ->groupBy('products.id', 'products.name', 'products.image', 'order_details.price')  // Nhóm theo product
+        ->orderByDesc('total_sales')  // Sắp xếp giảm dần theo số lượng bán
+        ->limit(10)  // Giới hạn 10 sản phẩm bán chạy nhất
+        ->get();
+
+    return view('Admin.index', compact('results','topSellingProducts'));
 }
     public function __construct()
     {
