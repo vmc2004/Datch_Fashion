@@ -19,7 +19,7 @@
                                         <th scope="col">Hình ảnh</th>
                                         <th scope="col">Chất liệu</th>
                                         <th scope="col">Trạng thái</th>
-                                        <th scope="col">Trạng thái hoạt động</th>
+                                        <th scope="col">TTHĐ</th>
                                         <th scope="col">Danh mục</th>
                                         <th scope="col">Thương hiệu</th>
                                         <th scope="col">Action</th>
@@ -30,19 +30,19 @@
                                         @if ($item->status=='1')
                                         <tr>
                                             <td>{{ $item->code }}</td>
-                                            <td>{{ $item->name }}</td>
+                                            <td style="max-width:100px ;" class="text-truncate">{{ $item->name }}</td>
                                             <td>
                                                 @if ($item->image)
                                                     <img src="{{asset($item->image)}}" width="100px" alt="">
                                                 @endif
                                             </td>
-                                            <td>{{ $item->material }}</td>
+                                            <td class="text-truncate" style="max-width: 100px;">{{ $item->material }}</td>
                                             <td>{!! $item->status
-                                                ? '<span class="badge text-bg-success">Hiển thị</span>'
-                                                : '<span class="badge text-bg-danger">Ẩn</span>' !!}</td>
+                                                ? '<span class="badge text-bg-success text-white">Hiển thị</span>'
+                                                : '<span class="badge text-bg-danger text-white">Ẩn</span>' !!}</td>
                                             <td>{!! $item->is_active
-                                                ? '<span class="badge text-bg-success">Còn hàng</span>'
-                                                : '<span class="badge text-bg-danger">Hết hàng</span>' !!}</td>
+                                                ? '<span class="badge text-bg-success text-white">Còn hàng</span>'
+                                                : '<span class="badge text-bg-danger text-white">Hết hàng</span>' !!}</td>
                                             <td>{{ $item->category->name }}</td>
                                             <td>{{ $item->brand->name }}</td>
                                             <td>

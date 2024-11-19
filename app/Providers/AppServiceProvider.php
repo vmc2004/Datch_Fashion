@@ -23,8 +23,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Paginator::useBootstrapFive();
-        Paginator::useTailwind();
+        if (request()->is('admin/*')) {
+            Paginator::useBootstrapFive();
+        } 
+        // Kiểm tra nếu là client, sử dụng Tailwind
+        elseif (request()->is('/*')) {
+            Paginator::useTailwind();
+        }
         $categories = Category::getCategoriesParentAndSub();
         view()->share('categories', $categories);
 

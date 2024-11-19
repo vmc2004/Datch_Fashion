@@ -63,7 +63,7 @@ Route::post('/vnpay-payment', [CheckoutController::class, 'vnpay_payment'])->nam
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn']);
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
-Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
+Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('thankyou');
 Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 

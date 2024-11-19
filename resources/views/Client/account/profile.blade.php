@@ -131,12 +131,12 @@
                                     </div>
                                     
                                     
-                                    <div class="flex mb-8 mr-24">
+                                    {{-- <div class="flex mb-8 mr-24">
                                         <label class="mr-8 text-right pl-10 md:pl-0 md:w-40">Giới thiệu</label>
                                         <div class="flex-1 relative">
                                             <textarea name="introduction" rows="5" class="w-full border border-slate-400 rounded-lg resize-none p-2.5" placeholder="Nhập giới thiệu">{{ old('introduction', $user->introduction) }}</textarea>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="text-center">
                                         <button type="button" id="saveProfileButton" class="text-white bg-red-700 rounded-full py-2 px-8">Lưu thay đổi</button>
