@@ -170,13 +170,13 @@
                   @if (Auth::check())
                   <div class="relative group menucha">
                     <!-- User profile link -->
-                    <a href="/tai-khoan" class="flex items-center text-gray-800">
-                      <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User" width="30">
+                    <a href="/tai-khoan" class="flex items-center text-gray-800 group" class="group-hover:opacity-100 group-hover:block opacity-0 hidden">
+                      <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User" width="30" >
                       <span class="text-sm">{{ Auth::user()->fullname }}</span>
                     </a>
-        
+                    
                     <!-- Dropdown Menu -->
-                    <div class="menu absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-20 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300">
+                    <div class="menu absolute left-0  w-48 bg-white shadow-lg rounded-lg z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:block hidden">
                       <ul class="py-2">
                         <li><a href="/tai-khoan" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="user-circle" class="overflow-hidden svg-vertical inline-block w-[14px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
