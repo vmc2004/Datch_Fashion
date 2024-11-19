@@ -41,7 +41,11 @@ class ProductVariantController extends Controller
         // dd($request->all());
         $productVariant = $request->except('image');
         if ($request->hasFile('image')) {
-            $productVariant['image'] = Storage::put('uploads/products',$request->file('image'));
+            // Lưu ảnh vào thư mục public/uploads/variants
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/variants'), $imageName);
+            $productVariant['image'] = 'uploads/variants/' . $imageName;
         }
         ProductVariant::query()->create($productVariant); 
         return redirect()->route('products.index')->with('message','Thêm biến thể thành công');
@@ -75,13 +79,28 @@ class ProductVariantController extends Controller
         $id = $productVariant->product_id;
         $dataVariant = $request->except('image');
         if ($request->hasFile('image')) {
-            $dataVariant['image'] = Storage::put('uploads', $request->file('image'));
+        // Lưu ảnh mới vào thư mục public/uploads/variants
+        $image = $request->file('image');
+        $imageName = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('uploads/variants'), $imageName);
+        $dataVariant['image'] = 'uploads/variants/' . $imageName;
+
+        // Xóa ảnh cũ nếu có
+        if ($productVariant->image && file_exists(public_path($productVariant->image))) {
+            unlink(public_path($productVariant->image));
         }
-        $oldImage = $request->has('image');
-        $productVariant->update($dataVariant);
-            if ($request->hasFile('image')&&Storage::exists($oldImage)) {
-                Storage::delete($oldImage);
-            }
+    }if ($request->hasFile('image')) {
+        // Lưu ảnh mới vào thư mục public/uploads/variants
+        $image = $request->file('image');
+        $imageName = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('uploads/variants'), $imageName);
+        $dataVariant['image'] = 'uploads/variants/' . $imageName;
+
+        // Xóa ảnh cũ nếu có
+        if ($productVariant->image && file_exists(public_path($productVariant->image))) {
+            unlink(public_path($productVariant->image));
+        }
+    }
             return redirect()->route('productVariants.index',['id'=>$id])->with('message','cập nhật thành công');
     }
 
