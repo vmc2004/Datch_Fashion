@@ -135,7 +135,7 @@ public function get30DaysOrderData(Request $request)
     
         
     // Truy vấn dữ liệu đơn hàng, sản phẩm và thông tin thanh toán
-    $results = Product::select('products.name', 'products.image', 'orders.payment', 'orders.status')
+    $orderStatus = Product::select('products.name', 'products.image', 'orders.payment', 'orders.status')
         ->join('order_details', 'products.id', '=', 'order_details.product_id')
         ->join('orders', 'order_details.order_id', '=', 'orders.id')
         ->groupBy('products.name', 'products.image', 'orders.payment', 'orders.status') // Group theo tất cả các trường không sử dụng hàm tổng hợp
@@ -151,7 +151,7 @@ public function get30DaysOrderData(Request $request)
         ->limit(10)  // Giới hạn 10 sản phẩm bán chạy nhất
         ->get();
 
-    return view('Admin.index', compact('results','topSellingProducts'));
+    return view('Admin.index', compact('orderStatus','topSellingProducts'));
 }
     public function __construct()
     {
