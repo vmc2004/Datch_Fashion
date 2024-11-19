@@ -11,6 +11,7 @@ use App\Models\OrderDetail;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -104,7 +105,7 @@ class CheckoutController extends Controller
     
         } catch (\Exception $e) {
             // Ghi log lỗi
-            \Log::error('Error creating order: ' . $e->getMessage(), [
+            Log::error('Error creating order: ' . $e->getMessage(), [
                 'request_data' => $request->all(),
             ]);
     
