@@ -15,7 +15,10 @@ class Cart extends Model
 
     public static function getCartByUser()
     {
-        return DB::table('carts')->where('user_id', Auth::id())->where('status', 'active')->first();
+        return self::with('Items')
+        ->where('user_id', Auth::id())
+        ->where('status', 'active')
+        ->first();   
     }
     public function items()
     {

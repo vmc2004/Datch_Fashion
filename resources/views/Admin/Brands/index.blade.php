@@ -27,7 +27,7 @@
                                     <td>{{ $item->name }}</td>
                                     <td>
                                         @if ($item->logo)
-                                            <img src="{{ asset('storage/' . $item->logo) }}" width="100px" height="70px" alt="Logo">
+                                            <img src="{{asset($item->logo)}}" width="100px" height="70px" alt="Logo">
                                         @endif
                                     </td>
                                     <td>
