@@ -118,7 +118,7 @@ public function updateProfile(Request $request,  User $user)
         }
         $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
     }
-    $user->save();
+    // $user->save();
 
     return response()->json([
         'success' => true,

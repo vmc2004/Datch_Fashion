@@ -1,79 +1,133 @@
 @extends('Admin.layout.app')
-@section('title', "Dashboard")
-@section('title-page', "Dashboard")
+@section('title', 'Dashboard')
+@section('title-page', 'Dashboard')
 @section('content')
 
 
-<div class="container-fluid py-3">
-  <style type="text/css">
-    p.title_thongke {
-      text-align: center;
-      font-size: 25px;
-      font-weight: bold;
-      color: black;
-    }
-    option{
-      text-align: center;
-    }
-    p{
-      color: black;
-    }
-  </style>
+    <div class="container-fluid py-3">
+        <style type="text/css">
+            p.title_thongke {
+                text-align: center;
+                font-size: 25px;
+                font-weight: bold;
+                color: black;
+            }
 
-  <div class="row ">
-    <p class="title_thongke">Thống kê đơn hàng doanh số</p>
+            option {
+                text-align: center;
+            }
 
-        <form autocomplete="off" class="row">
-        @csrf
-        <div class="col-md-2">
-          <p>Từ Ngày : <input type="text" id="datepicker" class="form-control"></p>
-          <input type="button" id="btn-dashboard-filter" class="btn btn-primary btn-sm" value="Lọc kết quả">
-          
+            p {
+                color: black;
+            }
+        </style>
+
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-end justify-content-between mt-4">
+                            <div>
+                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
+                                        data-target=""></span>k
+                                </h4>
+                            </div>
+                            <div class="avatar-sm flex-shrink-0">
+                                <span class="avatar-title bg-success-subtle rounded fs-3">
+                                    <i class="bx bx-dollar-circle text-success"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+
+            <div class="col-xl-3 col-md-6">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                    Tổng đơn hàng đã bán</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between mt-4">
+                            <div>
+                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
+                                        data-target="">0</span>
+                                </h4>
+
+                            </div>
+                            <div class="avatar-sm flex-shrink-0">
+                                <span class="avatar-title bg-info-subtle rounded fs-3">
+                                    <i class="bx bx-shopping-bag text-info"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+
+            <div class="col-xl-3 col-md-6">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                    Tổng sản phẩm</p>
+                            </div>
+
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between mt-4">
+                            <div>
+                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value"
+                                        data-target="">0</span>
+                                </h4>
+                            </div>
+                            <div class="avatar-sm flex-shrink-0">
+                                <span class="avatar-title bg-warning-subtle rounded fs-3">
+                                    <i class="bx bx-user-circle text-warning"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+
+            <div class="col-xl-3 col-md-6">
+                <!-- card -->
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 overflow-hidden">
+                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                    My Balance</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <h5 class="text-muted fs-14 mb-0">
+                                    +0.00 %
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-end justify-content-between mt-4">
+                            <div>
+                                <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value"
+                                        data-target="165.89">0</span>k
+                                </h4>
+                                <a href="" class="text-decoration-underline">Withdraw
+                                    money</a>
+                            </div>
+                            <div class="avatar-sm flex-shrink-0">
+                                <span class="avatar-title bg-primary-subtle rounded fs-3">
+                                    <i class="bx bx-wallet text-primary"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
         </div>
-        
-        <div class="col-md-2">
-          <p>Đến Ngày : <input type="text" id="datepicker2" class="form-control"></p>
-        </div>
-
-        <div class="col-md-2">
-          <p>
-            Lọc Theo :
-            <select class="dashboard-filter form-control">
-              <option>>---Chọn---<</option>
-              <option value="7ngay">7 Ngày Qua</option>
-              <option value="thangtruoc">Tháng trước</option>
-              <option value="thangnay">Tháng này</option>
-              <option value="365ngayqua">365 Ngày Qua</option>
-            </select>
-          </p>
-        </div>
-        </form>
-  </div>
-
-  <div class="col-md-12 py-4">
-    <div id="mychart" style="height:250px;">
-  </div>
-  </div>
-
-  <div class="row"></div>
-    <div class="col-sm-12">
-      <p class="title_thongke">Top 10 sản phẩm bán chạy</p>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Tên Sản Phẩm</th>
-            <th>Hình Ảnh</th>
-            <th>Giá</th>
-            <th>Lượt Bán</th>
-          </tr>
-        </thead>
-        <tbody>
-        
-        </tbody>
-      </table>
-
-    </div>
-</div>
-
-@endsection
+    < @endsection

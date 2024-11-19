@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
-use App\Models\CartDetail;
 use App\Models\Order;
+use App\Models\CartDetail;
 use App\Models\OrderDetail;
-use App\Models\ProductVariant;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Mail\OrderSuccessMail;
+use App\Models\ProductVariant;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -78,12 +79,12 @@ class CheckoutController extends Controller
                 $cart->delete(); 
             }
            
-            Mail::to($order->email)->send(new OrderSuccessMail($order));
+            // Mail::to($order->email)->send(new OrderSuccessMail($order));
             return redirect()->route('thankyou');
            
         } catch (\Exception $e) {
             // Ghi log lỗi
-            \Log::error('Error creating order: ' . $e->getMessage(), [
+            Log::error('Error creating order: ' . $e->getMessage(), [
                 'request_data' => $request->all(),
             ]);
 

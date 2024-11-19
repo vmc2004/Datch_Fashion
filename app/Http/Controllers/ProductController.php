@@ -46,7 +46,9 @@ class ProductController extends Controller
         // Xử lý upload hình ảnh nếu có
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->move(public_path('uploads/products'), $request->file('image')->getClientOriginalName());
+            $imageName = $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('uploads/products'), $imageName);
+            $imagePath = 'uploads/products/' . $imageName; // Lưu đường dẫn tương đối
         }
 
         // dd($request->all());
@@ -116,11 +118,9 @@ class ProductController extends Controller
             if ($product->image && file_exists(public_path($product->image))) {
                 unlink(public_path($product->image));  // Xóa ảnh cũ
             }
-        
+
             // Lưu ảnh mới vào thư mục uploads/products trong thư mục public
             $imagePath = $request->file('image')->move(public_path('uploads/products'), $request->file('image')->getClientOriginalName());
-
-           
         }
 
         // Tạo sản phẩm mới
