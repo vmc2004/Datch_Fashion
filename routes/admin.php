@@ -26,9 +26,11 @@ Route::prefix('admin')->group(function () {
     // Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
 
+    Route::post('/filter-by-date',[HomeController::class, 'filter'])->name('admin.filter');
+    Route::post('/dashboard-filter',[HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
+    Route::post('/day-sorder', [HomeController::class, 'get30DaysOrderData'])->name('admin.day-sorder');
 
-   
-   
+
     // Đường dẫn danh mục sản phẩm
     Route::prefix('categories')->group(function () {
         // Route::get('/', function(){

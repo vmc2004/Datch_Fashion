@@ -36,8 +36,13 @@ class ProductVariant extends Model
         return $this->belongsTo(Size::class, 'size_id');
     }
 
-    public function variants()
+    public function OrderDetail()
     {
-        return $this->hasMany(ProductVariant::class, 'product_id', 'id'); // 'product_id' là cột khóa ngoại trong bảng product_variants
+        return $this->hasMany(OrderDetail::class, 'variant_id'); 
     }
+    public function totalSold()
+    {
+        return $this->OrderDetail()->sum('quantity');
+    }
+
 }
