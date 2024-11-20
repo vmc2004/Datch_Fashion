@@ -78,7 +78,7 @@
                             <input type="hidden" name="variant_id[]" value="{{ $item['variant_id'] }}">
                             <input type="hidden" name="price[]" value="{{ $item['price_at_purchase'] }}">
                             <div class="flex items-center mb-4">
-                                <img alt="Ảnh sản phẩm" class="w-20 h-20 rounded-lg" height="80" src="{{asset($item->variant->image)}}" width="80"/>
+                                <img alt="Ảnh sản phẩm" class="w-16 rounded-lg"  src="{{asset($item->variant->image)}}" />
                                 <div class="ml-4">
                                     <p>{{ $item->variant->product->name }} - {{ $item->variant->color->name }}, {{ $item->variant->size->name }}</p>
                                     <p>{{ number_format($item['price_at_purchase']) }} đ</p>
