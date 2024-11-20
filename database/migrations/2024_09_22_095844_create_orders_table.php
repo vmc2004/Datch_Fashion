@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->string('fullname', 50);
             $table->string('phone', 15);
             $table->string('address', 199);
             $table->string('email', 199);
             $table->enum('payment' ,['Thanh toán khi nhận hàng' , 'Thanh toán bằng thẻ' , 'Thanh toán qua VNPay'])->default('Thanh toán khi nhận hàng');
-            
             $table->enum('status' , ['Chờ xác nhận', 'Đã xác nhận' ,'Đang chuẩn bị hàng', 'Đang giao hàng', 'Đã giao hàng', 'Đơn hàng đã hủy'])->default('Chờ xác nhận');
+            $table->double('total_price');
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('product_id')->constrained('products');
             $table->softDeletes();
             $table->timestamps();
         });

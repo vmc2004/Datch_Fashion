@@ -37,7 +37,10 @@ class BrandController extends Controller
 
         $logoPath = null;
         if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('brands', 'public');
+            // Lưu logo vào thư mục public/uploads/brands
+            $logoFile = $request->file('logo');
+            $logoPath = 'uploads/brands/' . time() . '_' . $logoFile->getClientOriginalName();
+            $logoFile->move(public_path('uploads/brands'), $logoPath);
         }
         $brand = Brand::create([
             'name' => $request->name,
@@ -80,12 +83,15 @@ class BrandController extends Controller
 
         $logoPath = $brand->logo;
         if ($request->hasFile('logo')) {
-            if ($brand->logo) {
-                Storage::disk('public')->delete('logo');
+            // Xóa logo cũ nếu có
+            if ($brand->logo && file_exists(public_path('uploads/brands/' . $brand->logo))) {
+                unlink(public_path('uploads/brands/' . $brand->logo)); // Xóa ảnh cũ
             }
-            $logoPath = $request->file('logo')->store('uploads/products', 'public');
-        } else {
-            $logoPath = $brand->logo;
+    
+            // Lưu logo mới vào thư mục public/uploads/brands
+            $logoFile = $request->file('logo');
+            $logoPath = 'uploads/brands/' . time() . '_' . $logoFile->getClientOriginalName();
+            $logoFile->move(public_path('uploads/brands'), $logoPath);
         }
         // dd($logoPath);
 

@@ -27,7 +27,7 @@
                                     <td>{{ $item->name }}</td>
                                     <td>
                                         @if ($item->logo)
-                                            <img src="{{ asset('storage/' . $item->logo) }}" width="100px" height="70px" alt="Logo">
+                                            <img src="{{asset($item->logo)}}" width="100px" height="70px" alt="Logo">
                                         @endif
                                     </td>
                                     <td>
@@ -38,7 +38,7 @@
                                                 onclick="return confirm('Bạn có muốn xóa sản phẩm??')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="btn btn-danger">Xóa</button>
+                                                <button class="btn btn-danger ms-2">Xóa</button>
                                             </form>
                                         </div>
                                     </td>

@@ -55,8 +55,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        // Lấy tất cả các danh mục (kể cả danh mục cha và con)
-        $categories = Category::with('children')->get();
+        // Lấy tất cả các danh mục cha và các danh mục con của chúng (bao gồm cả danh mục cháu)
+        $categories = Category::whereNull('parent_id')
+            ->with(['children' => function ($query) {
+                $query->with('children'); // Eager load các danh mục con của danh mục con
+            }])
+            ->get();
         return view('Admin.Categories.create', compact('categories'));
     }
 
@@ -76,8 +80,8 @@ class CategoryController extends Controller
 
         if ($request->hasFile('image')) {
             // Lưu hình ảnh
-            $pathFile = $request->file('image')->store('images/categories');
-            $data['image'] = 'storage/' . $pathFile;
+            $pathFile = $request->file('image')->move(public_path('uploads/category'), $request->file('image')->getClientOriginalName());
+            $data['image'] = 'uploads/category/' . $request->file('image')->getClientOriginalName();
         }
 
         Category::create($data);
@@ -91,7 +95,11 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         // Lấy tất cả các danh mục (kể cả danh mục cha và con)
-        $categories = Category::with('children')->get();
+        $categories = Category::whereNull('parent_id')
+            ->with(['children' => function ($query) {
+                $query->with('children'); // Eager load các danh mục con của danh mục con
+            }])
+            ->get();
 
         return view('Admin.Categories.edit', compact('category', 'categories'));
     }
@@ -111,13 +119,13 @@ class CategoryController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            // Lưu ảnh mới
-            $pathFile = $request->file('image')->store('images/categories');
-            $data['image'] = 'storage/' . $pathFile;
-
+            // Lưu ảnh mới vào thư mục public/uploads/category
+            $pathFile = $request->file('image')->move(public_path('uploads/category'), $request->file('image')->getClientOriginalName());
+            $data['image'] = 'uploads/category/' . $request->file('image')->getClientOriginalName();
+        
             // Xóa ảnh cũ nếu tồn tại
-            if ($category->image && Storage::exists(str_replace('storage/', '', $category->image))) {
-                Storage::delete(str_replace('storage/', '', $category->image));
+            if ($category->image && file_exists(public_path($category->image))) {
+                unlink(public_path($category->image));
             }
         }
 

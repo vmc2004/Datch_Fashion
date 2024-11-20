@@ -38,7 +38,7 @@
                     <a href="">Đăng ký</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
-                    <a href="">Đăng nhập</a>
+                    <a href="{{route('Client.account.login')}}">Đăng nhập</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
                     <a href="">Yêu thích</a>
@@ -92,12 +92,8 @@
                 <div class="font-bold text-slate-800 text-2xl mb-9"> Giao dịch của bạn</div>
                 <div class="flex">
                     <img src="{{asset('assets/client/assets/images/vnpay.png')}}" alt="payment" loading="lazy">
-                    <img class="ml-8" src="{{asset('assets/client/assets/images/nganluong.png')}}" alt="payment" loading="lazy">
                 </div>
-                <div class="flex mt-2">
-                    <img class="ml-8" src="{{asset('assets/client/assets/images/momo.png')}}" alt="payment" loading="lazy">
-                    <img class="ml-8" src="{{asset('assets/client/assets/images/visa.png')}}" alt="payment" loading="lazy">
-                </div>
+               
             </div>
             <div class="w-3/12">
                 <div class="font-bold text-slate-800 text-2xl mb-9">Chứng nhận</div>

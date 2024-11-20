@@ -11,7 +11,7 @@
       <div class="card z-index-2 h-100">
         <div class="card-header pb-0 pt-3 bg-transparent">
            
-            <h2 class="text-center  ">Cập nhật đơn hàng</h2>
+            <h2 class="text-center  ">Cập nhật đơn hàng : {{$order->code}}</h2>
             @if (session()->has('message'))
             <div class="alert alert-success text-white">
               {{session()->get('message')}}
@@ -20,7 +20,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Mã đơn Hàng</th>
+                        <th>Mã sản phẩm</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
@@ -94,20 +94,30 @@
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
-                        <div class="col-md-3">
-                          <form action="{{route('orders.update', $order)}}" method="POST">
+                        <div class="">
+                          <form action="{{route('orders.update', $order)}}" method="POST" >
                             @csrf
                             @method('PUT')
-                            <label for="payer" class="form-label">Trạng thái</label>
-                            <select class="form-select" id="payer" name="status">
-                                <option value="Chờ xác nhận" {{ $order->status == "Chờ xác nhận" ? 'selected' : '' }}>Chờ xác nhận</option>
-                                <option value="Đã xác nhận" {{ $order->status == "Đã xác nhận" ? 'selected' : '' }}>Đã xác nhận</option>
-                                <option value="Đang chuẩn bị hàng" {{ $order->status == "Đang chuẩn bị hàng" ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
-                                <option value="Đang giao hàng" {{ $order->status == "Đang giao hàng" ? 'selected' : '' }}>Đang giao hàng</option>
-                                <option value="Đã giao hàng" {{ $order->status == "Đã giao hàng" ? 'selected' : '' }}>Giao hàng thành công</option>
-                                <option value="Đơn hàng đã hủy" {{ $order->status == "Đơn hàng đã hủy" ? 'selected' : '' }}>Đơn hàng đã hủy</option>
-                            </select>
+                            <div class="row">
+                                <!-- Trạng thái -->
+                                <div class="col-md-3">
+                                    <label for="payer" class="form-label">Trạng thái</label>
+                                    <select class="form-select" id="payer" name="status">
+                                        <option value="Chờ xác nhận" {{ $order->status == "Chờ xác nhận" ? 'selected' : '' }}>Chờ xác nhận</option>
+                                        <option value="Đã xác nhận" {{ $order->status == "Đã xác nhận" ? 'selected' : '' }}>Đã xác nhận</option>
+                                        <option value="Đang chuẩn bị hàng" {{ $order->status == "Đang chuẩn bị hàng" ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
+                                        <option value="Đang giao hàng" {{ $order->status == "Đang giao hàng" ? 'selected' : '' }}>Đang giao hàng</option>
+                                        <option value="Đã giao hàng" {{ $order->status == "Đã giao hàng" ? 'selected' : '' }}>Giao hàng thành công</option>
+                                        <option value="Đơn hàng đã hủy" {{ $order->status == "Đơn hàng đã hủy" ? 'selected' : '' }}>Đơn hàng đã hủy</option>
+                                    </select>
+                                </div>
                             
+                                <!-- Ghi chú -->
+                                <div class="col-md-9">
+                                    <label for="note" class="form-label">Ghi chú</label>
+                                    <textarea name="note" id="note" class="form-control" cols="30" rows="4"></textarea>
+                                </div>
+                            </div>
                             
                         </div>
                         

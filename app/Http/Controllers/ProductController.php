@@ -19,7 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderByDesc('id')->paginate(10);
+        $products = Product::orderByDesc('id')->paginate(5);
         return view('Admin.Products.index', compact('products'));
     }
 
@@ -40,30 +40,13 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'code' => 'required|string|max:9|unique:products,code',
-        //     'name' => 'required|string|max:199',
-        //     'image' => 'nullable|image|max:2048',
-        //     'price' => 'required|numeric|min:0',
-        //     'description' => 'nullable|string',
-        //     'material' => 'nullable|string',
-        //     'status' => 'required|boolean',
-        //     'is_active' => 'required|boolean',
-        //     'category_id' => 'required|exists:categories,id',
-        //     'brand_id' => 'required|exists:brands,id',
-        //     'color_id.*' => 'required|exists:colors,id',
-        //     'size_id.*' => 'required|exists:sizes,id',
-        //     'quantity.*' => 'required|integer|min:0',
-        //     'images.*' => 'nullable|image|max:2048',
-        // ]);
-
         // Tạo slug từ tên sản phẩm
         $slug = Str::slug($request->name, '-');
 
         // Xử lý upload hình ảnh nếu có
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = Storage::put('uploads/products', $request->file('image'));
+            $imagePath = $request->file('image')->move(public_path('uploads/products'), $request->file('image')->getClientOriginalName());
         }
 
         // dd($request->all());
@@ -83,16 +66,13 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Product added successfully');
+        return redirect()->route('products.index')->with('success', 'Thêm sản phẩm thành công');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Product $product, $id)
-    {
-        
-    }
+    public function show(Product $product, $id) {}
 
     /**
      * Show the form for editing the specified resource.
@@ -132,12 +112,15 @@ class ProductController extends Controller
         // Xử lý upload hình ảnh nếu có
         $imagePath = null;
         if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete('image');
+            // Xóa ảnh cũ nếu có
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));  // Xóa ảnh cũ
             }
-            $imagePath = $request->file('image')->store('uploads/products', 'public');
-        } else {
-            $imagePath = $product->image;
+        
+            // Lưu ảnh mới vào thư mục uploads/products trong thư mục public
+            $imagePath = $request->file('image')->move(public_path('uploads/products'), $request->file('image')->getClientOriginalName());
+
+           
         }
 
         // Tạo sản phẩm mới
