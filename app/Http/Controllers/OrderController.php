@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OrdersExport;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
@@ -9,6 +10,7 @@ use App\Models\ProductVariant;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session as FacadesSession;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -146,5 +148,9 @@ class OrderController extends Controller
         ->orwhere('code', 'LIKE', '%'. str_replace('HD0', '', $request['search-order']) . '%')
         ->paginate(8);
         return view('Admin.Orders.index', compact('orders'));
+    }
+    public function exportToExcel()
+    {
+        return Excel::download(new OrdersExport, 'don_hang.xlsx');
     }
 }

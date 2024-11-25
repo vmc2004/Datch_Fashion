@@ -24,7 +24,7 @@
                 </div>
                 <h1>Đơn hàng</h1>
                 <div>
-                    <button class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</button>
+                  <a href="{{ route('orders.export') }}" class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</a>
                 </div>
             </div>
             <table class="table table-bordered table-hover">
