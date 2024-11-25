@@ -34,15 +34,19 @@
                             <input class="w-full p-2 border border-gray-300 rounded mt-1" name="phone" placeholder="Số điện thoại" type="text"/>
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700">Email của bạn</label>
+                            <label class="block text-gray-700">Email </label>
                             <input class="w-full p-2 border border-gray-300 rounded mt-1" name="email" placeholder="Email của bạn" type="email"/>
                         </div>
                         <hr>
 
-                        <div class="mb-4">
-                            <label class="block text-gray-700 text-bold">Địa chỉ của bạn</label>
-                            <div class="mb-4">
-                                <input class="w-full p-2 border border-gray-300 rounded mt-1" name="address" placeholder="Nhập địa chỉ (VD: Số 10 Nguyễn Tuân)" type="text"/>
+                        <div class="mb-4 custom-cursor-on-hover">
+                            <label class="block font-semibold mb-2">Địa chỉ:</label>
+                            <div class="flex items-center gap-4">
+                                <input type="hidden" name="address_id">
+                                <input type="text" name="new-address"  id="new-address" class="border border-gray-300 rounded px-3 py-2 w-full" placeholder="Địa chỉ..." readonly/>
+                                <span class="text-blue-500 flex items-center whitespace-nowrap" id="open-modal1">
+                                    Chỉnh sửa
+                                </span>
                             </div>
                         </div>
 
@@ -114,6 +118,75 @@
     </div>
 </div>
 
+<!-- Địa chỉ giao hàng Modal -->
+<div id="modal2" class="fixed inset-0 z-50 hidden" style="background: rgba(0, 0, 0, 0.3); overflow-y: auto;">
+    <div onclick="event.stopPropagation()" class="mx-auto w-[631px] absolute max-h-screen top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div class="relative w-full flex flex-col border-0 rounded-lg shadow-lg bg-white mt-[30px] pb-2.5">
+            <div class="flex items-center justify-between rounded-t p-[20px]">
+                <button class="modal2-close bg-transparent absolute right-0 pr-[12.5px] border-0 text-black float-right text-xl leading-none font-semibold outline-none focus:outline-none">
+                    <span class="bg-transparent text-black h-[15px] w-[15px] block outline-none focus:outline-none">×</span>
+                </button>
+            </div>
+            <div class="relative px-[15px] flex-auto">
+                <h3 class="text-xl mb-8 font-semibold text-center text-black">Địa chỉ giao hàng</h3>
+            </div>
+            <div class="pt-[30px] pb-[50px]">
+                <form class="bg-white rounded-lg ml-auto max-h-full" id="form_model2">
+                    @csrf
+                    <div class="py-[40px] px-[30px] border !rounded-[8px] border-dashed border-[#999]">
+                        <!-- Chọn Tỉnh -->
+                        <div class="mb-[20px] flex items-center">
+                            <label class="text-right w-1/4 mr-[30px]">Tỉnh / thành phố</label>
+                            <div class="rounded-full h-full relative flex-1">
+                                <select id="province" name="province" class="border border-solid border-[#999] w-full h-full p-[6px] !rounded-[4px] bg-white">
+                                    <option>Chọn tỉnh</option>
+                                    @foreach($province as $address)
+                                        <option value="{{ $address->id }}">{{ $address->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Chọn Quận/Huyện -->
+                        <div class="mb-[20px] flex items-center">
+                            <label class="text-right w-1/4 mr-[30px]">Quận / huyện</label>
+                            <div class="rounded-full h-full relative flex-1">
+                                <select name="district" id="district" disabled class="border border-solid border-[#999] w-full h-full p-[6px] !rounded-[4px] bg-white">
+                                    <option value="">Chọn quận / huyện</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Chọn Xã -->
+                        <div class="mb-[20px] flex items-center">
+                            <label class="text-right w-1/4 mr-[30px]">Xã / phường</label>
+                            <div class="rounded-full h-full relative flex-1">
+                                <select name="commune" id="commune" disabled class="border border-solid border-[#999] w-full h-full p-[6px] !rounded-[4px] bg-white">
+                                    <option value="">Chọn xã / phường</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Nhập địa chỉ cụ thể -->
+                        <div class="mb-[20px] flex items-center">
+                            <label class="text-right w-1/4 mr-[30px]">Địa chỉ</label>
+                            <div class="relative flex-1">
+                                <textarea name="address" rows="3" class="!rounded-[4px] w-full resize-none border border-solid border-[#999] p-[10px]" placeholder="Nhập địa chỉ"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-8 lg:mt-[30px]">
+                            <button type="button" class="modal2-close !rounded-[4px] border border-solid border-[#999] text-[#999] py-[7px] px-[30px] text-sm">Trở lại</button>
+                            <button id="button-save" type="button" class="ml-[30px] !rounded-[4px] border border-solid border-[#999] bg-[#BB0000] text-white py-[7px] px-[30px] text-sm">Lưu</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('checkoutForm');
@@ -131,6 +204,87 @@
             }
         });
     });
+    // Mở modal khi người dùng nhấn vào "Chỉnh sửa"
+    const openModalBtn = document.getElementById('open-modal1');
+    const modal = document.getElementById('modal2');
+    const closeModalBtn = document.querySelector('.modal2-close');
+    const saveButton = document.getElementById('button-save');
+    const addressInput = document.getElementById('new-address'); // Input cho địa chỉ trong form thanh toán
+
+    // Khi người dùng nhấn vào "Chỉnh sửa", mở modal
+    openModalBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
+
+    // Đóng modal khi người dùng nhấn nút đóng
+    closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    // Khi người dùng nhấn "Lưu", cập nhật địa chỉ và đóng modal
+    saveButton.addEventListener('click', () => {
+        const address = document.querySelector('textarea[name="address"]').value;
+        if (address) {
+            addressInput.value = address; // Cập nhật địa chỉ trong form thanh toán
+            modal.classList.add('hidden'); // Đóng modal
+        } else {
+            alert('Vui lòng nhập địa chỉ giao hàng.');
+        }
+    });
+    $(document).ready(function() {
+    // Khi chọn tỉnh, lấy danh sách huyện
+    $('#province').change(function() {
+        var provinceId = $(this).val();
+
+        if (provinceId) {
+            $.ajax({
+                url: '/districts/' + provinceId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var districtSelect = $('#district');
+                    districtSelect.empty();
+                    districtSelect.append('<option value="">Chọn quận / huyện</option>');
+                    $.each(data, function(key, district) {
+                        districtSelect.append('<option value="' + district.id + '">' + district.name + '</option>');
+                    });
+                    districtSelect.prop('disabled', false); // Kích hoạt select quận/huyện
+                }
+            });
+        } else {
+            $('#district').empty().append('<option value="">Chọn quận / huyện</option>').prop('disabled', true);
+            $('#commune').empty().append('<option value="">Chọn xã / phường</option>').prop('disabled', true);
+        }
+    });
+
+    // Khi chọn huyện, lấy danh sách phường
+    $('#district').change(function() {
+        var districtId = $(this).val();
+
+        if (districtId) {
+            $.ajax({
+                url: '/communes/' + districtId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var communeSelect = $('#commune');
+                    communeSelect.empty();
+                    communeSelect.append('<option value="">Chọn xã / phường</option>');
+                    $.each(data, function(key, commune) {
+                        communeSelect.append('<option value="' + commune.id + '">' + commune.name + '</option>');
+                    });
+                    communeSelect.prop('disabled', false); // Kích hoạt select xã/phường
+                }
+            });
+        } else {
+            $('#commune').empty().append('<option value="">Chọn xã / phường</option>').prop('disabled', true);
+        }
+    });
+});
+
+
+    
+
 </script>
 
 @endsection

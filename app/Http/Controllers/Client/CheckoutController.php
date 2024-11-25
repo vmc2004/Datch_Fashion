@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
 use App\Models\CartDetail;
+use App\Models\Commune;
+use App\Models\District;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\ProductVariant;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -19,10 +22,12 @@ class CheckoutController extends Controller
     public function checkout(Request $request ,$user_id)
     {
         $user = Auth::user();
+        $province = Province::all();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
             'user'=> $user,
+            'province' => $province,
         ]);
     }
     public function post_checkout(Request $request) {
@@ -223,6 +228,20 @@ public function thankyou($order)
     }
     return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
 }
+
+public function getDistricts($province_id)
+{
+    $districts = District::where('province_id', $province_id)->get();
+    return response()->json($districts);
+}
+
+// Lấy danh sách phường theo huyện
+public function getCommunes($district_id)
+{
+    $communes = Commune::where('district_id', $district_id)->get();
+    return response()->json($communes);
+}
+
 
     
 
