@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="{{asset('assets/admin/img/logoDatch.png')}}" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/admin/img/apple-icon.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logDatch.png') }}">
     <title>
@@ -29,6 +30,11 @@
     <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/admin/css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
+    <!-- datepicker -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.3/css/perfect-scrollbar.min.css">
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -47,7 +53,7 @@
       </a>
     </div>
     <hr class="horizontal dark mt-0">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+    <div class="collapse navbar-collapse h-auto w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link active" href="{{route('admin.index')}}">
@@ -92,7 +98,7 @@
         <li class="nav-item">
           <a class="nav-link " href="{{route('users.index')}}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i>
+              <i class="fa-regular fa-user fa-xl  text-sm " style="color: #B197FC;"></i>
             </div>
             <span class="nav-link-text ms-1">Người dùng</span>
           </a>
@@ -102,7 +108,7 @@
                     <a class="nav-link " href="{{ route('colors.index') }}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="ni ni-world fa-xl" style="color: #67ce23;"></i>
+                            <i class="ni ni-world fa-xl  text-sm " style="color: #67ce23;"></i>
                         </div>
                         <span class="nav-link-text ms-1">Màu sắc</span>
                     </a>
@@ -112,7 +118,7 @@
                     <a class="nav-link " href="{{ route('sizes.index') }}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="ni ni-tag fa-xl" style="color: #da1709;"></i>
+                            <i class="ni ni-tag fa-xl  text-sm " style="color: #da1709;"></i>
                         </div>
                         <span class="nav-link-text ms-1">Kích thước</span>
                     </a>
@@ -122,9 +128,9 @@
                   <a class="nav-link " href="{{ route('comments.index') }}">
                       <div
                           class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                          <i class="ni ni-tag fa-xl" style="color: #da1709;"></i>
+                          <i class="fa-solid fa-comment fa-xl  text-sm " style="color: black;"></i>
                       </div>
-                      <span class="nav-link-text ms-1">Bình luận</span>
+                      <span class="nav-link-text ms-1 " >Bình luận</span>
                   </a>
               </li>
 
@@ -133,9 +139,9 @@
                     <a class="nav-link " href="{{ route('coupons.index') }}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="fa-solid fa-ticket fa-xl"></i>
+                            <i class="fa-solid fa-ticket fa-xl" style="color: black;"></i>
                         </div>
-                        <span class="nav-link-text ms-1">Giảm giá</span>
+                        <span class="nav-link-text ms-1  text-sm fa-xl ">Giảm giá</span>
                         <a class="nav-link " href="{{ route('banners.index') }}">
                             <div
                                 class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -149,23 +155,9 @@
                     <a class="nav-link " href="{{ route('brands.index') }}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="fa-regular fa-user fa-xl" style="color: #B197FC;"></i>
-                            <i class="fa-solid fa-copyright" style="color: coral"></i>
+                            <i class="fa-solid fa-copyright fa-xl text-sm" style="color: brown ;"></i>
                         </div>
                         <span class="nav-link-text ms-1">Thương hiệu</span>
-                    </a>
-                </li>
-
-                <li class="nav-item mt-3">
-                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ url('/admin/profile') }}">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">Profile</span>
                     </a>
                 </li>
             </ul>

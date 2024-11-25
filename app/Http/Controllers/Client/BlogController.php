@@ -8,8 +8,22 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $blogs = Blog::query()->paginate(12);
-        return view('Client.blog.index',compact('blogs'));
+        return view('Client.blog.index', compact('blogs'));
+    }
+
+    public function show($slug)
+    {
+        $blog = Blog::where('slug', $slug)
+            ->firstOrFail();
+
+        $related_blog = Blog::where('category_id', $blog->category_id)
+            ->where('id', '!=', $blog->id)
+            ->take(3) // Giới hạn số lượng sản phẩm liên quan (tùy chỉnh theo ý muốn)
+            ->get();
+
+        return view('Client.blog.show', compact('blog','related_blog'));
     }
 }

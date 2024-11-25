@@ -15,7 +15,9 @@ class Order extends Model
         'phone',    
         'address',  
         'email',    
-        'payment',  
+        'payment', 
+        'note', 
+        'payment_status',
         'total_money',  
         'status',   
         'user_id',  
@@ -24,9 +26,12 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function orderDetails(): HasMany
+    public function orderDetails()
     {
-        return $this->hasMany(OrderDetail::class, 'order_id');
+        return $this->hasMany(OrderDetail::class);
     }
-    
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

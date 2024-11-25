@@ -18,10 +18,23 @@ class OrderDetail extends Model
         'unit_price',
     ];
 
-    public function Variant(): BelongsTo
+    public function product()
     {
-        return $this->belongsTo(ProductVariant::class);
+        return $this->belongsTo(Product::class);
     }
 
-
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+    
+    public function ProductVariant()
+    {
+        return $this->belongsTo(ProductVariant::class,'variant_id');
+    }
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class,'variant_id');
+    }
+    
 }
