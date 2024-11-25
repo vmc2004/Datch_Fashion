@@ -151,6 +151,6 @@ class OrderController extends Controller
     }
     public function exportToExcel()
     {
-        return Excel::download(new OrdersExport, 'don_hang.xlsx');
+        return Excel::download(new OrdersExport, 'Hoa_don.xlsx');
     }
 }
