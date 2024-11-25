@@ -27,6 +27,7 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
 use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\CouponController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,6 @@ Route::get('/account/orders', [OrderController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
-
 
 Route::get('/sale', [SaleController::class, 'getSaleProducts'])->name('Client.sale.index');
 

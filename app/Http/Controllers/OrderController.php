@@ -18,7 +18,7 @@ class OrderController extends Controller
     public function index()
     {
         
-        $orders = Order::OrderByDesc('id')->paginate(8);
+        $orders = Order::orderBy('id', 'desc')->paginate(8);
         return view('Admin.Orders.index', compact('orders'));
     }
 
@@ -143,7 +143,7 @@ class OrderController extends Controller
     }
     public function search_order(Request $request){
         $orders = Order::where('phone', 'LIKE', '%'. $request['search-order']. '%')
-        ->orwhere('id', 'LIKE', '%'. str_replace('HD0', '', $request['search-order']) . '%')
+        ->orwhere('code', 'LIKE', '%'. str_replace('HD0', '', $request['search-order']) . '%')
         ->paginate(8);
         return view('Admin.Orders.index', compact('orders'));
     }

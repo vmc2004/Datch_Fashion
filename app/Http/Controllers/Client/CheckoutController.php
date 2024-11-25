@@ -50,11 +50,11 @@ class CheckoutController extends Controller
             $order->address = $request->address;
             $order->total_price = $totalPrice; 
             $order->payment = $request->payment;
-            if($order->payment == 'Thanh toán khi nhận hàng'){
-                $order->payment_status == 'Chưa thanh toán';
+            if($request->payment == 'Thanh toán khi nhận hàng'){
+                $order->payment_status = 'Chưa thanh toán';
             }
-            else{
-                $order->payment_status == 'Đã thanh toán';
+            elseif($request->payment == 'Thanh toán qua VNPay'){
+                $order->payment_status = 'Đã thanh toán';
             }
             $order->save();
             
@@ -115,11 +115,11 @@ class CheckoutController extends Controller
             $order->address = $request->address;
             $order->total_price = $totalPrice; 
             $order->payment = $request->payment;
-            if($order->payment == 'Thanh toán khi nhận hàng'){
-                $order->payment_status == 'Chưa thanh toán';
+            if($request->payment == 'Thanh toán khi nhận hàng'){
+                $order->payment_status = 'Chưa thanh toán';
             }
-            else{
-                $order->payment_status == 'Đã thanh toán';
+            elseif($request->payment == 'Thanh toán qua VNPay'){
+                $order->payment_status = 'Đã thanh toán';
             }
             $order->save();
             
