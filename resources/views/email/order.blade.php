@@ -21,7 +21,7 @@
                 $itemTotal = $detail->quantity * $detail->price;
                 $totalAmount += $itemTotal;
             @endphp
-            <li>{{ $detail->variant->product->name }} - Màu sắc: {{ $detail->variant->color->name }} - Số lượng: {{ $detail->quantity }} - Giá: {{ number_format($detail->price, 0, ',', '.') }} VND</li>
+            <li>{{ $detail->productVariant->product->name }} - Màu sắc: {{ $detail->productVariant->color->name }} - Số lượng: {{ $detail->quantity }} - Giá: {{ number_format($detail->price, 0, ',', '.') }} VND</li>
         @endforeach
     </ul>
     <p><strong>Tổng giá trị đơn hàng: {{ number_format($totalAmount, 0, ',', '.') }} VND</strong></p>

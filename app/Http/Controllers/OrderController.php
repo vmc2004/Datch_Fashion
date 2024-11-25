@@ -102,12 +102,22 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
+        $request->validate([
+            'status' => 'required|string',
+            'note' => function ($attribute, $value, $fail) use ($request) {
+                if ($request->status === 'Đơn hàng đã hủy' && empty($value)) {
+                    $fail('Vui lòng ghi chú lý do hủy đơn hàng.');
+                }
+            },
+        ]);
         $data = [
-            'status' => $request['status']
+            'status' => $request->status,
+            'note' => $request->note,
         ];
         $order->update($data);
-        return redirect()->back()->with('message', 'Cập nhật thành công !');
+        return redirect()->back()->with('message', 'Cập nhật thành công!');
     }
+    
 
     /**
      * Remove the specified resource from storage.
