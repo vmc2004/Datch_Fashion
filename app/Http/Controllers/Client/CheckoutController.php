@@ -37,79 +37,55 @@ class CheckoutController extends Controller
             'quantity' => 'required|array', 
         ]);
     
-        try {
-            // Kiểm tra đăng nhập
             if (!Auth::check()) {
                 return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
             }
-    
-            // Tính tổng giá trị đơn hàng
             $totalPrice = 0;
-    
-            // Tạo đơn hàng mới
             $order = new Order();
             $order->code = strtoupper(Str::random(6)) . rand(100, 999);
-            $order->user_id = Auth::id();
+            $order->user_id = Auth::id(); 
             $order->fullname = $request->name;
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
-            $order->total_price = $totalPrice;
+            $order->total_price = $totalPrice; 
             $order->payment = $request->payment;
+            if($order->payment == 'Thanh toán khi nhận hàng'){
+                $order->payment_status == 'Chưa thanh toán';
+            }
+            else{
+                $order->payment_status == 'Đã thanh toán';
+            }
             $order->save();
-    
-            // Duyệt qua từng biến thể sản phẩm
+            
             foreach ($request->input('variant_id') as $index => $variantId) {
-                $quantity = $request->input('quantity')[$index];
+                $quantity = $request->input('quantity')[$index]; 
                 $price = $request->input('price')[$index];
     
                 if ($price < 0 || $quantity < 0) {
                     return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
                 }
     
-                // Lấy biến thể sản phẩm và kiểm tra kho
-                $productVariant = ProductVariant::find($variantId);
-                if (!$productVariant || $productVariant->quantity < $quantity) {
-                    return back()->withErrors(['message' => 'Số lượng sản phẩm không đủ.']);
-                }
-    
-                // Cập nhật số lượng trong kho
-                $productVariant->quantity -= $quantity;
-                $productVariant->save();
-    
-                // Tạo chi tiết đơn hàng
                 $orderDetail = new OrderDetail();
-                $orderDetail->order_id = $order->id;
+                $orderDetail->order_id = $order->id; 
                 $orderDetail->variant_id = $variantId;
-                $orderDetail->quantity = $quantity;
-                $orderDetail->price = $price;
-                $orderDetail->total_price = $price * $quantity;
+                $orderDetail->quantity = $quantity; 
+                $orderDetail->price = $price; 
+                $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
-    
-                // Cộng tổng giá trị đơn hàng
                 $totalPrice += $orderDetail->total_price;
             }
     
-            // Cập nhật lại tổng giá trị đơn hàng
             $order->total_price = $totalPrice;
             $order->save();
-    
-            // Xóa giỏ hàng sau khi đặt đơn hàng thành công
+           
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
-                $cart->items()->delete();
-                $cart->delete();
+                $cart->items()->delete(); 
+                $cart->delete(); 
             }
                 return redirect()->route('thankyou', ['order' => $order->code]);
     
-        } catch (\Exception $e) {
-            // Ghi log lỗi
-            \Log::error('Error creating order: ' . $e->getMessage(), [
-                'request_data' => $request->all(),
-            ]);
-    
-            return back()->withErrors(['message' => 'Có lỗi xảy ra. Vui lòng thử lại.']);
-        }
     }
     
     public function vnpay_payment(Request $request)
@@ -139,6 +115,12 @@ class CheckoutController extends Controller
             $order->address = $request->address;
             $order->total_price = $totalPrice; 
             $order->payment = $request->payment;
+            if($order->payment == 'Thanh toán khi nhận hàng'){
+                $order->payment_status == 'Chưa thanh toán';
+            }
+            else{
+                $order->payment_status == 'Đã thanh toán';
+            }
             $order->save();
             
             foreach ($request->input('variant_id') as $index => $variantId) {
