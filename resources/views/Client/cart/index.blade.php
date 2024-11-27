@@ -40,7 +40,7 @@
                                             <div class="flex items-center border-b py-4">
                                                 <!-- Cột 1: Ảnh sản phẩm -->
                                                 <div class="flex-shrink-0 w-1/5 text-center">
-                                                    <img src="{{ asset($item->variant->product->image) }}"
+                                                    <img src="{{ asset('storage/'.$item->variant->product->image) }}"
                                                         alt="ảnh sản phẩm {{ $item->variant->product->name }}"
                                                         class="w-50 h-24 object-cover rounded border">
                                                 </div>

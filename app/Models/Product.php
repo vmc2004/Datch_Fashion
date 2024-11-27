@@ -51,6 +51,10 @@ class Product extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class, 'product_id', 'id'); // Đảm bảo tên cột khóa ngoại đúng
+    }
     public $timestamps = false;
     protected $dates = ['deleted_at'];
 }
