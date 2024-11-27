@@ -39,7 +39,76 @@
       opacity: 0.8;
       /* Hiệu ứng khi di chuột */
     }
+    .color-option:hover,
+    .size-option:hover {
+      cursor: pointer;
+      opacity: 0.8;
+      /* Hiệu ứng khi di chuột */
+    }
 
+    .bird-container {
+      width: 100%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    #suggestions {
+      position: absolute;
+      /* Đặt vị trí tuyệt đối */
+      top: 100%;
+      /* Để nó nằm ngay dưới ô tìm kiếm */
+      left: 0;
+      width: 100%;
+      /* Đảm bảo độ rộng bằng với ô tìm kiếm */
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      max-height: 200px;
+      /* Giới hạn chiều cao */
+      overflow-y: auto;
+      /* Cuộn khi có quá nhiều kết quả */
+      z-index: 21;
+      /* Đảm bảo nó nằm trên các phần tử khác */
+    }
+
+    .menucha {
+      z-index: 21;
+    }
+
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    /* Logo animation */
+    #loading-logo {
+      width: 100px;
+      animation: rotate 2s linear infinite;
+    }
+
+    /* Rotate animation */
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
     .bird-container {
       width: 100%;
       position: fixed;
@@ -126,6 +195,52 @@
 
             
 
+  <div class="max-w-screen-xl mx-auto ">
+    <div class="header">
+      <nav class="flex items-center justify-between">
+        <div class="flex items-center space-x-8">
+          <div class="">
+            <a href="/">
+              <img src="{{asset('assets/admin/img/Datch.png')}}" alt="" width="50px" class="mb-1">
+            </a>
+          </div>
+          <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
+          <div class="relative group">
+            <!-- Liên kết "Danh mục sản phẩm" -->
+            <a href="/cua-hang" class="text-gray-800 font-semibold">
+                Danh mục sản phẩm
+            </a>
+
+            
+
+            <!-- Dropdown menu -->
+            <div class="dropdown-menu hidden absolute bg-white shadow-lg rounded-lg left-0  w-[400px] group-hover:block z-50"
+                id="menu-container" onmouseenter="showDropdownMenu()" onmouseleave="hideDropdownMenu()">
+                <div class="flex">
+                    <!-- Lề bên trái - Danh mục chính -->
+                    <ul class="py-2 w-1/4 text-sm text-gray-700 border-r border-gray-300">
+                        @foreach ($categories as $cat)
+                            <li class="hover:bg-gray-100 relative"
+                                onmouseenter="showSubcategories({{ $cat->id }}, '{{ $cat->name }}')">
+                                <a href="/cua-hang/danh-muc/{{ $cat->id }}"
+                                    class="font-bold block px-4 py-2">
+                                    @if ($cat->parent_id == 0)
+                                        {{ $cat->name }}
+                                    @endif
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <!-- Lề bên phải - Danh mục con -->
+                    <ul id="subcategory-list" class="py-2 w-3/4">
+                        <!-- Các danh mục con sẽ được hiển thị tại đây -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+      
+                    <a href="/sale" class="text-gray-800 font-semibold">Sale</a>
+                    <a href="/bai-viet" class="text-gray-800 font-semibold">Tin hot</a>
             <!-- Dropdown menu -->
             <div class="dropdown-menu hidden absolute bg-white shadow-lg rounded-lg left-0  w-[400px] group-hover:block z-50"
                 id="menu-container" onmouseenter="showDropdownMenu()" onmouseleave="hideDropdownMenu()">
@@ -158,10 +273,16 @@
                 </div>
                 <div class="flex items-center space-x-4">
                   <form action="{{ route('search') }}" method="GET">
+                  <form action="{{ route('search') }}" method="GET">
                     <div class="relative">
                       <input type="text" placeholder="Tìm kiếm" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300" id="search-box" name="query" autocomplete="off">
                       <button type="submit">
+                      <input type="text" placeholder="Tìm kiếm" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300" id="search-box" name="query" autocomplete="off">
+                      <button type="submit">
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                      </button>
+                      <!-- Gợi ý hiển thị dưới ô tìm kiếm -->
+                      <div id="suggestions" class="absolute bg-white border border-gray-200 rounded-lg mt-1 w-full max-h-60 overflow-y-auto z-10 hidden"></div>
                       </button>
                       <!-- Gợi ý hiển thị dưới ô tìm kiếm -->
                       <div id="suggestions" class="absolute bg-white border border-gray-200 rounded-lg mt-1 w-full max-h-60 overflow-y-auto z-10 hidden"></div>
@@ -262,7 +383,84 @@
   </script>
   
 
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay">
+    <img src="{{asset('assets/admin/img/logDatch.png')}}" alt="" width="300px" id="loading-logo">
+  </div>
+
+  <!-- Nội dung trang web -->
+  <div id="content" style="display:none;">
+    <!-- Nội dung chính của trang -->
+  </div>
+
+  <script>
+    // Script để ẩn overlay sau khi trang tải xong
+    window.addEventListener("load", function() {
+      document.getElementById("loading-overlay").style.display = "none";
+      document.getElementById("content").style.display = "block";
+    });
+  </script>
+  
+
         </div>
+        
+
+
+
+   
+
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#search-box').on('keyup', function() {
+        let query = $(this).val();
+
+        if (query.length > 1) {
+          $.ajax({
+            url: "{{ route('autocomplete') }}", // Đảm bảo đây là đường dẫn đúng tới API autocompletion
+            type: "GET",
+            data: {
+              query: query
+            },
+            success: function(data) {
+              let suggestions = $('#suggestions');
+              suggestions.empty().show();
+
+              if (data.length > 0) {
+                data.forEach(function(product) {
+                  // Làm nổi bật từ khóa trong tên sản phẩm
+                  let highlightedName = product.name.replace(
+                    new RegExp(query, "gi"),
+                    (match) => `<strong>${match}</strong>`
+                  );
+
+                  // Sử dụng slug thay vì id để tạo đường dẫn
+                  suggestions.append(`
+                  <div style="padding: 10px; border-bottom: 1px solid #eee;">
+                    <a href="/product/${product.slug}" class="flex items-center">
+                      <img src="${product.image}" alt="${product.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
+                      <div>
+                        <div class="search-price">${highlightedName}</div>
+                        <div style="color:#d70018">${product.price}đ</div>
+                      </div>
+                    </a>
+                  </div>
+                `);
+                });
+              } else {
+                suggestions.append('<div style="padding: 10px;">Không tìm thấy sản phẩm</div>');
+              }
+            }
+          });
+        } else {
+          $('#suggestions').hide();
+        }
+      });
+    });
+    document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
         
 
 
@@ -322,7 +520,11 @@
     document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
 
 document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
+document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
 
+function showDropdownMenu() {
+    document.getElementById('menu-container').classList.remove('hidden');
+}
 function showDropdownMenu() {
     document.getElementById('menu-container').classList.remove('hidden');
 }
@@ -330,7 +532,14 @@ function showDropdownMenu() {
 function hideDropdownMenu() {
     document.getElementById('menu-container').classList.add('hidden');
 }
+function hideDropdownMenu() {
+    document.getElementById('menu-container').classList.add('hidden');
+}
 
+// Hiển thị danh mục con khi di chuột vào danh mục cha
+function showSubcategories(categoryId, categoryName) {
+    const subcategoryList = document.getElementById('subcategory-list');
+    subcategoryList.innerHTML = '';
 // Hiển thị danh mục con khi di chuột vào danh mục cha
 function showSubcategories(categoryId, categoryName) {
     const subcategoryList = document.getElementById('subcategory-list');
@@ -341,7 +550,32 @@ function showSubcategories(categoryId, categoryName) {
     parentCategoryItem.className = 'font-bold px-4 py-2 text-gray-700';
     parentCategoryItem.textContent = categoryName;
     subcategoryList.appendChild(parentCategoryItem);
+    // Tạo tiêu đề danh mục cha
+    const parentCategoryItem = document.createElement('li');    
+    parentCategoryItem.className = 'font-bold px-4 py-2 text-gray-700';
+    parentCategoryItem.textContent = categoryName;
+    subcategoryList.appendChild(parentCategoryItem);
 
+    // Lấy danh sách danh mục con
+    const categories = @json($categories);
+    const parentCategory = categories.find(cat => cat.id === categoryId);
+    if (parentCategory && parentCategory.sub) {
+        parentCategory.sub.forEach(subcat => {
+            const li = document.createElement('li');
+            li.className = 'hover:bg-gray-100';
+            
+            const a = document.createElement('a');
+            a.href = `/cua-hang/danh-muc/${subcat.id}`;
+            a.className = 'block px-4 py-2 text-gray-700';
+            a.textContent = subcat.name;
+            
+            li.appendChild(a);
+            subcategoryList.appendChild(li);
+        });
+    }
+}
+
+  </script>
     // Lấy danh sách danh mục con
     const categories = @json($categories);
     const parentCategory = categories.find(cat => cat.id === categoryId);

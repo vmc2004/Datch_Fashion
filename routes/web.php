@@ -27,7 +27,8 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
 use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\OrderController as ControllersOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,7 @@ use App\Http\Controllers\CommentController;
 |
 */
 
-
+Route::get('/orders/export', [ControllersOrderController::class, 'exportToExcel'])->name('orders.export');
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/filter-products', [ProductController::class, 'filterByCategory'])->name('products.filter');
@@ -53,7 +54,6 @@ Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
-
 Route::get('/sale', [SaleController::class, 'getSaleProducts'])->name('Client.sale.index');
 
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
@@ -62,13 +62,11 @@ Route::delete('/gio-hang/xoa/{item}', [CartController::class, 'removeItem'])->na
 Route::post('/gio-hang/sua/{itemId}', [CartController::class, 'updateQuantity']);
 Route::post('/vnpay-payment', [CheckoutController::class, 'vnpay_payment'])->name('vnpay_payment');
 Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn']);
-Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
-Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou');
+Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('thankyou');
 Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
-Route::get('danh-gia-cua-toi', [CommentController::class, 'listRate'])->name('listRate');
-Route::get('gui-danh-gia/{variant_id}', [CommentController::class, 'sendRate'])->name('sendRate');
 
 Route::get('/tai-khoan', function () {
     return view('Client.account.profile');

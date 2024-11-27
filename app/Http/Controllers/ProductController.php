@@ -19,7 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderByDesc('id')->paginate(10);
+        $products = Product::orderByDesc('id')->paginate(5);
         return view('Admin.Products.index', compact('products'));
     }
 
@@ -46,7 +46,7 @@ class ProductController extends Controller
         // Xử lý upload hình ảnh nếu có
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = Storage::put('uploads/products', $request->file('image'));
+            $imagePath = $request->file('image')->move(public_path('uploads/products'), $request->file('image')->getClientOriginalName());
         }
 
         // dd($request->all());
@@ -72,6 +72,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
+    public function show(Product $product, $id) {}
     public function show(Product $product, $id) {}
 
     /**

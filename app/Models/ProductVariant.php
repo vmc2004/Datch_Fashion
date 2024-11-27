@@ -31,10 +31,21 @@ class ProductVariant extends Model
         return $this->belongsTo(Color::class, 'color_id');
     }
 
+
     public function size()
     {
         return $this->belongsTo(Size::class, 'size_id');
     }
+
+    public function OrderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'variant_id'); 
+    }
+    public function totalSold()
+    {
+        return $this->OrderDetail()->sum('quantity');
+    }
+
 
     public function variants()
     {

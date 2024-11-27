@@ -6,7 +6,13 @@
 @section('content')
 @include('Client.layout.slide')
 {{-- <div class="bird-container">
+{{-- <div class="bird-container">
     <img src="https://chillnfree.vn/assets/images/bird-animation-desktop-1.gif" alt="chillnfree" class="bird-animation bird-desktop" id="birdAnimation">
+</div> --}}
+<div class="max-w-screen-xl mx-auto py-8" data-aos="fade-up">
+
+
+
 </div> --}}
 <div class="max-w-screen-xl mx-auto py-8" data-aos="fade-up">
 
@@ -50,7 +56,23 @@
                             style="background-color: {{ $variant->color->color_code }}">
                         </div>
                     @endforeach
+                    @endforeach
                 </div>
+                <p class="mt-2 text-gray-700">
+                    {{ $new->name }}
+                </p>
+                @if ($new->ProductVariants->first()?->sale_price != 0)
+                    <p class="text-lg font-semibold">
+                        {{ number_format($new->ProductVariants->first()?->sale_price ?? 0) }} đ
+                    </p>
+                    <p class="text-gray-500 line-through">
+                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
+                    </p>
+                @else
+                    <p class="text-gray-500">
+                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
+                    </p>
+                @endif
                 <p class="mt-2 text-gray-700">
                     {{ $new->name }}
                 </p>
@@ -68,8 +90,10 @@
                 @endif
             </div>
         @endforeach
+        @endforeach
         </div>
     </div>
+
 
 
 <div class="max-w-screen-xl mx-auto py-8">
@@ -80,6 +104,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6">
             @foreach ($Proview as $view)
             <div class="text-center">
@@ -93,7 +118,23 @@
                             style="background-color: {{ $variant->color->color_code }}">
                         </div>
                     @endforeach
+                    @endforeach
                 </div>
+                <p class="mt-2 text-gray-700">
+                    {{ $view->name }}
+                </p>
+                @if ($view->ProductVariants->first()?->sale_price != 0)
+                    <p class="text-lg font-semibold">
+                        {{ number_format($view->ProductVariants->first()?->sale_price ?? 0) }} đ
+                    </p>
+                    <p class="text-gray-500 line-through">
+                        {{ number_format($view->ProductVariants->first()?->price ?? 0) }} đ
+                    </p>
+                @else
+                    <p class="text-gray-500">
+                        {{ number_format($view->ProductVariants->first()?->price ?? 0) }} đ
+                    </p>
+                @endif
                 <p class="mt-2 text-gray-700">
                     {{ $view->name }}
                 </p>
@@ -115,7 +156,34 @@
        
 </div>
 </div>
+        @endforeach
+        
+       
 </div>
+</div>
+</div>
+<script>
+    AOS.init({
+        duration: 1200, // Thời gian chạy hiệu ứng (tính bằng ms)
+    });
+</script>
+<style>
+    .product-item {
+        transition: all 0.3s ease-in-out;
+        /* Thêm hiệu ứng mượt mà khi ẩn/hiện */
+    }
+
+    .slick-carousel .product-item {
+        display: block;
+        /* Đảm bảo rằng các phần tử có thể hiển thị */
+    }
+
+    /* Thêm hiệu ứng hover */
+    .product-item:hover {
+        transform: scale(1.05);
+        /* Hiệu ứng phóng to khi hover */
+    }
+</style>
 <script>
     AOS.init({
         duration: 1200, // Thời gian chạy hiệu ứng (tính bằng ms)

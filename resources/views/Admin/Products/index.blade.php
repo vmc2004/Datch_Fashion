@@ -24,7 +24,7 @@
                                         <th scope="col">Hình ảnh</th>
                                         <th scope="col">Chất liệu</th>
                                         <th scope="col">Trạng thái</th>
-                                        <th scope="col">Trạng thái hoạt động</th>
+                                        <th scope="col">TTHĐ</th>
                                         <th scope="col">Danh mục</th>
                                         <th scope="col">Thương hiệu</th>
                                         <th scope="col">Action</th>

@@ -205,6 +205,82 @@ if (win && document.querySelector('#sidenav-scrollbar')) {
     });
   } );
   </script>
+
+<script >
+  $(document).ready(function(){
+
+
+      chart30daysorder(); 
+
+      var chart = new Morris.Bar({
+      element:'mychart',
+      barColors : ['#819C79' , '#fc8710' , '#FF6541' , '#FF5733'],
+
+      pointFillColors : ['#ffffff'],
+      ponintStrokeColors : ['black'],
+        fillOpacity: 0.6,
+        hideHower : 'auto',
+        parseTime : false,
+      xkey: 'period',
+      ykeys: ['order','total_price','quantity'],
+      behaveLikeBar : true,
+      labels: ['đơn hàng','Tổng số tiền','số lượng',]
+    });
+
+    // Lọc 30 ngày
+    function chart30daysorder() {
+    var _token = $('input[name="_token"]').val();
+
+    $.ajax({
+    url: "{{ route('admin.day-sorder') }}",
+    method: "POST",
+    dataType: "JSON",
+    data: {
+      _token: _token 
+    },
+    success: function(data) {
+      chart.setData(data);
+    },
+    error: function(xhr, status, error) {
+      console.error("Có lỗi khi gọi API:", error);
+      alert("Có lỗi xảy ra khi lấy dữ liệu.");
+    }
+  });
+}
+
+    $('.dashboard-filter').change(function(){
+      var dashboard_value = $(this).val();
+      var _token = $('input[name = "_token"] ').val();
+      $.ajax({
+        url : "{{ route('admin.db_filter') }} ",
+        method : "POST",
+        dataType : "JSON",
+        data:{dashboard_value:dashboard_value,_token:_token},
+        success:function(data){
+          chart.setData(data);
+        }
+      });
+    });
+
+    $('#btn-dashboard-filter').click(function(){
+      var _token = $('input[name = "_token"]').val();
+      var from_date = $('#datepicker').val();
+      var to_date = $('#datepicker2').val();
+      $.ajax({
+        url : "{{ route('admin.filter') }} ",
+        method : "POST",
+        dataType : "JSON",
+        data : {from_date:from_date,to_date:to_date,_token:_token},
+
+        success:function(data){
+          chart.setData(data);
+        }
+      });
+    });
+
+
+  });
+</script>
 </body>
 
 </html>
