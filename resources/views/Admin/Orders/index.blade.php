@@ -34,6 +34,7 @@
                         <th>Thời gian</th>
                         <th>Khách hàng</th>
                         <th>Tổng tiền hàng</th>
+                        <th>Trạng thái thanh toán</th>
                         <th>Trạng thái</th>
                     </tr>
                 </thead>
@@ -41,19 +42,21 @@
                   
                   @foreach ($orders as $order)
                   <tr>
-                    <td><a href="{{route('orders.edit', $order->id)}}" class="d-flex justify-content-center"> {{ $order->Code }}</a></td>
+                    <td><a href="{{route('orders.edit', $order->id)}}" class="d-flex justify-content-center"> {{ $order->code }}</a></td>
                     <td>{{ $order->created_at }}</td>
                     <td class="d-flex justify-content-center">{{ $order->fullname }}</td>
                     
-                    @php
-                        $totalAmount = 0;
-                        foreach ($order->orderDetails as $detail) {
-                            $totalAmount += $detail->price * $detail->quantity;
-                        }
-                    @endphp
+                 
                     
-                    <td>{{ number_format($totalAmount) }} ₫</td>
+                    <td>{{ number_format($order->total_price) }} ₫</td>
                     
+                    <td>
+                        @if($order->payment == 'Thanh toán qua VNPay')
+                        <p class="text-success">Đã thanh toán</p>
+                        @elseif ($order->payment == 'Thanh toán khi nhận hàng')
+                        <p class="text-danger">Chưa thanh toán</p>
+                        @endif
+                    </td>
                     <td>
                         @if ($order->status == 'Đã giao hàng')
                             <p class="text-success">Hoàn thành</p>

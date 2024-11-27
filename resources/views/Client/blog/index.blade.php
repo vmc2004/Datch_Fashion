@@ -33,7 +33,7 @@
             <div class="h-full rounded-lg relative shadow-xl">
                 <div class="h-full rounded-lg overflow-hidden flex flex-col">
                     <div class="overflow-hidden h-80">
-                        <a href="/product/{{$blog->slug}}">
+                        <a href="/bai-viet/{{$blog->slug}}">
                             <img class=""
                                  src="{{ asset( $blog->image) }}" alt="{{$blog->slug}}">
                         </a>
@@ -41,7 +41,7 @@
                     <div class="bg-white p-2 flex flex-col space-y-2">
                         <div class="">
                             <div class="cursor-pointer">
-                                <a class="text-slate-800" href=""> {{$blog->title}} </a>
+                                <a class="text-slate-800" href="/bai-viet/{{$blog->slug}}"> {{$blog->title}} </a>
                             </div>
                         </div>
                     </div>

@@ -33,7 +33,7 @@
                                             <td>{{$productVariant->price}}</td>
                                             <td>{{$productVariant->sale_price}}</td>
                                             <td>{{$productVariant->quantity}}</td>
-                                            <td><img src="{{asset('storage/'.$productVariant->image)}}" style="width: 100px" alt=""></td>
+                                            <td><img src="{{asset($productVariant->image)}}" style="width: 100px" alt=""></td>
                                             <td>
                                                 <a href="{{route('productVariants.edit',$productVariant->id)}}" class="btn btn-warning">Cập nhật</a>
                                                 <a href="{{route('products.index')}}" class="btn btn-success">Quay lại</a>

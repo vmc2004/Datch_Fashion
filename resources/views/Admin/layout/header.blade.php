@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="{{asset('assets/admin/img/logoDatch.png')}}" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/admin/img/apple-icon.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logDatch.png') }}">
     <title>
@@ -29,6 +30,11 @@
     <link href="{{ asset('assets/admin/css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/admin/css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
+    <!-- datepicker -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/perfect-scrollbar/1.5.3/css/perfect-scrollbar.min.css">
 </head>
 
 <body class="g-sidenav-show bg-gray-100">

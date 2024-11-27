@@ -10,6 +10,11 @@
                     </div>
                     <a href="{{ route('products.create') }}" class="btn btn-success mt-3">Thêm sản phẩm</a>
                     <div class="card-body p-3">
+                        @if (session()->has('message'))
+                            <div class="alert alert-success text-white">
+                                {{ session()->get('message') }}
+                            </div>
+                        @endif
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -27,29 +32,32 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $index => $item)
-                                        @if ($item->status=='1')
-                                        <tr>
-                                            <td>{{ $item->code }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>
-                                                @if ($item->image)
-                                                    <img src="{{ asset('storage/' . $item->image) }}" width="100px" alt="">
-                                                @endif
-                                            </td>
-                                            <td>{{ $item->material }}</td>
-                                            <td>{!! $item->status
-                                                ? '<span class="badge text-bg-success">Hiển thị</span>'
-                                                : '<span class="badge text-bg-danger">Ẩn</span>' !!}</td>
-                                            <td>{!! $item->is_active
-                                                ? '<span class="badge text-bg-success">Còn hàng</span>'
-                                                : '<span class="badge text-bg-danger">Hết hàng</span>' !!}</td>
-                                            <td>{{ $item->category->name }}</td>
-                                            <td>{{ $item->brand->name }}</td>
-                                            <td>
-                                                <a href="{{route('productVariants.create',$item->id)}}" class="btn btn-success">Thêm biến thể</a>
-                                                <a href="{{route('productVariants.index',$item->id)}}" class="btn btn-primary">Danh sách biến thể</a>
-                                                <a href="{{ route('products.edit', $item->id) }}" class="btn btn-warning">Sửa</a>
-                                        </tr>
+                                        @if ($item->status == '1')
+                                            <tr>
+                                                <td>{{ $item->code }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>
+                                                    @if ($item->image)
+                                                        <img src="{{ asset('storage/'.$item->image) }}" width="100px" alt="">
+                                                    @endif
+                                                </td>
+                                                <td>{{ $item->material }}</td>
+                                                <td>{!! $item->status
+                                                    ? '<span class="badge text-bg-success">Hiển thị</span>'
+                                                    : '<span class="badge text-bg-danger">Ẩn</span>' !!}</td>
+                                                <td>{!! $item->is_active
+                                                    ? '<span class="badge text-bg-success">Còn hàng</span>'
+                                                    : '<span class="badge text-bg-danger">Hết hàng</span>' !!}</td>
+                                                <td>{{ $item->category->name }}</td>
+                                                <td>{{ $item->brand->name }}</td>
+                                                <td>
+                                                    <a href="{{ route('productVariants.create', $item->id) }}"
+                                                        class="btn btn-success">Thêm biến thể</a>
+                                                    <a href="{{ route('productVariants.index', $item->id) }}"
+                                                        class="btn btn-primary">Danh sách biến thể</a>
+                                                    <a href="{{ route('products.edit', $item->id) }}"
+                                                        class="btn btn-warning">Sửa</a>
+                                            </tr>
                                         @else
                                             <div class=""></div>
                                         @endif

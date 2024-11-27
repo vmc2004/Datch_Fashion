@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -16,6 +19,16 @@ class CommentController extends Controller
     {
         $comments = Comment::query()->with('user','product')->paginate('9');
         return view('Admin.comments.index',compact('comments'));
+    }
+
+    public function listRate(){
+        $listRate = Comment::query()->where('user_id',Auth::user()->id)->where('rating','!=',null)->with('product')->paginate(6);
+        return view('Client.rate.index',compact('listRate'));
+    }
+
+    public function sendRate($variant_id){
+        $variants = ProductVariant::query()->where('id',$variant_id)->with(['product','color','size'])->get();
+        return view('Client.rate.rate',compact('variants'));
     }
 
 

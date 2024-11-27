@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-                $table->string('otp')->nullable();
-           
+            $table->enum('gender', ['Nam', 'Nữ', 'Khác'])->nullable();
+            $table->date('birthday')->nullable();
+            $table->string('language')->nullable()->default('Vietnamese');
+            $table->text('introduction')->nullable();
         });
     }
 
@@ -23,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('otp');
+            $table->dropColumn(['gender', 'birthday', 'language', 'introduction']);
         });
     }
 };
