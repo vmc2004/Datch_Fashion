@@ -115,7 +115,7 @@
                                 <!-- Ghi chú -->
                                 <div class="col-md-9">
                                     <label for="note" class="form-label">Ghi chú</label>
-                                    <textarea name="note" id="note" class="form-control" cols="30" rows="4"></textarea>
+                                    <textarea name="note" id="note" class="form-control" cols="30" rows="4">{{ old('note', $order->note) }}</textarea>
                                 </div>
                             </div>
                             
@@ -142,5 +142,17 @@
     </div>
 </div>
 
+<script>
+     document.querySelector('form').addEventListener('submit', function (e) {
+        const statusSelect = document.getElementById('payer');
+        const noteTextarea = document.getElementById('note');
+
+        if (statusSelect.value === 'Đơn hàng đã hủy' && noteTextarea.value.trim() === '') {
+            e.preventDefault(); // Ngăn gửi form
+            alert('Vui lòng ghi chú lý do hủy đơn hàng!');
+            noteTextarea.focus(); // Đặt con trỏ vào ô ghi chú
+        }
+    });
+</script>
 
 @endsection

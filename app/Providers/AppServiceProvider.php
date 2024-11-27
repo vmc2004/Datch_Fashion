@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
         $cart = Cart::getCartByUser();
-        $totalCart = $cart ? count($cart->items) : 0;
+        $totalCart = $cart ? count($cart->items) : '';
         $view->with('totalCart', $totalCart);
     });
 

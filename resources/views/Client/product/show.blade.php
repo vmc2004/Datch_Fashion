@@ -26,40 +26,41 @@
         </div>
     </div>
 
-    <div class="flex p-4 rounded">
+    <div class="flex  rounded">
         <!-- Left Section: Product Images -->
-        <div class="w-5/12	mr-8">
-            <div class="relative">
+        <div class="w-6/12 ">
+            <div class="flex">
                 <!-- Ảnh lớn hiển thị chính -->
-                <div class="relative image-container">
-                    <img alt="Ảnh sản phẩm" class="zoom-image " src="{{ asset( $product->image) }}"  />
-
+                <div class="relative image-container w-4/6 h-screen ml-8">
+                    <img alt="Ảnh sản phẩm" class="zoom-image w-96 object-cover" src="{{ asset($product->image) }}" />
+            
                     <!-- Nút Trái -->
                     <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md left-arrow">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-
+            
                     <!-- Nút Phải -->
                     <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md right-arrow">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
-            </div>
-            <div class="flex mt-4 space-x-2 ml-8">
-                @php
-                $uniqueVariants = $product->ProductVariants->unique('color_id');
-                @endphp
-
-                <div class="flex mt-4 space-x-2">
+            
+                <!-- Ảnh biến thể -->
+                <div class="flex flex-col space-y-2 ml-4 ">
+                    @php
+                    $uniqueVariants = $product->ProductVariants->unique('color_id');
+                    @endphp
+            
                     @foreach ($uniqueVariants as $variant)
-                    <img alt="Ảnh biến thể" class="w-20 h-20 border thumbnail"
+                    <img alt="Ảnh biến thể" class="w-28 border thumbnail cursor-pointer"
                         src="{{ asset($variant->image) }}" />
                     @endforeach
                 </div>
             </div>
+            
         </div>
         <!-- Right Section: Product Details  2-->
-        <div class="w-1/2 pl-8">
+        <div class="w-7/12 mr-4">
             <h1 class="text-2xl font-bold flex">
                 {{ $product->name }}
                 <button class="action action-wishlist action towishlist action towishlist ml-8	">

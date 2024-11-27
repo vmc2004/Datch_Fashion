@@ -24,7 +24,7 @@
                 </div>
                 <h1>Đơn hàng</h1>
                 <div>
-                    <button class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</button>
+                  <a href="{{ route('orders.export') }}" class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</a>
                 </div>
             </div>
             <table class="table table-bordered table-hover">
@@ -51,10 +51,10 @@
                     <td>{{ number_format($order->total_price) }} ₫</td>
                     
                     <td>
-                        @if($order->payment == 'Thanh toán qua VNPay')
-                        <p class="text-success">Đã thanh toán</p>
-                        @elseif ($order->payment == 'Thanh toán khi nhận hàng')
-                        <p class="text-danger">Chưa thanh toán</p>
+                        @if($order->payment_status == 'Đã thanh toán')
+                        <p class="text-success">{{$order->payment_status}}</p>
+                        @elseif ($order->payment_status == 'Chưa thanh toán')
+                        <p class="text-danger">{{$order->payment_status}}</p>
                         @endif
                     </td>
                     <td>

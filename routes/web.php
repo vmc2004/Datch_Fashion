@@ -27,6 +27,8 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
 use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\OrderController as ControllersOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +41,10 @@ use App\Http\Controllers\Client\UserController;
 |
 */
 
+
+
+Route::get('/orders/export', [ControllersOrderController::class, 'exportToExcel'])->name('orders.export');
+
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/filter-products', [ProductController::class, 'filterByCategory'])->name('products.filter');
@@ -50,7 +56,6 @@ Route::get('/account/orders', [OrderController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
-
 
 Route::get('/sale', [SaleController::class, 'getSaleProducts'])->name('Client.sale.index');
 
