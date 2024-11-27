@@ -68,7 +68,7 @@
                         <tbody class="table-light">
                         @foreach ($topSellingProducts as $product)
                           <tr>
-                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->name }} </td>
                             <td><img src="{{ $product->image }}" alt="{{ $product->name }}" width="50"></td>
                             <td>{{ number_format($product->price, 0, ',', '.') }} VNĐ</td>
                             <td>{{ $product->total_sales }}</td>
