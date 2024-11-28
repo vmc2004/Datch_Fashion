@@ -31,6 +31,7 @@ class ProductVariant extends Model
         return $this->belongsTo(Color::class, 'color_id');
     }
 
+
     public function size()
     {
         return $this->belongsTo(Size::class, 'size_id');
@@ -45,4 +46,9 @@ class ProductVariant extends Model
         return $this->OrderDetail()->sum('quantity');
     }
 
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class, 'product_id', 'id'); // 'product_id' là cột khóa ngoại trong bảng product_variants
+    }
 }
