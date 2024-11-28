@@ -11,7 +11,7 @@ class Category extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'image', 'is_active','parent_id'];
+    protected $fillable = ['name', 'image', 'is_active', 'parent_id'];
 
     // Quan hệ danh mục con
     public function children()
@@ -26,7 +26,7 @@ class Category extends Model
     }
 
     public $timestamps = false;
-    
+
     protected $dates = ['deleted_at'];
 
     const CAT_STATUS_ENABLE  = 1;
@@ -36,9 +36,8 @@ class Category extends Model
     {
         $result = array('' => '');
 
-        $categories = DB::table('categories')
-                ->where('is_active', self::CAT_STATUS_ENABLE)
-                ->get(array('*'));
+        $categories = Category::all();
+
 
         $result = array();
 

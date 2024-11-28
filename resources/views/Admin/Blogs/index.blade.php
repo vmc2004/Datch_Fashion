@@ -50,7 +50,9 @@
                             @foreach ($blogs as $blog)
                             <tr>
                                 <td>{{ $blog->id }}</td>
-                                <td>{{ $blog->title }}</td>
+                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    {{ $blog->title }}
+                                </td>
                                 <td>
                                     <img src="{{asset($blog->image)}}" alt="" width="100px">
                                 </td>
