@@ -68,9 +68,6 @@ Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('
 Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 
-Route::get('/tai-khoan', function () {
-    return view('Client.account.profile');
-});
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
@@ -88,7 +85,7 @@ Route::get('/Client/account/register', [ClientUserController::class, 'register']
 Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
 Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
-Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
+Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile'])->middleware('auth');
 
 
 
