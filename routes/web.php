@@ -72,6 +72,7 @@ Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
+Route::get('/cua-hang/thuong-hieu/{id}', [StoreController::class,'getByBrand']);
 
 
 Route::get('/lien-he', [ContactController::class, 'contact'])->name('Client.contact');
