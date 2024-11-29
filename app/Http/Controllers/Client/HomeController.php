@@ -23,7 +23,9 @@ class HomeController extends Controller
             // Kiểm tra lại việc truyền biến vào view
             return view('Client.home', compact('brands', 'category', 'newPro', 'Proview'));
         }
-        
+        public function feedback(){
+            return view('Client.feedback');
+        }
 
 
 }

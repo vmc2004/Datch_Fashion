@@ -229,19 +229,6 @@ public function thankyou($order)
     return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
 }
 
-public function getDistricts($province_id)
-{
-    $districts = District::where('province_id', $province_id)->get();
-    return response()->json($districts);
-}
-
-// Lấy danh sách phường theo huyện
-public function getCommunes($district_id)
-{
-    $communes = Commune::where('district_id', $district_id)->get();
-    return response()->json($communes);
-}
-
 
     
 

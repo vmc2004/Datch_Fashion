@@ -52,7 +52,7 @@ Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/account/orders', [OrderController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class, 'show']);
-
+Route::get('/feedback', [HomeController::class,'feedback']);
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
 Route::get('/sale', [SaleController::class, 'getSaleProducts'])->name('Client.sale.index');

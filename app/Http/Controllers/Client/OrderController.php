@@ -22,17 +22,24 @@ class OrderController extends Controller
         ]);
     }
     public function huy($code)
-{
-    $order = Order::where('code', $code)->first();
+    {
+        $order = Order::where('code', $code)->with('ProductVariants')->first(); 
+        if ($order) {
+            foreach ($order->ProductVariants as $item) {
+                $product = $item->product; 
+                if ($product) {
+                    $product->quantity += $item->quantity; 
+                    $product->save();
+                }
+            }
+            $order->status = 'Đơn hàng đã hủy';
+            $order->save();
 
-    if ($order) {
-        $order->status = 'Đơn hàng đã hủy';
-        $order->save();
-        
-        return redirect()->back()->with('success', 'Hủy đơn hàng thành công');
+            return redirect()->back()->with('success', 'Hủy đơn hàng thành công');
+        }
+
+        return redirect()->back()->with('error', 'Không tìm thấy đơn hàng');
     }
 
-    return redirect()->back()->with('error', 'Không tìm thấy đơn hàng');
-}
 
 }
