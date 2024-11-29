@@ -27,6 +27,7 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
 use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController as ControllersOrderController;
 
@@ -208,5 +209,7 @@ Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.
 
 Route::get('/bai-viet', [BlogController::class, 'index'])->name('client.blog');
 Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.blog.show');
+Route::get('/Danh-gia/{variant_id}', [CommentController::class, 'form'])->name('rate.form');
+Route::get('/Danh-gia-cua-toi', [CommentController::class, 'listRate'])->name('rate.list');
 
 
