@@ -186,7 +186,7 @@
 
         <div class="row">
             @foreach ($comments as $comment)
-                @if ($comment->status == 'approved')
+                @if ($comment->rating != '')
                     <div class="comment my-2 col-sm-4 col-md-4">
                         <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
                             {{ $comment->created_at->format('d/m/Y') }}</p>
@@ -194,7 +194,11 @@
                         <p><span class="font-bold">Đánh giá:</span> {{ $comment->rating }} sao</p>
                     </div>
                 @else
-                    <div></div>
+                <div class="comment my-2 col-sm-4 col-md-4">
+                    <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
+                        {{ $comment->created_at->format('d/m/Y') }}</p>
+                    <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
+                </div>
                 @endif
             @endforeach
             {{ $comments->links() }}
@@ -202,10 +206,9 @@
         <hr class="mb-3">
 
         @if (Auth::check())
-            <form action="{{ route('comments.sendComment', $product->id) }}" method="POST"
-                class="comment-form w-100">
+            <form action="{{ route('comments.sendComment', $product->id) }}" method="POST" class="comment-form w-100">
                 @csrf
-                <div class="star-rating">
+                {{-- <div class="star-rating">
                     <input type="radio" id="star5" name="rating" value="5" />
                     <label for="star5">&#9733;</label>
                     <input type="radio" id="star4" name="rating" value="4" />
@@ -216,7 +219,7 @@
                     <label for="star2">&#9733;</label>
                     <input type="radio" id="star1" name="rating" value="1" />
                     <label for="star1">&#9733;</label>
-                </div>
+                </div> --}}
 
                 <textarea name="content" placeholder="Viết bình luận của bạn..." required></textarea>
                 <button type="submit" class="submit-button">Gửi bình luận</button>

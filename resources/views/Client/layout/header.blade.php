@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <!-- Thêm vào trong <head> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 
@@ -171,7 +173,7 @@
                   <div class="relative group menucha">
                     <!-- User profile link -->
                     <a href="/tai-khoan" class="flex items-center text-gray-800 group" class="group-hover:opacity-100 group-hover:block opacity-0 hidden">
-                      <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User" width="30" >
+                      <img src="{{ Auth::user()->avatar ? asset('uploads/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User"  class="rounded-full w-8 h-8 mr-2" >
                       <span class="text-sm">{{ Auth::user()->fullname }}</span>
                     </a>
                     

@@ -27,22 +27,22 @@
                         <h2 class="text-xl font-bold mb-4">Người nhận</h2>
                         <div class="mb-4">
                             <label class="block text-gray-700">Tên khách hàng</label>
-                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="name" placeholder="Tên khách hàng" type="text"/>
+                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="name" placeholder="Tên khách hàng" type="text" value="{{Auth::user()->fullname}}"/>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700">Số điện thoại</label>
-                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="phone" placeholder="Số điện thoại" type="text"/>
+                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="phone" placeholder="Số điện thoại" type="text" value="{{Auth::user()->phone}}"/>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700">Email của bạn</label>
-                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="email" placeholder="Email của bạn" type="email"/>
+                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="email" placeholder="Email của bạn" type="email" value="{{Auth::user()->email}}"/>
                         </div>
                         <hr>
 
                         <div class="mb-4">
                             <label class="block text-gray-700 text-bold">Địa chỉ của bạn</label>
                             <div class="mb-4">
-                                <input class="w-full p-2 border border-gray-300 rounded mt-1" name="address" placeholder="Nhập địa chỉ (VD: Số 10 Nguyễn Tuân)" type="text"/>
+                                <input class="w-full p-2 border border-gray-300 rounded mt-1" name="address" placeholder="Nhập địa chỉ (VD: Số 10 Nguyễn Tuân)" type="text" value="{{Auth::user()->address}}"/>
                             </div>
                         </div>
 

@@ -102,7 +102,8 @@
                                 <!-- Trạng thái -->
                                 <div class="col-md-3">
                                     <label for="payer" class="form-label">Trạng thái</label>
-                                    <select class="form-select" id="payer" name="status">
+                                    <select class="form-select" id="payer" name="status" 
+                                        {{ in_array($order->status, ['Đơn hàng đã hủy', 'Đã giao hàng']) ? 'disabled' : '' }}>
                                         <option value="Chờ xác nhận" {{ $order->status == "Chờ xác nhận" ? 'selected' : '' }}>Chờ xác nhận</option>
                                         <option value="Đã xác nhận" {{ $order->status == "Đã xác nhận" ? 'selected' : '' }}>Đã xác nhận</option>
                                         <option value="Đang chuẩn bị hàng" {{ $order->status == "Đang chuẩn bị hàng" ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
@@ -111,6 +112,7 @@
                                         <option value="Đơn hàng đã hủy" {{ $order->status == "Đơn hàng đã hủy" ? 'selected' : '' }}>Đơn hàng đã hủy</option>
                                     </select>
                                 </div>
+                                
                             
                                 <!-- Ghi chú -->
                                 <div class="col-md-9">

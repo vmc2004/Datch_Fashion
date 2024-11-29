@@ -18,7 +18,7 @@
 
             @foreach ($brands as $brand)
             <div class="text-center">
-                <a href="/thuong-hieu/{{$brand->name}}">
+                <a href="/cua-hang/thuong-hieu/{{$brand->id}}">
                     <div class="w-24 h-24 mx-auto rounded-full bg-white shadow-lg flex items-center justify-center">
                         <img src="{{ asset($brand->logo) }}" alt="Ảnh danh mục {{$brand->name}}" class="w-24 h-24 rounded-full">
                     </div>

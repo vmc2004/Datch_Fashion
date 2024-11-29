@@ -27,6 +27,7 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
 use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController as ControllersOrderController;
 
@@ -55,7 +56,7 @@ Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/account/orders', [OrderController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class, 'show']);
-
+Route::get('/feedback', [HomeController::class,'feedback']);
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
 Route::get('/sale', [SaleController::class, 'index'])->name('Client.sale.index');
@@ -73,12 +74,10 @@ Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('
 Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 
-Route::get('/tai-khoan', function () {
-    return view('Client.account.profile');
-});
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
+Route::get('/cua-hang/thuong-hieu/{id}', [StoreController::class,'getByBrand']);
 
 Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
 Route::get('/bai-viet', [BlogController::class, 'index'])->name('client.blog');
@@ -96,9 +95,14 @@ Route::get('/Client/account/register', [ClientUserController::class, 'register']
 Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
 Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
+
 Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
 Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
 Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
+
+
+
+
 
 
 //ADMIN
@@ -221,6 +225,8 @@ Route::group([
 
 
 
+Route::get('/Danh-gia/{variant_id}', [CommentController::class, 'form'])->name('rate.form');
+Route::get('/Danh-gia-cua-toi', [CommentController::class, 'listRate'])->name('rate.list');
 
 
 
