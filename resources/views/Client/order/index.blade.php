@@ -71,9 +71,9 @@
                                     @elseif ($order->status == "Đang giao hàng")
                                         Đang giao hàng
                                     @elseif ($order->status == "Đã giao hàng")
-                                        Giao hàng thành công
+                                       <p class="text-green-500"> Giao hàng thành công</p>
                                     @elseif ($order->status == "Đơn hàng đã hủy")
-                                        Đơn hàng đã hủy
+                                        <p class="text-red-500">Đơn hàng đã hủy</p>
                                     @else
                                         Trạng thái không xác định
                                     @endif

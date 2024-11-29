@@ -14,6 +14,7 @@ use App\Models\ProductVariant;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -219,15 +220,41 @@ class CheckoutController extends Controller
     
 
     
-public function thankyou($order)
-{
-    $order = Order::where('code', $order)->first();
-    if ($order) {
-        Mail::to($order->email)->send(new OrderSuccessMail($order));
-        return view('Client.checkout.done', compact('order'));
+    public function thankyou($order)
+    {
+        // Lấy đơn hàng cùng với chi tiết và sản phẩm liên quan
+        $order = Order::where('code', $order)
+            ->with('orderDetails.productVariant') // Load quan hệ orderDetails và productVariant
+            ->first();
+    
+        if ($order) {
+            // Trừ số lượng sản phẩm trong kho
+            foreach ($order->orderDetails as $detail) {
+                $variant = $detail->productVariant; // Lấy thông tin ProductVariant
+                if ($variant) {
+                    if ($variant->quantity >= $detail->quantity) {
+                        $variant->quantity -= $detail->quantity; // Trừ số lượng
+                        $variant->save(); // Lưu thay đổi
+                    } else {
+                        return redirect()->route('home')->withErrors([
+                            'message' => 'Sản phẩm ' . $variant->name . ' không đủ số lượng tồn kho.'
+                        ]);
+                    }
+                }
+            }
+    
+            // Gửi email xác nhận đơn hàng
+            Mail::to($order->email)->send(new OrderSuccessMail($order));
+    
+            // Trả về view xác nhận
+            return view('Client.checkout.done', compact('order'));
+        }
+    
+        // Trường hợp đơn hàng không tồn tại
+        return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
     }
-    return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
-}
+    
+
 
 
     
