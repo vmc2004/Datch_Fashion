@@ -27,6 +27,9 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
 use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\OrderController as ControllersOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +42,7 @@ use App\Http\Controllers\Client\UserController;
 |
 */
 
-
+Route::get('/orders/export', [ControllersOrderController::class, 'exportToExcel'])->name('orders.export');
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/filter-products', [ProductController::class, 'filterByCategory'])->name('products.filter');
@@ -51,7 +54,6 @@ Route::get('/account/orders', [OrderController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
-
 
 Route::get('/sale', [SaleController::class, 'getSaleProducts'])->name('Client.sale.index');
 
@@ -67,9 +69,6 @@ Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('
 Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 
-Route::get('/tai-khoan', function () {
-    return view('Client.account.profile');
-});
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
@@ -88,7 +87,7 @@ Route::get('/Client/account/register', [ClientUserController::class, 'register']
 Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
 Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
-Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
+Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile'])->middleware('auth');
 
 
 
@@ -211,5 +210,7 @@ Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.
 
 Route::get('/bai-viet', [BlogController::class, 'index'])->name('client.blog');
 Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.blog.show');
+Route::get('/Danh-gia/{variant_id}', [CommentController::class, 'form'])->name('rate.form');
+Route::get('/Danh-gia-cua-toi', [CommentController::class, 'listRate'])->name('rate.list');
 
 

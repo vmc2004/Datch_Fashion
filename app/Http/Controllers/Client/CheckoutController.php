@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
 use App\Models\CartDetail;
+use App\Models\Commune;
+use App\Models\District;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\ProductVariant;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -19,10 +22,12 @@ class CheckoutController extends Controller
     public function checkout(Request $request ,$user_id)
     {
         $user = Auth::user();
+        $province = Province::all();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
             'user'=> $user,
+            'province' => $province,
         ]);
     }
     public function post_checkout(Request $request) {
@@ -37,79 +42,55 @@ class CheckoutController extends Controller
             'quantity' => 'required|array', 
         ]);
     
-        try {
-            // Kiểm tra đăng nhập
             if (!Auth::check()) {
                 return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
             }
-    
-            // Tính tổng giá trị đơn hàng
             $totalPrice = 0;
-    
-            // Tạo đơn hàng mới
             $order = new Order();
             $order->code = strtoupper(Str::random(6)) . rand(100, 999);
-            $order->user_id = Auth::id();
+            $order->user_id = Auth::id(); 
             $order->fullname = $request->name;
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
-            $order->total_price = $totalPrice;
+            $order->total_price = $totalPrice; 
             $order->payment = $request->payment;
+            if($request->payment == 'Thanh toán khi nhận hàng'){
+                $order->payment_status = 'Chưa thanh toán';
+            }
+            elseif($request->payment == 'Thanh toán qua VNPay'){
+                $order->payment_status = 'Đã thanh toán';
+            }
             $order->save();
-    
-            // Duyệt qua từng biến thể sản phẩm
+            
             foreach ($request->input('variant_id') as $index => $variantId) {
-                $quantity = $request->input('quantity')[$index];
+                $quantity = $request->input('quantity')[$index]; 
                 $price = $request->input('price')[$index];
     
                 if ($price < 0 || $quantity < 0) {
                     return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
                 }
     
-                // Lấy biến thể sản phẩm và kiểm tra kho
-                $productVariant = ProductVariant::find($variantId);
-                if (!$productVariant || $productVariant->quantity < $quantity) {
-                    return back()->withErrors(['message' => 'Số lượng sản phẩm không đủ.']);
-                }
-    
-                // Cập nhật số lượng trong kho
-                $productVariant->quantity -= $quantity;
-                $productVariant->save();
-    
-                // Tạo chi tiết đơn hàng
                 $orderDetail = new OrderDetail();
-                $orderDetail->order_id = $order->id;
+                $orderDetail->order_id = $order->id; 
                 $orderDetail->variant_id = $variantId;
-                $orderDetail->quantity = $quantity;
-                $orderDetail->price = $price;
-                $orderDetail->total_price = $price * $quantity;
+                $orderDetail->quantity = $quantity; 
+                $orderDetail->price = $price; 
+                $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
-    
-                // Cộng tổng giá trị đơn hàng
                 $totalPrice += $orderDetail->total_price;
             }
     
-            // Cập nhật lại tổng giá trị đơn hàng
             $order->total_price = $totalPrice;
             $order->save();
-    
-            // Xóa giỏ hàng sau khi đặt đơn hàng thành công
+           
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
-                $cart->items()->delete();
-                $cart->delete();
+                $cart->items()->delete(); 
+                $cart->delete(); 
             }
                 return redirect()->route('thankyou', ['order' => $order->code]);
     
-        } catch (\Exception $e) {
-            // Ghi log lỗi
-            \Log::error('Error creating order: ' . $e->getMessage(), [
-                'request_data' => $request->all(),
-            ]);
-    
-            return back()->withErrors(['message' => 'Có lỗi xảy ra. Vui lòng thử lại.']);
-        }
     }
     
     public function vnpay_payment(Request $request)
@@ -139,6 +120,12 @@ class CheckoutController extends Controller
             $order->address = $request->address;
             $order->total_price = $totalPrice; 
             $order->payment = $request->payment;
+            if($request->payment == 'Thanh toán khi nhận hàng'){
+                $order->payment_status = 'Chưa thanh toán';
+            }
+            elseif($request->payment == 'Thanh toán qua VNPay'){
+                $order->payment_status = 'Đã thanh toán';
+            }
             $order->save();
             
             foreach ($request->input('variant_id') as $index => $variantId) {
@@ -241,6 +228,20 @@ public function thankyou($order)
     }
     return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
 }
+
+public function getDistricts($province_id)
+{
+    $districts = District::where('province_id', $province_id)->get();
+    return response()->json($districts);
+}
+
+// Lấy danh sách phường theo huyện
+public function getCommunes($district_id)
+{
+    $communes = Commune::where('district_id', $district_id)->get();
+    return response()->json($communes);
+}
+
 
     
 
