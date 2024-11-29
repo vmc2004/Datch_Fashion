@@ -73,6 +73,7 @@ Route::get('/tai-khoan', function () {
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
+Route::get('/cua-hang/thuong-hieu/{id}', [StoreController::class,'getByBrand']);
 
 
 Route::get('/lien-he', [ContactController::class, 'contact'])->name('Client.contact');
