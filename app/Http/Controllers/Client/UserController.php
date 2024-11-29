@@ -43,13 +43,23 @@ class UserController extends Controller
     if ($user && password_verify($request->password, $user->password)) {
       
         Auth::login($user);
+        
 
-       
-        return redirect()->route('Client.home')->with(['message' => 'Đăng nhập thành công',
-        'message_type' => 'success']); 
+        if ($user->role === 'member') {
+            // Chuyển hướng tới trang dành cho member
+            return redirect()->route('Client.home')->with([
+                'message' => 'Đăng nhập thành công với quyền Member',
+                'message_type' => 'success',
+            ]);
+        }
+
+        // Nếu không phải là member, trả về lỗi
+        return back()->withErrors([
+            'role' => 'Bạn không có quyền truy cập vào hệ thống.',
+        ]);
     }
 
-  
+    // Trả về lỗi nếu đăng nhập thất bại
     return back()->withErrors([
         'email' => 'Thông tin đăng nhập không khớp với hồ sơ của chúng tôi.',
     ]);

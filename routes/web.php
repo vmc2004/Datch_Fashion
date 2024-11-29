@@ -17,7 +17,7 @@ use App\Http\Controllers\Client\UserController as ClientUserController;
 use App\Http\Controllers\Client\BlogController;
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Client\GoogleController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ContactController;
@@ -29,6 +29,7 @@ use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController as ControllersOrderController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -57,7 +58,8 @@ Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
-Route::get('/sale', [SaleController::class, 'getSaleProducts'])->name('Client.sale.index');
+Route::get('/sale', [SaleController::class, 'index'])->name('Client.sale.index');
+
 
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
@@ -78,6 +80,9 @@ Route::get('/tai-khoan', function () {
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
 
+Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
+Route::get('/bai-viet', [BlogController::class, 'index'])->name('client.blog');
+Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.blog.show');
 
 Route::get('/lien-he', [ContactController::class, 'contact'])->name('Client.contact');
 Route::post('/lien-he', [ContactController::class, 'updateContact'])->name('Client.updateContact');
@@ -92,8 +97,8 @@ Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 's
 Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
 Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
-
-
+Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
+Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
 
 
 //ADMIN
@@ -113,6 +118,9 @@ Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordF
 // Xử lý form nhập mật khẩu mới
 Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 
+Route::get('google/login', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+
 //OTP
 Route::get('/otp/confirm', [AuthController::class, 'showOtpConfirmationForm'])->name('otp.confirm');
 Route::get('verify-otp', function () {
@@ -121,12 +129,12 @@ Route::get('verify-otp', function () {
 Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
 
-Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
-Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
+
+
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
-    'middleware' => ['auth', 'checkAdmin']
+    'middleware' => ['auth', 'role:admin']
 ], function(){
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
         //user
@@ -210,10 +218,9 @@ Route::group([
         
     });
 
-Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
 
-Route::get('/bai-viet', [BlogController::class, 'index'])->name('client.blog');
-Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.blog.show');
+
+
 
 
 

@@ -11,7 +11,6 @@ use App\Models\OrderDetail;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -87,15 +86,6 @@ class CheckoutController extends Controller
             }
                 return redirect()->route('thankyou', ['order' => $order->code]);
     
-        } catch (\Exception $e) {
-            // Ghi log lỗi
-            Log::error('Error creating order: ' . $e->getMessage(), [
-                'request_data' => $request->all(),
-            ]);
-    
-            return back()->withErrors(['message' => 'Có lỗi xảy ra. Vui lòng thử lại.']);
-        }
-
     }
     
     public function vnpay_payment(Request $request)
