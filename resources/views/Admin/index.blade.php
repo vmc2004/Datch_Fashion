@@ -43,7 +43,7 @@
               <option value="7ngay">7 Ngày Qua</option>
               <option value="thangtruoc">Tháng trước</option>
               <option value="thangnay">Tháng này</option>
-              <option value="365ngayqua">365 Ngày Qua</option>
+              <option value="365ngay">365 Ngày Qua</option>
             </select>
           </p>
         </div>
@@ -58,20 +58,47 @@
   <div class="row"></div>
     <div class="col-sm-12">
       <p class="title_thongke">Top 10 sản phẩm bán chạy</p>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Tên Sản Phẩm</th>
-            <th>Hình Ảnh</th>
-            <th>Giá</th>
-            <th>Lượt Bán</th>
-          </tr>
-        </thead>
-        <tbody>
-        
-        </tbody>
-      </table>
+      <table class="table">
+                        <thead class="table-dark">
+                              <th>Tên Sản Phẩm</th>
+                              <th>Hình Ảnh</th>
+                              <th>Giá</th>
+                              <th>Lượt Bán</th>
+                        </thead>
+                        <tbody class="table-light">
+                        @foreach ($topSellingProducts as $product)
+                          <tr>
+                            <td>{{ $product->name }}</td>
+                            <td><img src="{{ $product->image }}" alt="{{ $product->name }}" width="50"></td>
+                            <td>{{ number_format($product->price, 0, ',', '.') }} VNĐ</td>
+                            <td>{{ $product->total_sales }}</td>
+                          </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
+    </div>
+
+    <div class="col-sm-12">
+      <p class="title_thongke">Thống kê đơn hàng theo Trạng Thái</p>
+      <table class="table">
+                        <thead class="table-dark">
+                              <th>Tên Sản Phẩm</th>
+                              <th>Hình Ảnh</th>
+                              <th>Hình thức thanh toán</th>
+                              <th>Tình Trạng Đơn Hàng</th>
+                              <th>Số Lượng</th>
+                        </thead>
+                        @foreach ($orderStatus as $od)
+                        <tr>
+                            <td>{{ $od->name }}</td>
+                            <td><img src="{{ $od->image }}" width="50"></td>
+                            <td>{{ $od->payment }}</td>
+                            <td>{{ $od->status }}</td>
+                            <td>{{ $od->total_quantity }}</td>
+                        </tr>
+                        @endforeach
+                    </table>
 
     </div>
 </div>

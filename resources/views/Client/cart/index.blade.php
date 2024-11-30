@@ -40,7 +40,7 @@
                                 <div class="flex items-center border-b py-4">
                                     <!-- Cột 1: Ảnh sản phẩm -->
                                     <div class="flex-shrink-0 w-1/5 text-center">
-                                        <img src="{{ asset($item->variant->product->image) }}"
+                                        <img src="{{ asset('storage/'.$item->variant->product->image) }}"
                                             alt="ảnh sản phẩm {{ $item->variant->product->name }}"
                                             class="w-50 h-24 object-cover rounded border">
                                     </div>
@@ -133,11 +133,8 @@
                     </div>
 
                     <div class="p-5 flex items-center justify-between">
-                        <?php
-                        $user_id = 1;
-                        ?>
                         <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
-                                href="/mua-hang/{{ Auth::id()}}">Thanh toán</a></button>
+                                href="/mua-hang/{{Auth::id()}}">Thanh toán</a></button>
                     </div>
                     @endif
                 </div>

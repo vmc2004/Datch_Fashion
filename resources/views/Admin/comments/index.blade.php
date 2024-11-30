@@ -69,7 +69,11 @@
                 <td>{{$comment->product->name}}</td>
                 <td>{{$comment->user->fullname}}</td>
                 <td>{{$comment->content}}</td>
+                @if ($comment['rate'] != '')
                 <td>{{$comment->rating}} sao</td>
+                @else
+                  <td></td>
+                @endif
                 <td>
                   <form method="POST" action="{{ route('comments.update', $comment) }}" enctype="multipart/form-data">
                   @method('PUT')

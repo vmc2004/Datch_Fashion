@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OrdersExport;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
@@ -9,6 +10,7 @@ use App\Models\ProductVariant;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session as FacadesSession;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -18,7 +20,7 @@ class OrderController extends Controller
     public function index()
     {
         
-        $orders = Order::OrderByDesc('id')->paginate(8);
+        $orders = Order::orderBy('id', 'desc')->paginate(8);
         return view('Admin.Orders.index', compact('orders'));
     }
 
@@ -102,12 +104,22 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
+        $request->validate([
+            'status' => 'required|string',
+            'note' => function ($attribute, $value, $fail) use ($request) {
+                if ($request->status === 'Đơn hàng đã hủy' && empty($value)) {
+                    $fail('Vui lòng ghi chú lý do hủy đơn hàng.');
+                }
+            },
+        ]);
         $data = [
-            'status' => $request['status']
+            'status' => $request->status,
+            'note' => $request->note,
         ];
         $order->update($data);
-        return redirect()->back()->with('message', 'Cập nhật thành công !');
+        return redirect()->back()->with('message', 'Cập nhật thành công!');
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -133,8 +145,12 @@ class OrderController extends Controller
     }
     public function search_order(Request $request){
         $orders = Order::where('phone', 'LIKE', '%'. $request['search-order']. '%')
-        ->orwhere('id', 'LIKE', '%'. str_replace('HD0', '', $request['search-order']) . '%')
+        ->orwhere('code', 'LIKE', '%'. str_replace('HD0', '', $request['search-order']) . '%')
         ->paginate(8);
         return view('Admin.Orders.index', compact('orders'));
+    }
+    public function exportToExcel()
+    {
+        return Excel::download(new OrdersExport, 'Hoa_don.xlsx');
     }
 }

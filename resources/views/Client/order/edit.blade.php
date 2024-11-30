@@ -60,6 +60,23 @@
                         </thead>
                         <tbody>
                             @foreach ($order->OrderDetails as $detail)
+                            @if ($order->status == 'Đã giao hàng')
+                            <tr class="hover:bg-gray-100">
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->variant->product->code}}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    {{ $detail->variant->product->name }}
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">
+                                    <img src="{{asset($detail->variant->image)}}" alt="" width="100">
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ $detail->variant->color->name }}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ $detail->variant->size->name }}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->variant->price) }} ₫</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->quantity}}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center"><a href="{{route('sendRate',['variant_id'=>$detail->variant->id])}}" class="btn btn-danger">Đánh giá</a></td>
+                            </tr>
+                            @else
                             <tr class="hover:bg-gray-100">
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->variant->product->code}}</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -74,6 +91,7 @@
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->quantity}}</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
                             </tr>
+                            @endif
                             @endforeach
                         </tbody>
                     </table>
