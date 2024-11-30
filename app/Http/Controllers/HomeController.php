@@ -142,7 +142,7 @@ public function get30DaysOrderData(Request $request)
         ->selectRaw('SUM(order_details.quantity) as total_quantity')
         ->orderByDesc('total_quantity')
         ->get();
-
+    
         $topSellingProducts = DB::table('products')
         ->join('order_details', 'products.id', '=', 'order_details.product_id')  // Kết nối bảng products với order_details
         ->select('products.name', 'products.image', 'order_details.price', DB::raw('SUM(order_details.quantity) as total_sales'))

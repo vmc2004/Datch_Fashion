@@ -133,8 +133,13 @@
                         </div>
 
                         <div class="p-5 flex items-center justify-between">
-                                <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
-                                    href="/mua-hang/{{Auth::id()}}">Thanh toán</a></button>
+
+                            <?php
+                            $user_id = 1;
+                            ?>
+                            <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
+                                    href="/mua-hang/{{ Auth::id() }}">Thanh toán</a></button>
+
                         </div>
                         @endif
                     </div>

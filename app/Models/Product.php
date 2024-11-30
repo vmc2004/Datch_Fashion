@@ -59,8 +59,4 @@ class Product extends Model
     }
     public $timestamps = false;
     protected $dates = ['deleted_at'];
-    public function images()
-{
-    return $this->hasMany(ProductGallery::class);
-}
 }

@@ -17,7 +17,7 @@ use App\Http\Controllers\Client\UserController as ClientUserController;
 use App\Http\Controllers\Client\BlogController;
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Client\GoogleController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ContactController;
@@ -31,6 +31,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController as ControllersOrderController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,7 +43,10 @@ use App\Http\Controllers\OrderController as ControllersOrderController;
 |
 */
 
+
+
 Route::get('/orders/export', [ControllersOrderController::class, 'exportToExcel'])->name('orders.export');
+
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/filter-products', [ProductController::class, 'filterByCategory'])->name('products.filter');
@@ -55,7 +59,8 @@ Route::get('/product/{slug}', [ProductController::class, 'show']);
 Route::get('/feedback', [HomeController::class,'feedback']);
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
-Route::get('/sale', [SaleController::class, 'getSaleProducts'])->name('Client.sale.index');
+Route::get('/sale', [SaleController::class, 'index'])->name('Client.sale.index');
+Route::get('/sale/category/{category_id}', [SaleController::class, 'index'])->name('Client.sale.byCategory');
 
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
@@ -74,6 +79,9 @@ Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
 Route::get('/cua-hang/thuong-hieu/{id}', [StoreController::class,'getByBrand']);
 
+Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
+Route::get('/bai-viet', [BlogController::class, 'index'])->name('client.blog');
+Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.blog.show');
 
 Route::get('/lien-he', [ContactController::class, 'contact'])->name('Client.contact');
 Route::post('/lien-he', [ContactController::class, 'updateContact'])->name('Client.updateContact');
@@ -87,7 +95,13 @@ Route::get('/Client/account/register', [ClientUserController::class, 'register']
 Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
 Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
-Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile'])->middleware('auth');
+
+Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
+Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
+Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
+
+
+
 
 
 
@@ -109,6 +123,9 @@ Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordF
 // Xử lý form nhập mật khẩu mới
 Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 
+Route::get('google/login', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+
 //OTP
 Route::get('/otp/confirm', [AuthController::class, 'showOtpConfirmationForm'])->name('otp.confirm');
 Route::get('verify-otp', function () {
@@ -117,12 +134,12 @@ Route::get('verify-otp', function () {
 Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
 
 
-Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
-Route::get('/Client/bai-viet', [BlogController::class, 'index'])->name('client.blog');
+
+
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
-    'middleware' => ['auth', 'checkAdmin']
+    'middleware' => ['auth', 'role:admin']
 ], function(){
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
         //user
@@ -206,11 +223,11 @@ Route::group([
         
     });
 
-Route::get('/Client/home', [UserController::class, 'homeClient'])->name('Client.home');
 
-Route::get('/bai-viet', [BlogController::class, 'index'])->name('client.blog');
-Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.blog.show');
+
+
 Route::get('/Danh-gia/{variant_id}', [CommentController::class, 'form'])->name('rate.form');
 Route::get('/Danh-gia-cua-toi', [CommentController::class, 'listRate'])->name('rate.list');
+
 
 

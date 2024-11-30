@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('colors', function (Blueprint $table) {
-            $table->string('color_code', 7);
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('google_id')->nullable()->unique();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('colors', function (Blueprint $table) {
-            $table->dropColumn('color_code');
+        Schema::table('users', function (Blueprint $table) {
+            
         });
     }
 };
