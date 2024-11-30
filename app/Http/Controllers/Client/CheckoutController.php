@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Client;
 
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Commune;
+use App\Models\District;
+use App\Models\Province;
 use App\Models\CartDetail;
 use App\Models\OrderDetail;
 use Illuminate\Support\Str;
@@ -19,10 +22,14 @@ class CheckoutController extends Controller
 {
     public function checkout(Request $request ,$user_id)
     {
-    $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
-    return view('Client.checkout.show', [
-        'cartItems' => $cartItems,
-    ]);
+        $user = Auth::user();
+        $province = Province::all();
+        $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
+        return view('Client.checkout.show', [
+            'cartItems' => $cartItems,
+            'user'=> $user,
+            'province' => $province,
+        ]);
     }
     public function post_checkout(Request $request) {
         $request->validate([
@@ -209,6 +216,20 @@ class CheckoutController extends Controller
         return back()->withErrors(['message' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
     }
 }
+
+public function getDistricts($province_id)
+{
+    $districts = District::where('province_id', $province_id)->get();
+    return response()->json($districts);
+}
+
+// Lấy danh sách phường theo huyện
+public function getCommunes($district_id)
+{
+    $communes = Commune::where('district_id', $district_id)->get();
+    return response()->json($communes);
+}
+
 
     
     public function thankyou(){

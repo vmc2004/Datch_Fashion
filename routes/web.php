@@ -27,6 +27,8 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
 use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\Api\ProductController as ProductApiController;
+use App\Http\Controllers\HomeController as ControllersHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,8 @@ use App\Http\Controllers\Client\UserController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
+Route::post('/', [HomeController::class, 'fetchFavorites']);
+
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/filter-products', [ProductController::class, 'filterByCategory'])->name('products.filter');
 Route::get('/products/filter', [ProductController::class, 'getProducts']);
@@ -49,6 +53,7 @@ Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/account/orders', [OrderController::class,'index']);
 Route::get('/product/{slug}', [ProductController::class, 'show']);
+
 
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
@@ -67,9 +72,6 @@ Route::get('/thankyou', [CheckoutController::class, 'thankyou'])->name('thankyou
 Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 
-Route::get('/tai-khoan', function () {
-    return view('Client.account.profile');
-});
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
@@ -87,7 +89,7 @@ Route::get('/Client/account/register', [ClientUserController::class, 'register']
 Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
 Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
-Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
+Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile'])->middleware('auth');
 
 
 
