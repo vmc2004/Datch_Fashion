@@ -60,7 +60,7 @@ Route::get('/feedback', [HomeController::class,'feedback']);
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
 Route::get('/sale', [SaleController::class, 'index'])->name('Client.sale.index');
-
+Route::get('/sale/category/{category_id}', [SaleController::class, 'index'])->name('Client.sale.byCategory');
 
 Route::post('/gio-hang/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/gio-hang', [CartController::class, 'showCart'])->name('cart.show');
@@ -99,6 +99,7 @@ Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client
 Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
 Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
 Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
+
 
 
 
