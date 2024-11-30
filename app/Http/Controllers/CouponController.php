@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\SendCoupon;
 use App\Models\Coupon;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 class CouponController extends Controller
@@ -88,5 +89,37 @@ class CouponController extends Controller
         $email = User::query()->where('role' ,'member')->pluck('email');
         Mail::to($email)->send(new SendCoupon($coupon));
         return redirect()->back()->with('message', 'Email đã được gửi thành công!');
+    }
+    public function applyCoupon(Request $request)
+    {
+        // Lấy thông tin mã giảm giá và tổng tiền từ request
+        $couponCode = $request->input('coupon_code');
+        $cartTotal = $request->input('cart_total');
+
+        // Kiểm tra mã giảm giá
+        $coupon = \App\Models\Coupon::where('code', $couponCode)->first();
+
+        if (!$coupon) {
+            return response()->json(['error' => 'Mã giảm giá không hợp lệ'], 400);
+        }
+
+        // Kiểm tra điều kiện áp dụng
+        if ($coupon->min_order_value > $cartTotal) {
+            return response()->json(['error' => 'Giá trị đơn hàng không đủ để áp dụng mã giảm giá'], 400);
+        }
+
+        // Tính toán giảm giá
+        $discount = $coupon->type === 'percent' 
+            ? $cartTotal * ($coupon->value / 100) 
+            : $coupon->value;
+
+        $discount = min($discount, $coupon->max_discount); // Giới hạn giảm giá tối đa
+
+        $totalAfterDiscount = $cartTotal - $discount;
+
+        return response()->json([
+            'discount' => number_format($discount),
+            'total' => number_format($totalAfterDiscount)
+        ]);
     }
 }

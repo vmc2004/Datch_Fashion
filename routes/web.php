@@ -73,6 +73,7 @@ Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->nam
 Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('thankyou');
 Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
+Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply_coupon');
 
 
 
@@ -95,8 +96,7 @@ Route::get('/Client/account/register', [ClientUserController::class, 'register']
 Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
 Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
-
-Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
+Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile'])->middleware('auth');
 Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
 Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
 

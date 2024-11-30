@@ -89,7 +89,12 @@
 
                         <div class="mb-4">
                             <label class="block text-gray-700">Mã giảm giá</label>
-                            <input class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="Nhập mã giảm giá" type="text"/>
+                            <form id="applyCouponForm">
+                                <input type="text" name="coupon_code" placeholder="Nhập mã giảm giá">
+                                <button type="submit">Áp dụng</button>
+                            </form>
+                            <p id="discountInfo"></p>
+                            <p id="totalInfo"></p>
                         </div>
                         <div class="mb-4">
                             <div class="flex justify-between">
@@ -97,7 +102,7 @@
                                 <span>{{ number_format($subtotal) }} đ</span>
                             </div>
                             <div class="flex justify-between">
-                                <span>Vận chuyển</span>
+                                <span>Giảm giá</span>
                                 <span>0 đ</span>
                             </div>
                         </div>
@@ -131,6 +136,30 @@
             }
         });
     });
+    $('#applyCouponForm').on('submit', function (e) {
+        e.preventDefault();
+        const couponCode = $('input[name="coupon_code"]').val();
+        const cartTotal = {{ $subtotal }}; // Lấy tổng tiền từ backend
+
+        $.ajax({
+            url: "{{ route('apply_coupon') }}",
+            method: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                coupon_code: couponCode,
+                cart_total: cartTotal,
+            },
+            success: function (response) {
+                $('#discountInfo').text(`Giảm giá: ${response.discount} VNĐ`);
+                $('#totalInfo').text(`Tổng sau giảm giá: ${response.total} VNĐ`);
+            },
+            error: function (error) {
+                alert(error.responseJSON.error);
+            }
+        });
+    });
+
+
 </script>
 
 @endsection
