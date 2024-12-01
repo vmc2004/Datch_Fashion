@@ -75,5 +75,42 @@ class ProductController extends Controller
             'totalResults' => $totalResults,
         ]);
     }
-    
+    public function getProducts(Request $request)
+    {
+        // Lọc và lấy sản phẩm kèm theo variants
+        $products = Product::with('variants') // Eager load variants
+            ->when($request->min_price, function ($query) use ($request) {
+                return $query->whereHas('variants', function ($q) use ($request) {
+                    $q->where('price', '>=', $request->min_price); // Lọc theo giá tối thiểu
+                });
+            })
+            ->when($request->max_price, function ($query) use ($request) {
+                return $query->whereHas('variants', function ($q) use ($request) {
+                    $q->where('price', '<=', $request->max_price); // Lọc theo giá tối đa
+                });
+            })
+            ->get();
+
+        // Trả về sản phẩm dưới dạng JSON
+        return response()->json($products);
+    }
+
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class, 'product_id', 'id'); // Đảm bảo tên cột khóa ngoại đúng
+    }
+
+    public function filterByCategory(Request $request)
+    {
+        $categoryId = $request->input('category_id');
+        $products = Product::where('category_id', $categoryId)->with('variants')->get();
+
+        return response()->json($products);
+    }
+    public function index()
+    {
+        $categories = Category::all(); // Giả sử bạn có model Category cho bảng danh mục
+        return view('search_results', compact('categories'));
+    }
 }

@@ -14,19 +14,49 @@
         {{session()->get('message')}}
       </div>
       @endif
-            <div class="header">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                   <form action="{{route('orders.search')}}" method="GET">
-                    @csrf
-                    <input type="text" name="search-order" placeholder="Tìm kiếm đơn hàng...">
-                   </form>
+      <h2 class="text-center">Đơn hàng</h2>
+                <div class="header d-flex justify-content-between align-items-center py-3 px-4 border-bottom">
+                    <!-- Ô tìm kiếm -->
+                    <div class="search-box col-md-3">
+                        <form action="{{ route('orders.search') }}" method="GET" class="d-flex align-items-center">
+                            <i class="fas fa-search text-secondary me-2"></i>
+                            @csrf
+                            <input type="text" name="search-order" class="form-control" placeholder="Tìm kiếm đơn hàng...">
+                        </form>
+                    </div>
+                
+                    <!-- Form lọc danh mục -->
+                    <div class="col-md-8">
+                        <form action="{{ route('categories.filter') }}" method="GET" class="row g-3 align-items-center">
+                            <!-- Trạng thái -->
+                            <div class="col-md-5">
+                                <select class="form-select" name="is_active">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="1" {{ request('is_active') == '1' ? 'selected' : '' }}>Đã thanh toán</option>
+                                    <option value="0" {{ request('is_active') == '0' ? 'selected' : '' }}>Chưa thanh toán</option>
+                                </select>
+                            </div>
+                            <!-- Sắp xếp -->
+                            <div class="col-md-5">
+                                <select class="form-select" name="sort">
+                                    <option value="">Sắp xếp theo</option>
+                                    <option value="az">A-Z</option>
+                                    <option value="za">Z-A</option>
+                                </select>
+                            </div>
+                            <!-- Nút lọc -->
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <h1>Đơn hàng</h1>
-                <div>
+                
+                
+                
+                {{-- <div>
                   <a href="{{ route('orders.export') }}" class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</a>
-                </div>
-            </div>
+                </div> --}}
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-dark-subtle">
