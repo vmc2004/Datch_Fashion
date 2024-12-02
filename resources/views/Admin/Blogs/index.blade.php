@@ -1,7 +1,7 @@
 @extends('Admin.layout.app')
-@section('title', 'Màu sắc')
-@section('title-page', 'Màu sắc')
-@section('single-page', 'Danh sách màu sắc')
+@section('title', 'Bài viết')
+@section('title-page', 'Bài viết')
+@section('single-page', 'Danh sách bài viết')
 @section('content')
 
     <div class="row m-4 vh-90">
@@ -58,8 +58,8 @@
                                 </td>
                                 {{-- <td>{{ Str::limit($blog->content, 50) }}</td> --}}
                                 <td>{!! $blog->status
-                                    ? '<span class="badge text-bg-success">Hiển thị</span>'
-                                    : '<span class="badge text-bg-danger">Ẩn</span>' !!}</td>
+                                    ? '<span class="badge text-bg-success text-white">Hiển thị</span>'
+                                    : '<span class="badge text-bg-danger text-white">Ẩn</span>' !!}</td>
                                 {{-- <td>{{ $blog->status }}</td> --}}
                                 <td>{{ $blog->category->name}}</td>
                                 <td>{{ $blog->user->fullname}}</td>

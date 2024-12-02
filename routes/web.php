@@ -45,6 +45,10 @@ use App\Http\Controllers\OrderController as ControllersOrderController;
 
 
 
+Route::get('/api/districts/{provinceId}', [UserController::class, 'getDistricts'])->name('get.districts');
+Route::get('/api/communes/{districtId}', [UserController::class, 'getCommunes'])->name('get.communes');
+// Định nghĩa route cho việc lưu địa chỉ
+
 Route::get('/orders/export', [ControllersOrderController::class, 'exportToExcel'])->name('orders.export');
 
 Route::get('/', [HomeController::class, 'index'])->name('/');

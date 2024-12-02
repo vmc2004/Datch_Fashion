@@ -8,7 +8,7 @@
             <div class="card z-index-2 h-100">
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <div class="card mt-3">
-                        <h3 class="card-header">Thêm mới sản phẩm</h3>
+                        <h3 class="card-header text-center">Tạo mới sản phẩm</h3>
                     </div>
                     <div class="card-body p-3">
                         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">

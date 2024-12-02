@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController as ApiUserController;
-
+use App\Http\Controllers\Client\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +24,8 @@ use App\Http\Controllers\Api\UserController as ApiUserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+// routes/api.php
+Route::post('/save-address', [UserController::class, 'saveAdd'])->name('address.save');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

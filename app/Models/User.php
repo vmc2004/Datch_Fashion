@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use HasFactory;
     use Notifiable;
+    protected $guarded = [];
+
 
     protected $fillable = [
         'fullname',
@@ -61,4 +63,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Cart::class);
     }
+    
 }

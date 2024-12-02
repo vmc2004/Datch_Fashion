@@ -8,7 +8,7 @@
             <div class="card z-index-2 h-100">
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <div class="mb-4">
-                        <h2 class="text-center">Quản lý danh mục</h2>
+                        <h2 class="text-center">Danh sách danh mục</h2>
                     </div>
 
                     @if (session()->has('success'))

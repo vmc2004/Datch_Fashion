@@ -21,6 +21,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\SizeController;
 
+
+
+
 Route::prefix('admin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');

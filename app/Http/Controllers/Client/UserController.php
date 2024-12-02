@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Commune;
+use App\Models\District;
 use App\Models\Product;
+use App\Models\Province;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -96,12 +99,13 @@ public function showRegisterForm(Request $request)
 
 public function profile()
 {
-   
+    $getAddress = Province::all();
     $user = Auth::user();
 
    
     return view('Client.account.profile',[
-        'user' => $user
+        'user' => $user,
+        'getAddress'=> $getAddress,
     ]);
 }
 public function updateProfile(Request $request)
@@ -224,4 +228,45 @@ public function logout() {
     Auth::logout();
     return redirect()->route('Client.home')->with(['message' => 'Đăng xuất thành công', 'message_type' => 'success']);
 }
+public function getDistricts($provinceId)
+{
+    $districts = District::where('province_id', $provinceId)->get();
+    return response()->json($districts);
+}
+public function getCommunes($districtId)
+{
+    $communes = Commune::where('district_id', $districtId)->get();
+    return response()->json($communes);
+}
+public function saveAdd(Request $request) {
+    dd($request->all());
+    $user = Auth::user();
+
+    // Lấy thông tin từ request
+    $province_id = $request->province_id;
+    $district_id = $request->district_id;
+    $commune_id = $request->commune_id;
+    $address = $request->address;
+
+    $province = Province::find($province_id);
+    $district = District::find($district_id);
+    $commune = Commune::find($commune_id);
+
+    // Kiểm tra nếu các thông tin không tồn tại
+    if (!$province || !$district || !$commune) {
+        return response()->json(['error' => 'Thông tin địa chỉ không hợp lệ.'], 400);
+    }
+
+    // Cộng chuỗi địa chỉ
+    $fullAddress = $address . ', ' . $commune->name . ', ' . $district->name . ', ' . $province->name;
+
+    // Lưu thông tin vào bảng user
+    $userData= ['address'=>$fullAddress];
+    $user->update($userData);
+
+    // Trả về thông báo thành công
+    return response()->json(['success' => 'Địa chỉ đã được lưu thành công!']);
+}
+
+
 }

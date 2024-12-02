@@ -10,7 +10,51 @@
                     <div class="card mt-3">
                         <h3 class="card-header text-center">Danh sách sản phẩm</h3>
                     </div>
-                    <a href="{{ route('products.create') }}" class="btn btn-success mt-3"> <i class="fa-solid fa-plus me-2"></i>Thêm sản phẩm</a>
+                    <div class="container-fluid mt-4   ">
+                        <form action="{{ route('categories.search') }}" method="GET" class="row g-3">
+                            <div class="col-md-4">
+                                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tên sản phẩm"
+                                    value="{{ request('name') }}">
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary w-50">
+                                    <i class="fa-solid fa-magnifying-glass me-2"></i>Tìm kiếm
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Form lọc danh mục -->
+                    <div class="container-fluid d-flex align-items-center justify-content-between">
+                        <div class="flex-grow-1 me-3">
+                            <form action="{{ route('categories.filter') }}" method="GET" class="row g-3">
+                                <div class="col-md-5">
+                                    <select class="form-select" name="is_active">
+                                        <option value="">Tất cả trạng thái</option>
+                                        <option value="1" {{ request('is_active') == '1' ? 'selected' : '' }}>Hiển thị</option>
+                                        <option value="0" {{ request('is_active') == '0' ? 'selected' : '' }}>Đã ẩn</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <select class="form-select" name="sort">
+                                        <option value="">Sắp xếp theo</option>
+                                        <option value="az" {{ request('sort') == 'az' ? 'selected' : '' }}>A-Z</option>
+                                        <option value="za" {{ request('sort') == 'za' ? 'selected' : '' }}>Z-A</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Nút thêm mới -->
+                        <div>
+                            <a href="{{ route('products.create') }}" class="btn btn-success">
+                                <i class="fa-solid fa-plus me-2"></i>Tạo mới sản phẩm
+                            </a>
+                        </div>
+                    </div>
+                </div>
                     <div class="card-body p-3">
                         <div class="table-responsive">
                             <table class="table table-hover">
