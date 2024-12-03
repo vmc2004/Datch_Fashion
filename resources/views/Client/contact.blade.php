@@ -6,10 +6,14 @@
 @section('content')
 <hr>
 
+<div class="flex justify-center items-center mt-2">
+    <h1 class="text-center p-5 border shadow-xl rounded-lg text-2xl font-bold w-9/12">
+        Liên hệ
+    </h1>
+</div>
+
 <div class="max-w-screen-xl mx-auto ">
-    <div class="container flex mx-auto flex py-4">
          
-    </div>
 
 <div
             class="grid md:grid-cols-2 gap-16 items-center relative overflow-hidden p-8 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-3xl max-w-6xl mx-auto bg-white mt-4 font-[sans-serif] before:absolute before:right-0 before:w-[300px] before:bg-blue-400 before:h-full max-md:before:hidden">

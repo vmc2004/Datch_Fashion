@@ -180,18 +180,18 @@
                             <label class="md:w-40 text-right mr-8 py-2.5 pl-10 md:pl-0">Địa chỉ</label>
                             <div class="flex-1 mr-24">
                                 <div class="py-2.5 cursor-pointer">
-                                    @if($user->address != "")
+                                    {{-- @if($user->address != "") --}}
                                     <p class="mr-8">
                                         <input type="text" name="address"
                                                class="text-blue-900 border border-blue-900 w-10/12 h-9 rounded-3xl py-2.5 px-3.5 mr-4"
                                                placeholder="Nhập địa chỉ" value="{{ $user->address }}">
                                     </p>
-                                @else
+                                {{-- @else
                                     <span class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                                           onclick="toggleModal(true)">
                                         Thêm mới
                                     </span>
-                                @endif
+                                @endif --}}
                                 
                                 </div>
                             </div>

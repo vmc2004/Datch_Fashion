@@ -41,7 +41,7 @@
             <div class="mb-3">
                 <label for="image" class="form-label">Ảnh banner</label>
                 <input type="file" class="form-control" name="image">
-                <br><img src="{{ asset('/storage/' . $banner->image) }}" alt="{{$banner->image}}" width="100">
+                <br><img src="{{ asset($banner->image) }}" alt="{{$banner->image}}" width="100">
             </div>
 
             <div class="mb-3">

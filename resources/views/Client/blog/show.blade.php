@@ -1,25 +1,29 @@
 @extends('Client.layout.layout')
 
-@section('title', 'Bài viết')
+@section('title', 'Chi tiết bài viết')
 
 
 @section('content')
-    <div class="container flex mx-auto flex">
-        <div>
-            <ul class="flex container mx-auto pt-4 text-sm ">
+<div class="max-w-screen-xl mx-auto ">
+        
+    <div class="container mx-auto ">
+        <div class="mb-5">
+            <ul class="flex container mx-auto py-2">
                 <li>
-                    <a class="hover:underline cursor-pointer" href="/">
-                        Datch Fashion
-                    </a>
+                    <a class="hover:underline hover:text-red-700 cursor-pointer" href="/">Datch Fashion</a>
                 </li>
                 <li>
-                    <span class="mx-4">&gt;</span>
-                    <a class="hover:underline cursor-pointer" href="{{ route('client.blog') }}">Bài viết</a>
+                    <span class="mx-3">&gt;</span>
+                    <a class="hover:underline hover:text-red-700 cursor-pointer" href="/bai-viet">Bài Viết</a>
+                </li>
+                <li>
+                    <span class="mx-3">&gt;</span>
+                    <a class="hover:underline hover:text-red-700 cursor-pointer" href="">{{ $blog->title }}</a>
                 </li>
             </ul>
         </div>
     </div>
-    <hr>
+</div>
     <div class="mt-[28px] mx-auto w-[1400px]">
         <!-- Phần content top -->
         <div class="grid grid-cols-[1fr_4fr_1fr] ">

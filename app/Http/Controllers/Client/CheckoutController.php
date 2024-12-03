@@ -189,7 +189,6 @@ class CheckoutController extends Controller
                 $inputData['vnp_BankCode'] = $vnp_BankCode;
             }
     
-            // Sắp xếp dữ liệu và tạo chuỗi hash
             ksort($inputData);
             $query = "";
             $i = 0;
@@ -204,14 +203,12 @@ class CheckoutController extends Controller
                 $query .= urlencode($key) . "=" . urlencode($value) . '&';
             }
     
-            // Tạo URL với các tham số đã mã hóa
             $vnp_Url = $vnp_Url . "?" . $query;
             if (isset($vnp_HashSecret)) {
                 $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                 $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
             }
         
-            // Chuyển hướng đến VNPAY
             return redirect()->away($vnp_Url);
         } catch (\Exception $e) {
             return back()->withErrors(['message' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
@@ -222,36 +219,28 @@ class CheckoutController extends Controller
     
     public function thankyou($order)
     {
-        // Lấy đơn hàng cùng với chi tiết và sản phẩm liên quan
         $order = Order::where('code', $order)
-            ->with('orderDetails.productVariant') // Load quan hệ orderDetails và productVariant
+            ->with('orderDetails.productVariant')
             ->first();
     
         if ($order) {
-            // Trừ số lượng sản phẩm trong kho
             foreach ($order->orderDetails as $detail) {
-                $variant = $detail->productVariant; // Lấy thông tin ProductVariant
+                $variant = $detail->productVariant; 
                 if ($variant) {
                     if ($variant->quantity >= $detail->quantity) {
-                        $variant->quantity -= $detail->quantity; // Trừ số lượng
-                        $variant->save(); // Lưu thay đổi
+                        $variant->quantity -= $detail->quantity; 
+                        $variant->save(); 
                     } else {
-                        return redirect()->route('home')->withErrors([
+                        return redirect()->route('Client.home')->withErrors([
                             'message' => 'Sản phẩm ' . $variant->name . ' không đủ số lượng tồn kho.'
                         ]);
                     }
                 }
             }
-    
-            // Gửi email xác nhận đơn hàng
             Mail::to($order->email)->send(new OrderSuccessMail($order));
-    
-            // Trả về view xác nhận
             return view('Client.checkout.done', compact('order'));
         }
-    
-        // Trường hợp đơn hàng không tồn tại
-        return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
+        return redirect()->route('Client.home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
     }
     
 

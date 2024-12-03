@@ -19,20 +19,52 @@
                             {{ session()->get('success') }}
                         </div>
                     @endif
-                    <div class="header">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <form action="" method="GET">
-                                @csrf
-                                <input type="text" name="search-order" placeholder="">
-                            </form>
-                        </div>
-                        <h1>Bài viết</h1>
-                        <div>
-                            <button class="btn btn-custom btn-success"><a href="{{ route('blogs.create') }}"
-                                    class=" text-white"><i class="fas fa-plus "></i>Thêm mới</a></button>
-                        </div>
-                    </div>
+                        <h2 class="text-center">Danh sách bài viết</h2>
+                                      <!-- Form tìm kiếm -->
+                                      <div class="container-fluid mb-3 mt-4   ">
+                                        <form action="{{ route('categories.search') }}" method="GET" class="row g-3">
+                                            <div class="col-md-9">
+                                                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tiêu đề bài viết"
+                                                    value="{{ request('name') }}">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="submit" class="btn btn-primary w-50">
+                                                    <i class="fa-solid fa-magnifying-glass me-2"></i>Tìm kiếm
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                
+                                    <!-- Form lọc danh mục -->
+                                    <div class="container-fluid d-flex align-items-center justify-content-between">
+                                        <div class="flex-grow-1 me-3">
+                                            <form action="{{ route('categories.filter') }}" method="GET" class="row g-3">
+                                                <div class="col-md-5">
+                                                    <select class="form-select" name="is_active">
+                                                        <option value="">Tất cả trạng thái</option>
+                                                        <option value="1" {{ request('is_active') == '1' ? 'selected' : '' }}>Hiển thị</option>
+                                                        <option value="0" {{ request('is_active') == '0' ? 'selected' : '' }}>Đã ẩn</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <select class="form-select" name="sort">
+                                                        <option value="">Sắp xếp theo</option>
+                                                        <option value="az" {{ request('sort') == 'az' ? 'selected' : '' }}>A-Z</option>
+                                                        <option value="za" {{ request('sort') == 'za' ? 'selected' : '' }}>Z-A</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- Nút thêm mới -->
+                                        <div>
+                                            <a href="{{ route('blogs.create') }}" class="btn btn-success">
+                                                <i class="fa-solid fa-plus me-2"></i>Tạo bài viết
+                                            </a>
+                                        </div>
+                                    </div>
                     <table class="table">
                         <thead>
                             <tr>
