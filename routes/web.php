@@ -46,7 +46,6 @@ use App\Http\Controllers\OrderController as ControllersOrderController;
 
 
 
-Route::get('/orders/export', [ControllersOrderController::class, 'exportToExcel'])->name('orders.export');
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
