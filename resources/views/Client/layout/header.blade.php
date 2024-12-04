@@ -5,15 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  
   <link rel="shortcut icon" href="{{asset('assets/admin/img/logoDatch.png')}}" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{{asset('assets/clinet/css/styles.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <title>@yield('title') - Datch</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{asset('assets/client/css/styles.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/client//assets/css/styles.css')}}">
   <link rel="stylesheet" href="{{asset('assets/client/assets/css/styles-be.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
@@ -29,6 +29,8 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   <style>
     .border-blue-500 {
       border-color: #3B82F6;
@@ -41,76 +43,7 @@
       opacity: 0.8;
       /* Hiệu ứng khi di chuột */
     }
-    .color-option:hover,
-    .size-option:hover {
-      cursor: pointer;
-      opacity: 0.8;
-      /* Hiệu ứng khi di chuột */
-    }
 
-    .bird-container {
-      width: 100%;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 9999;
-      pointer-events: none;
-    }
-
-    #suggestions {
-      position: absolute;
-      /* Đặt vị trí tuyệt đối */
-      top: 100%;
-      /* Để nó nằm ngay dưới ô tìm kiếm */
-      left: 0;
-      width: 100%;
-      /* Đảm bảo độ rộng bằng với ô tìm kiếm */
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      max-height: 200px;
-      /* Giới hạn chiều cao */
-      overflow-y: auto;
-      /* Cuộn khi có quá nhiều kết quả */
-      z-index: 21;
-      /* Đảm bảo nó nằm trên các phần tử khác */
-    }
-
-    .menucha {
-      z-index: 21;
-    }
-
-    #loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    /* Logo animation */
-    #loading-logo {
-      width: 100px;
-      animation: rotate 2s linear infinite;
-    }
-
-    /* Rotate animation */
-    @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
     .bird-container {
       width: 100%;
       position: fixed;
@@ -197,52 +130,6 @@
 
             
 
-  <div class="max-w-screen-xl mx-auto ">
-    <div class="header">
-      <nav class="flex items-center justify-between">
-        <div class="flex items-center space-x-8">
-          <div class="">
-            <a href="/">
-              <img src="{{asset('assets/admin/img/Datch.png')}}" alt="" width="50px" class="mb-1">
-            </a>
-          </div>
-          <a href="/" class="text-gray-800 font-semibold">Trang chủ</a>
-          <div class="relative group">
-            <!-- Liên kết "Danh mục sản phẩm" -->
-            <a href="/cua-hang" class="text-gray-800 font-semibold">
-                Danh mục sản phẩm
-            </a>
-
-            
-
-            <!-- Dropdown menu -->
-            <div class="dropdown-menu hidden absolute bg-white shadow-lg rounded-lg left-0  w-[400px] group-hover:block z-50"
-                id="menu-container" onmouseenter="showDropdownMenu()" onmouseleave="hideDropdownMenu()">
-                <div class="flex">
-                    <!-- Lề bên trái - Danh mục chính -->
-                    <ul class="py-2 w-1/4 text-sm text-gray-700 border-r border-gray-300">
-                        @foreach ($categories as $cat)
-                            <li class="hover:bg-gray-100 relative"
-                                onmouseenter="showSubcategories({{ $cat->id }}, '{{ $cat->name }}')">
-                                <a href="/cua-hang/danh-muc/{{ $cat->id }}"
-                                    class="font-bold block px-4 py-2">
-                                    @if ($cat->parent_id == 0)
-                                        {{ $cat->name }}
-                                    @endif
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <!-- Lề bên phải - Danh mục con -->
-                    <ul id="subcategory-list" class="py-2 w-3/4">
-                        <!-- Các danh mục con sẽ được hiển thị tại đây -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-      
-                    <a href="/sale" class="text-gray-800 font-semibold">Sale</a>
-                    <a href="/bai-viet" class="text-gray-800 font-semibold">Tin hot</a>
             <!-- Dropdown menu -->
             <div class="dropdown-menu hidden absolute bg-white shadow-lg rounded-lg left-0  w-[400px] group-hover:block z-50"
                 id="menu-container" onmouseenter="showDropdownMenu()" onmouseleave="hideDropdownMenu()">
@@ -275,16 +162,10 @@
                 </div>
                 <div class="flex items-center space-x-4">
                   <form action="{{ route('search') }}" method="GET">
-                  <form action="{{ route('search') }}" method="GET">
                     <div class="relative">
                       <input type="text" placeholder="Tìm kiếm" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300" id="search-box" name="query" autocomplete="off">
                       <button type="submit">
-                      <input type="text" placeholder="Tìm kiếm" class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300" id="search-box" name="query" autocomplete="off">
-                      <button type="submit">
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                      </button>
-                      <!-- Gợi ý hiển thị dưới ô tìm kiếm -->
-                      <div id="suggestions" class="absolute bg-white border border-gray-200 rounded-lg mt-1 w-full max-h-60 overflow-y-auto z-10 hidden"></div>
                       </button>
                       <!-- Gợi ý hiển thị dưới ô tìm kiếm -->
                       <div id="suggestions" class="absolute bg-white border border-gray-200 rounded-lg mt-1 w-full max-h-60 overflow-y-auto z-10 hidden"></div>
@@ -298,9 +179,9 @@
                       <img src="{{ Auth::user()->avatar ? asset('uploads/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User"  class="rounded-full w-8 h-8 mr-2" >
                       <span class="text-sm">{{ Auth::user()->fullname }}</span>
                     </a>
-        
+                    
                     <!-- Dropdown Menu -->
-                    {{-- <div class="menu absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-20 opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300">
+                    <div class="menu absolute left-0  w-48 bg-white shadow-lg rounded-lg z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:block hidden">
                       <ul class="py-2">
                         <li><a href="/tai-khoan" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="user-circle" class="overflow-hidden svg-vertical inline-block w-[14px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
@@ -314,13 +195,17 @@
                         </svg>
                           Yêu thích</a>
                         </li>
+                        <li><a href="/account/points" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                          <i class="fa-solid fa-hand-holding-medical"></i>
+                          Tích điểm</a>
+                        </li>
                         <li><a href="/account/orders" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="shopping-cart" class="overflow-hidden svg-vertical inline-block w-[15.75px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M551.991 64H129.28l-8.329-44.423C118.822 8.226 108.911 0 97.362 0H12C5.373 0 0 5.373 0 12v8c0 6.627 5.373 12 12 12h78.72l69.927 372.946C150.305 416.314 144 431.42 144 448c0 35.346 28.654 64 64 64s64-28.654 64-64a63.681 63.681 0 0 0-8.583-32h145.167a63.681 63.681 0 0 0-8.583 32c0 35.346 28.654 64 64 64 35.346 0 64-28.654 64-64 0-17.993-7.435-34.24-19.388-45.868C506.022 391.891 496.76 384 485.328 384H189.28l-12-64h331.381c11.368 0 21.177-7.976 23.496-19.105l43.331-208C578.592 77.991 567.215 64 551.991 64zM240 448c0 17.645-14.355 32-32 32s-32-14.355-32-32 14.355-32 32-32 32 14.355 32 32zm224 32c-17.645 0-32-14.355-32-32s14.355-32 32-32 32 14.355 32 32-14.355 32-32 32zm38.156-192H171.28l-36-192h406.876l-40 192z"></path>
                         </svg>
                           Đơn mua</a>
                         </li>
-                        <li><a href="/account/reviews" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                        <li><a href="Danh-gia-cua-toi" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="star" class="w-[15px] h-[14px] overflow-hidden svg-vertical inline-block mr-2.5" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM405.8 317.9l27.8 162L288 403.5 142.5 480l27.8-162L52.5 203.1l162.7-23.6L288 32l72.8 147.5 162.7 23.6-117.7 114.8z"></path>
                         </svg>
@@ -346,7 +231,7 @@
                           Đăng xuất</a>
                         </li>
                       </ul>
-                    </div> --}}
+                    </div>
                   </div>
                   @else
                   <a href="{{ route('Client.account.login') }}" class="flex flex-col items-center text-gray-800">
@@ -358,33 +243,15 @@
         
         
                   <a href="/gio-hang" class="flex flex-col items-center text-gray-800 relative">
-                    <i class="fas fa-shopping-bag fa-xl"></i>
-                    <span class="absolute bottom-1 left-3 bg-red-600 text-white text-xs rounded-full px-1"> {{$totalCart}} </span>
+                    <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="shopping-cart" class="overflow-hidden svg-vertical inline-block w-[22.5px] h-[20px] text-[20px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                        <path fill="currentColor" d="M551.991 64H129.28l-8.329-44.423C118.822 8.226 108.911 0 97.362 0H12C5.373 0 0 5.373 0 12v8c0 6.627 5.373 12 12 12h78.72l69.927 372.946C150.305 416.314 144 431.42 144 448c0 35.346 28.654 64 64 64s64-28.654 64-64a63.681 63.681 0 0 0-8.583-32h145.167a63.681 63.681 0 0 0-8.583 32c0 35.346 28.654 64 64 64 35.346 0 64-28.654 64-64 0-17.993-7.435-34.24-19.388-45.868C506.022 391.891 496.76 384 485.328 384H189.28l-12-64h331.381c11.368 0 21.177-7.976 23.496-19.105l43.331-208C578.592 77.991 567.215 64 551.991 64zM240 448c0 17.645-14.355 32-32 32s-32-14.355-32-32 14.355-32 32-32 32 14.355 32 32zm224 32c-17.645 0-32-14.355-32-32s14.355-32 32-32 32 14.355 32 32-14.355 32-32 32zm38.156-192H171.28l-36-192h406.876l-40 192z"></path>
+                    </svg>
+                    <span class="absolute bottom-3 left-3 bg-red-600 text-white text-xs rounded-full px-1"> {{$totalCart}} </span>
                   </a>
                 </div>
               </nav>
             </div>
             </nav>
-
-  <!-- Loading overlay -->
-  <div id="loading-overlay">
-    <img src="{{asset('assets/admin/img/logDatch.png')}}" alt="" width="300px" id="loading-logo">
-  </div>
-
-  <!-- Nội dung trang web -->
-  <div id="content" style="display:none;">
-    <!-- Nội dung chính của trang -->
-  </div>
-
-  <script>
-    // Script để ẩn overlay sau khi trang tải xong
-    window.addEventListener("load", function() {
-      document.getElementById("loading-overlay").style.display = "none";
-      document.getElementById("content").style.display = "block";
-    });
-  </script>
-  
-
 
   <!-- Loading overlay -->
   <div id="loading-overlay">
@@ -463,70 +330,9 @@
       });
     });
     document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
-        
-
-
-
-   
-
-
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#search-box').on('keyup', function() {
-        let query = $(this).val();
-
-        if (query.length > 1) {
-          $.ajax({
-            url: "{{ route('autocomplete') }}", // Đảm bảo đây là đường dẫn đúng tới API autocompletion
-            type: "GET",
-            data: {
-              query: query
-            },
-            success: function(data) {
-              let suggestions = $('#suggestions');
-              suggestions.empty().show();
-
-              if (data.length > 0) {
-                data.forEach(function(product) {
-                  // Làm nổi bật từ khóa trong tên sản phẩm
-                  let highlightedName = product.name.replace(
-                    new RegExp(query, "gi"),
-                    (match) => `<strong>${match}</strong>`
-                  );
-
-                  // Sử dụng slug thay vì id để tạo đường dẫn
-                  suggestions.append(`
-                  <div style="padding: 10px; border-bottom: 1px solid #eee;">
-                    <a href="/product/${product.slug}" class="flex items-center">
-                      <img src="${product.image}" alt="${product.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
-                      <div>
-                        <div class="search-price">${highlightedName}</div>
-                        <div style="color:#d70018">${product.price}đ</div>
-                      </div>
-                    </a>
-                  </div>
-                `);
-                });
-              } else {
-                suggestions.append('<div style="padding: 10px;">Không tìm thấy sản phẩm</div>');
-              }
-            }
-          });
-        } else {
-          $('#suggestions').hide();
-        }
-      });
-    });
-    document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
 
 document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
-document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
 
-function showDropdownMenu() {
-    document.getElementById('menu-container').classList.remove('hidden');
-}
 function showDropdownMenu() {
     document.getElementById('menu-container').classList.remove('hidden');
 }
@@ -534,14 +340,7 @@ function showDropdownMenu() {
 function hideDropdownMenu() {
     document.getElementById('menu-container').classList.add('hidden');
 }
-function hideDropdownMenu() {
-    document.getElementById('menu-container').classList.add('hidden');
-}
 
-// Hiển thị danh mục con khi di chuột vào danh mục cha
-function showSubcategories(categoryId, categoryName) {
-    const subcategoryList = document.getElementById('subcategory-list');
-    subcategoryList.innerHTML = '';
 // Hiển thị danh mục con khi di chuột vào danh mục cha
 function showSubcategories(categoryId, categoryName) {
     const subcategoryList = document.getElementById('subcategory-list');
@@ -552,32 +351,7 @@ function showSubcategories(categoryId, categoryName) {
     parentCategoryItem.className = 'font-bold px-4 py-2 text-gray-700';
     parentCategoryItem.textContent = categoryName;
     subcategoryList.appendChild(parentCategoryItem);
-    // Tạo tiêu đề danh mục cha
-    const parentCategoryItem = document.createElement('li');    
-    parentCategoryItem.className = 'font-bold px-4 py-2 text-gray-700';
-    parentCategoryItem.textContent = categoryName;
-    subcategoryList.appendChild(parentCategoryItem);
 
-    // Lấy danh sách danh mục con
-    const categories = @json($categories);
-    const parentCategory = categories.find(cat => cat.id === categoryId);
-    if (parentCategory && parentCategory.sub) {
-        parentCategory.sub.forEach(subcat => {
-            const li = document.createElement('li');
-            li.className = 'hover:bg-gray-100';
-            
-            const a = document.createElement('a');
-            a.href = `/cua-hang/danh-muc/${subcat.id}`;
-            a.className = 'block px-4 py-2 text-gray-700';
-            a.textContent = subcat.name;
-            
-            li.appendChild(a);
-            subcategoryList.appendChild(li);
-        });
-    }
-}
-
-  </script>
     // Lấy danh sách danh mục con
     const categories = @json($categories);
     const parentCategory = categories.find(cat => cat.id === categoryId);

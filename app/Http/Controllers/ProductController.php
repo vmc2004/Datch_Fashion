@@ -66,13 +66,12 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
         ]);
 
-        return redirect()->route('products.index')->with('message', 'Thêm sản phẩm thành công');
+        return redirect()->route('products.index')->with('success', 'Thêm sản phẩm thành công');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Product $product, $id) {}
     public function show(Product $product, $id) {}
 
     /**
@@ -97,6 +96,7 @@ class ProductController extends Controller
             'code' => 'required|string|max:9|unique:products,code,' . $id,
             'name' => 'required|string|max:199',
             'image' => 'nullable|image|max:2048',
+            'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'material' => 'nullable|string',
             'status' => 'required|boolean',
@@ -118,7 +118,7 @@ class ProductController extends Controller
             }
         
             // Lưu ảnh mới vào thư mục uploads/products trong thư mục public
-            $imagePath = Storage::put('uploads/products', $request->file('image'));
+            $imagePath = $request->file('image')->move(public_path('uploads/products'), $request->file('image')->getClientOriginalName());
 
            
         }
@@ -138,7 +138,7 @@ class ProductController extends Controller
             'brand_id' => $request->brand_id,
         ]);
 
-        return redirect()->route('products.index')->with('message', 'Cập nhật sản phẩm thành công');
+        return redirect()->route('products.index')->with('success', 'Product added successfully');
     }
 
     /**

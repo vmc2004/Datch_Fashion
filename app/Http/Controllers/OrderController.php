@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use Carbon\Carbon;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session as FacadesSession;
@@ -17,12 +18,50 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        
-        $orders = Order::orderBy('id', 'desc')->paginate(8);
-        return view('Admin.Orders.index', compact('orders'));
-    }
+    
+
+public function index(Request $request)
+{
+    $search_order = $request->get('search-order');
+    $payment_status = $request->get('payment_status');
+    $status = $request->get('status');
+    $date_filter = $request->get('date_filter'); 
+    $orders = Order::query()
+        ->when($status, function($query) use ($status) {
+            return $query->where('status', $status);
+        })
+        ->when($payment_status, function($query) use ($payment_status) {
+            return $query->where('payment_status', $payment_status);
+        })
+        ->when($search_order, function($query) use ($search_order){
+            return $query->where('phone', 'LIKE', '%'. $search_order. '%')
+                         ->orWhere('code', 'LIKE', '%'.$search_order . '%');
+        })
+        ->when($date_filter, function($query) use ($date_filter) {
+            switch ($date_filter) {
+                case 'today':
+                    return $query->whereDate('created_at', Carbon::today());
+                case 'yesterday':
+                    return $query->whereDate('created_at', Carbon::yesterday());
+                case 'this_week':
+                    return $query->whereBetween('created_at', [
+                        Carbon::now()->startOfWeek(),
+                        Carbon::now()->endOfWeek(),
+                    ]);
+                case 'this_month':
+                    return $query->whereMonth('created_at', Carbon::now()->month)
+                                 ->whereYear('created_at', Carbon::now()->year);
+                default:
+                    return $query;
+            }
+        })
+        ->orderBy('id', 'desc')
+        ->paginate(8);
+
+    return view('Admin.Orders.index', compact('orders'));
+}
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -110,12 +149,6 @@ class OrderController extends Controller
     {
         $product = Product::findOrFail($id);
         return response()->json($product);
-    }
-    public function search_order(Request $request){
-        $orders = Order::where('phone', 'LIKE', '%'. $request['search-order']. '%')
-        ->orwhere('code', 'LIKE', '%'. str_replace('HD0', '', $request['search-order']) . '%')
-        ->paginate(8);
-        return view('Admin.Orders.index', compact('orders'));
     }
     public function exportToExcel()
     {

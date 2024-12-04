@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Commune;
+use App\Models\District;
 use App\Models\Product;
+use App\Models\Province;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -20,11 +24,12 @@ class UserController extends Controller
     public function homeClient()
     {
         // Lấy danh sách danh mục từ cơ sở dữ liệu
+        $banners = Banner::where('is_active', 1)->where('location', 1)->get();
         $brands = Brand::query()->limit(5)->get();
         $category = Category::query()->limit(5)->get();
         $newPro = Product::query()->latest('id')->limit(5)->get();
         $Proview = Product::query()->orderBy('views', 'desc')->limit(5)->get();
-        return view('Client.home', compact('category', 'newPro','brands', 'Proview'));
+        return view('Client.home', compact('category', 'newPro','brands', 'Proview', 'banners'));
     }
     public function login() {
         return view('Client.account.login');
@@ -45,13 +50,20 @@ class UserController extends Controller
     if ($user && password_verify($request->password, $user->password)) {
       
         Auth::login($user);
+        
 
-       
-        return redirect()->route('Client.home')->with(['message' => 'Đăng nhập thành công',
-        'message_type' => 'success']); 
+        if ($user->role === 'member') {
+            return redirect()->route('Client.home')->with([
+                'message' => 'Đăng nhập thành công với quyền Member',
+                'message_type' => 'success',
+            ]);
+        }
+        return back()->withErrors([
+            'role' => 'Bạn không có quyền truy cập vào hệ thống.',
+        ]);
     }
 
-  
+    // Trả về lỗi nếu đăng nhập thất bại
     return back()->withErrors([
         'email' => 'Thông tin đăng nhập không khớp với hồ sơ của chúng tôi.',
     ]);
@@ -86,19 +98,15 @@ public function showRegisterForm(Request $request)
 
 public function profile()
 {
-   
     $user = Auth::user();
 
    
     return view('Client.account.profile',[
-        'user' => $user
+        'user' => $user,
     ]);
 }
 public function updateProfile(Request $request)
 {
-    // $da = $request->all();
-    // dd($da);
-    // Validate dữ liệu từ request
     $data = $request->validate([
         'fullname' => 'required|max:200',
         'gender' => 'required',
@@ -162,51 +170,6 @@ public function updateProfile(Request $request)
     return redirect()->back()->with('success', 'Cập nhật hồ sơ shop thành công!');
 }
 
-// public function updateProfile(Request $request,  User $user)
-// {
-//     $request->validate([
-//         'fullname' => 'required|string|max:255',
-//         'gender' => 'required|string',
-//         'birthday' => 'required|date',
-//         'language' => 'required|string',
-//         'address' => 'nullable|string|max:255',
-//         'introduction' => 'nullable|string',
-//     ]);
-
-//     $user = auth()->user();
-//     $user->fullname = $request->input('fullname');
-//     $user->gender = $request->input('gender');
-//     $user->birthday = $request->input('birthday');
-//     $user->language = $request->input('language');
-//     $user->address = $request->input('address');
-//     $user->introduction = $request->input('introduction');
-//     // Cập nhật avatar nếu có
-//     $data = $request->except('avatar');
-//     if ($request->hasFile('avatar')) {
-//         $oldAvatar = $user->avatar;
-//         // Kiểm tra và xóa avatar cũ
-//         if ($oldAvatar && Storage::disk('public')->exists($oldAvatar)) {
-//             Storage::disk('public')->delete($oldAvatar);
-//         }
-//         // Lưu ảnh mới
-//         $user->avatar = $request->file('avatar')->store('uploads/users', 'public');
-//     }
-    
-//     $user->save();
-
-//     return response()->json([
-//         'success' => true,
-//         'user' => [
-//             'fullname' => $user->fullname,
-//             'gender' => $user->gender,
-//             'birthday' => $user->birthday,
-//             'language' => $user->language,
-//             'address' => $user->address,
-//             'introduction' => $user->introduction,
-//            'avatar_url' => $user->avatar ? asset('storage/' . $user->avatar) . '?' . time() : null,  // Đường dẫn ảnh mới
-//         ]
-//     ]);
-// }
 
 
 

@@ -3,6 +3,101 @@
 @section('title', "Hồ sơ của tôi")
 
 @section('content')
+<style>
+            .suggestions {
+            position: absolute;
+            background: #1a1d24;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+           
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            margin-top: 3px;
+            border: 1px solid #3f4451;
+        }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: white;
+            border-bottom: 1px solid #3f4451;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: #292e3a;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:before {
+            content: "📍";
+            margin-right: 10px;
+            font-size: 1.1em;
+            transition: transform 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background: #3a4150;
+            color: #ffffff;
+            padding-left: 24px;
+        }
+
+        .suggestion-item:hover:before {
+            transform: scale(1.2);
+        }
+
+        .suggestion-item:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .suggestion-item:hover:after {
+            transform: scaleY(1);
+        }
+
+        .address-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        /* Tùy chỉnh thanh cuộn */
+        .suggestions::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .suggestions::-webkit-scrollbar-track {
+            background: #1a1d24;
+            border-radius: 8px;
+        }
+
+        .suggestions::-webkit-scrollbar-thumb {
+            background: #3f4451;
+            border-radius: 8px;
+        }
+
+        .suggestions::-webkit-scrollbar-thumb:hover {
+            background: #4f5565;
+        }
+
+        #phone {
+            filter: blur(5px)
+        }
+
+</style>
 <div class="max-w-screen-xl mx-auto ">
 
     <div class="mt-12 md:grid grid-cols-5 gap-8">
@@ -146,16 +241,6 @@
                                     <input type="text"  name="email"
                                     class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4"
                                     placeholder="Nhập họ và tên" value="{{ $user->email }}">
-                                    {{-- <span class="text-green-300">
-                                        <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="check"
-                                            class="overflow-visible w-3.5 inline-block" role="img"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                            <path fill="currentColor"
-                                                d="M413.505 91.951L133.49 371.966l-98.995-98.995c-4.686-4.686-12.284-4.686-16.971 0L6.211 284.284c-4.686 4.686-4.686 12.284 0 16.971l118.794 118.794c4.686 4.686 12.284 4.686 16.971 0l299.813-299.813c4.686-4.686 4.686-12.284 0-16.971l-11.314-11.314c-4.686-4.686-12.284-4.686-16.97 0z">
-                                            </path>
-                                        </svg>
-                                        Đã xác minh
-                                    </span> --}}
                                 </p>
                                 @error('email')
                                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -169,30 +254,28 @@
                                 <input type="text"  name="phone"
                                 class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4"
                                 placeholder="Nhập số điện thoại" value="{{ $user->phone }}">
-                                {{-- <span class="cursor-pointer text-blue-900 hover:underline">{{ $user->phone }}</span> --}}
                                 </p>
                             </div>
                             @error('phone')
                                 <div class="text-red-500 text-sm mt-1 ">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="flex mb-8">
-                            <label class="md:w-40 text-right mr-8 py-2.5 pl-10 md:pl-0">Địa chỉ</label>
-                            <div class="flex-1 mr-24">
-                                <div class="py-2.5 cursor-pointer">
-                                    <p class="mr-8">
-                                        <input type="text"  name="address"
-                                        class="text-blue-900 border border-blue-900 w-10/12 h-9 rounded-3xl py-2.5 px-3.5 mr-4"
-                                        placeholder="Nhập địa chỉ" value="{{ $user->address }}">
-                                        {{-- <span class="cursor-pointer text-blue-900 hover:underline">{{ $user->phone }}</span> --}}
-                                        </p>
-                                </div>
-                            </div>
+                        <div class="flex space-x-4 mb-8 ">
+                            <label class="block w-40 text-right mr-5" for="address">
+                                Địa chỉ
+                            </label>
+                           <div class="w-8/12">
+                            <input type="text" id="address" name="address" class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4" required placeholder="Nhập địa chỉ của bạn"
+                            autocomplete="off" value="{{$user->address}}">   
+                            <div id="ok" class="ok block"></div>
+                           </div>
                         </div>
+                        </div>
+                       
                         
                        
                         <div class="text-center">
-                            <button type="submit" class="text-white bg-red-700 rounded-full py-2 px-8">Lưu thay
+                            <button type="submit" class="text-white bg-red-700 rounded-full py-2 px-8 mb-2">Lưu thay
                                 đổi</button>
                         </div>
                     </div>
@@ -201,6 +284,8 @@
         </div>
     </div>
 </div>
+
+
 <script>
         document.addEventListener('DOMContentLoaded', function() {
             flatpickr("#birthday", {
@@ -234,6 +319,75 @@
                 reader.readAsDataURL(file);
             }
         });
-</script>
+       
+      
 
+</script>
+<script>
+    const apiKey = '0ChWSfCbLYvwL5nNJke0tHln2QewXBUBTcpMnZdK'; 
+    const addressInput = document.getElementById('address');
+    const suggestionsContainer = document.getElementById('ok');
+    const cityInput = document.getElementById('city');
+    const districtInput = document.getElementById('district');
+    const wardInput = document.getElementById('ward');
+    let sessionToken = crypto.randomUUID();
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    const debouncedSearch = debounce((query) => {
+        if (query.length < 2) {
+            suggestionsContainer.style.display = 'none';
+            return;
+        }
+
+        // đây là demo, các bạn nên dùng API từ backend để tăng bảo mật, có thể thêm cache và rate limit
+        fetch(`https://rsapi.goong.io/Place/AutoComplete?api_key=${apiKey}&input=${encodeURIComponent(query)}&sessiontoken=${sessionToken}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'OK') {
+                    suggestionsContainer.innerHTML = '';
+                    suggestionsContainer.style.display = 'block';
+
+                    data.predictions.forEach(prediction => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.textContent = prediction.description;
+                        div.addEventListener('click', () => {
+                            addressInput.value = prediction.description;
+                            suggestionsContainer.style.display = 'none';
+
+                            // Tự động điền các trường địa chỉ từ compound
+                            if (prediction.compound) {
+                                cityInput.value = prediction.compound.province || '';
+                                districtInput.value = prediction.compound.district || '';
+                                wardInput.value = prediction.compound.commune || '';
+                            }
+                        });
+                        suggestionsContainer.appendChild(div);
+                    });
+                }
+            })
+            .catch(error => console.error('Lỗi:', error));
+    }, 300);
+
+    addressInput.addEventListener('input', (e) => debouncedSearch(e.target.value));
+
+    document.addEventListener('click', function (e) {
+        if (!suggestionsContainer.contains(e.target) && e.target !== addressInput) {
+            suggestionsContainer.style.display = 'none';
+        }
+    });
+
+   
+</script>
 @endsection

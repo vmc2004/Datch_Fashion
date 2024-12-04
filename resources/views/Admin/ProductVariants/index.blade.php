@@ -1,13 +1,19 @@
 @extends('Admin.layout.app')
-
+@section('title', "Biến thể")
+@section('title-page', "Sản phẩm")
+@section('single-page', "Danh sách Biến thể")
 @section('content')
     <div class="row m-4 vh-90">
         <div class="col-lg-12 mb-lg-0 mb-4">
             <div class="card z-index-2 h-100">
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <div class="card mt-3">
-                        <h3 class="card-header">Danh sách biến thể</h3>
+                        <h3 class="card-header text-center">Danh sách biến thể</h3>
+                      
                     </div>
+                    @foreach ($productVariants as $productVariant)
+                    @endforeach
+                    <a href="{{route('productVariants.create',$productVariant->id)}}" class="btn btn-success"> <i class="fa-solid fa-plus me-2"></i>Thêm biến thể</a>
                     <div class="card-body p-3">
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -25,7 +31,6 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($productVariants as $productVariant)
-                                        
                                         <tr>
                                             <td>{{ $productVariant->product->name }}</td>
                                             <td>{{ $productVariant->color->name }}</td>

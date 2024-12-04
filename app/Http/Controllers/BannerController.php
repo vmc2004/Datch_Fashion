@@ -19,24 +19,36 @@ class BannerController extends Controller
     }
 
     public function store(Request $request) {
+        // Validate input
         $validated = $request->validate([
             'title' => 'required|unique:banners|max:255',
             'image' => 'nullable|image',
-            'description' => 'required|unique:banners|max:255'
+            'link' => 'required',
+        ], [
+            'title.required' => 'Tiêu đề không được để trống',
+            'title.unique' => 'Tiêu đề đã tồn tại',
+            'image.image' => 'Chỉ được chọn ảnh',
+            'link.required' => 'Đường dẫn k được bỏ trống',
         ]);
-
-        $banner = new Banner($validated);
-
-        $data = $request->except('image');
-        if ($request->hasFile('image')){
-            $path_image = $request->file('image')->store('images/banners');
-            $data['image'] = $path_image;
+        $data = $validated;
+        $data['is_active'] = 0; 
+        if ($request->has('is_active') && $request['is_active'] == 'on') {
+            $data['is_active'] = 1; 
         }
-
-        Banner::query()->create($data);
+        $data['location'] = 0; 
+        if ($request->has('location') && $request['location'] == 'on') {
+            $data['location'] = 1; 
+        }
+    
+        if ($request->hasFile('image')) {
+            $pathFile = $request->file('image')->move(public_path('uploads/banner'), $request->file('image')->getClientOriginalName());
+            $data['image'] = 'uploads/banner/' . $request->file('image')->getClientOriginalName();
+        }
+        Banner::create($data);
+    
         return redirect()->route('banners.index')->with('message', 'Thêm mới banner thành công');
     }
-
+    
     public function edit(Banner $banner)
     {
         return view('admin.banners.edit', compact('banner'));

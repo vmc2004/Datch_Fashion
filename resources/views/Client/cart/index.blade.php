@@ -3,9 +3,9 @@
 @section('title', 'Giỏ hàng')
 @section('content')
     <hr>
-
     <div class="max-w-screen-xl mx-auto ">
-        <div class="container mx-auto mb-12 pb-20">
+        
+        <div class="container mx-auto  pb-20">
             <div class="mb-5">
                 <ul class="flex container mx-auto py-2">
                     <li>
@@ -13,16 +13,17 @@
                     </li>
                     <li>
                         <span class="mx-3">&gt;</span>
-                        <a class="hover:underline hover:text-red-700 cursor-pointer" href="/">Giỏ hàng</a>
+                        <a class="hover:underline hover:text-red-700 cursor-pointer" href="/gio-hang">Giỏ hàng</a>
                     </li>
                 </ul>
             </div>
+            <h1 class="text-center p-5 border shadow-xl rounded-lg text-2xl font-bold">Giỏ hàng</h1>
          
-            <div class="flex md:mt-16">
+            <div class="flex md:mt-8 ">
                 <div class="flex-1 md:mr-8">
-                    <div class="bg-white md:px-6 md:py-10 py-4 px-2 rounded-lg">
+                    <div class="bg-white shadow rounded-md md:px-6 md:py-10 py-4 px-2 rounded-lg">
                         <div>
-                            <div id="paymentBtn" class="cursor-pointer select-none">
+                            {{-- <div id="paymentBtn" class="cursor-pointer select-none">
                                 <span class="paymentClose">
                                     <svg class="w-4 h-4 inline-block svg-vertical" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 512 512">
@@ -32,7 +33,7 @@
                                     </svg>
                                 </span>
                                 <span class="ml-2">Chọn tất cả</span>
-                            </div>
+                            </div> --}}
                             <div class="container mx-auto shadow-2xl">
                                 @if ($cart && $cart->items->count() > 0)
                                     <div class="bg-white shadow-md rounded-lg p-4">
@@ -40,7 +41,7 @@
                                             <div class="flex items-center border-b py-4">
                                                 <!-- Cột 1: Ảnh sản phẩm -->
                                                 <div class="flex-shrink-0 w-1/5 text-center">
-                                                    <img src="{{ asset('storage/'.$item->variant->product->image) }}"
+                                                    <img src="{{ asset($item->variant->product->image) }}"
                                                         alt="ảnh sản phẩm {{ $item->variant->product->name }}"
                                                         class="w-50 h-24 object-cover rounded border">
                                                 </div>
@@ -95,7 +96,7 @@
                     </div>
                 </div>
 
-                <div class="w-96 hidden md:block mt-16">
+                <div class="w-96 hidden md:block mt-18">
                     <div class="md:flex p-6 mb-8 rounded-lg bg-[#05a5011a] text-[#05a501] text-sm hidden">
                         <div>
                             <svg class="font-bold mr-2 overflow-visible w-4 inline-block svg-vertical"
@@ -133,8 +134,13 @@
                         </div>
 
                         <div class="p-5 flex items-center justify-between">
-                                <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
-                                    href="/mua-hang/{{Auth::id()}}">Thanh toán</a></button>
+
+                            <?php
+                            $user_id = 1;
+                            ?>
+                            <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
+                                    href="/mua-hang/{{ Auth::id() }}">Thanh toán</a></button>
+
                         </div>
                         @endif
                     </div>

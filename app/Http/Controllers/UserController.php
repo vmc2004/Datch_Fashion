@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -94,5 +96,30 @@ class UserController extends Controller
     public function search(Request $request){
         $users = User::where('fullname', 'like', '%' .$request->input('fullname'). '%')->paginate(8);
         return view('Admin.users.index', compact('users'));
+    }
+
+    public function filter(Request $request)
+    {
+        $query = User::query();
+        // Lọc theo trạng thái
+        if (isset($request->status)) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Sắp xếp theo A-Z hoặc Z-A
+        if ($request->has('sort')) {
+            $query->orderBy('fullname', $request->input('sort') == 'az' ? 'asc' : 'desc');
+        }
+
+        $users = $query->paginate(8);
+        return view('Admin.users.index', compact('users'));
+    }
+
+    public function profile(){
+        $user = Auth::user();
+        return view('Admin.profile',
+    [
+        'user' => $user,
+    ]);
     }
 }

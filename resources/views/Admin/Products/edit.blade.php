@@ -1,5 +1,7 @@
 @extends('Admin.layout.app')
-
+@section('title', "Sản phẩm")
+@section('title-page', "Sản phẩm")
+@section('single-page', "Cập nhật sản phẩm")
 @section('content')
     <div class="row m-4 vh-90">
         <div class="col-lg-12 mb-lg-0 mb-4">
@@ -9,17 +11,7 @@
                         <h3 class="card-header">Sửa sản phẩm</h3>
                     </div>
                     <div class="card-body p-3">
-                        @if ($errors->any())
-                            <div class="alert alert-danger text-white">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        <form action="{{ route('products.update', $product->id) }}" method="POST"
-                            enctype="multipart/form-data">
+                        <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
@@ -60,8 +52,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-lable">Mô tả sản phẩm:</label>
-                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" cols="30"
-                                    rows="3">{{ old('description', $product['description']) }}</textarea>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" cols="30" rows="3">{{ old('description', $product['description']) }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -115,11 +106,9 @@
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                     @endforeach
                                 </select> --}}
-                                <select name="category_id" id="category"
-                                    class="form-control @error('category_id') is-invalid @enderror">
+                                <select name="category_id" id="category" class="form-control @error('category_id') is-invalid @enderror">
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"
-                                            {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                        <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -138,15 +127,13 @@
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                     @endforeach
                                 </select> --}}
-                                <select name="brand_id" id="brand"
-                                    class="form-control @error('brand_id') is-invalid @enderror">
+                                <select name="brand_id" id="brand" class="form-control @error('brand_id') is-invalid @enderror">
                                     @foreach ($brands as $brand)
-                                        <option value="{{ $brand->id }}"
-                                            {{ $product->brand_id == $brand->id ? 'selected' : '' }}>
+                                        <option value="{{ $brand->id }}" {{ $product->brand_id == $brand->id ? 'selected' : '' }}>
                                             {{ $brand->name }}
                                         </option>
                                     @endforeach
-                                </select>
+                                </select>                    
                                 @error('brand_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}

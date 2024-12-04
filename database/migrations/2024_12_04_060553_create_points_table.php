@@ -9,10 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::table('colors', function (Blueprint $table) {
-            $table->string('color_code', 7);
+        Schema::create('points', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->integer('points')->default(0); 
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('colors', function (Blueprint $table) {
-            $table->dropColumn('color_code');
-        });
+        Schema::dropIfExists('points');
     }
 };

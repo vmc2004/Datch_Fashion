@@ -5,16 +5,10 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
-use App\Models\CartDetail;
-use App\Models\Commune;
-use App\Models\District;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\ProductVariant;
-use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -23,12 +17,10 @@ class CheckoutController extends Controller
     public function checkout(Request $request ,$user_id)
     {
         $user = Auth::user();
-        $province = Province::all();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
             'user'=> $user,
-            'province' => $province,
         ]);
     }
     public function post_checkout(Request $request) {
@@ -189,7 +181,6 @@ class CheckoutController extends Controller
                 $inputData['vnp_BankCode'] = $vnp_BankCode;
             }
     
-            // Sắp xếp dữ liệu và tạo chuỗi hash
             ksort($inputData);
             $query = "";
             $i = 0;
@@ -204,14 +195,12 @@ class CheckoutController extends Controller
                 $query .= urlencode($key) . "=" . urlencode($value) . '&';
             }
     
-            // Tạo URL với các tham số đã mã hóa
             $vnp_Url = $vnp_Url . "?" . $query;
             if (isset($vnp_HashSecret)) {
                 $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                 $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
             }
         
-            // Chuyển hướng đến VNPAY
             return redirect()->away($vnp_Url);
         } catch (\Exception $e) {
             return back()->withErrors(['message' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
@@ -220,28 +209,33 @@ class CheckoutController extends Controller
     
 
     
-public function thankyou($order)
-{
-    $order = Order::where('code', $order)->first();
-    if ($order) {
-        Mail::to($order->email)->send(new OrderSuccessMail($order));
-        return view('Client.checkout.done', compact('order'));
+    public function thankyou($order)
+    {
+        $order = Order::where('code', $order)
+            ->with('orderDetails.productVariant')
+            ->first();
+    
+        if ($order) {
+            foreach ($order->orderDetails as $detail) {
+                $variant = $detail->productVariant; 
+                if ($variant) {
+                    if ($variant->quantity >= $detail->quantity) {
+                        $variant->quantity -= $detail->quantity; 
+                        $variant->save(); 
+                    } else {
+                        return redirect()->route('Client.home')->withErrors([
+                            'message' => 'Sản phẩm ' . $variant->name . ' không đủ số lượng tồn kho.'
+                        ]);
+                    }
+                }
+            }
+            Mail::to($order->email)->send(new OrderSuccessMail($order));
+            return view('Client.checkout.done', compact('order'));
+        }
+        return redirect()->route('Client.home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
     }
-    return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
-}
+    
 
-public function getDistricts($province_id)
-{
-    $districts = District::where('province_id', $province_id)->get();
-    return response()->json($districts);
-}
-
-// Lấy danh sách phường theo huyện
-public function getCommunes($district_id)
-{
-    $communes = Commune::where('district_id', $district_id)->get();
-    return response()->json($communes);
-}
 
 
     

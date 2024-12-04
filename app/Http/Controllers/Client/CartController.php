@@ -104,10 +104,11 @@ class CartController extends Controller
     public function updateQuantity($itemId, Request $request)
     {
         $cartItem = CartItem::find($itemId);
+
         if (!$cartItem) {
             return response()->json(['success' => false], 404);
         }
-        
+
         // Cập nhật số lượng
         $cartItem->quantity = $request->quantity;
         $cartItem->save();

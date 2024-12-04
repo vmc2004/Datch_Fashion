@@ -22,16 +22,6 @@ class CommentController extends Controller
         return view('Admin.comments.index',compact('comments'));
     }
 
-    public function listRate(){
-        $listRate = Comment::query()->where('user_id',Auth::user()->id)->where('rating','!=',null)->with('product')->paginate(6);
-        return view('Client.rate.index',compact('listRate'));
-    }
-
-    public function sendRate($variant_id){
-        $variants = ProductVariant::query()->where('id',$variant_id)->with(['product','color','size'])->get();
-        return view('Client.rate.rate',compact('variants'));
-    }
-
 
     /**
      * Store a newly created resource in storage.
