@@ -162,13 +162,13 @@
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
-                                                    <label class="form-label">
+                                                    {{-- <label class="form-label">
                                                         Active
                                                     </label>
                                                     <div class="form-check form-switch">
                                                         <input checked="" class="form-check-input" name="status"
                                                             id="active" type="checkbox" />
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="mb-3">
                                                         <label class="form-label" for="diaChi">
                                                             Vai trò
