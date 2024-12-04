@@ -60,10 +60,10 @@
                         </thead>
                         <tbody>
                             @foreach ($order->OrderDetails as $detail)
-                            @if ($order->status == 'Đã giao hàng')
+                            @if ($order->status=="Đã giao hàng" && $order->payment_status=="Đã thanh toán")
                             <tr class="hover:bg-gray-100">
-                                <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->variant->product->code}}</td>
-                                <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:130px;">{{$detail->variant->product->code}}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                     {{ $detail->variant->product->name }}
                                 </td>
                                 <td class="px-4 py-2 border border-gray-300 text-center">
@@ -74,7 +74,7 @@
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->variant->price) }} ₫</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->quantity}}</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
-                                <td class="px-4 py-2 border border-gray-300 text-center"><a href="{{route('sendRate',['variant_id'=>$detail->variant->id])}}" class="btn btn-danger">Đánh giá</a></td>
+                                <td class="px-4 py-2 border border-gray-300 text-center"><a href="{{route('rate.form',$detail->variant->id)}}" class="btn btn-danger">Đánh giá</a></td>
                             </tr>
                             @else
                             <tr class="hover:bg-gray-100">

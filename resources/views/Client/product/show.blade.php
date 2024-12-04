@@ -326,14 +326,14 @@
         <hr class="mb-3">
 
         @if (Auth::check())
-            <form action="{{ route('comments.sendComment', $product->id) }}" method="POST"
-                class="comment-form w-100">
+            <form action="{{ route('comments.sendComment', $product->id) }}" method="POST" class="comment-form w-100">
                 @csrf
                 @if (session()->has('message'))
                     <div class="alert alert-success text-white slide-in" id="success-message">
                         {{ session()->get('message') }}
                     </div>
             @endif
+                {{-- <div class="star-rating">
                 {{-- <div class="star-rating">
                     <input type="radio" id="star5" name="rating" value="5" />
                     <label for="star5">&#9733;</label>

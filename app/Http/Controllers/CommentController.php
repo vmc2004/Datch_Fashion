@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\ProductVariant;
@@ -45,7 +46,18 @@ class CommentController extends Controller
             'content' => $request->content,
             'rating' => $request->rating,
         ]);
-        return redirect()->back()->with('message','gửi bình luận thành công');
+        return redirect()->route('rate.list')->with('message','Đánh giá sản phẩm thành công!');
+    }
+
+    public function listRate(){
+        $listRate = Comment::query()->where('user_id',Auth::user()->id)->where('rating','!=',null)->with('product')->paginate(6);
+        return view('Client.comment.myRate',compact('listRate'));
+    }
+
+    public function form($variant_id)
+    {
+        $variant = ProductVariant::query()->where('id',$variant_id)->with(['size','color','product'])->first();
+        return view('Client.comment.sendRate',compact('variant'));
     }
 
     /**

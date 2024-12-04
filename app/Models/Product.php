@@ -43,6 +43,12 @@ class Product extends Model
     {
         return $this->hasMany(ProductVariant::class);
     }
+
+    public function Comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function Order()
     {
         return $this->hasMany(Order::class);
