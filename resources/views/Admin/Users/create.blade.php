@@ -4,7 +4,99 @@
 @section('single-page', "Thêm người dùng mới")
 @section('content')
 <style>
-    
+    .suggestions {
+    position: absolute;
+    background: #1a1d24;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+   
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    display: none;
+    margin-top: 3px;
+    border: 1px solid #3f4451;
+}
+
+.suggestion-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: white;
+    border-bottom: 1px solid #3f4451;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: #292e3a;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:before {
+    content: "📍";
+    margin-right: 10px;
+    font-size: 1.1em;
+    transition: transform 0.3s ease;
+}
+
+.suggestion-item:hover {
+    background: #3a4150;
+    color: #ffffff;
+    padding-left: 24px;
+}
+
+.suggestion-item:hover:before {
+    transform: scale(1.2);
+}
+
+.suggestion-item:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--primary);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.suggestion-item:hover:after {
+    transform: scaleY(1);
+}
+
+.address-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Tùy chỉnh thanh cuộn */
+.suggestions::-webkit-scrollbar {
+    width: 8px;
+}
+
+.suggestions::-webkit-scrollbar-track {
+    background: #1a1d24;
+    border-radius: 8px;
+}
+
+.suggestions::-webkit-scrollbar-thumb {
+    background: #3f4451;
+    border-radius: 8px;
+}
+
+.suggestions::-webkit-scrollbar-thumb:hover {
+    background: #4f5565;
+}
+
+#phone {
+    filter: blur(5px)
+}
+
 </style>
 <div class="row m-4 vh-90">
     <div class="col-lg-12 mb-lg-0 mb-4">
@@ -56,31 +148,13 @@
                            <input class="form-control"  id="matKhau" type="password" />
                           </div>
                          </div>
-                         <div class="row mb-3">
-                          <div class="col-md-4">
-                           <label class="form-label" for="tinhThanhPho">
-                            Tỉnh / Thành phố
-                           </label>
-                           <input class="form-control" id="tinhThanhPho" placeholder="Chọn Tỉnh / Thành phố" type="text"/>
-                          </div>
-                          <div class="col-md-4">
-                           <label class="form-label" for="quanHuyen">
-                            Quận / Huyện
-                           </label>
-                           <input class="form-control" id="quanHuyen" placeholder="Chọn Quận / Huyện" type="text"/>
-                          </div>
-                          <div class="col-md-4">
-                           <label class="form-label" for="xaPhuong">
-                            Xã / Phường
-                           </label>
-                           <input class="form-control" id="xaPhuong" placeholder="Chọn Xã / Phường" type="text"/>
-                          </div>
-                         </div>
-                         <div class="mb-3">
+                         <div class="mb-3 col-md-12">
                           <label class="form-label" for="diaChi">
                            Địa chỉ
                           </label>
-                          <textarea class="form-control" id="diaChi" rows="3"></textarea>
+                           <input type="text" id="address" name="address" class="form-control " required placeholder="Nhập địa chỉ của bạn"
+                            autocomplete="off" >   
+                            <div id="ok" class="ok block"></div>
                          </div>
                          <div class="row mb-3">
                           <div class="col-md-6">
@@ -94,7 +168,7 @@
                             <label class="form-label" for="diaChi">
                                 Vai trò
                             </label>
-                            <select name="role" id="">
+                            <select name="role" id="" class="border rounded-2">
                                 <option value="member">Member</option>
                                 <option value="admin">Admin</option>
                             </select>
@@ -116,4 +190,71 @@
     </div>
 </div>
 
+<script>
+    const apiKey = '0ChWSfCbLYvwL5nNJke0tHln2QewXBUBTcpMnZdK'; 
+    const addressInput = document.getElementById('address');
+    const suggestionsContainer = document.getElementById('ok');
+    const cityInput = document.getElementById('city');
+    const districtInput = document.getElementById('district');
+    const wardInput = document.getElementById('ward');
+    let sessionToken = crypto.randomUUID();
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    const debouncedSearch = debounce((query) => {
+        if (query.length < 2) {
+            suggestionsContainer.style.display = 'none';
+            return;
+        }
+
+        // đây là demo, các bạn nên dùng API từ backend để tăng bảo mật, có thể thêm cache và rate limit
+        fetch(`https://rsapi.goong.io/Place/AutoComplete?api_key=${apiKey}&input=${encodeURIComponent(query)}&sessiontoken=${sessionToken}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'OK') {
+                    suggestionsContainer.innerHTML = '';
+                    suggestionsContainer.style.display = 'block';
+
+                    data.predictions.forEach(prediction => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.textContent = prediction.description;
+                        div.addEventListener('click', () => {
+                            addressInput.value = prediction.description;
+                            suggestionsContainer.style.display = 'none';
+
+                            // Tự động điền các trường địa chỉ từ compound
+                            if (prediction.compound) {
+                                cityInput.value = prediction.compound.province || '';
+                                districtInput.value = prediction.compound.district || '';
+                                wardInput.value = prediction.compound.commune || '';
+                            }
+                        });
+                        suggestionsContainer.appendChild(div);
+                    });
+                }
+            })
+            .catch(error => console.error('Lỗi:', error));
+    }, 300);
+
+    addressInput.addEventListener('input', (e) => debouncedSearch(e.target.value));
+
+    document.addEventListener('click', function (e) {
+        if (!suggestionsContainer.contains(e.target) && e.target !== addressInput) {
+            suggestionsContainer.style.display = 'none';
+        }
+    });
+
+   
+</script>
 @endsection
