@@ -159,17 +159,13 @@
                         </div>
                         <button class="w-full bg-red-600 text-white p-4 rounded-lg mt-4"  type="submit">Thanh toán</button>
                     </div>
-
+               
                     <!-- Right Column -->
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h2 class="text-xl font-bold mb-4">Thông tin sản phẩm</h2>
-                        @php
-                            $subtotal = 0; 
-                        @endphp
+                       
                         @foreach ($cartItems->items as $item)
-                            @php
-                                $subtotal += $item['price_at_purchase'] * $item['quantity']; // Cộng dồn giá trị
-                            @endphp
+                           
                             <input type="hidden" name="quantity[]" value="{{ $item['quantity'] }}">
                             <input type="hidden" name="variant_id[]" value="{{ $item['variant_id'] }}">
                             <input type="hidden" name="price[]" value="{{ $item['price_at_purchase'] }}">
@@ -182,54 +178,75 @@
                                 </div>
                             </div>
                         @endforeach
-
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Mã giảm giá</label>
-                           <form action="" method="POST">
-                            <input type="text" class="border border-gray-500 rounded-md pl-1 w-9/12" name="code" placeholder="Nhập mã giảm giá">
-                           </form>
-                        </div>
+                       
                         <div class="mb-4">
                             <div class="flex justify-between">
                                 <span>Tạm tính</span>
-                                <span>{{ number_format($subtotal) }} đ</span>
+                                <span>{{ number_format($total_price) }} đ</span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Vận chuyển</span>
-                                @if($subtotal >= 599000)
+                                @if($total_price >= 629000)
                                 <span>0 đ</span>
                                 @else
                                 <span>30.000 đ</span>
                                 @endif
                             </div>
+
                          
 
-
+                            @if (session('discount'))
+                            <div class="flex justify-between">
+                                <span>Giảm giá</span>
+                                {{ number_format(session('discount')) }} đ
+                            </div>
+                            @else   
                             <div class="flex justify-between">
                                 <span>Giảm giá</span>
                                 <span>0 đ</span>
                             </div>
+                            @endif
                         </div>
                         <div class="mb-4">
                             <div class="flex justify-between font-bold">
                                 <span>Tổng thanh toán</span>
-                                @if($subtotal >= 599000)
-                                <span>{{ number_format($subtotal ) }} đ</span>
-                                <input type="hidden" name="subtotal" value="{{$subtotal}}">
-                                @else
-                                <span>{{ number_format($subtotal + 30000) }} đ</span>
-                                <input type="hidden" name="subtotal" value="{{$subtotal + 30000}}">
+                                @if (session('subtotals'))
+                                <span>  {{  number_format(session('subtotals')) }} đ</span>
+                                <input type="hidden" name="subtotal" value="{{session('subtotals')}}">
+                                @else   
+                                <span>{{ number_format($total_price ) }} đ</span>
+                                <input type="hidden" name="subtotal" value="{{$total_price}}">
                                 @endif
                             </div>
                         </div>
+                    </form>
+                        <form action="{{route('coupon.apply')}}" method="POST">
+                            @csrf
+                                <label class="block text-gray-700">Mã giảm giá</label>
+                                <input type="hidden" name="subtotal" value="{{$total_price}}">
+                                <input type="text" class="border border-gray-500 rounded-md pl-1 w-8/12" id="code" name="code" placeholder="Nhập mã giảm giá">
+                                <button type="submit" class="mt-2 ml-2 bg-gray-300 border-gray-500  text-white px-4 py-1 rounded" >Áp dụng</button>
+                        </form>
+                    
                     </div>
                 </div>
-            </form>
+            
+            
         </div>
     </div>
 </div>
 
 <script>
+    window.onbeforeunload = function() {
+    // Gửi request đến Laravel để xóa session
+    fetch('/clear-session', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    });
+};
+
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('checkoutForm');
         const vnpayRadio = document.getElementById('vnpay');
@@ -246,7 +263,7 @@
             }
         });
     });
-
+   
 </script>
 
 <script>

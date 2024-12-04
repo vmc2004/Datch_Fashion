@@ -48,16 +48,12 @@ class BrandController extends Controller
         ]);
 
         return redirect()->route('brands.index')->with('success', 'Thêm mới thương hiệu thành công');
-
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Brand $brand)
-    {
-        
-    }
+    public function show(Brand $brand) {}
 
     /**
      * Show the form for editing the specified resource.
@@ -66,7 +62,6 @@ class BrandController extends Controller
     {
         $brand = Brand::FindorFail($id);
         return view('Admin.Brands.edit', compact('brand'));
-
     }
 
     /**
@@ -87,7 +82,7 @@ class BrandController extends Controller
             if ($brand->logo && file_exists(public_path('uploads/brands/' . $brand->logo))) {
                 unlink(public_path('uploads/brands/' . $brand->logo)); // Xóa ảnh cũ
             }
-    
+
             // Lưu logo mới vào thư mục public/uploads/brands
             $logoFile = $request->file('logo');
             $logoPath = 'uploads/brands/' . time() . '_' . $logoFile->getClientOriginalName();
@@ -102,7 +97,6 @@ class BrandController extends Controller
         // dd($brand);
 
         return redirect()->route('brands.index')->with('success', 'Brand updated successfully');
-
     }
 
     /**
@@ -115,6 +109,35 @@ class BrandController extends Controller
         $brand->delete();
 
         return redirect()->route('brands.index');
+    }
+    public function search(Request $request)
+    {
+        $keyword = $request->input('keyword');
 
+
+        $brands = Brand::query()
+            ->when($keyword, function ($query, $keyword) {
+                $query->where('name', 'LIKE', "%{$keyword}%");
+            })
+            ->paginate(10);
+
+        return view('admin.brands.index', compact('brands', 'keyword'));
+    }
+
+    public function filter(Request $request)
+    {
+        $sort = $request->input('sort');
+
+        $brands = Brand::query();
+
+        if ($sort === 'az') {
+            $brands->orderBy('name', 'asc');
+        } elseif ($sort === 'za') {
+            $brands->orderBy('name', 'desc');
+        }
+
+        $brands = $brands->paginate(10); 
+
+        return view('admin.brands.index', compact('brands', 'sort'));
     }
 }

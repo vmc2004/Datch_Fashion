@@ -15,13 +15,35 @@ class StoreController extends Controller
 {
     public function index(Request $request)
     {
-        $category = Category::query()->limit(10)->get();
-        $size = Size::query()->limit(10)->get();
-        $color = Color::query()->limit(10)->get();
+        $category = Category::query()->where('is_active', 1)->limit(10)->get();
+        $sizes = Size::query()->limit(10)->get();
+        $colors = Color::query()->limit(10)->get();
         $flow_type = $request->input('flow_type', 'default');
         $price_filter = $request->input('price', 'price_all');
+        $min = $request->query('min', 0);
+        $max = $request->query('max', 999999999);
+        $color = $request->get('color');
+        $size = $request->get('size');
         $query = Product::query();
 
+        $query->when($min !== null && $max !== null, function ($query) use ($min, $max) {
+            $query->whereHas('productVariants', function ($q) use ($min, $max) {
+                $q->whereBetween('price', [$min, $max]);
+            });
+        });
+
+        $query->when($color, function ($query) use ($color) {
+            return $query->whereHas('productVariants', function ($q) use ($color) {
+                $q->where('color_id', $color); 
+            });
+        });
+
+        $query->when($size, function ($query) use ($size) {
+            return $query->whereHas('productVariants', function ($q) use ($size) {
+                $q->where('size_id', $size); 
+            });
+        });
+        
         $query->when($price_filter == 'free', function ($query) {
             $query->whereHas('productItems', function ($q) {
                 $q->where('price', 0);
@@ -80,8 +102,8 @@ class StoreController extends Controller
         return view('Client.category.index', [
             'products' => $products,
             'category' => $category,
-            'size' => $size,
-            'color' => $color,
+            'sizes' => $sizes,
+            'colors' => $colors,
             'flow_type' =>$flow_type,
         ]);
     } 

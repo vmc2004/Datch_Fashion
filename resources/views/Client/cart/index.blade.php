@@ -4,7 +4,7 @@
 @section('content')
     <hr>
     <div class="max-w-screen-xl mx-auto ">
-        
+
         <div class="container mx-auto  pb-20">
             <div class="mb-5">
                 <ul class="flex container mx-auto py-2">
@@ -18,7 +18,7 @@
                 </ul>
             </div>
             <h1 class="text-center p-5 border shadow-xl rounded-lg text-2xl font-bold">Giỏ hàng</h1>
-         
+
             <div class="flex md:mt-8 ">
                 <div class="flex-1 md:mr-8">
                     <div class="bg-white shadow rounded-md md:px-6 md:py-10 py-4 px-2 rounded-lg">
@@ -113,36 +113,45 @@
                     </div>
                     <div class="bg-white rounded-lg border shadow-2xl">
                         @if ($cart && $cart->items->count() > 0)
-                        <div class="p-5 border-b text-lg uppercase text-slate-700">
-                            Tóm tắt đơn hàng
-                        </div>
-                        <div class="p-5 border-b">
-                            <div class="flex flex-col gap-3 mb-8 text-sm">
-                                <div class="flex">
-                                    <div>Tổng tiền hàng:</div>
-                                    <div class="ml-auto" id="total-price-cart">
-                                        {{ number_format($cart->items->sum('price_at_purchase')) }} đ
+                            <div class="p-5 border-b text-lg uppercase text-slate-700">
+                                Tóm tắt đơn hàng
+                            </div>
+                            <div class="p-5 border-b">
+                                <div class="flex flex-col gap-3 mb-8 text-sm">
+                                    <div class="flex">
+                                        <div>Tổng tiền hàng:</div>
+                                        <div class="ml-auto" id="total-price-cart">
+                                            {{ number_format(
+                                                $cart->items->sum(function ($item) {
+                                                    return $item->price_at_purchase * $item->quantity;
+                                                }),
+                                            ) }}
+                                            đ
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex font-bold">
+                                    <div>Tổng cộng:</div>
+                                    <div class="ml-auto" id="total-cart-price">
+                                        {{ number_format(
+                                            $cart->items->sum(function ($item) {
+                                                return $item->price_at_purchase * $item->quantity;
+                                            }),
+                                        ) }}
+                                        đ
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex font-bold">
-                                <div>Tổng cộng:</div>
-                                <div class="ml-auto" id="total-cart-price">
-                                    {{ number_format($cart->items->sum('price_at_purchase')) }} đ
-                                </div>
+                            <div class="p-5 flex items-center justify-between">
+                                <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
+                                        href="/mua-hang/{{ Auth::id() }}">Thanh toán</a></button>
                             </div>
-                        </div>
-
-                        <div class="p-5 flex items-center justify-between">
-
-                            <?php
-                            $user_id = 1;
-                            ?>
-                            <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
-                                    href="/mua-hang/{{ Auth::id() }}">Thanh toán</a></button>
-
-                        </div>
+                        @else
+                            <div class="p-5 text-center text-gray-500">
+                                Giỏ hàng của bạn hiện đang trống.
+                            </div>
                         @endif
+
                     </div>
                 </div>
             </div>
@@ -170,6 +179,7 @@
                         if (data.success) {
                             // Xóa sản phẩm khỏi giỏ hàng trên giao diện
                             form.closest('.flex').remove(); // Xóa phần tử sản phẩm
+                            location.reload();
                             // alert(data.message); // Hiển thị thông báo thành công
                         } else {
                             alert(data.message); // Hiển thị thông báo lỗi
@@ -228,4 +238,4 @@
         }
     </script>
 
-@endsection    
+@endsection

@@ -38,7 +38,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach )
+                            @foreach ($order->OrderDetails as $detail)
                             @if ($order->status=="Đã giao hàng" && $order->payment_status=="Đã thanh toán")
                             <tr class="hover:bg-gray-100">
                                 <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:130px;">{{$detail->variant->product->code}}</td>

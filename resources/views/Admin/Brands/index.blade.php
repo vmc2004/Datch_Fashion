@@ -9,14 +9,14 @@
                         <h3 class="card-header text-center">Danh sách thương hiệu</h3>
                     </div>
                     <div class="container-fluid mt-4   ">
-                        <form action="{{ route('categories.search') }}" method="GET" class="row g-3">
-                            <div class="col-md-4">
-                                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tên thương hiệu"
-                                    value="{{ request('name') }}">
+                        <form action="{{ route('brands.search') }}" method="GET" class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm thương hiệu"
+                                    value="{{ request('keyword') }}">
                             </div>
                             <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary w-50">
-                                    <i class="fa-solid fa-magnifying-glass me-2"></i>Tìm kiếm
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fa-solid fa-magnifying-glass me-2"></i> Tìm kiếm
                                 </button>
                             </div>
                         </form>
@@ -25,17 +25,18 @@
                     <!-- Form lọc danh mục -->
                     <div class="container-fluid d-flex align-items-center justify-content-between">
                         <div class="flex-grow-1 me-3">
-                            <form action="{{ route('categories.filter') }}" method="GET" class="row g-3">
-                              
+                            <form action="{{ route('brands.filter') }}" method="GET" class="row g-3">
                                 <div class="col-md-5">
                                     <select class="form-select" name="sort">
-                                        <option value="">Sắp xếp theo</option>
+                                        <option value="#">Sắp xếp theo</option>
                                         <option value="az" {{ request('sort') == 'az' ? 'selected' : '' }}>A-Z</option>
                                         <option value="za" {{ request('sort') == 'za' ? 'selected' : '' }}>Z-A</option>
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fa-solid fa-filter me-2"></i>Lọc
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -64,7 +65,8 @@
                                     <td>{{ $item->name }}</td>
                                     <td>
                                         @if ($item->logo)
-                                            <img src="{{asset($item->logo)}}" width="100px" height="70px" alt="Logo">
+                                            <img src="{{ asset($item->logo) }}" width="100px" height="70px"
+                                                alt="Logo">
                                         @endif
                                     </td>
                                     <td>

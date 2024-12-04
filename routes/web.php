@@ -74,6 +74,10 @@ Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('
 Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 Route::get('/account/favorites',[HomeController::class, 'favorite']);
+Route::post('/apply-coupon', [CheckoutController::class, 'apply'])->name('coupon.apply');
+// web.php
+Route::post('/clear-session', [CheckoutController::class, 'clearSession']);
+
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);

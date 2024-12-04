@@ -33,7 +33,9 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
 
     Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
     Route::post('/filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');
+    
     Route::post('/dashboard-filter',[HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
+    Route::post('/dashboard-filter', [HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
     Route::post('/day-sorder', [HomeController::class, 'get30DaysOrderData'])->name('admin.day-sorder');
 
 
@@ -70,8 +72,8 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     });
     // Kết thúc người dùng
 
-     // Đường dẫn bình luận
-     Route::prefix('comments')->group(function () {
+    // Đường dẫn bình luận
+    Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('comments.index');
         Route::post('/send-comment/{product_id}', [CommentController::class, 'sendComment'])->name('comments.sendComment');
         Route::post('/send-rate/{product_id}', [CommentController::class, 'sendRate'])->name('comments.sendRate');
@@ -90,6 +92,8 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+        Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
     });
     // Kết thúc sản phẩm
 
@@ -102,6 +106,9 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('brands.edit');
         Route::put('/edit/{id}', [BrandController::class, 'update'])->name('brands.update');
         Route::delete('/destroy/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+        Route::get('/brands/filter', [BrandController::class, 'filter'])->name('brands.filter');
+        Route::get('/brands/search', [BrandController::class, 'search'])->name('brands.search');
+
     });
 
     // Đường dẫn sản phẩm biến thể
@@ -180,6 +187,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::delete('/destroy/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
     });
 
+
      // Đường dẫn mã giảm giá
      Route::prefix('coupons')->group(function () {
         Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
@@ -194,6 +202,3 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     });
             // Kết thúc mã giảm giá
 });
-
-    
-

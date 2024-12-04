@@ -19,10 +19,11 @@ class HomeController extends Controller
     public function index()
     {
         $banners = Banner::where('is_active', 1)->where('location', 1)->get();
+        // $banners = Banner::query()->get();
         $brands = Brand::query()->limit(5)->get();
         $newPro = Product::query()->where('is_active', 1)->latest('id')->limit(10)->get();
         $Proview = Product::query()->where('is_active', 1)->orderBy('views', 'desc')->limit(10)->get();
-        $category = Category::all();
+        $category = Category::where('is_active', 1)->get();
 
         // Kiểm tra lại việc truyền biến vào view
         return view('Client.home', compact('brands', 'category', 'newPro', 'Proview', 'banners'));
