@@ -3,7 +3,101 @@
 @section('title', 'Thanh toán')
 @section('content')
 <hr>
+<style>
+    .suggestions {
+    position: absolute;
+    background: #1a1d24;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+   
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    z-index: 1000;
+    display: none;
+    margin-top: 3px;
+    border: 1px solid #3f4451;
+}
 
+.suggestion-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: white;
+    border-bottom: 1px solid #3f4451;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: #292e3a;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:before {
+    content: "😤 ";
+    margin-right: 10px;
+    font-size: 1.1em;
+    transition: transform 0.3s ease;
+}
+
+.suggestion-item:hover {
+    background: #3a4150;
+    color: #ffffff;
+    padding-left: 24px;
+}
+
+.suggestion-item:hover:before {
+    transform: scale(1.2);
+}
+
+.suggestion-item:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--primary);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.suggestion-item:hover:after {
+    transform: scaleY(1);
+}
+
+.address-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Tùy chỉnh thanh cuộn */
+.suggestions::-webkit-scrollbar {
+    width: 8px;
+}
+
+.suggestions::-webkit-scrollbar-track {
+    background: #1a1d24;
+    border-radius: 8px;
+}
+
+.suggestions::-webkit-scrollbar-thumb {
+    background: #3f4451;
+    border-radius: 8px;
+}
+
+.suggestions::-webkit-scrollbar-thumb:hover {
+    background: #4f5565;
+}
+
+#phone {
+    filter: blur(5px)
+}
+
+</style>
 <div class="max-w-screen-xl mx-auto">
     <div class="container mx-auto mb-12 pb-20">
         <div class="mb-5">
@@ -26,24 +120,26 @@
                     <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-md">
                         <h2 class="text-xl font-bold mb-4">Người nhận</h2>
                         <div class="mb-4">
-                            <label class="block text-gray-700">Tên khách hàng</label>
+                            <label class="block text-gray-700">Tên người nhận</label>
                             <input class="w-full p-2 border border-gray-300 rounded mt-1" name="name" placeholder="Tên khách hàng" type="text" value="{{Auth::user()->fullname}}"  />
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700">Số điện thoại</label>
-                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="phone" placeholder="Số điện thoại" type="text" value="{{Auth::user()->phone}}" />
+                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="phone" placeholder="Số điện thoại" type="text" value="{{Auth::user()->phone}}" readonly/>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700">Email của bạn</label>
-                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="email" placeholder="Email của bạn" type="email" value="{{Auth::user()->email}}" />
+                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="email" placeholder="Email của bạn" type="email" value="{{Auth::user()->email}}" readonly/>
                         </div>
                         <hr>
 
                         <div class="mb-4">
                             <label class="block text-gray-700 text-bold">Địa chỉ của bạn</label>
                             <div class="mb-4">
-                                <input class="w-full p-2 border border-gray-300 rounded mt-1" name="address" placeholder="Nhập địa chỉ (VD: Số 10 Nguyễn Tuân)" type="text" value="{{Auth::user()->address}}"/>
-                            </div>
+                                <input type="text" id="address" name="address" class="w-full p-2 border border-gray-300 rounded mt-1" required placeholder="Nhập địa chỉ của bạn"
+                                autocomplete="off" value="{{Auth::user()->address}}">   
+                                <div id="ok" class="ok block "></div>
+                          </div>
                         </div>
 
                         <h2 class="text-xl font-bold mb-4">Phương thức thanh toán</h2>
@@ -89,12 +185,11 @@
 
                         <div class="mb-4">
                             <label class="block text-gray-700">Mã giảm giá</label>
-                            <form id="applyCouponForm">
-                                <input type="text" class="border border-gray-500 rounded-md pl-1 w-9/12" name="coupon_code" placeholder="Nhập mã giảm giá">
+                            <form action="" method="GET">
+                                @csrf
+                                <input type="text" class="border border-gray-500 rounded-md pl-1 w-9/12" name="code" placeholder="Nhập mã giảm giá">
                                 <button type="submit" class="bg-gray-200 px-2 rounded-lg border border-gray-500">Áp dụng</button>
                             </form>
-                            <p id="discountInfo"></p>
-                            <p id="totalInfo"></p>
                         </div>
                         <div class="mb-4">
                             <div class="flex justify-between">
@@ -120,7 +215,11 @@
                         <div class="mb-4">
                             <div class="flex justify-between font-bold">
                                 <span>Tổng thanh toán</span>
+                                @if($subtotal >= 599000)
                                 <span>{{ number_format($subtotal ) }} đ</span>
+                                @else
+                                <span>{{ number_format($subtotal + 30000) }} đ</span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -147,30 +246,74 @@
             }
         });
     });
-    $('#applyCouponForm').on('submit', function (e) {
-        e.preventDefault();
-        const couponCode = $('input[name="coupon_code"]').val();
-        const cartTotal = {{ $subtotal }}; // Lấy tổng tiền từ backend
-
-        $.ajax({
-            url: "{{ route('apply_coupon') }}",
-            method: 'POST',
-            data: {
-                _token: "{{ csrf_token() }}",
-                coupon_code: couponCode,
-                cart_total: cartTotal,
-            },
-            success: function (response) {
-                $('#discountInfo').text(`Giảm giá: ${response.discount} VNĐ`);
-                $('#totalInfo').text(`Tổng sau giảm giá: ${response.total} VNĐ`);
-            },
-            error: function (error) {
-                alert(error.responseJSON.error);
-            }
-        });
-    });
-
 
 </script>
 
+<script>
+    const apiKey = '0ChWSfCbLYvwL5nNJke0tHln2QewXBUBTcpMnZdK'; 
+    const addressInput = document.getElementById('address');
+    const suggestionsContainer = document.getElementById('ok');
+    const cityInput = document.getElementById('city');
+    const districtInput = document.getElementById('district');
+    const wardInput = document.getElementById('ward');
+    let sessionToken = crypto.randomUUID();
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    const debouncedSearch = debounce((query) => {
+        if (query.length < 2) {
+            suggestionsContainer.style.display = 'none';
+            return;
+        }
+
+        // đây là demo, các bạn nên dùng API từ backend để tăng bảo mật, có thể thêm cache và rate limit
+        fetch(`https://rsapi.goong.io/Place/AutoComplete?api_key=${apiKey}&input=${encodeURIComponent(query)}&sessiontoken=${sessionToken}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'OK') {
+                    suggestionsContainer.innerHTML = '';
+                    suggestionsContainer.style.display = 'block';
+
+                    data.predictions.forEach(prediction => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.textContent = prediction.description;
+                        div.addEventListener('click', () => {
+                            addressInput.value = prediction.description;
+                            suggestionsContainer.style.display = 'none';
+
+                            // Tự động điền các trường địa chỉ từ compound
+                            if (prediction.compound) {
+                                cityInput.value = prediction.compound.province || '';
+                                districtInput.value = prediction.compound.district || '';
+                                wardInput.value = prediction.compound.commune || '';
+                            }
+                        });
+                        suggestionsContainer.appendChild(div);
+                    });
+                }
+            })
+            .catch(error => console.error('Lỗi:', error));
+    }, 300);
+
+    addressInput.addEventListener('input', (e) => debouncedSearch(e.target.value));
+
+    document.addEventListener('click', function (e) {
+        if (!suggestionsContainer.contains(e.target) && e.target !== addressInput) {
+            suggestionsContainer.style.display = 'none';
+        }
+    });
+
+   
+</script>
 @endsection

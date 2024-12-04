@@ -27,10 +27,10 @@
         <div class="table-responsive">
           <!-- Form tìm kiếm -->
           <div class="container-fluid mb-3 mt-4   ">
-            <form action="" method="GET" class="row g-3">
+            <form action="{{route('users.search')}}" method="GET" class="row g-3">
                 <div class="col-md-9">
-                    <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tên"
-                        value="{{ request('name') }}">
+                    <input type="text" name="fullname" class="form-control" placeholder="Tìm kiếm theo tên"
+                        value="{{ request('fullname') }}">
                 </div>
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-primary w-50">
@@ -43,12 +43,12 @@
         <!-- Form lọc danh mục -->
         <div class="container-fluid d-flex align-items-center justify-content-between">
             <div class="flex-grow-1 me-3">
-                <form action="" method="GET" class="row g-3">
+                <form action="{{route('users.filter')}}" method="GET" class="row g-3">
                     <div class="col-md-5">
-                        <select class="form-select" name="is_active">
+                        <select class="form-select" name="status">
                             <option value="">Tất cả trạng thái</option>
-                            <option value="1" {{ request('is_active') == '1' ? 'selected' : '' }}>Hiển thị</option>
-                            <option value="0" {{ request('is_active') == '0' ? 'selected' : '' }}>Đã ẩn</option>
+                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Đang kích hoạt</option>
+                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Ngừng kích hoạt</option>
                         </select>
                     </div>
                     <div class="col-md-5">

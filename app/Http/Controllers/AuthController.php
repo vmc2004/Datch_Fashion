@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostLoginRequest;
 use App\Mail\SendOtpMail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class AuthController extends Controller
     return view('login');
    }
 
-   public function postLogin(Request $request) {
+   public function postLogin(PostLoginRequest $request) {
         $request->validate([
             'email' => 'required|email|exists:users',
             'password' => 'required',

@@ -5,16 +5,11 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
-use App\Models\CartDetail;
-use App\Models\Commune;
-use App\Models\District;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\ProductVariant;
-use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -23,12 +18,10 @@ class CheckoutController extends Controller
     public function checkout(Request $request ,$user_id)
     {
         $user = Auth::user();
-        $province = Province::all();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
             'user'=> $user,
-            'province' => $province,
         ]);
     }
     public function post_checkout(Request $request) {
@@ -241,6 +234,28 @@ class CheckoutController extends Controller
             return view('Client.checkout.done', compact('order'));
         }
         return redirect()->route('Client.home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
+    }
+    
+    public function applyCoupon(Request $request)
+    {
+        $couponCode = $request->input('code');
+        $cartTotal = $request->input('cart_total');
+    
+        $coupon = Coupon::where('code', $couponCode)->first();
+    
+        if (!$coupon) {
+            return response()->json(['error' => 'Mã giảm giá không hợp lệ.']);
+        }
+        if ($coupon->end_date < now()) {
+            return response()->json(['error' => 'Mã giảm giá đã hết hạn.']);
+        }
+        $discount = $coupon->discount_type;  // Giảm giá cố định
+        $totalAfterDiscount = $cartTotal - $discount;
+    
+        return response()->json([
+            'discount' => number_format($discount),
+            'total' => number_format($totalAfterDiscount),
+        ]);
     }
     
 
