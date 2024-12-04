@@ -19,6 +19,7 @@ use App\Http\Controllers\Client\BlogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\GoogleController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\ChatController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
@@ -87,52 +88,65 @@ Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.bl
 
 Route::get('/lien-he', [ContactController::class, 'contact'])->name('Client.contact');
 Route::post('/lien-he', [ContactController::class, 'updateContact'])->name('Client.updateContact');
+Route::get('/account/chat', [ChatController::class, 'index'])->name('Client.chat.index');
+Route::get('/account/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages']);
+Route::post('/account/chat/sendMessage', [ChatController::class, 'sendMessage']);
+Route::get('/account/chat/unread-count', [ChatController::class, 'getUnreadCount']);
 
 //USER
+Route::middleware('guest')->group(function () {
+    // Routes cho người dùng chưa đăng nhập
+    Route::get('/Client/account/login', [ClientUserController::class, 'login'])->name('Client.account.login');
+    Route::post('/Client/account/showLoginForm', [ClientUserController::class, 'showLoginForm'])->name('showLoginForm');
+    Route::get('/Client/account/register', [ClientUserController::class, 'register'])->name('Client.account.register');
+    Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
+    Route::get('/Client/account/forgot-password', [ClientUserController::class, 'showForgotPasswordForm'])->name('Client.account.forgot-password');
+    Route::post('/Client/account/forgot-password', [ClientUserController::class, 'sendResetLinkEmail'])->name('Client.account.forgot-password');
+    Route::get('/Client/account/reset-password/{token}', [ClientUserController::class, 'showResetPasswordForm'])->name('Client.account.reset-password');
+    Route::post('/Client/account/reset-password', [ClientUserController::class, 'resetPassword'])->name('Client.account.reset-password');
+});
 
-Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
-Route::get('/Client/account/login', [ClientUserController::class, 'login'])->name('Client.account.login');
-Route::post('/Client/account/showLoginForm', [ClientUserController::class, 'showLoginForm'])->name('showLoginForm');
-Route::get('/Client/account/register', [ClientUserController::class, 'register'])->name('Client.account.register');
-Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
-Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
-Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
-Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile'])->middleware('auth');
-Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
-Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
-
-
-
-
-
-
+Route::middleware('member')->group(function () {
+    // Routes cho người dùng đã đăng nhập
+    Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
+    Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile');
+    Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
+    Route::get('Client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
+    Route::get('Client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
+    Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
+    
+});
 
 //ADMIN
-Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::post('post-login', [AuthController::class, 'postLogin'])->name('postLogin');
-Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('register', [AuthController::class, 'register'])->name('register');
-Route::post('post-register', [AuthController::class, 'postRegister'])->name('postRegister');
-// Hiển thị form yêu cầu reset password
-Route::get('forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
-// Xử lý form yêu cầu reset password
-Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])->middleware('guest')->name('password.email');
+Route::middleware('guest')->group(function () {
+    // Các route mà người dùng chưa đăng nhập có thể truy cập
+    Route::get('login', [AuthController::class, 'login'])->name('login');
+    Route::post('post-login', [AuthController::class, 'postLogin'])->name('postLogin');
+    Route::get('register', [AuthController::class, 'register'])->name('register');
+    Route::post('post-register', [AuthController::class, 'postRegister'])->name('postRegister');
+    // Hiển thị form yêu cầu reset password
+    Route::get('forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+    // Xử lý form yêu cầu reset password
+    Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+    // Hiển thị form nhập mật khẩu mới
+    Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+    // Xử lý form nhập mật khẩu mới
+    Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+});
 
-// Hiển thị form nhập mật khẩu mới
-Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->middleware('guest')->name('password.reset');
+Route::middleware('admin')->group(function () {
+    // Các route yêu cầu quyền admin
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('google/login', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+    Route::get('google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
 
-// Xử lý form nhập mật khẩu mới
-Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
-
-Route::get('google/login', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
-
-//OTP
-Route::get('/otp/confirm', [AuthController::class, 'showOtpConfirmationForm'])->name('otp.confirm');
-Route::get('verify-otp', function () {
-    return view('verifyOtp');
-})->name('verifyOtpForm');
-Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
+    //OTP
+    Route::get('/otp/confirm', [AuthController::class, 'showOtpConfirmationForm'])->name('otp.confirm');
+    Route::get('verify-otp', function () {
+        return view('verifyOtp');
+    })->name('verifyOtpForm');
+    Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
+});
 
 
 

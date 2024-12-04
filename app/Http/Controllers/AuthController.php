@@ -116,28 +116,39 @@ class AuthController extends Controller
 
    // Xử lý form nhập mật khẩu mới
    public function resetPassword(Request $request)
-   {
-       $request->validate([
-           'token' => 'required',
-           'email' => 'required|email',
-           'password' => 'required|min:8|confirmed',
-       ]);
+{
+    $request->validate(
+        [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ],
+        [
+            'token.required' => 'Token không được để trống.',
+            'email.required' => 'Email không được để trống.',
+            'email.email' => 'Email không hợp lệ.',
+            'password.required' => 'Mật khẩu mới không được để trống.',
+            'password.min' => 'Mật khẩu phải có ít nhất :min ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+        ]
+    );
 
-       $status = Password::reset(
-           $request->only('email', 'password', 'password_confirmation', 'token'),
-           function ($user, $password) {
-               $user->forceFill([
-                   'password' => Hash::make($password),
-               ])->save();
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password),
+            ])->save();
 
-               $user->setRememberToken(Str::random(60));
-           }
-       );
+            $user->setRememberToken(Str::random(60));
+        }
+    );
 
-       return $status === Password::PASSWORD_RESET
-           ? redirect()->route('login')->with('status', __($status))
-           : back()->withErrors(['email' => [__($status)]]);
-   }
+    return $status === Password::PASSWORD_RESET
+        ? redirect()->route('login')->with('status', 'Mật khẩu đã được đặt lại thành công.')
+        : back()->withErrors(['email' => ['Không tìm thấy người dùng với địa chỉ email này.']]);
+}
+
 
    public function showOtpConfirmationForm(Request $request)
     {

@@ -106,6 +106,91 @@
         transform: rotate(360deg);
       }
     }
+
+    .chat-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #2c3e50;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        z-index: 1000;
+    }
+
+    .chat-icon img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #e74c3c;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Cửa sổ chat */
+    .chat-popup {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 300px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .chat-header {
+        padding: 10px;
+        background: #2c3e50;
+        color: white;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .chat-header h3 {
+        margin: 0;
+    }
+
+    .chat-body {
+        padding: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .chat-footer {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .chat-footer button {
+        padding: 10px 20px;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .chat-footer button:hover {
+        background: #2980b9;
+    }
   </style>
 
 </head>
@@ -252,7 +337,29 @@
               </nav>
             </div>
             </nav>
-
+            <div class="chat-widget">
+              <div class="chat-icon" id="chatIcon">
+                  <img src="{{ asset('users->image') }}" alt="Chat">
+                  <div class="notification-badge" id="notificationBadge" style="display: none;">0</div>
+              </div>
+              <!-- Cửa sổ chat -->
+              <div class="chat-popup" id="chatPopup" style="display: none;">
+                  <div class="chat-header">
+                      <h3>Xin chào 👋</h3>
+                      <p>Hãy hỏi bất cứ điều gì hoặc chia sẻ phản hồi của bạn.</p>
+                  </div>
+                  <div class="chat-body">
+                      <h4>Danh sách hội thoại</h4>
+                      <div class="chat-conversation">
+                          <p><strong>DATCH FASHION</strong></p>
+                          <p>Xin chào 👋, Datch Fashion có thể giúp.</p>
+                      </div>
+                  </div>
+                  <div class="chat-footer">
+                      <button id="newConversation">Hội thoại mới</button>
+                  </div>
+              </div>
+          </div>
   <!-- Loading overlay -->
   <div id="loading-overlay">
     <img src="{{asset('assets/admin/img/logDatch.png')}}" alt="" width="300px" id="loading-logo">
@@ -270,7 +377,45 @@
       document.getElementById("content").style.display = "block";
     });
   </script>
-  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatIcon = document.getElementById('chatIcon');
+        const chatPopup = document.getElementById('chatPopup');
+
+        // Hiển thị/ẩn popup chat khi nhấp vào biểu tượng
+        chatIcon.addEventListener('click', function () {
+            if (chatPopup.style.display === 'none') {
+                chatPopup.style.display = 'block';
+            } else {
+                chatPopup.style.display = 'none';
+            }
+        });
+
+        // Tải số lượng tin nhắn chưa đọc
+        fetch('/account/chat/unread-count')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('notificationBadge');
+                if (data.unread_count > 0) {
+                    badge.style.display = 'flex';
+                    badge.innerText = data.unread_count;
+                }
+            });
+    });
+    document.getElementById('newConversation').addEventListener('click', function () {
+    window.location.href = '/account/chat'; // Chuyển đến giao diện chat đầy đủ
+});
+document.getElementById('chatIcon').addEventListener('click', function() {
+    var chatBubble = document.getElementById('chatBubble');
+    if (chatBubble.style.display === 'block') {
+        chatBubble.style.display = 'none';
+    } else {
+        chatBubble.style.display = 'block';
+    }
+});
+
+</script>
+
 
         </div>
         
