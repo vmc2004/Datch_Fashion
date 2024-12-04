@@ -91,10 +91,11 @@
                 @endif
                 <form action="{{ route('cart.add') }}" method="POST">
                     @csrf
-                    <!-- Trường ẩn chứa ID của sản phẩm -->
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <input type="hidden" id="selectedColorId" name="color_id" value="">
                     <input type="hidden" id="selectedSizeId" name="size_id" value="">
+
+                    <!-- Màu sắc -->
                     <div class="mt-4">
                         <p class="font-bold">
                             Màu sắc:
@@ -102,7 +103,6 @@
                                 {{ $product->ProductVariants->first()->color->name }}
                             </span>
                         </p>
-
                         <div class="flex space-x-2 mt-2">
                             @php
                                 $uniqueColors = $product->ProductVariants->unique('color_id');
@@ -117,20 +117,33 @@
                             @endforeach
                         </div>
                     </div>
+
+                    <!-- Kích cỡ -->
                     <div class="mt-4">
                         <p class="font-bold">
                             Kích cỡ:
                         </p>
-                        <div class="flex space-x-2 mt-2">
-                            @foreach ($product->ProductVariants->unique('size_id') as $variant)
-                                <input type="button" name="size"
-                                    class="size-option w-10 h-10 border border-gray-300 rounded"
-                                    value="{{ $variant->size->name }}" data-size="{{ $variant->size_id }}"
-                                    onclick="highlightSize(this)">
-                            @endforeach
+                        <div class="flex space-x-2 mt-2" id="sizeContainer">
+                            <div class="flex space-x-2 mt-2">
+                                <!-- Danh sách các size mặc định -->
+                                @foreach ($sizes as $size)
+                                    @php
+                                        $matchingVariant = $product->ProductVariants->firstWhere('size_id', $size->id);
+                                    @endphp
+                                    <button type="button" name="size"
+                                        class="size-option w-10 h-10 border border-gray-300 rounded"
+                                        data-size="{{ $size->id }}"
+                                        data-color-id="{{ $matchingVariant->color_id ?? '' }}"
+                                        onclick="highlightSize(this)">
+                                        {{ $size->name }}
+                                    </button>
+                                @endforeach
+                            </div>
 
                         </div>
                     </div>
+
+                    <!-- Số lượng -->
                     <p class="font-bold">Số lượng:</p>
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center border rounded-lg px-1 py-1">
@@ -141,13 +154,15 @@
                         </div>
                     </div>
 
-
+                    <!-- Nút hành động -->
                     <div class="mt-4 flex space-x-4">
                         <button class="border border-red-500 rounded-lg px-4 py-2 text-black" type="submit">Thêm vào giỏ
                             hàng</button>
                         <button class="bg-red-600 text-white rounded-lg px-4 py-2">Mua ngay</button>
                     </div>
                 </form>
+
+
 
                 <div class="mt-4">
                     <h2 class="font-bold">
@@ -285,6 +300,7 @@
         <script>
             const imageContainer = document.querySelector('.image-container');
             const zoomImage = document.querySelector('.zoom-image');
+            const productVariants = @json($product->ProductVariants);
 
             imageContainer.addEventListener('mousemove', (e) => {
                 const rect = imageContainer.getBoundingClientRect();
@@ -312,14 +328,53 @@
                 // Hiển thị tên màu được chọn
                 document.getElementById('selectedColorName').textContent = selectedColorName;
 
-                console.log('Selected color_id:', selectedColorId);
-            }
+                // Làm nổi bật nút màu được chọn
+                document.querySelectorAll('.color-button').forEach(element => {
+                    element.classList.remove('border-4', 'border-black');
+                });
+                button.classList.add('border-4', 'border-black');
 
-            function highlightSize(selectedButton) {
+                // Reset tất cả các size (sáng lên)
+                document.querySelectorAll('.size-option').forEach(element => {
+                    element.classList.remove('opacity-50', 'cursor-not-allowed');
+                    element.disabled = false; // Cho phép chọn
+                });
+
+                // Làm mờ các size không thuộc biến thể của màu được chọn
+                document.querySelectorAll('.size-option').forEach(element => {
+                    const sizeId = element.getAttribute('data-size');
+                    const sizeColorMatch = productVariants.some(variant =>
+                        variant.color_id == selectedColorId && variant.size_id == sizeId
+                    );
+
+                    if (!sizeColorMatch) {
+                        element.classList.add('opacity-50', 'cursor-not-allowed');
+                        element.disabled = true; // Không cho chọn
+                    }
+                });
+
+                // Reset kích cỡ được chọn trước đó
+                document.getElementById('selectedSizeId').value = '';
                 document.querySelectorAll('.size-option').forEach(element => {
                     element.classList.remove('border-4', 'border-blue-500');
                 });
 
+                console.log('Selected color_id:', selectedColorId);
+            }
+
+
+            function highlightSize(selectedButton) {
+                // Nếu kích cỡ bị vô hiệu hóa, không cho phép chọn
+                if (selectedButton.disabled) {
+                    return;
+                }
+
+                // Xóa các viền trước đó
+                document.querySelectorAll('.size-option').forEach(element => {
+                    element.classList.remove('border-4', 'border-blue-500');
+                });
+
+                // Làm nổi bật nút kích cỡ được chọn
                 selectedButton.classList.add('border-4', 'border-blue-500');
 
                 // Lấy size_id từ thuộc tính data
@@ -344,6 +399,9 @@
                     quantityInput.value = currentValue - 1;
                 }
             }
+
+
+
 
             async function handleSubmit(event) {
                 event.preventDefault();
@@ -537,6 +595,11 @@
             .wishlist-button:hover i {
                 transform: scale(1.2);
                 /* Hiệu ứng phóng to khi hover */
+            }
+
+            .size-option.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
             }
         </style>
     @endsection

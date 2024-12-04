@@ -28,13 +28,9 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
-    Route::get('/topProduct', [HomeController::class, 'showTopProduct'])->name('admin.topProduct');
     Route::get('/users/profile', [UserController::class, 'profile']);
 
     Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
-    Route::post('/filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');
-    
-    Route::post('/dashboard-filter',[HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
     Route::post('/dashboard-filter', [HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
     Route::post('/day-sorder', [HomeController::class, 'get30DaysOrderData'])->name('admin.day-sorder');
 
@@ -189,7 +185,6 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::delete('/destroy/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
     });
 
-
      // Đường dẫn mã giảm giá
      Route::prefix('coupons')->group(function () {
         Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
@@ -204,3 +199,20 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     });
             // Kết thúc mã giảm giá
 });
+
+    
+
+
+// // Đường dẫn mã giảm giá
+// Route::prefix('coupons')->group(function () {
+//     Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
+//     Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
+//     Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
+//     Route::post('/send_coupon/{coupon}', [CouponController::class, 'send_coupon'])->name('coupons.send_coupon');
+//     Route::get('/edit/{coupon}', [CouponController::class, 'edit'])->name('coupons.edit');
+//     Route::put('/update/{coupon}', [CouponController::class, 'update'])->name('coupons.update');
+//     Route::delete('/destroy/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+//     Route::put('/{coupon}', [CouponController::class, 'stateChangeCoupon'])->name('coupons.stateChangeCoupon');
+//     Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
+// });
+// // Kết thúc mã giảm giá

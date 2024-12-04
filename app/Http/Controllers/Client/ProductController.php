@@ -34,6 +34,7 @@ class ProductController extends Controller
             'related_products' => $related_products,
             'comments' => $comments,
             'avgRating' => $avgRating,
+            'productVariants' => $product->ProductVariants,
         ]);
     }
     public function autocomplete(Request $request)
