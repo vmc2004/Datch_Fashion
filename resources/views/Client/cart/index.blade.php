@@ -147,7 +147,6 @@
                                 Giỏ hàng của bạn hiện đang trống.
                             </div>
                         @endif
-
                     </div>
                 </div>
             </div>

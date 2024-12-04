@@ -82,7 +82,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($products as $index => $item)
-                                    @if ($item->status == '1')
+                                    {{-- @if ($item->status == '1') --}}
                                         <tr>
                                             <td>{{ $item->code }}</td>
                                             <td style="max-width:100px ;" class="text-truncate">{{ $item->name }}</td>
@@ -108,9 +108,9 @@
                                                 <a href="{{ route('products.edit', $item->id) }}"
                                                     class="btn btn-warning">Sửa</a>
                                         </tr>
-                                    @else
+                                    {{-- @else
                                         <div class=""></div>
-                                    @endif
+                                    @endif --}}
                                 @endforeach
                             </tbody>
                         </table>

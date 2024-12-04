@@ -107,7 +107,8 @@ class ProductController extends Controller
         $product = Product::FindorFail($id);
         // Tạo slug từ tên sản phẩm
         $slug = Str::slug($request->name, '-');
-
+        
+        $imagePath = $product->image;
         if ($request->hasFile('image')) {
             // Xóa ảnh cũ nếu có
             if ($product->image && file_exists(public_path($product->image))) {
