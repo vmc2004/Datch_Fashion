@@ -31,7 +31,8 @@
             <div class="">
                 <!-- Phần content chính -->
                 <div class="">
-                    <h2 class="text-[36px] font-bold mb-8">{{ $blog->title }}</h2>
+                    <h2 class="text-[36px] font-bold mb-2">{{ $blog->title }}</h2>
+                    <span class="text-slate-500 ">Ngày đăng: {{ $blog->created_at }} </span>
                     <img class="w-full my-8" src="{{ asset($blog->image) }}" alt="">
                     <div class="mb-[20px]">
                         {!! $blog->content !!}

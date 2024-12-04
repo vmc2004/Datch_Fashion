@@ -28,28 +28,39 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
         </button>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 gap-6 mb-5">
             @foreach ($blogs as $blog)
             <div class="h-full rounded-lg relative shadow-xl">
                 <div class="h-full rounded-lg overflow-hidden flex flex-col">
+                    <!-- Hình ảnh bài viết -->
                     <div class="overflow-hidden h-80">
                         <a href="/bai-viet/{{$blog->slug}}">
-                            <img class=""
-                                 src="{{ asset( $blog->image) }}" alt="{{$blog->slug}}">
+                            <img class="" src="{{ asset( $blog->image) }}" alt="{{$blog->slug}}">
                         </a>
                     </div>
+                    <!-- Nội dung bài viết -->
                     <div class="bg-white p-2 flex flex-col space-y-2">
-                        <div class="">
-                            <div class="cursor-pointer">
-                                <a class="text-slate-800" href="/bai-viet/{{$blog->slug}}"> {{$blog->title}} </a>
+                        <div class="flex flex-col">
+                            <!-- Tiêu đề bài viết -->
+                            <div class="mb-2">
+                                <a class="" href="/bai-viet/{{$blog->slug}}">
+                                    <h3 class="font-bold text-lg leading-tight">{{$blog->title}}</h3>
+                                </a>
+                            </div>
+                            <!-- Thời gian bài viết -->
+                            <div class="mt-2">
+                                <span class="text-slate-500 text-sm block">{{$blog->created_at}}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>            
             @endforeach
         </div>
+        {{$blogs->links()}}
     </div>
 </div>
 @endsection
+
+
 
