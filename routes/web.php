@@ -90,33 +90,38 @@ Route::get('/account/chat', [ChatController::class, 'index'])->name('Client.chat
 Route::get('/account/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages']);
 Route::post('/account/chat/sendMessage', [ChatController::class, 'sendMessage']);
 Route::get('/account/chat/unread-count', [ChatController::class, 'getUnreadCount']);
+Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile');
+Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
 
 //USER
-Route::middleware('guest')->group(function () {
-    // Routes cho người dùng chưa đăng nhập
+
     Route::get('/Client/account/login', [ClientUserController::class, 'login'])->name('Client.account.login');
     Route::post('/Client/account/showLoginForm', [ClientUserController::class, 'showLoginForm'])->name('showLoginForm');
     Route::get('/Client/account/register', [ClientUserController::class, 'register'])->name('Client.account.register');
     Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
     Route::get('/Client/account/forgot-password', [ClientUserController::class, 'showForgotPasswordForm'])->name('Client.account.forgot-password');
-    Route::post('/Client/account/forgot-password', [ClientUserController::class, 'sendResetLinkEmail'])->name('Client.account.forgot-password');
+    Route::post('/Client/account/forgot-password', [ClientUserController::class, 'sendResetLinkEmail'])->name('Client.account.password.email');
     Route::get('/Client/account/reset-password/{token}', [ClientUserController::class, 'showResetPasswordForm'])->name('Client.account.reset-password');
-    Route::post('/Client/account/reset-password', [ClientUserController::class, 'resetPassword'])->name('Client.account.reset-password');
-});
+    Route::post('/Client/account/reset-password', [ClientUserController::class, 'resetPassword'])->name('Client.account.password.update');
+    // Route cho form nhập OTP
+    Route::get('Client/otp/confirm', [ClientUserController::class, 'showOtpConfirmationForm'])->name('Client.otp.confirm');
 
-Route::middleware('member')->group(function () {
-    // Routes cho người dùng đã đăng nhập
+// Route để xử lý xác thực OTP
+    Route::post('/Client/account/verify-otp', [ClientUserController::class, 'verifyOtp'])->name('Client.account.verifyOtp');
+
+
+    Route::prefix('member')->middleware('checkUser')->group(function () {
     Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
-    Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile');
-    Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
-    Route::get('Client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
-    Route::get('Client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
+    
+    });
+    Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
+    Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
     Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
     
-});
+
 
 //ADMIN
-Route::middleware('guest')->group(function () {
+
     // Các route mà người dùng chưa đăng nhập có thể truy cập
     Route::get('login', [AuthController::class, 'login'])->name('login');
     Route::post('post-login', [AuthController::class, 'postLogin'])->name('postLogin');
@@ -130,9 +135,7 @@ Route::middleware('guest')->group(function () {
     Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
     // Xử lý form nhập mật khẩu mới
     Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
-});
 
-Route::middleware('admin')->group(function () {
     // Các route yêu cầu quyền admin
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('google/login', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
@@ -144,7 +147,6 @@ Route::middleware('admin')->group(function () {
         return view('verifyOtp');
     })->name('verifyOtpForm');
     Route::post('verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
-});
 
 
 

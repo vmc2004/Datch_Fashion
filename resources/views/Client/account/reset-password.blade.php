@@ -21,7 +21,7 @@
                 @endif
 
 
-                    <form class="space-y-4 md:space-y-6" method="POST" action="{{ route('Client.account.reset-password') }}">
+                    <form class="space-y-4 md:space-y-6" method="POST" action="{{ route('Client.account.password.update') }}">
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">
                         
