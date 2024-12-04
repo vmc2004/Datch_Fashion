@@ -20,8 +20,8 @@ class HomeController extends Controller
     {
         $banners = Banner::where('is_active', 1)->where('location', 1)->get();
         $brands = Brand::query()->limit(5)->get();
-        $newPro = Product::query()->latest('id')->limit(5)->get();
-        $Proview = Product::query()->orderBy('views', 'desc')->limit(5)->get();
+        $newPro = Product::query()->where('is_active', 1)->latest('id')->limit(10)->get();
+        $Proview = Product::query()->where('is_active', 1)->orderBy('views', 'desc')->limit(10)->get();
         $category = Category::all();
 
         // Kiểm tra lại việc truyền biến vào view

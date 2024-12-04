@@ -5,16 +5,10 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
-use App\Models\CartDetail;
-use App\Models\Commune;
-use App\Models\District;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\ProductVariant;
-use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -23,12 +17,10 @@ class CheckoutController extends Controller
     public function checkout(Request $request ,$user_id)
     {
         $user = Auth::user();
-        $province = Province::all();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
             'user'=> $user,
-            'province' => $province,
         ]);
     }
     public function post_checkout(Request $request) {
