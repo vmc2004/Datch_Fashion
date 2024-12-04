@@ -163,13 +163,9 @@
                     <!-- Right Column -->
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h2 class="text-xl font-bold mb-4">Thông tin sản phẩm</h2>
-                        @php
-                            $subtotal = 0; 
-                        @endphp
+                       
                         @foreach ($cartItems->items as $item)
-                            @php
-                                $subtotal += $item['price_at_purchase'] * $item['quantity']; // Cộng dồn giá trị
-                            @endphp
+                           
                             <input type="hidden" name="quantity[]" value="{{ $item['quantity'] }}">
                             <input type="hidden" name="variant_id[]" value="{{ $item['variant_id'] }}">
                             <input type="hidden" name="price[]" value="{{ $item['price_at_purchase'] }}">
@@ -186,11 +182,11 @@
                         <div class="mb-4">
                             <div class="flex justify-between">
                                 <span>Tạm tính</span>
-                                <span>{{ number_format($subtotal) }} đ</span>
+                                <span>{{ number_format($total_price) }} đ</span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Vận chuyển</span>
-                                @if($subtotal >= 599000)
+                                @if($total_price >= 629000)
                                 <span>0 đ</span>
                                 @else
                                 <span>30.000 đ</span>
@@ -218,13 +214,8 @@
                                 <span>  {{  number_format(session('subtotals')) }} đ</span>
                                 <input type="hidden" name="subtotal" value="{{session('subtotals')}}">
                                 @else   
-                                @if($subtotal >= 599000)
-                                <span>{{ number_format($subtotal ) }} đ</span>
-                                <input type="hidden" name="subtotal" value="{{$subtotal}}">
-                                @else
-                                <span>{{ number_format($subtotal + 30000) }} đ</span>
-                                <input type="hidden" name="subtotal" value="{{$subtotal + 30000}}">
-                                @endif
+                                <span>{{ number_format($total_price ) }} đ</span>
+                                <input type="hidden" name="subtotal" value="{{$total_price}}">
                                 @endif
                             </div>
                         </div>
@@ -232,11 +223,7 @@
                         <form action="{{route('coupon.apply')}}" method="POST">
                             @csrf
                                 <label class="block text-gray-700">Mã giảm giá</label>
-                                @if($subtotal >= 599000)
-                                <input type="hidden" name="subtotal" value="{{$subtotal}}">
-                                @else
-                                <input type="hidden" name="subtotal" value="{{$subtotal + 30000}}">
-                                @endif
+                                <input type="hidden" name="subtotal" value="{{$total_price}}">
                                 <input type="text" class="border border-gray-500 rounded-md pl-1 w-8/12" id="code" name="code" placeholder="Nhập mã giảm giá">
                                 <button type="submit" class="mt-2 ml-2 bg-gray-300 border-gray-500  text-white px-4 py-1 rounded" >Áp dụng</button>
                         </form>
@@ -250,6 +237,16 @@
 </div>
 
 <script>
+    window.onbeforeunload = function() {
+    // Gửi request đến Laravel để xóa session
+    fetch('/clear-session', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    });
+};
+
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('checkoutForm');
         const vnpayRadio = document.getElementById('vnpay');

@@ -55,7 +55,7 @@ Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('a
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/account/orders', [OrderController::class,'index']);
-Route::get('/product/{slug}', [ProductController::class, 'show']);
+Route::get('/product/{slug}', [ProductController::class, 'show'])->name('client.product.show');
 Route::get('/feedback', [HomeController::class,'feedback']);
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
@@ -75,11 +75,9 @@ Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 Route::get('/account/favorites',[HomeController::class, 'favorite']);
 Route::post('/apply-coupon', [CheckoutController::class, 'apply'])->name('coupon.apply');
-Route::get('/clear-session', function () {
-    session()->forget('subtotals');
-    session()->forget('discount');
-    return response()->json(['status' => 'success']);
-})->name('clear.session');
+// web.php
+Route::post('/clear-session', [CheckoutController::class, 'clearSession']);
+
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);

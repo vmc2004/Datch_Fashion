@@ -34,6 +34,18 @@ class CommentController extends Controller
             'content' => $request->content,
             'rating' => $request->rating,
         ]);
+        return redirect()->back()->with('message','Bình luận sản phẩm thành công!');
+    }
+
+    public function sendRate(StoreCommentRequest $request, $product_id)
+    {
+        $user_id = Auth::user()->id;
+        Comment::query()->create([
+            'product_id' => $product_id,
+            'user_id' => $user_id,
+            'content' => $request->content,
+            'rating' => $request->rating,
+        ]);
         return redirect()->route('rate.list')->with('message','Đánh giá sản phẩm thành công!');
     }
 

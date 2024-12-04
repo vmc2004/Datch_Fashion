@@ -13,15 +13,28 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
     public function checkout(Request $request ,$user_id)
     {
+        $price= 0;
         $user = Auth::user();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
+        foreach ($cartItems->items as $item) {
+            $price += $item->price_at_purchase * $item->quantity;  
+            
+        }
+        if($price <= 599000){
+            $total_price = $price+30000;
+        }
+        else{
+            $total_price = $price;
+        }
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
+            'total_price' => $total_price,
             'user'=> $user,
         ]);
     }
@@ -238,13 +251,9 @@ class CheckoutController extends Controller
         $code = $request->code;
         $coupon = Coupon::where('code', $code)
         ->where('is_active', 1)
-        ->whereBetween(Carbon::now()->toDateString(), ['start_date', 'end_date'])
         ->first();
         if (!$coupon) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn!',
-            ]);
+            return redirect()->back()->with('success', 'Mã giảm giá không hợp lệ!');
         }
        else{
        if($coupon->discount_type=='fixed'){
@@ -267,7 +276,15 @@ class CheckoutController extends Controller
         return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
         }
     }
-    
+    public function clearSession()
+    {
+        // Xóa session cụ thể
+        Session::forget('subtotals');
+        Session::forget('discount');
+
+        // Trả về một phản hồi thành công
+        return response()->json(['status' => 'success']);
+    }
     
 
 
