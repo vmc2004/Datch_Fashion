@@ -73,7 +73,6 @@ Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->nam
 Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('thankyou');
 Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
-Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply_coupon');
 Route::get('/account/favorites',[HomeController::class, 'favorite']);
 
 

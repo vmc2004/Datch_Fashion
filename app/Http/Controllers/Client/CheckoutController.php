@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
@@ -233,6 +234,28 @@ class CheckoutController extends Controller
             return view('Client.checkout.done', compact('order'));
         }
         return redirect()->route('Client.home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
+    }
+    
+    public function applyCoupon(Request $request)
+    {
+        $couponCode = $request->input('code');
+        $cartTotal = $request->input('cart_total');
+    
+        $coupon = Coupon::where('code', $couponCode)->first();
+    
+        if (!$coupon) {
+            return response()->json(['error' => 'Mã giảm giá không hợp lệ.']);
+        }
+        if ($coupon->end_date < now()) {
+            return response()->json(['error' => 'Mã giảm giá đã hết hạn.']);
+        }
+        $discount = $coupon->discount_type;  // Giảm giá cố định
+        $totalAfterDiscount = $cartTotal - $discount;
+    
+        return response()->json([
+            'discount' => number_format($discount),
+            'total' => number_format($totalAfterDiscount),
+        ]);
     }
     
 
