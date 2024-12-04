@@ -97,6 +97,24 @@ class UserController extends Controller
         $users = User::where('fullname', 'like', '%' .$request->input('fullname'). '%')->paginate(8);
         return view('Admin.users.index', compact('users'));
     }
+
+    public function filter(Request $request)
+    {
+        $query = User::query();
+        // Lọc theo trạng thái
+        if (isset($request->status)) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Sắp xếp theo A-Z hoặc Z-A
+        if ($request->has('sort')) {
+            $query->orderBy('fullname', $request->input('sort') == 'az' ? 'asc' : 'desc');
+        }
+
+        $users = $query->paginate(8);
+        return view('Admin.users.index', compact('users'));
+    }
+
     public function profile(){
         $user = Auth::user();
         return view('Admin.profile',
