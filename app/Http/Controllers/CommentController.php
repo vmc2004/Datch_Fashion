@@ -6,8 +6,6 @@ use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Product;
-use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 

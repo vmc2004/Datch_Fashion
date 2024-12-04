@@ -164,7 +164,7 @@ class CheckoutController extends Controller
             $vnp_OrderInfo = "Thanh toán hóa đơn";
             $vnp_OrderType = "Datch Fashion";
             $vnp_Amount = $order->total_price * 100; // Quy đổi thành đồng
-            $vnp_Locale = "vn";
+            $vnp_Locale = "VN";
             $vnp_BankCode = "NCB";
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
     

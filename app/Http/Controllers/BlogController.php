@@ -22,31 +22,6 @@ class BlogController extends Controller
         return view('Admin.Blogs.index',compact('blogs'));
     }
 
-    public function search(Request $request)
-    {
-        $blogs = Blog::where('title', 'like', '%' . $request->input('title') . '%')->paginate(10);
-        return view('Admin.Blogs.index', compact('blogs'));
-    }
-
-    public function filter(Request $request)
-    {
-        $query = Blog::query();
-
-        // Lọc theo trạng thái
-        if ($request->has('status')) {
-            $query->where('status', $request->input('status'));
-        }
-
-        // Sắp xếp theo A-Z hoặc Z-A
-        if ($request->has('sort')) {
-            $query->orderBy('title', $request->input('sort') == 'az' ? 'asc' : 'desc');
-        }
-
-        $blogs = $query->paginate(10);
-
-        return view('Admin.Blogs.index', compact('blogs'));
-    }
-
     public function __construct()
 {
     $this->middleware('auth');

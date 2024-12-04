@@ -248,50 +248,38 @@ if (win && document.querySelector('#sidenav-scrollbar')) {
   });
 }
 
-$('.dashboard-filter').change(function() {
-    var dashboard_value = $(this).val();
-    var _token = $('input[name="_token"]').val();
- 
-    if (!dashboard_value) {
-        alert('Vui lòng chọn giá trị để lọc.');
-        return;
-    }
-
-    $.ajax({
-        url: "{{ route('admin.db_filter') }}", 
-        method: "POST",  
-        dataType: "JSON", 
-        data: { 
-            dashboard_value: dashboard_value, 
-            _token: _token 
-        },
-        success: function(data) {
-            var tableBody = $("#orderTable tbody");
-            tableBody.empty();
-            if (data.length > 0) {
-                data.forEach(function(order) {
-                    var row = `
-                        <tr>
-                            <td>${order.period}</td>
-                            <td>${order.order_count}</td>
-                            <td>${order.quantity}</td>
-                            <td>${order.total_price.toLocaleString()}</td>
-                        </tr>
-                    `;
-                    tableBody.append(row);
-                });
-            } else {
-                tableBody.append('<tr><td colspan="4" class="text-center">Không có đơn hàng trong khoảng thời gian này.</td></tr>');
-            }
-            chart.setData(data);
-        },
-        error: function(xhr, status, error) {
-            alert('Có lỗi xảy ra. Vui lòng thử lại!');
+    $('.dashboard-filter').change(function(){
+      var dashboard_value = $(this).val();
+      var _token = $('input[name = "_token"] ').val();
+      $.ajax({
+        url : "{{ route('admin.db_filter') }} ",
+        method : "POST",
+        dataType : "JSON",
+        data:{dashboard_value:dashboard_value,_token:_token},
+        success:function(data){
+          chart.setData(data);
         }
+      });
     });
-  });
-});
 
+    $('#btn-dashboard-filter').click(function(){
+      var _token = $('input[name = "_token"]').val();
+      var from_date = $('#datepicker').val();
+      var to_date = $('#datepicker2').val();
+      $.ajax({
+        url : "{{ route('admin.filter') }} ",
+        method : "POST",
+        dataType : "JSON",
+        data : {from_date:from_date,to_date:to_date,_token:_token},
+
+        success:function(data){
+          chart.setData(data);
+        }
+      });
+    });
+
+
+  });
 </script>
 
 <!-- Thống kê doanh số -->

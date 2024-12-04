@@ -22,10 +22,10 @@
                         <h2 class="text-center">Danh sách bài viết</h2>
                                       <!-- Form tìm kiếm -->
                                       <div class="container-fluid mb-3 mt-4   ">
-                                        <form action="{{ route('blogs.search') }}" method="GET" class="row g-3">
+                                        <form action="{{ route('categories.search') }}" method="GET" class="row g-3">
                                             <div class="col-md-9">
-                                                <input type="text" name="title" class="form-control" placeholder="Tìm kiếm theo tiêu đề bài viết"
-                                                    value="{{ request('title') }}">
+                                                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tiêu đề bài viết"
+                                                    value="{{ request('name') }}">
                                             </div>
                                             <div class="col-md-3">
                                                 <button type="submit" class="btn btn-primary w-50">
@@ -38,12 +38,12 @@
                                     <!-- Form lọc danh mục -->
                                     <div class="container-fluid d-flex align-items-center justify-content-between">
                                         <div class="flex-grow-1 me-3">
-                                            <form action="{{ route('blogs.filter') }}" method="GET" class="row g-3">
+                                            <form action="{{ route('categories.filter') }}" method="GET" class="row g-3">
                                                 <div class="col-md-5">
-                                                    <select class="form-select" name="status">
+                                                    <select class="form-select" name="is_active">
                                                         <option value="">Tất cả trạng thái</option>
-                                                        <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Hiển thị</option>
-                                                        <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Đã ẩn</option>
+                                                        <option value="1" {{ request('is_active') == '1' ? 'selected' : '' }}>Hiển thị</option>
+                                                        <option value="0" {{ request('is_active') == '0' ? 'selected' : '' }}>Đã ẩn</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-5">

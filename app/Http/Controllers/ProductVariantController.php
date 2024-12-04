@@ -73,7 +73,7 @@ class ProductVariantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductVariantRequest $request,$id)
+    public function update(Request $request,$id)
     {
         $productVariant = ProductVariant::query()->find($id);
         $id = $productVariant->product_id;
