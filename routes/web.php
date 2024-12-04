@@ -55,7 +55,7 @@ Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('a
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/account/orders', [OrderController::class,'index']);
-Route::get('/product/{slug}', [ProductController::class, 'show']);
+Route::get('/product/{slug}', [ProductController::class, 'show'])->name('client.product.show');
 Route::get('/feedback', [HomeController::class,'feedback']);
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
@@ -73,7 +73,6 @@ Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->nam
 Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('thankyou');
 Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
-Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply_coupon');
 Route::get('/account/favorites',[HomeController::class, 'favorite']);
 
 

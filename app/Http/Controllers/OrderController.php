@@ -35,7 +35,8 @@ public function index(Request $request)
         })
         ->when($search_order, function($query) use ($search_order){
             return $query->where('phone', 'LIKE', '%'. $search_order. '%')
-                         ->orWhere('code', 'LIKE', '%'.$search_order . '%');
+                         ->orWhere('code', 'LIKE', '%'.$search_order . '%')
+                         ->orWhere('fullname', 'LIKE', '%'.$search_order.'%');
         })
         ->when($date_filter, function($query) use ($date_filter) {
             switch ($date_filter) {
@@ -145,13 +146,5 @@ public function index(Request $request)
         return response()->json($variants);
     }
 
-    public function show_result($id)
-    {
-        $product = Product::findOrFail($id);
-        return response()->json($product);
-    }
-    public function exportToExcel()
-    {
-        return Excel::download(new OrdersExport, 'Hoa_don.xlsx');
-    }
+   
 }

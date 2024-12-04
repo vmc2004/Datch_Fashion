@@ -72,6 +72,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
      Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('comments.index');
         Route::post('/send-comment/{product_id}', [CommentController::class, 'sendComment'])->name('comments.sendComment');
+        Route::post('/send-rate/{product_id}', [CommentController::class, 'sendRate'])->name('comments.sendRate');
         Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('comments.edit');
         Route::put('/edit/{comment}', [CommentController::class, 'update'])->name('comments.update');
     });
