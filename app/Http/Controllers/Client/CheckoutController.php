@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class CheckoutController extends Controller
 {
@@ -226,28 +227,47 @@ class CheckoutController extends Controller
         }
         return redirect()->route('Client.home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
     }
-    
-    public function applyCoupon(Request $request)
+ 
+    public function apply(Request $request)
     {
-        $couponCode = $request->input('code');
-        $cartTotal = $request->input('cart_total');
-    
-        $coupon = Coupon::where('code', $couponCode)->first();
-    
-        if (!$coupon) {
-            return response()->json(['error' => 'Mã giảm giá không hợp lệ.']);
-        }
-        if ($coupon->end_date < now()) {
-            return response()->json(['error' => 'Mã giảm giá đã hết hạn.']);
-        }
-        $discount = $coupon->discount_type;  // Giảm giá cố định
-        $totalAfterDiscount = $cartTotal - $discount;
-    
-        return response()->json([
-            'discount' => number_format($discount),
-            'total' => number_format($totalAfterDiscount),
+        $request->validate([
+            'code' => 'required|string|max:10',
+            'subtotal' => 'required',
         ]);
+        $subtotal = $request->subtotal;
+        $code = $request->code;
+        $coupon = Coupon::where('code', $code)
+        ->where('is_active', 1)
+        ->whereBetween(Carbon::now()->toDateString(), ['start_date', 'end_date'])
+        ->first();
+        if (!$coupon) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã giảm giá không hợp lệ hoặc đã hết hạn!',
+            ]);
+        }
+       else{
+       if($coupon->discount_type=='fixed'){
+        $subtotals = $subtotal - $coupon->discount;
+        session([
+            'subtotals' => $subtotals,
+            'discount'=>$coupon->discount,
+        ]);
+       }
+       else{
+        $discountAmount = $subtotal * ($coupon->discount / 100); 
+        $subtotals = $subtotal - $discountAmount;  
+        session([
+            'subtotals' => $subtotals,
+            'discount'=>$discountAmount,
+        ]);
+       }
+        
+        
+        return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
+        }
     }
+    
     
 
 

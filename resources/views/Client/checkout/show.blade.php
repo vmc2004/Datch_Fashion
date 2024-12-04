@@ -159,7 +159,7 @@
                         </div>
                         <button class="w-full bg-red-600 text-white p-4 rounded-lg mt-4"  type="submit">Thanh toán</button>
                     </div>
-
+               
                     <!-- Right Column -->
                     <div class="bg-white p-6 rounded-lg shadow-md">
                         <h2 class="text-xl font-bold mb-4">Thông tin sản phẩm</h2>
@@ -182,13 +182,7 @@
                                 </div>
                             </div>
                         @endforeach
-
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Mã giảm giá</label>
-                           <form action="" method="POST">
-                            <input type="text" class="border border-gray-500 rounded-md pl-1 w-9/12" name="code" placeholder="Nhập mã giảm giá">
-                           </form>
-                        </div>
+                       
                         <div class="mb-4">
                             <div class="flex justify-between">
                                 <span>Tạm tính</span>
@@ -202,17 +196,28 @@
                                 <span>30.000 đ</span>
                                 @endif
                             </div>
+
                          
 
-
+                            @if (session('discount'))
+                            <div class="flex justify-between">
+                                <span>Giảm giá</span>
+                                {{ number_format(session('discount')) }} đ
+                            </div>
+                            @else   
                             <div class="flex justify-between">
                                 <span>Giảm giá</span>
                                 <span>0 đ</span>
                             </div>
+                            @endif
                         </div>
                         <div class="mb-4">
                             <div class="flex justify-between font-bold">
                                 <span>Tổng thanh toán</span>
+                                @if (session('subtotals'))
+                                <span>  {{  number_format(session('subtotals')) }} đ</span>
+                                <input type="hidden" name="subtotal" value="{{session('subtotals')}}">
+                                @else   
                                 @if($subtotal >= 599000)
                                 <span>{{ number_format($subtotal ) }} đ</span>
                                 <input type="hidden" name="subtotal" value="{{$subtotal}}">
@@ -220,11 +225,26 @@
                                 <span>{{ number_format($subtotal + 30000) }} đ</span>
                                 <input type="hidden" name="subtotal" value="{{$subtotal + 30000}}">
                                 @endif
+                                @endif
                             </div>
                         </div>
+                    </form>
+                        <form action="{{route('coupon.apply')}}" method="POST">
+                            @csrf
+                                <label class="block text-gray-700">Mã giảm giá</label>
+                                @if($subtotal >= 599000)
+                                <input type="hidden" name="subtotal" value="{{$subtotal}}">
+                                @else
+                                <input type="hidden" name="subtotal" value="{{$subtotal + 30000}}">
+                                @endif
+                                <input type="text" class="border border-gray-500 rounded-md pl-1 w-8/12" id="code" name="code" placeholder="Nhập mã giảm giá">
+                                <button type="submit" class="mt-2 ml-2 bg-gray-300 border-gray-500  text-white px-4 py-1 rounded" >Áp dụng</button>
+                        </form>
+                    
                     </div>
                 </div>
-            </form>
+            
+            
         </div>
     </div>
 </div>
@@ -246,7 +266,7 @@
             }
         });
     });
-
+   
 </script>
 
 <script>

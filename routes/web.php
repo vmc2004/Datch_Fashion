@@ -74,6 +74,12 @@ Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('
 Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 Route::get('/account/favorites',[HomeController::class, 'favorite']);
+Route::post('/apply-coupon', [CheckoutController::class, 'apply'])->name('coupon.apply');
+Route::get('/clear-session', function () {
+    session()->forget('subtotals');
+    session()->forget('discount');
+    return response()->json(['status' => 'success']);
+})->name('clear.session');
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
