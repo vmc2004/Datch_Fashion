@@ -19,6 +19,7 @@ class HomeController extends Controller
     public function index()
     {
         $banners = Banner::where('is_active', 1)->where('location', 1)->get();
+        // $banners = Banner::query()->get();
         $brands = Brand::query()->limit(5)->get();
         $newPro = Product::query()->latest('id')->limit(5)->get();
         $Proview = Product::query()->orderBy('views', 'desc')->limit(5)->get();
