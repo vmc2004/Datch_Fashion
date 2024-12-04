@@ -39,35 +39,37 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        // Tạo slug từ tên sản phẩm
-        $slug = Str::slug($request->name, '-');
+{
+    // Tạo slug từ tên sản phẩm
+    $slug = Str::slug($request->name, '-');
 
-        // Xử lý upload hình ảnh nếu có
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->move(public_path('uploads/products'), $request->file('image')->getClientOriginalName());
-        }
-
-        // dd($request->all());
-
-        // Tạo sản phẩm mới
-        $product = Product::create([
-            'code' => $request->code,
-            'name' => $request->name,
-            'slug' => $slug,
-            'image' => $imagePath,
-            'price' => $request->price,
-            'description' => $request->description,
-            'material' => $request->material,
-            'status' => $request->status,
-            'is_active' => $request->is_active,
-            'category_id' => $request->category_id,
-            'brand_id' => $request->brand_id,
-        ]);
-
-        return redirect()->route('products.index')->with('success', 'Thêm sản phẩm thành công');
+    // Xử lý upload hình ảnh nếu có
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        // Tạo tên tệp duy nhất cho ảnh
+        $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+        // Di chuyển tệp vào thư mục uploads
+        $imagePath = $request->file('image')->move(public_path('uploads/products'), $imageName);
     }
+
+    // Tạo sản phẩm mới
+    $product = Product::create([
+        'code' => $request->code,
+        'name' => $request->name,
+        'slug' => $slug,
+        'image' => 'uploads/products/' . $imageName, // Lưu đường dẫn ảnh trong cơ sở dữ liệu
+        'price' => $request->price,
+        'description' => $request->description,
+        'material' => $request->material,
+        'status' => $request->status,
+        'is_active' => $request->is_active,
+        'category_id' => $request->category_id,
+        'brand_id' => $request->brand_id,
+    ]);
+
+    return redirect()->route('products.index')->with('success', 'Thêm sản phẩm thành công');
+}
+
 
     /**
      * Display the specified resource.

@@ -163,6 +163,8 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::get('/edit/{blog}', [BlogController::class, 'edit'])->name('blogs.edit');
         Route::put('/update/{blog}', [BlogController::class, 'update'])->name('blogs.update');
         Route::delete('/destroy/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+        Route::get('blogs/search',['BlogController::class','search'])->name('blogs.search');
+        Route::get('blogs/filter',['BlogController::class','filter'])->name('blogs.filter');
     });
     // Đường dẫn thuộc tính màu sắc
     Route::prefix('colors')->group(function () {

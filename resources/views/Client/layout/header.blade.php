@@ -215,7 +215,7 @@
                                             </svg>
                                             Hồ sơ của tôi</a>
                                     </li>
-                                    <li><a href="/account/favorites"
+                                    {{-- <li><a href="/account/favorites"
                                             class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                                             <svg aria-hidden="true" focusable="false" data-prefix="fal"
                                                 data-icon="heart"
@@ -227,7 +227,7 @@
                                                 </path>
                                             </svg>
                                             Yêu thích</a>
-                                    </li>
+                                    </li> --}}
                                     <li><a href="/account/points"
                                             class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                                             <i class="fa-solid fa-hand-holding-medical"></i>
