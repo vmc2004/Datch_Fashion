@@ -39,7 +39,7 @@ class CheckoutController extends Controller
             if (!Auth::check()) {
                 return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
             }
-            $totalPrice = 0;
+
             $order = new Order();
             $order->code = strtoupper(Str::random(6)) . rand(100, 999);
             $order->user_id = Auth::id(); 
@@ -47,7 +47,7 @@ class CheckoutController extends Controller
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
-            $order->total_price = $totalPrice; 
+            $order->total_price =$request->subtotal; 
             $order->payment = $request->payment;
             if($request->payment == 'Thanh toán khi nhận hàng'){
                 $order->payment_status = 'Chưa thanh toán';
@@ -72,11 +72,9 @@ class CheckoutController extends Controller
                 $orderDetail->price = $price; 
                 $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
-                $totalPrice += $orderDetail->total_price;
             }
     
-            $order->total_price = $totalPrice;
-            $order->save();
+           
            
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
@@ -104,7 +102,6 @@ class CheckoutController extends Controller
             if (!Auth::check()) {
                 return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
             }
-            $totalPrice = 0;
             $order = new Order();
             $order->code = strtoupper(Str::random(6)) . rand(100, 999);
             $order->user_id = Auth::id(); 
@@ -112,7 +109,7 @@ class CheckoutController extends Controller
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
-            $order->total_price = $totalPrice; 
+            $order->total_price = $request->subtotal; 
             $order->payment = $request->payment;
             if($request->payment == 'Thanh toán khi nhận hàng'){
                 $order->payment_status = 'Chưa thanh toán';
@@ -137,19 +134,13 @@ class CheckoutController extends Controller
                 $orderDetail->price = $price; 
                 $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
-                $totalPrice += $orderDetail->total_price;
             }
-    
-            $order->total_price = $totalPrice;
-            $order->save();
-           
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
                 $cart->items()->delete(); 
                 $cart->delete(); 
             }
     
-            // Tạo URL thanh toán VNPAY
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
             $vnp_Returnurl = route('thankyou', ['order' => $order->code]); // Thay đổi ở đây
             $vnp_TmnCode = "OXAW03IW"; // Mã website tại VNPAY 

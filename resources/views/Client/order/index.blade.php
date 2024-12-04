@@ -104,7 +104,7 @@
                          </button>
                         <div>
                             <div>
-                                Phí vận chuyển :
+                                Phí vận chuyển : 30.000 VND
                             </div>
                             <div class="text-red-500 font-bold">
                                 Thành tiền: {{number_format($order->total_price, 0, ',', '.')}} VND

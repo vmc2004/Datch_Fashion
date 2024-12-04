@@ -185,11 +185,9 @@
 
                         <div class="mb-4">
                             <label class="block text-gray-700">Mã giảm giá</label>
-                            <form action="" method="GET">
-                                @csrf
-                                <input type="text" class="border border-gray-500 rounded-md pl-1 w-9/12" name="code" placeholder="Nhập mã giảm giá">
-                                <button type="submit" class="bg-gray-200 px-2 rounded-lg border border-gray-500">Áp dụng</button>
-                            </form>
+                           <form action="" method="POST">
+                            <input type="text" class="border border-gray-500 rounded-md pl-1 w-9/12" name="code" placeholder="Nhập mã giảm giá">
+                           </form>
                         </div>
                         <div class="mb-4">
                             <div class="flex justify-between">
@@ -217,8 +215,10 @@
                                 <span>Tổng thanh toán</span>
                                 @if($subtotal >= 599000)
                                 <span>{{ number_format($subtotal ) }} đ</span>
+                                <input type="hidden" name="subtotal" value="{{$subtotal}}">
                                 @else
                                 <span>{{ number_format($subtotal + 30000) }} đ</span>
+                                <input type="hidden" name="subtotal" value="{{$subtotal + 30000}}">
                                 @endif
                             </div>
                         </div>

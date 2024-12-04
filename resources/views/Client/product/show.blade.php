@@ -139,6 +139,7 @@
                                 class="mx-2 w-10 text-center appearance-none">
                             <button type="button" class="text-gray-500" onclick="increment()">+</button>
                         </div>
+
                     </div>
 
 
