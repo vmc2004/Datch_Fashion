@@ -183,19 +183,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::delete('/destroy/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
     });
 
-<<<<<<< HEAD
-// Đường dẫn mã giảm giá
-Route::prefix('coupons')->group(function () {
-    Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
-    Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
-    Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
-    Route::post('/send_coupon/{coupon}', [CouponController::class, 'send_coupon'])->name('coupons.send_coupon');
-    Route::get('/edit/{coupon}', [CouponController::class, 'edit'])->name('coupons.edit');
-    Route::put('/update/{coupon}', [CouponController::class, 'update'])->name('coupons.update');
-    Route::delete('/destroy/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
-    Route::put('/{coupon}', [CouponController::class, 'stateChangeCoupon'])->name('coupons.stateChangeCoupon');
-    Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
-=======
+
      // Đường dẫn mã giảm giá
      Route::prefix('coupons')->group(function () {
         Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
@@ -209,22 +197,4 @@ Route::prefix('coupons')->group(function () {
         Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
     });
             // Kết thúc mã giảm giá
->>>>>>> 426bef249330be6a16966439c825bfdf066afc91
 });
-
-    
-
-
-// Đường dẫn mã giảm giá
-Route::prefix('coupons')->group(function () {
-    Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
-    Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
-    Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
-    Route::post('/send_coupon/{coupon}', [CouponController::class, 'send_coupon'])->name('coupons.send_coupon');
-    Route::get('/edit/{coupon}', [CouponController::class, 'edit'])->name('coupons.edit');
-    Route::put('/update/{coupon}', [CouponController::class, 'update'])->name('coupons.update');
-    Route::delete('/destroy/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
-    Route::put('/{coupon}', [CouponController::class, 'stateChangeCoupon'])->name('coupons.stateChangeCoupon');
-    Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
-});
-// Kết thúc mã giảm giá
