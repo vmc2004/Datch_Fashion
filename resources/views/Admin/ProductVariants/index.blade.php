@@ -13,7 +13,7 @@
                     </div>
                     @foreach ($productVariants as $productVariant)
                     @endforeach
-                    <a href="{{route('productVariants.create',$productVariant->id)}}" class="btn btn-success"> <i class="fa-solid fa-plus me-2"></i>Thêm biến thể</a>
+                     {{-- <a href="{{route('productVariants.create',$productVariant->id)}}" class="btn btn-success"> <i class="fa-solid fa-plus me-2"></i>Thêm biến thể</a> --}}
                     <div class="card-body p-3">
                         <div class="table-responsive">
                             <table class="table table-hover">

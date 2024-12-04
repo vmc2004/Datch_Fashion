@@ -13,7 +13,8 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <title>@yield('title') - Datch</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{asset('assets/client//assets/css/styles.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/client/css/styles.css')}}">
+  
   <link rel="stylesheet" href="{{asset('assets/client/assets/css/styles-be.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>

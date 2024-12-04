@@ -21,7 +21,6 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
-
         // Tìm biến thể dựa trên ID sản phẩm, màu sắc và kích cỡ
         $variant = ProductVariant::where('product_id', $validatedData['product_id'])
             ->where('color_id', $validatedData['color_id'])
@@ -34,15 +33,24 @@ class CartController extends Controller
             'status' => 'active',
         ]);
 
-        // Thêm sản phẩm vào giỏ hàng
-        $cart->items()->create([
-            'variant_id' => $variant->id,
-            'quantity' => $validatedData['quantity'],
-            'price_at_purchase' => $variant->price,
-        ]);
+        // Kiểm tra sản phẩm trong giỏ hàng và cập nhật số lượng nếu cần
+        $cartItem = $cart->items()->where('variant_id', $variant->id)->first();
+
+        if ($cartItem) {
+            // Nếu đã có sản phẩm, tăng số lượng
+            $cartItem->increment('quantity', $validatedData['quantity']);
+        } else {
+            // Nếu chưa có, tạo mới
+            $cart->items()->create([
+                'variant_id' => $variant->id,
+                'quantity' => $validatedData['quantity'],
+                'price_at_purchase' => $variant->price,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Sản phẩm đã được thêm vào giỏ hàng!');
     }
+
     public function showCart()
     {
         // Lấy giỏ hàng của người dùng (user_id là 1 theo yêu cầu)

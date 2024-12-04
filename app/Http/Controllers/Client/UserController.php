@@ -30,6 +30,7 @@ class UserController extends Controller
     {
         // Lấy danh sách danh mục từ cơ sở dữ liệu
         $banners = Banner::where('is_active', 1)->where('location', 1)->get();
+        // $banners = Banner::query()->get();
         $brands = Brand::query()->limit(5)->get();
         $category = Category::query()->limit(5)->get();
         $newPro = Product::query()->latest('id')->limit(5)->get();

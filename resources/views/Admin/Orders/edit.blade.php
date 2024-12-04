@@ -42,9 +42,33 @@
                         <td>{{$detail->quantity}}</td>
                         <td>{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
                     </tr>
+                   
                     @endforeach
-                    
+                        
+
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7" class="text-end"><strong>Tổng tiền hàng:</strong></td>
+                        <td><strong>{{ number_format($order->OrderDetails->sum(function($detail) { return $detail->quantity * $detail->variant->price; })) }} ₫</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="text-end"><strong>Tiền giao hàng:</strong></td>
+                        <td>@if ( ($order->OrderDetails->sum(function($detail) { return $detail->quantity * $detail->variant->price; }))  >= 599000)
+                            <strong>0₫</strong>
+                        @else
+                        <strong>30.000₫</strong>
+                        @endif</td>
+                    </tr>
+                    {{-- <tr>
+                        <td colspan="7" class="text-end"><strong>Giảm giá:</strong></td>
+                        <td><strong>{{ number_format($order->discount) }} ₫</strong></td>
+                    </tr> --}}
+                    <tr>
+                        <td colspan="7" class="text-end"><strong>Tổng cộng:</strong></td>
+                        <td><strong>{{ number_format($order->total_price) }} ₫</strong></td>
+                    </tr>
+                </tfoot>
             </table>
             <div class="row mb-3">
                 <div class="col-md-6">

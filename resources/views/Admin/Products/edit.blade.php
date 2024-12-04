@@ -46,7 +46,7 @@
                                     </div>
                                 @enderror
                                 @if ($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" width="100px" height="100px"
+                                    <img src="{{ asset($product->image) }}" width="100px" height="100px"
                                         alt="">
                                 @endif
                             </div>

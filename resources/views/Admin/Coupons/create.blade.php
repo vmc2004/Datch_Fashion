@@ -18,7 +18,7 @@
       <div class="card z-index-2 h-100">
         <div class="card-header pb-0 pt-3 bg-transparent">
     @if ($errors->any())
-        <div class="alert alert-danger">
+        <div class="alert alert-danger text-white">
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -52,38 +52,18 @@
 
             <div class="mb-3">
                 <label for="" class="form-label">Số lượng mã</label>
-                <input type="number" name="usage_limit" class="form-control" id="">
+                <input type="number" name="quantity" class="form-control" id="">
             </div>
 
-            <div class="mb-3">
-                <label for="" class="form-label">Giới hạn số lượng mã cho người dùng </label>
-                <input type="number" name="usage_limit_per_user" class="form-control" id="">
-            </div>
-
-            {{-- <div class="mb-3">
-                <label for="" class="form-label">Đã sử dụng</label>
-                <input type="number" name="used_count" class="form-control" id="">
-            </div> --}}
-
-
-            <div class="mb-3">
-                <label for="" class="form-label">Tổng tiền tối thiểu</label>
-                <input type="number" name="minimum_amount" class="form-control" id="">
-            </div>
-
-            <div class="mb-3">
-                <label for="" class="form-label">Tổng tiền tối đa</label>
-                <input type="number" name="maximum_amount" class="form-control" id="">
-            </div>
 
             <div class="mb-3">
                 <label for="" class="form-label">Ngày bắt đầu</label>
-                <input type="datetime-local" name="start_date" class="form-control" id="">
+                <input type="date" name="start_date" class="form-control" id="">
             </div>
 
             <div class="mb-3">
                 <label for="" class="form-label">Ngày kết thúc</label>
-                <input type="datetime-local" name="end_date" class="form-control" id="">
+                <input type="date" name="end_date" class="form-control" id="">
             </div>
 
             <button type="submit" class="btn btn-primary">Thêm</button>

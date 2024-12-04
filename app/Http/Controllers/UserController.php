@@ -34,6 +34,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        // dd($request->all());
         $user = $request->except('avatar');
         if ($request->hasFile('avatar')) {
             $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
