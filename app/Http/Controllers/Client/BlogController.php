@@ -10,7 +10,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::query()->paginate(12);
+        $blogs = Blog::where('status',1)->paginate(3);
         return view('Client.blog.index', compact('blogs'));
     }
 
