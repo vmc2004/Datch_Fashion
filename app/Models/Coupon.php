@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,13 +14,11 @@ class Coupon extends Model
         'code',
         'discount',
         'discount_type',
-        'usage_limit',
-        'usage_limit_per_user',
-        'used_count',
-        'minimum_amount',
-        'maximum_amount',
+        'quantity',
+        'used',
         'start_date',
         'end_date',
         'is_active',
     ];
+
 }

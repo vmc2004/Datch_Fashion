@@ -1,6 +1,6 @@
 @extends('Client.layout.layout')
 
-@section('title', 'Chi tiết sản phẩm')
+@section('title', 'Bài Viết')
 
 
 @section('content')

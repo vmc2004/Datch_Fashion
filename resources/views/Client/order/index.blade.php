@@ -102,9 +102,14 @@
                          <button class="bg-green-500 text-white px-4 py-2 rounded">
                           <a href="/account/orders/edit/{{$order->code}}">Xem chi tiết</a>
                          </button>
-                         <div class="text-red-500 font-bold">
-                          Thành tiền: {{number_format($order->total_price, 0, ',', '.')}} VND
-                         </div>
+                        <div>
+                            <div>
+                                Phí vận chuyển : 30.000 VND
+                            </div>
+                            <div class="text-red-500 font-bold">
+                                Thành tiền: {{number_format($order->total_price, 0, ',', '.')}} VND
+                               </div>
+                        </div>
                         </div> <hr>
                         @endforeach
                     </div>

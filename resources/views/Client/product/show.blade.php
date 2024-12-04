@@ -191,17 +191,17 @@
             <p class="mt-2"><span class="font-bold">Đánh giá trung bình:</span> {{ round($avgRating, 1) }}/5 <i
                     class="fa-solid fa-star text-warning"></i></p>
 
-            <div class="row">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 gap-6">
                 @foreach ($comments as $comment)
                     @if ($comment->rating != '')
-                        <div class="comment my-2 col-sm-4 col-md-4">
+                        <div class="">
                             <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
                                 {{ $comment->created_at->format('d/m/Y') }}</p>
                             <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
                             <p><span class="font-bold">Đánh giá:</span> {{ $comment->rating }} sao</p>
                         </div>
                     @else
-                        <div class="comment my-2 col-sm-4 col-md-4">
+                        <div class="">
                             <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
                                 {{ $comment->created_at->format('d/m/Y') }}</p>
                             <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
@@ -228,7 +228,6 @@
                     <input type="radio" id="star1" name="rating" value="1" />
                     <label for="star1">&#9733;</label>
                 </div> --}}
-
                     <textarea name="content" placeholder="Viết bình luận của bạn..." required></textarea>
                     <button type="submit" class="submit-button">Gửi bình luận</button>
                 </form>

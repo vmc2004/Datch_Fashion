@@ -32,36 +32,58 @@ class CouponController extends Controller
      */
     public function store(Request $request)
     {
-        $coupon = $request->all();
-        // dd($coupon);
-        Coupon::query()->create($coupon);
+        $coupon = $request->validate([
+            'code' => 'required|unique:coupons,code|max:10',
+            'discount' => 'required',
+            'discount_type'=> 'required|in:percent,fixed',
+            'quantity' => 'required|integer|min:1',
+            'start_date' => 'nullable|date', 
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ],[
+            'code.required' => 'Mã giảm giá không được để trống.',
+            'code.unique' => 'Mã giảm giá đã tồn tại.',
+            'code.max' => 'Mã giảm giá không được vượt quá :max ký tự.',
+            'discount.required' => 'Giá trị giảm giá không được để trống.',
+            'discount_type.required' => 'Loại giảm giá không được để trống.',
+            'discount_type.in' => 'Loại giảm giá chỉ được là percentage hoặc fixed.',
+            'quantity.required' => 'Số lượng không được để trống.',
+            'quantity.integer' => 'Số lượng phải là một số nguyên.',
+            'quantity.min' => 'Số lượng phải lớn hơn hoặc bằng :min.',
+            'start_date.date' => 'Ngày bắt đầu phải là định dạng ngày hợp lệ.',
+            'end_date.date' => 'Ngày kết thúc phải là định dạng ngày hợp lệ.',
+            'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+        ]);
+        Coupon::create($coupon);
         return redirect()->route('coupons.index')->with('message','Thêm mã giảm giá thành công');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Coupon $coupon)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Coupon $coupon)
     {
         return view('Admin.Coupons.edit', compact('coupon'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Coupon $coupon)
     {
         {
-            $data = $request->all();
-
+            $data = $request->validate([
+                'code' => 'required|unique:coupons,code|max:10',
+                'discount' => 'required',
+                'discount_type'=> 'required|in:percent,fixed',
+                'quantity' => 'required|integer|min:1',
+                'start_date' => 'nullable|date', 
+                'end_date' => 'nullable|date|after_or_equal:start_date',
+            ],[
+                'code.required' => 'Mã giảm giá không được để trống.',
+                'code.unique' => 'Mã giảm giá đã tồn tại.',
+                'code.max' => 'Mã giảm giá không được vượt quá :max ký tự.',
+                'discount.required' => 'Giá trị giảm giá không được để trống.',
+                'discount_type.required' => 'Loại giảm giá không được để trống.',
+                'discount_type.in' => 'Loại giảm giá chỉ được là percentage hoặc fixed.',
+                'quantity.required' => 'Số lượng không được để trống.',
+                'quantity.integer' => 'Số lượng phải là một số nguyên.',
+                'quantity.min' => 'Số lượng phải lớn hơn hoặc bằng :min.',
+                'start_date.date' => 'Ngày bắt đầu phải là định dạng ngày hợp lệ.',
+                'end_date.date' => 'Ngày kết thúc phải là định dạng ngày hợp lệ.',
+                'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+            ]);
             $coupon->update($data);
 
             return redirect()->back()->with('message', 'Cập nhật thành công');
