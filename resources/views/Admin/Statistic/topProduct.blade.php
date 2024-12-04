@@ -10,7 +10,7 @@
     </div>
     <div class="col-12 text-center">
       <a href="{{ route('admin.index') }}" class="btn btn-danger mx-2">Thống kê đơn hàng doanh số</a>
-      <a href="{{ route('admin.topProduct') }}" class="btn btn-success mx-2">Thống kê 10 sản phẩm bán chạy nhất</a>
+      <a href="#" class="btn btn-success mx-2">Thống kê 10 sản phẩm bán chạy nhất</a>
       <a href="#" class="btn btn-warning mx-2">Thống kê hàng tồn kho</a>
       <a href="#" class="btn btn-info mx-2">Thống kê trạng thái đơn hàng</a>
     </div>
@@ -42,7 +42,7 @@
       </div>
 
       <div class="col-md-3 mb-3 d-flex align-items-end">
-        <button type="button" id="btn-dashboard-filter" class="btn btn-primary w-100 mt-4">Lọc kết quả</button>
+        <button type="button" id="btn-topProduct" class="btn btn-primary w-100 mt-4">Lọc kết quả</button>
       </div>
     </form>
   </div>
@@ -54,24 +54,25 @@
   </div>
 
     <div class="row mb-4">
-  <div class="col-sm-12">
+    <div class="col-sm-12">
     <p class="display-4 text-center text-dark font-weight-bold mb-4">
-      <i class="fas fa-chart-line"></i> Bảng thống kê doanh số
+      <i class="fas fa-chart-line"></i> Thống kê 10 sản phẩm bán chạy nhất
     </p>
-    <table class="table table-bordered table-striped table-hover"  id="orderTable">
+    <table class="table table-bordered table-striped table-hover" id="topProductTable">
       <thead class="table-dark">
         <tr>
-          <th><i class="fas fa-calendar-day"></i> Thời gian</th>
-          <th><i class="fas fa-box"></i> Số lượng đơn hàng</th>
-          <th><i class="fas fa-cogs"></i> Số lượng sản phẩm đã bán</th>
-          <th><i class="fas fa-dollar-sign"></i> Tổng giá trị</th>
+          <th><i class="fas fa-cogs"></i> Tên sản phẩm</th>
+          <th><i class="fas fa-box"></i> Số lượng đã bán</th>
+          <th><i class="fas fa-dollar-sign"></i> Giá bán</th>
+          <th><i class="fas fa-money-bill-wave"></i> Tổng doanh thu</th>
         </tr>
       </thead>
       <tbody>
         <!-- Dữ liệu sẽ được hiển thị ở đây -->
       </tbody>
     </table>
-  </div>
+</div>
+
 </div>
 
 

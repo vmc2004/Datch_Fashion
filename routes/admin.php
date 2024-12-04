@@ -29,8 +29,13 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     // Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
     Route::get('/users/profile', [UserController::class, 'profile']);
+    Route::get('/topProduct', [HomeController::class, 'showTopProduct'])->name('admin.topProduct');
+    Route::get('/users/profile', [UserController::class, 'profile']);
 
     Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
+    Route::post('/filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');
+    
+    Route::post('/dashboard-filter',[HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
     Route::post('/dashboard-filter', [HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
     Route::post('/day-sorder', [HomeController::class, 'get30DaysOrderData'])->name('admin.day-sorder');
 
