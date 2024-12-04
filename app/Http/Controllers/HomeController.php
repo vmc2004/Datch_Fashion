@@ -216,7 +216,7 @@ public function get30DaysOrderData(Request $request)
         return [
             'product_name' => $product ? $product->name : 'Sản phẩm không tồn tại',
             'quantity_sold' => $item->total_quantity,
-            'unit_price' => $item->price,  // Giá từ bảng order_details
+            'unit_price' => $item->price,
             'total_sales' => $item->total_sales
         ];
     });

@@ -9,7 +9,7 @@
       <p class="display-4 text-dark font-weight-bold">Danh mục thống kê</p>
     </div>
     <div class="col-12 text-center">
-      <a href="{{ route('admin.filter') }}" class="btn btn-danger mx-2">Thống kê đơn hàng doanh số</a>
+      <a href="{{ route('admin.index') }}" class="btn btn-danger mx-2">Thống kê đơn hàng doanh số</a>
       <a href="#" class="btn btn-success mx-2">Thống kê 10 sản phẩm bán chạy nhất</a>
       <a href="#" class="btn btn-warning mx-2">Thống kê hàng tồn kho</a>
       <a href="#" class="btn btn-info mx-2">Thống kê trạng thái đơn hàng</a>
