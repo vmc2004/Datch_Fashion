@@ -71,7 +71,7 @@
                     </table>
                 </div>
                 <div class="border border-gray-300 rounded-lg shadow-lg">
-                    <form action="{{ route('comments.sendComment', $variant->product->id) }}" method="POST" class="comment-form w-100 my-3">
+                    <form action="{{ route('comments.sendRate', $variant->product->id) }}" method="POST" class="comment-form w-100 my-3">
                         @csrf
                         <div class="star-rating">
                             <input type="radio" id="star5" name="rating" value="5" />

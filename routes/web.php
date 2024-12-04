@@ -55,7 +55,7 @@ Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('a
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/account/orders', [OrderController::class,'index']);
-Route::get('/product/{slug}', [ProductController::class, 'show']);
+Route::get('/product/{slug}', [ProductController::class, 'show'])->name('client.product.show');
 Route::get('/feedback', [HomeController::class,'feedback']);
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
