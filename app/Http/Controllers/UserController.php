@@ -98,12 +98,10 @@ class UserController extends Controller
         return view('Admin.users.index', compact('users'));
     }
     public function profile(){
-        $getAddress = Province::all();
         $user = Auth::user();
         return view('Admin.profile',
     [
         'user' => $user,
-        'getAddress' => $getAddress,
     ]);
     }
 }
