@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Commune;
@@ -23,11 +24,12 @@ class UserController extends Controller
     public function homeClient()
     {
         // Lấy danh sách danh mục từ cơ sở dữ liệu
+        $banners = Banner::where('is_active', 1)->where('location', 1)->get();
         $brands = Brand::query()->limit(5)->get();
         $category = Category::query()->limit(5)->get();
         $newPro = Product::query()->latest('id')->limit(5)->get();
         $Proview = Product::query()->orderBy('views', 'desc')->limit(5)->get();
-        return view('Client.home', compact('category', 'newPro','brands', 'Proview'));
+        return view('Client.home', compact('category', 'newPro','brands', 'Proview', 'banners'));
     }
     public function login() {
         return view('Client.account.login');

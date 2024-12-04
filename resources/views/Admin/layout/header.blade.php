@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="{{ asset('assets/admin/img/logoDatch.png') }}" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/admin/img/apple-icon.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('assets/admin/img/logDatch.png') }}">
+
     <title>@yield('title')</title>
 
     @yield('style')
@@ -20,7 +21,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     
     <!-- Fonts and Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     
     <!-- Nucleo Icons -->
@@ -237,13 +238,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('blogs.create') }}">
+                    <a class="nav-link" href="{{ route('users.create') }}">
                         <div class="icon icon-shape border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512">
                                 <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"/>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Thêm khách hàng</span>
+                        <span class="nav-link-text ms-1">Thêm thành viên mới</span>
                     </a>
                 </li>
             </ul>
@@ -348,10 +349,9 @@
                             @if (Auth::check())
                                 <img src="{{ Auth::user()->avatar ? '/uploads/' . Auth::user()->avatar : '/assets/images/no-avatar.svg' }}" alt="Avatar Admin"
                                     class="rounded-circle me-2" style="width: 30px; height: 30px;">
-                                <a href="{{ route('logout') }}" class="nav-link text-white font-weight-bold px-0">
+                                <a href="/admin/users/profile" class="nav-link text-white font-weight-bold px-0">
                                     {{ Auth::user()->fullname }} <!-- Hiển thị tên người dùng -->
                                 </a>
-                                <a href="{{ route('logout') }}" class="d-sm-inline d-none"></a>
                             @else
                                 <a href="{{ route('login') }}" class="nav-link text-white font-weight-bold px-0">
                                     <i class="fa fa-user me-sm-1"></i>

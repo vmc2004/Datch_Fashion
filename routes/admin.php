@@ -28,6 +28,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
+    Route::get('/users/profile', [UserController::class, 'profile']);
 
     Route::post('/filter-by-date',[HomeController::class, 'filter'])->name('admin.filter');
     Route::post('/dashboard-filter',[HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
@@ -56,6 +57,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('users.index');
         Route::get('/search', [UserController::class, 'search'])->name('users.search');
+        Route::get('/filter', [UserController::class, 'filter'])->name('users.filter');
         Route::get('/create', [UserController::class, 'create'])->name('users.create');
         Route::post('/create', [UserController::class, 'store'])->name('users.store');
         Route::get('/show/{user}', [UserController::class, 'show'])->name('users.show');
