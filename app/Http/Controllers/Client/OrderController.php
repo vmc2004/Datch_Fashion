@@ -9,10 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function index(){
-        $orders = Order::query()->where('user_id', Auth::id())->latest('id')->paginate(7);
+    public function index(Request $request)
+    {
+        $status = $request->get('status', '');
+        $orders = Order::where('user_id', Auth::id()) 
+            ->when($status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->latest('id') 
+            ->paginate(7);
         return view('Client.order.index', [
             'orders' => $orders,
+            'status' => $status,
         ]);
     }
     public function edit($code){
@@ -24,14 +32,14 @@ class OrderController extends Controller
     public function huy($code)
     {
         $order = Order::where('code', $code)
-            ->with('orderDetails.productVariant') // Load quan hệ orderDetails và productVariant
+            ->with('orderDetails.productVariant') 
             ->first();
         if ($order) {
             foreach ($order->orderDetails as $detail) {
-                $variant = $detail->productVariant; // Lấy thông tin productVariant
+                $variant = $detail->productVariant;
                 if ($variant) {
-                    $variant->quantity += $detail->quantity; // Cộng lại số lượng
-                    $variant->save(); // Lưu thay đổi
+                    $variant->quantity += $detail->quantity;
+                    $variant->save(); 
                 }
             }
             $order->status = 'Đơn hàng đã hủy';
