@@ -78,12 +78,12 @@
 
             <div class="mb-3">
                 <label for="" class="form-label">Ngày bắt đầu</label>
-                <input type="datetime-local" name="start_date" class="form-control" id="">
+                <input type="date" name="start_date" class="form-control" id="">
             </div>
 
             <div class="mb-3">
                 <label for="" class="form-label">Ngày kết thúc</label>
-                <input type="datetime-local" name="end_date" class="form-control" id="">
+                <input type="date" name="end_date" class="form-control" id="">
             </div>
 
             <button type="submit" class="btn btn-primary">Thêm</button>
