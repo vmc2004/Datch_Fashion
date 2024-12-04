@@ -17,12 +17,28 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        
-        $orders = Order::orderBy('id', 'desc')->paginate(8);
+        $search_order = $request->get('search-order');
+        $payment_status = $request->get('payment_status');
+        $status = $request->get('status');
+        $orders = Order::query()
+            ->when($status, function($query) use ($status) {
+                return $query->where('status', $status);
+            })
+            ->when($payment_status, function($query) use ($payment_status) {
+                return $query->where('payment_status', $payment_status);
+            })
+            ->when($search_order, function($query) use ($search_order){
+                 return $query->where('phone', 'LIKE', '%'. $search_order. '%')
+                 ->orwhere('code', 'LIKE', '%'.$search_order . '%');
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(8);
+
         return view('Admin.Orders.index', compact('orders'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -110,12 +126,6 @@ class OrderController extends Controller
     {
         $product = Product::findOrFail($id);
         return response()->json($product);
-    }
-    public function search_order(Request $request){
-        $orders = Order::where('phone', 'LIKE', '%'. $request['search-order']. '%')
-        ->orwhere('code', 'LIKE', '%'. str_replace('HD0', '', $request['search-order']) . '%')
-        ->paginate(8);
-        return view('Admin.Orders.index', compact('orders'));
     }
     public function exportToExcel()
     {

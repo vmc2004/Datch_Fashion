@@ -18,7 +18,7 @@
                 <div class="header d-flex justify-content-between align-items-center py-3 px-4 border-bottom">
                     <!-- Ô tìm kiếm -->
                     <div class="search-box col-md-3">
-                        <form action="{{ route('orders.search') }}" method="GET" class="d-flex align-items-center">
+                        <form action="" method="GET" class="d-flex align-items-center">
                             <i class="fas fa-search text-secondary me-2"></i>
                             @csrf
                             <input type="text" name="search-order" class="form-control" placeholder="Tìm kiếm đơn hàng...">
@@ -27,21 +27,25 @@
                 
                     <!-- Form lọc danh mục -->
                     <div class="col-md-8">
-                        <form action="{{ route('categories.filter') }}" method="GET" class="row g-3 align-items-center">
+                        <form action="" method="GET" class="row g-3 align-items-center">
                             <!-- Trạng thái -->
                             <div class="col-md-5">
-                                <select class="form-select" name="is_active">
+                                <select class="form-select" name="payment_status">
                                     <option value="">Tất cả trạng thái</option>
-                                    <option value="1" {{ request('is_active') == '1' ? 'selected' : '' }}>Đã thanh toán</option>
-                                    <option value="0" {{ request('is_active') == '0' ? 'selected' : '' }}>Chưa thanh toán</option>
+                                    <option value="Đã thanh toán" {{ request('payment_status') == 'Đã thanh toán' ? 'selected' : '' }}>Đã thanh toán</option>
+                                    <option value="Chưa thanh toán" {{ request('payment_status') == 'Chưa thanh toán' ? 'selected' : '' }}>Chưa thanh toán</option>
                                 </select>
                             </div>
                             <!-- Sắp xếp -->
                             <div class="col-md-5">
-                                <select class="form-select" name="sort">
+                                <select class="form-select" name="status">
                                     <option value="">Sắp xếp theo</option>
-                                    <option value="az">A-Z</option>
-                                    <option value="za">Z-A</option>
+                                    <option value="Chờ xác nhận" {{ request('status') == 'Chờ xác nhận' ? 'selected' : '' }}>Đơn hàng mới</option>
+                                    <option value="Đã xác nhận" {{ request('status') == 'Đã xác nhận' ? 'selected' : '' }}>Đã xác nhận</option>
+                                    <option value="Đang chuẩn bị hàng" {{ request('status') == 'Đang chuẩn bị hàng' ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
+                                    <option value="Đang giao hàng" {{ request('status') == 'Đang giao hàng' ? 'selected' : '' }}>Đang giao hàng</option>
+                                    <option value="Đã giao hàng" {{ request('status') == 'Đã giao hàng' ? 'selected' : '' }}>Đã giao hàng</option>
+                                    <option value="Đơn hàng đã hủy" {{ request('status') == 'Đơn hàng đã hủy' ? 'selected' : '' }}>Đơn hàng đã hủy</option>
                                 </select>
                             </div>
                             <!-- Nút lọc -->
@@ -92,6 +96,8 @@
                             <p class="text-success">Hoàn thành</p>
                         @elseif ($order->status == 'Đơn hàng đã hủy')
                             <p class="text-danger">Hủy đơn hàng</p>
+                        @elseif ($order->status == 'Đang giao hàng')
+                        <p class="text-primary">Đang giao hàng</p>
                         @elseif($order->status == 'Chờ xác nhận')
                             <p>Đơn hàng mới</p>
                         @else
