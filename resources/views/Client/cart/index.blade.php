@@ -175,6 +175,7 @@
                         if (data.success) {
                             // Xóa sản phẩm khỏi giỏ hàng trên giao diện
                             form.closest('.flex').remove(); // Xóa phần tử sản phẩm
+                            location.reload();
                             // alert(data.message); // Hiển thị thông báo thành công
                         } else {
                             alert(data.message); // Hiển thị thông báo lỗi

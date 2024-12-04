@@ -3,6 +3,101 @@
 @section('title', "Hồ sơ của tôi")
 
 @section('content')
+<style>
+            .suggestions {
+            position: absolute;
+            background: #1a1d24;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+           
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            margin-top: 3px;
+            border: 1px solid #3f4451;
+        }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: white;
+            border-bottom: 1px solid #3f4451;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: #292e3a;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:before {
+            content: "📍";
+            margin-right: 10px;
+            font-size: 1.1em;
+            transition: transform 0.3s ease;
+        }
+
+        .suggestion-item:hover {
+            background: #3a4150;
+            color: #ffffff;
+            padding-left: 24px;
+        }
+
+        .suggestion-item:hover:before {
+            transform: scale(1.2);
+        }
+
+        .suggestion-item:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .suggestion-item:hover:after {
+            transform: scaleY(1);
+        }
+
+        .address-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        /* Tùy chỉnh thanh cuộn */
+        .suggestions::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .suggestions::-webkit-scrollbar-track {
+            background: #1a1d24;
+            border-radius: 8px;
+        }
+
+        .suggestions::-webkit-scrollbar-thumb {
+            background: #3f4451;
+            border-radius: 8px;
+        }
+
+        .suggestions::-webkit-scrollbar-thumb:hover {
+            background: #4f5565;
+        }
+
+        #phone {
+            filter: blur(5px)
+        }
+
+</style>
 <div class="max-w-screen-xl mx-auto ">
 
     <div class="mt-12 md:grid grid-cols-5 gap-8">
@@ -146,16 +241,6 @@
                                     <input type="text"  name="email"
                                     class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4"
                                     placeholder="Nhập họ và tên" value="{{ $user->email }}">
-                                    {{-- <span class="text-green-300">
-                                        <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="check"
-                                            class="overflow-visible w-3.5 inline-block" role="img"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                            <path fill="currentColor"
-                                                d="M413.505 91.951L133.49 371.966l-98.995-98.995c-4.686-4.686-12.284-4.686-16.971 0L6.211 284.284c-4.686 4.686-4.686 12.284 0 16.971l118.794 118.794c4.686 4.686 12.284 4.686 16.971 0l299.813-299.813c4.686-4.686 4.686-12.284 0-16.971l-11.314-11.314c-4.686-4.686-12.284-4.686-16.97 0z">
-                                            </path>
-                                        </svg>
-                                        Đã xác minh
-                                    </span> --}}
                                 </p>
                                 @error('email')
                                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -169,114 +254,33 @@
                                 <input type="text"  name="phone"
                                 class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4"
                                 placeholder="Nhập số điện thoại" value="{{ $user->phone }}">
-                                {{-- <span class="cursor-pointer text-blue-900 hover:underline">{{ $user->phone }}</span> --}}
                                 </p>
                             </div>
                             @error('phone')
                                 <div class="text-red-500 text-sm mt-1 ">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="flex mb-8">
-                            <label class="md:w-40 text-right mr-8 py-2.5 pl-10 md:pl-0">Địa chỉ</label>
-                            <div class="flex-1 mr-24">
-                                <div class="py-2.5 cursor-pointer">
-                                    {{-- @if($user->address != "") --}}
-                                    <p class="mr-8">
-                                        <input type="text" name="address"
-                                               class="text-blue-900 border border-blue-900 w-10/12 h-9 rounded-3xl py-2.5 px-3.5 mr-4"
-                                               placeholder="Nhập địa chỉ" value="{{ $user->address }}">
-                                    </p>
-                                {{-- @else
-                                    <span class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                                          onclick="toggleModal(true)">
-                                        Thêm mới
-                                    </span>
-                                @endif --}}
-                                
-                                </div>
-                            </div>
+                        <div class="flex space-x-4 mb-8 ">
+                            <label class="block w-40 text-right mr-5" for="address">
+                                Địa chỉ
+                            </label>
+                           <div class="w-8/12">
+                            <input type="text" id="address" name="address" class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4" required placeholder="Nhập địa chỉ của bạn"
+                            autocomplete="off" value="{{$user->address}}">   
+                            <div id="ok" class="ok block"></div>
+                           </div>
                         </div>
+                        </div>
+                       
                         
                        
                         <div class="text-center">
-                            <button type="submit" class="text-white bg-red-700 rounded-full py-2 px-8">Lưu thay
+                            <button type="submit" class="text-white bg-red-700 rounded-full py-2 px-8 mb-2">Lưu thay
                                 đổi</button>
                         </div>
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-<!-- Modal Background -->
-<div 
-    id="addAddressModal" 
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <!-- Modal Content -->
-    <div class="bg-white rounded-lg shadow-lg max-w-md w-full">
-        <!-- Modal Header -->
-        <div class="flex justify-between items-center border-b p-4">
-            <h2 class="text-lg font-semibold">Địa chỉ</h2>
-            <button 
-                class="text-gray-500 hover:text-gray-800"
-                onclick="toggleModal(false)">
-                &times;
-            </button>
-        </div>
-        <!-- Modal Body -->
-        <div class="p-4">
-            <form id="addAddressForm">
-                <div class="mb-[20px] flex items-center">
-                    <label class="text-right w-1/4 mr-[30px]">Tỉnh / thành phố</label>
-                    <div class="rounded-full h-full relative flex-1">
-                        <select id="province" name="province" class=" province border border-solid border-[#999] w-full h-full p-[6px] !rounded-[4px] bg-white">
-                            <option>Chọn tỉnh</option>
-                            @foreach($getAddress as $address)
-                                        <option value="{{ $address->id }}">{{ $address->name }}</option>
-                                    @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-[20px] flex items-center">
-                    <label class="text-right w-1/4 mr-[30px]">Huyện</label>
-                    <div class="rounded-full h-full relative flex-1">
-                        <select name="district" id="district" disabled class= "district border border-solid border-[#999] w-full h-full p-[6px] !rounded-[4px] bg-white">
-                            <option value="">Chọn huyện</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-[20px] flex items-center">
-                    <label class="text-right w-1/4 mr-[30px]">Xã</label>
-                    <div class="rounded-full h-full relative flex-1">
-                        <select name="commune" id="commune" disabled class=" communeborder border-solid border-[#999] w-full h-full p-[6px] !rounded-[4px] bg-white">
-                            <option value="">Chọn xã</option>
-                        </select>
-                    </div>
-                </div>
-
-
-                <div class="mb-[20px] flex items-center">
-                    <label class="text-right w-1/4 mr-[30px]">Địa chỉ</label>
-                    <div class="relative flex-1">
-                    <textarea name="address" rows="3"
-                              class=" address !rounded-[4px] w-full resize-none border border-solid border-[#999] p-[10px]"
-                              placeholder="Nhập địa chỉ"></textarea>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <!-- Modal Footer -->
-        <div class="flex justify-end gap-2 border-t p-4">
-            <button 
-                class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-                onclick="toggleModal(false)">
-                Hủy
-            </button>
-            <button 
-                id="saveAddressBtn" 
-                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                Lưu
-            </button>
         </div>
     </div>
 </div>
@@ -315,104 +319,75 @@
                 reader.readAsDataURL(file);
             }
         });
-        function toggleModal(show) {
-            const modal = document.getElementById('addAddressModal');
-            modal.classList.toggle('hidden', !show);
-        }
-      // API endpoint (nếu cần thay đổi URL)
-const apiGetDistricts = '/api/districts';  // Đường dẫn lấy huyện từ API
-const apiGetCommunes = '/api/communes';    // Đường dẫn lấy xã từ API
+       
+      
 
-// Khi người dùng thay đổi tỉnh
-$('#province').change(function() {
-    var provinceId = $(this).val().padStart(2, '0'); // Lấy ID tỉnh và đảm bảo có ít nhất 2 ký tự
-    $('#district').prop('disabled', false);  // Bật dropdown huyện
-    $('#district').empty().append('<option value="">Chọn huyện</option>'); // Làm sạch và thêm lựa chọn mặc định
-    $('#commune').prop('disabled', true).empty().append('<option value="">Chọn xã</option>');  // Tắt dropdown xã và làm sạch
+</script>
+<script>
+    const apiKey = '0ChWSfCbLYvwL5nNJke0tHln2QewXBUBTcpMnZdK'; 
+    const addressInput = document.getElementById('address');
+    const suggestionsContainer = document.getElementById('ok');
+    const cityInput = document.getElementById('city');
+    const districtInput = document.getElementById('district');
+    const wardInput = document.getElementById('ward');
+    let sessionToken = crypto.randomUUID();
 
-    // Nếu đã chọn tỉnh, gửi request Ajax để lấy danh sách huyện
-    if (provinceId) {
-        $.ajax({
-            url: `${apiGetDistricts}/${provinceId}`,
-            method: 'GET',
-            success: function(data) {
-                $.each(data, function(key, district) {
-                    $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
-                });
-            },
-            error: function() {
-                console.error('Lỗi khi lấy dữ liệu huyện');
-            }
-        });
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
     }
-});
 
-// Khi người dùng thay đổi huyện
-$('#district').change(function() {
-    var districtId = $(this).val().padStart(3, '0'); // Lấy ID huyện và đảm bảo có ít nhất 3 ký tự
-    $('#commune').prop('disabled', false);  // Bật dropdown xã
-    $('#commune').empty().append('<option value="">Chọn xã</option>'); // Làm sạch và thêm lựa chọn mặc định
-
-    // Nếu đã chọn huyện, gửi request Ajax để lấy danh sách xã
-    if (districtId) {
-        $.ajax({
-            url: `${apiGetCommunes}/${districtId}`,
-            method: 'GET',
-            success: function(data) {
-                $.each(data, function(key, commune) {
-                    $('#commune').append('<option value="' + commune.id + '">' + commune.name + '</option>');
-                });
-            },
-            error: function() {
-                console.error('Lỗi khi lấy dữ liệu xã');
-            }
-        });
-    }
-});$(document).ready(function() {
-    // Khi người dùng ấn nút "Lưu"
-    $('#saveAddressBtn').click(function(e) {
-        e.preventDefault(); // Ngừng hành động mặc định của form
-
-        // Lấy giá trị từ các trường nhập liệu
-        var provinceId = $('#province').val();
-        var districtId = $('#district').val();
-        var communeId = $('#commune').val();
-        var address = $('textarea[name="address"]').val();
-
-        // Kiểm tra xem các trường có hợp lệ không
-        if (!provinceId || !districtId || !communeId || !address) {
-            alert('Vui lòng điền đầy đủ thông tin.');
+    const debouncedSearch = debounce((query) => {
+        if (query.length < 2) {
+            suggestionsContainer.style.display = 'none';
             return;
         }
 
-        // Gửi dữ liệu thông qua AJAX
-        $.ajax({
-            url: '/api/save-address',
-            method: 'POST',
-            data: {
-                province_id: provinceId,
-                district_id: districtId,
-                commune_id: communeId,
-                address: address,
-                _token: $('meta[name="csrf-token"]').attr('content')  // Lấy CSRF token từ meta tag
-            },
-            success: function(response) {
-                // Xử lý khi lưu thành công
-                alert('Địa chỉ đã được lưu thành công!');
-                toggleModal(false);  // Đóng modal sau khi thành công
-            },
-            error: function(xhr, status, error) {
-                // Hiển thị thông tin lỗi trong console và alert người dùng
-                console.error("Error:", xhr.responseText);
-                alert('Đã có lỗi xảy ra, vui lòng thử lại.');
-            }
-        });
+        // đây là demo, các bạn nên dùng API từ backend để tăng bảo mật, có thể thêm cache và rate limit
+        fetch(`https://rsapi.goong.io/Place/AutoComplete?api_key=${apiKey}&input=${encodeURIComponent(query)}&sessiontoken=${sessionToken}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'OK') {
+                    suggestionsContainer.innerHTML = '';
+                    suggestionsContainer.style.display = 'block';
+
+                    data.predictions.forEach(prediction => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.textContent = prediction.description;
+                        div.addEventListener('click', () => {
+                            addressInput.value = prediction.description;
+                            suggestionsContainer.style.display = 'none';
+
+                            // Tự động điền các trường địa chỉ từ compound
+                            if (prediction.compound) {
+                                cityInput.value = prediction.compound.province || '';
+                                districtInput.value = prediction.compound.district || '';
+                                wardInput.value = prediction.compound.commune || '';
+                            }
+                        });
+                        suggestionsContainer.appendChild(div);
+                    });
+                }
+            })
+            .catch(error => console.error('Lỗi:', error));
+    }, 300);
+
+    addressInput.addEventListener('input', (e) => debouncedSearch(e.target.value));
+
+    document.addEventListener('click', function (e) {
+        if (!suggestionsContainer.contains(e.target) && e.target !== addressInput) {
+            suggestionsContainer.style.display = 'none';
+        }
     });
-});
 
-
-
-
+   
 </script>
-
 @endsection

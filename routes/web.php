@@ -45,11 +45,7 @@ use App\Http\Controllers\OrderController as ControllersOrderController;
 
 
 
-Route::get('/api/districts/{provinceId}', [UserController::class, 'getDistricts'])->name('get.districts');
-Route::get('/api/communes/{districtId}', [UserController::class, 'getCommunes'])->name('get.communes');
-// Định nghĩa route cho việc lưu địa chỉ
 
-Route::get('/orders/export', [ControllersOrderController::class, 'exportToExcel'])->name('orders.export');
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -59,7 +55,7 @@ Route::get('/autocomplete', [ProductController::class, 'autocomplete'])->name('a
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/account/orders', [OrderController::class,'index']);
-Route::get('/product/{slug}', [ProductController::class, 'show']);
+Route::get('/product/{slug}', [ProductController::class, 'show'])->name('client.product.show');
 Route::get('/feedback', [HomeController::class,'feedback']);
 Route::get('/cua-hang', [StoreController::class, 'index'])->name('Client.category.index');
 
@@ -75,10 +71,13 @@ Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn']);
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('thankyou');
-Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
+Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
-Route::post('/apply-coupon', [CouponController::class, 'applyCoupon'])->name('apply_coupon');
 Route::get('/account/favorites',[HomeController::class, 'favorite']);
+Route::post('/apply-coupon', [CheckoutController::class, 'apply'])->name('coupon.apply');
+// web.php
+Route::post('/clear-session', [CheckoutController::class, 'clearSession']);
+
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);

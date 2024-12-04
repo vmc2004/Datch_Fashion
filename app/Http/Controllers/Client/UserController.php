@@ -54,14 +54,11 @@ class UserController extends Controller
         
 
         if ($user->role === 'member') {
-            // Chuyển hướng tới trang dành cho member
             return redirect()->route('Client.home')->with([
                 'message' => 'Đăng nhập thành công với quyền Member',
                 'message_type' => 'success',
             ]);
         }
-
-        // Nếu không phải là member, trả về lỗi
         return back()->withErrors([
             'role' => 'Bạn không có quyền truy cập vào hệ thống.',
         ]);
@@ -102,20 +99,15 @@ public function showRegisterForm(Request $request)
 
 public function profile()
 {
-    $getAddress = Province::all();
     $user = Auth::user();
 
    
     return view('Client.account.profile',[
         'user' => $user,
-        'getAddress'=> $getAddress,
     ]);
 }
 public function updateProfile(Request $request)
 {
-    // $da = $request->all();
-    // dd($da);
-    // Validate dữ liệu từ request
     $data = $request->validate([
         'fullname' => 'required|max:200',
         'gender' => 'required',
@@ -179,51 +171,6 @@ public function updateProfile(Request $request)
     return redirect()->back()->with('success', 'Cập nhật hồ sơ shop thành công!');
 }
 
-// public function updateProfile(Request $request,  User $user)
-// {
-//     $request->validate([
-//         'fullname' => 'required|string|max:255',
-//         'gender' => 'required|string',
-//         'birthday' => 'required|date',
-//         'language' => 'required|string',
-//         'address' => 'nullable|string|max:255',
-//         'introduction' => 'nullable|string',
-//     ]);
-
-//     $user = auth()->user();
-//     $user->fullname = $request->input('fullname');
-//     $user->gender = $request->input('gender');
-//     $user->birthday = $request->input('birthday');
-//     $user->language = $request->input('language');
-//     $user->address = $request->input('address');
-//     $user->introduction = $request->input('introduction');
-//     // Cập nhật avatar nếu có
-//     $data = $request->except('avatar');
-//     if ($request->hasFile('avatar')) {
-//         $oldAvatar = $user->avatar;
-//         // Kiểm tra và xóa avatar cũ
-//         if ($oldAvatar && Storage::disk('public')->exists($oldAvatar)) {
-//             Storage::disk('public')->delete($oldAvatar);
-//         }
-//         // Lưu ảnh mới
-//         $user->avatar = $request->file('avatar')->store('uploads/users', 'public');
-//     }
-    
-//     $user->save();
-
-//     return response()->json([
-//         'success' => true,
-//         'user' => [
-//             'fullname' => $user->fullname,
-//             'gender' => $user->gender,
-//             'birthday' => $user->birthday,
-//             'language' => $user->language,
-//             'address' => $user->address,
-//             'introduction' => $user->introduction,
-//            'avatar_url' => $user->avatar ? asset('storage/' . $user->avatar) . '?' . time() : null,  // Đường dẫn ảnh mới
-//         ]
-//     ]);
-// }
 
 
 
@@ -231,45 +178,4 @@ public function logout() {
     Auth::logout();
     return redirect()->route('Client.home')->with(['message' => 'Đăng xuất thành công', 'message_type' => 'success']);
 }
-public function getDistricts($provinceId)
-{
-    $districts = District::where('province_id', $provinceId)->get();
-    return response()->json($districts);
-}
-public function getCommunes($districtId)
-{
-    $communes = Commune::where('district_id', $districtId)->get();
-    return response()->json($communes);
-}
-public function saveAdd(Request $request) {
-    dd($request->all());
-    $user = Auth::user();
-
-    // Lấy thông tin từ request
-    $province_id = $request->province_id;
-    $district_id = $request->district_id;
-    $commune_id = $request->commune_id;
-    $address = $request->address;
-
-    $province = Province::find($province_id);
-    $district = District::find($district_id);
-    $commune = Commune::find($commune_id);
-
-    // Kiểm tra nếu các thông tin không tồn tại
-    if (!$province || !$district || !$commune) {
-        return response()->json(['error' => 'Thông tin địa chỉ không hợp lệ.'], 400);
-    }
-
-    // Cộng chuỗi địa chỉ
-    $fullAddress = $address . ', ' . $commune->name . ', ' . $district->name . ', ' . $province->name;
-
-    // Lưu thông tin vào bảng user
-    $userData= ['address'=>$fullAddress];
-    $user->update($userData);
-
-    // Trả về thông báo thành công
-    return response()->json(['success' => 'Địa chỉ đã được lưu thành công!']);
-}
-
-
 }

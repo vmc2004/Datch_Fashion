@@ -24,7 +24,7 @@ use App\Http\Controllers\SizeController;
 
 
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
@@ -57,6 +57,7 @@ Route::prefix('admin')->group(function () {
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('users.index');
         Route::get('/search', [UserController::class, 'search'])->name('users.search');
+        Route::get('/filter', [UserController::class, 'filter'])->name('users.filter');
         Route::get('/create', [UserController::class, 'create'])->name('users.create');
         Route::post('/create', [UserController::class, 'store'])->name('users.store');
         Route::get('/show/{user}', [UserController::class, 'show'])->name('users.show');
@@ -71,6 +72,7 @@ Route::prefix('admin')->group(function () {
     Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('comments.index');
         Route::post('/send-comment/{product_id}', [CommentController::class, 'sendComment'])->name('comments.sendComment');
+        Route::post('/send-rate/{product_id}', [CommentController::class, 'sendRate'])->name('comments.sendRate');
         Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('comments.edit');
         Route::put('/edit/{comment}', [CommentController::class, 'update'])->name('comments.update');
     });
@@ -180,8 +182,8 @@ Route::prefix('admin')->group(function () {
         Route::put('/update/{size}', [SizeController::class, 'update'])->name('sizes.update');
         Route::delete('/destroy/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
     });
-});
 
+<<<<<<< HEAD
 // Đường dẫn mã giảm giá
 Route::prefix('coupons')->group(function () {
     Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
@@ -193,8 +195,24 @@ Route::prefix('coupons')->group(function () {
     Route::delete('/destroy/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
     Route::put('/{coupon}', [CouponController::class, 'stateChangeCoupon'])->name('coupons.stateChangeCoupon');
     Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
+=======
+     // Đường dẫn mã giảm giá
+     Route::prefix('coupons')->group(function () {
+        Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
+        Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
+        Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
+        Route::post('/send_coupon/{coupon}', [CouponController::class, 'send_coupon'])->name('coupons.send_coupon');
+        Route::get('/edit/{coupon}', [CouponController::class, 'edit'])->name('coupons.edit');
+        Route::put('/update/{coupon}', [CouponController::class, 'update'])->name('coupons.update');
+        Route::delete('/destroy/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+        Route::put('/{coupon}', [CouponController::class, 'stateChangeCoupon'])->name('coupons.stateChangeCoupon');
+        Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
+    });
+            // Kết thúc mã giảm giá
+>>>>>>> 426bef249330be6a16966439c825bfdf066afc91
 });
-// Kết thúc mã giảm giá
+
+    
 
 
 // Đường dẫn mã giảm giá

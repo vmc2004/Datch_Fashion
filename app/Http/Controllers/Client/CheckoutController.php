@@ -5,30 +5,37 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
-use App\Models\CartDetail;
-use App\Models\Commune;
-use App\Models\District;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\ProductVariant;
-use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
     public function checkout(Request $request ,$user_id)
     {
+        $price= 0;
         $user = Auth::user();
-        $province = Province::all();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
+        foreach ($cartItems->items as $item) {
+            $price += $item->price_at_purchase * $item->quantity;  
+            
+        }
+        if($price <= 599000){
+            $total_price = $price+30000;
+        }
+        else{
+            $total_price = $price;
+        }
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
+            'total_price' => $total_price,
             'user'=> $user,
-            'province' => $province,
         ]);
     }
     public function post_checkout(Request $request) {
@@ -46,7 +53,7 @@ class CheckoutController extends Controller
             if (!Auth::check()) {
                 return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
             }
-            $totalPrice = 0;
+
             $order = new Order();
             $order->code = strtoupper(Str::random(6)) . rand(100, 999);
             $order->user_id = Auth::id(); 
@@ -54,7 +61,7 @@ class CheckoutController extends Controller
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
-            $order->total_price = $totalPrice; 
+            $order->total_price =$request->subtotal; 
             $order->payment = $request->payment;
             if($request->payment == 'Thanh toán khi nhận hàng'){
                 $order->payment_status = 'Chưa thanh toán';
@@ -79,11 +86,9 @@ class CheckoutController extends Controller
                 $orderDetail->price = $price; 
                 $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
-                $totalPrice += $orderDetail->total_price;
             }
     
-            $order->total_price = $totalPrice;
-            $order->save();
+           
            
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
@@ -111,7 +116,6 @@ class CheckoutController extends Controller
             if (!Auth::check()) {
                 return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
             }
-            $totalPrice = 0;
             $order = new Order();
             $order->code = strtoupper(Str::random(6)) . rand(100, 999);
             $order->user_id = Auth::id(); 
@@ -119,7 +123,7 @@ class CheckoutController extends Controller
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
-            $order->total_price = $totalPrice; 
+            $order->total_price = $request->subtotal; 
             $order->payment = $request->payment;
             if($request->payment == 'Thanh toán khi nhận hàng'){
                 $order->payment_status = 'Chưa thanh toán';
@@ -144,19 +148,13 @@ class CheckoutController extends Controller
                 $orderDetail->price = $price; 
                 $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
-                $totalPrice += $orderDetail->total_price;
             }
-    
-            $order->total_price = $totalPrice;
-            $order->save();
-           
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
                 $cart->items()->delete(); 
                 $cart->delete(); 
             }
     
-            // Tạo URL thanh toán VNPAY
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
             $vnp_Returnurl = route('thankyou', ['order' => $order->code]); // Thay đổi ở đây
             $vnp_TmnCode = "OXAW03IW"; // Mã website tại VNPAY 
@@ -241,6 +239,51 @@ class CheckoutController extends Controller
             return view('Client.checkout.done', compact('order'));
         }
         return redirect()->route('Client.home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
+    }
+ 
+    public function apply(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:10',
+            'subtotal' => 'required',
+        ]);
+        $subtotal = $request->subtotal;
+        $code = $request->code;
+        $coupon = Coupon::where('code', $code)
+        ->where('is_active', 1)
+        ->first();
+        if (!$coupon) {
+            return redirect()->back()->with('success', 'Mã giảm giá không hợp lệ!');
+        }
+       else{
+       if($coupon->discount_type=='fixed'){
+        $subtotals = $subtotal - $coupon->discount;
+        session([
+            'subtotals' => $subtotals,
+            'discount'=>$coupon->discount,
+        ]);
+       }
+       else{
+        $discountAmount = $subtotal * ($coupon->discount / 100); 
+        $subtotals = $subtotal - $discountAmount;  
+        session([
+            'subtotals' => $subtotals,
+            'discount'=>$discountAmount,
+        ]);
+       }
+        
+        
+        return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
+        }
+    }
+    public function clearSession()
+    {
+        // Xóa session cụ thể
+        Session::forget('subtotals');
+        Session::forget('discount');
+
+        // Trả về một phản hồi thành công
+        return response()->json(['status' => 'success']);
     }
     
 
