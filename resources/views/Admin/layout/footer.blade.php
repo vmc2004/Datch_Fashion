@@ -248,38 +248,139 @@ if (win && document.querySelector('#sidenav-scrollbar')) {
   });
 }
 
-    $('.dashboard-filter').change(function(){
-      var dashboard_value = $(this).val();
-      var _token = $('input[name = "_token"] ').val();
-      $.ajax({
-        url : "{{ route('admin.db_filter') }} ",
-        method : "POST",
-        dataType : "JSON",
-        data:{dashboard_value:dashboard_value,_token:_token},
-        success:function(data){
-          chart.setData(data);
+$('.dashboard-filter').change(function() {
+    var dashboard_value = $(this).val();
+    var _token = $('input[name="_token"]').val();
+ 
+    if (!dashboard_value) {
+        alert('Vui lòng chọn giá trị để lọc.');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('admin.db_filter') }}", 
+        method: "POST",  
+        dataType: "JSON", 
+        data: { 
+            dashboard_value: dashboard_value, 
+            _token: _token 
+        },
+        success: function(data) {
+            var tableBody = $("#orderTable tbody");
+            tableBody.empty();
+            if (data.length > 0) {
+                data.forEach(function(order) {
+                    var row = `
+                        <tr>
+                            <td>${order.period}</td>
+                            <td>${order.order_count}</td>
+                            <td>${order.quantity}</td>
+                            <td>${order.total_price.toLocaleString()}</td>
+                        </tr>
+                    `;
+                    tableBody.append(row);
+                });
+            } else {
+                tableBody.append('<tr><td colspan="4" class="text-center">Không có đơn hàng trong khoảng thời gian này.</td></tr>');
+            }
+            chart.setData(data);
+        },
+        error: function(xhr, status, error) {
+            alert('Có lỗi xảy ra. Vui lòng thử lại!');
         }
-      });
     });
-
-    $('#btn-dashboard-filter').click(function(){
-      var _token = $('input[name = "_token"]').val();
-      var from_date = $('#datepicker').val();
-      var to_date = $('#datepicker2').val();
-      $.ajax({
-        url : "{{ route('admin.filter') }} ",
-        method : "POST",
-        dataType : "JSON",
-        data : {from_date:from_date,to_date:to_date,_token:_token},
-
-        success:function(data){
-          chart.setData(data);
-        }
-      });
-    });
-
-
   });
+});
+</script>
+
+<!-- Thống kê doanh số -->
+<script>
+ $(document).ready(function() {
+        $("#btn-dashboard-filter").click(function() {
+            let fromDate = $("#datepicker").val();
+            let toDate = $("#datepicker2").val();
+
+            if (!fromDate || !toDate) {
+                alert('Vui lòng chọn đầy đủ ngày bắt đầu và ngày kết thúc.');
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route("admin.filter") }}',
+                type: 'POST',
+                data: {
+                    _token: $('input[name="_token"]').val(),
+                    from_date: fromDate,
+                    to_date: toDate
+                },
+                success: function(response) {
+                    let tableBody = $("#orderTable tbody");
+                    tableBody.empty();
+
+                    if (response.length > 0) {
+                        response.forEach(function(order) {
+                            let row = `
+                                <tr>
+                                    <td>${order.period}</td>
+                                    <td>${order.order_count}</td>
+                                    <td>${order.quantity}</td>
+                                    <td>${order.total_price.toLocaleString()}</td>
+                                </tr>
+                            `;
+                            tableBody.append(row);
+                        });
+                    } else {
+                        tableBody.append('<tr><td colspan="4">Không có đơn hàng trong khoảng thời gian này.</td></tr>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại!');
+                }
+            });
+        });
+    });
+
+    // Kết thúc js thống kê doanh số
+    $('#btn-topProduct').on('click', function() {
+                var from_date = $('#datepicker').val();
+                var to_date = $('#datepicker2').val();
+
+                // Kiểm tra xem ngày tháng đã được chọn chưa
+                if (!from_date || !to_date) {
+                    alert('Vui lòng chọn từ ngày và đến ngày!');
+                    return;
+                }
+
+                // Gửi yêu cầu AJAX tới controller
+                $.ajax({
+    url: '{{ route('admin.topproduct') }}', // Đảm bảo đường dẫn đúng
+    type: 'POST', // Sử dụng phương thức POST
+    data: {
+        _token: $('meta[name="csrf-token"]').attr('content'), // Lấy CSRF token từ meta tag
+        from_date: from_date,
+        to_date: to_date
+    },
+    success: function(response) {
+        // Xử lý kết quả và hiển thị trong bảng
+        $('#topProductTable tbody').empty();
+        response.forEach(function(product) {
+            var row = `
+                <tr>
+                    <td>${product.product_name}</td>
+                    <td>${product.quantity_sold}</td>
+                    <td>${new Intl.NumberFormat().format(product.unit_price)} VND</td>
+                    <td>${new Intl.NumberFormat().format(product.total_sales)} VND</td>
+                </tr>
+            `;
+            $('#topProductTable tbody').append(row);
+        });
+    },
+    error: function(xhr, status, error) {
+        alert('Có lỗi xảy ra! Vui lòng thử lại.');
+    }
+});
+              });
+    
 </script>
 </body>
 
