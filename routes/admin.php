@@ -30,14 +30,14 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
     Route::get('/users/profile', [UserController::class, 'profile']);
 
-<<<<<<< HEAD
+
     Route::post('filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
     Route::post('filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');
     
     Route::post('/dashboard-filter',[HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
-=======
+
     Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
->>>>>>> 019d002f8abb21eeab8003c0330e7b194c712b89
+
     Route::post('/dashboard-filter', [HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
     Route::post('/day-sorder', [HomeController::class, 'get30DaysOrderData'])->name('admin.day-sorder');
 

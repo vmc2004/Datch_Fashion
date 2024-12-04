@@ -128,7 +128,7 @@ public function get30DaysOrderData(Request $request)
         return response()->json($chart_data);
     }
 
-<<<<<<< HEAD
+
     public function topSellingProducts(Request $request)
 {
     $data = $request->all();
@@ -189,9 +189,6 @@ public function get30DaysOrderData(Request $request)
     return response()->json($result);
 }
 
-=======
-    
->>>>>>> 019d002f8abb21eeab8003c0330e7b194c712b89
 
     public function indexAdmin()
 {
