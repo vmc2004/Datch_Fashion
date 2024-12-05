@@ -16,7 +16,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::query()->with('user','product')->paginate('9');
+        $comments = Comment::query()->where('status','approved')->with('user','product')->paginate('9');
         return view('Admin.comments.index',compact('comments'));
     }
 
