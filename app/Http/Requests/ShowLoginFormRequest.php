@@ -13,6 +13,11 @@ class ShowLoginFormRequest extends FormRequest
     {
         // Cho phép tất cả người dùng thực hiện yêu cầu này.
         // Nếu cần kiểm tra quyền, thêm logic tại đây.
+        // Kiểm tra nếu người dùng đã đăng nhập và có vai trò 'member'
+    if (auth()->check() && auth()->user()->role == 'member') {
+        // Nếu không phải là 'member', từ chối quyền truy cập
+        return false;
+    }
         return true;
     }
 

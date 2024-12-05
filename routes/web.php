@@ -109,9 +109,11 @@ Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
     Route::post('/Client/account/reset-password', [ClientUserController::class, 'resetPassword'])->name('Client.account.password.update');
     // Route cho form nhập OTP
     Route::get('Client/otp/confirm', [ClientUserController::class, 'showOtpConfirmationForm'])->name('Client.otp.confirm');
-
-// Route để xử lý xác thực OTP
-    Route::post('/Client/account/verify-otp', [ClientUserController::class, 'verifyOtp'])->name('Client.account.verifyOtp');
+    Route::get('Client/verify-otp', function () {
+        return view('Client.verifyOtp');
+    })->name('Client.verifyOtpForm');  
+    Route::post('Client/verify-otp', [ClientUserController::class, 'verifyOtp'])->name('Client.verifyOtp');
+    
 
 
     Route::prefix('member')->middleware('checkUser')->group(function () {

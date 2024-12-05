@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowLoginFormRequest;
+use App\Mail\ClientOtpMail;
 use App\Mail\SendOtpMail;
 use App\Models\Banner;
 use App\Models\Brand;
@@ -45,8 +46,8 @@ class UserController extends Controller
         return view('Client.account.register');
        }
     
-       public function showLoginForm(ShowLoginFormRequest $request)
-{
+    public function showLoginForm(ShowLoginFormRequest $request)
+    {
     $credentials = $request->only('email', 'password');
 
     if (Auth::attempt($credentials)) {
@@ -88,7 +89,7 @@ public function showRegisterForm(Request $request)
         session(['otp' => $otp]);
 
         $newUser = User::create($data);
-        Mail::to($newUser->email)->send(new SendOtpMail($otp, $request->fullname));
+        Mail::to($newUser->email)->send(new ClientOtpMail($otp, $request->fullname));
         return redirect()->route('Client.otp.confirm', ['email' => $newUser->email, 'otp' => $otp])
         ->with('message', 'Đăng kí thành công. Vui lòng kiểm tra email để nhận mã OTP.')
         ->with('message_type', 'success');
