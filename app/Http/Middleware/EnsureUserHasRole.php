@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -8,6 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserHasRole
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
@@ -30,5 +37,3 @@ class EnsureUserHasRole
         return redirect()->route('login')->with(['message' => 'Bạn phải đăng nhập trước']);
     }
 }
-
-?>
