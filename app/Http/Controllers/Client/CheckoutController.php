@@ -90,11 +90,6 @@ class CheckoutController extends Controller
     
            
            
-            $cart = Cart::where('user_id', Auth::id())->first();
-            if ($cart) {
-                $cart->items()->delete(); 
-                $cart->delete(); 
-            }
                 return redirect()->route('thankyou', ['order' => $order->code]);
     
     }
@@ -228,12 +223,23 @@ class CheckoutController extends Controller
                     if ($variant->quantity >= $detail->quantity) {
                         $variant->quantity -= $detail->quantity; 
                         $variant->save(); 
+
                     } else {
-                        return redirect()->route('Client.home')->withErrors([
-                            'message' => 'Sản phẩm ' . $variant->name . ' không đủ số lượng tồn kho.'
+                        $order->orderDetails()->delete();
+
+                        $order->delete();
+        
+                        return redirect()->route('cart.show')->withErrors([
+                            'message' => 'Sản phẩm không đủ số lượng tồn kho.'
                         ]);
                     }
                 }
+            }
+            
+            $cart = Cart::where('user_id', Auth::id())->first();
+            if ($cart) {
+                $cart->items()->delete(); 
+                $cart->delete(); 
             }
             Mail::to($order->email)->send(new OrderSuccessMail($order));
             return view('Client.checkout.done', compact('order'));
