@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Mail\OrderSuccessMail;
 use App\Models\Cart;
 use App\Models\CartDetail;
+use App\Models\Commune;
+use App\Models\District;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\ProductVariant;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -17,16 +20,19 @@ use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
-    public function checkout(Request $request ,$user_id)
+    public function checkout(Request $request, $user_id)
     {
         $user = Auth::user();
+        $province = Province::all();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
-            'user'=> $user,
+            'user' => $user,
+            'province' => $province,
         ]);
     }
-    public function post_checkout(Request $request) {
+    public function post_checkout(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
@@ -35,60 +41,58 @@ class CheckoutController extends Controller
             'payment' => 'required|string',
             'variant_id' => 'required|array',
             'price' => 'required|array',
-            'quantity' => 'required|array', 
+            'quantity' => 'required|array',
         ]);
-    
-            if (!Auth::check()) {
-                return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
+
+        if (!Auth::check()) {
+            return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
+        }
+        $totalPrice = 0;
+        $order = new Order();
+        $order->code = strtoupper(Str::random(6)) . rand(100, 999);
+        $order->user_id = Auth::id();
+        $order->fullname = $request->name;
+        $order->phone = $request->phone;
+        $order->email = $request->email;
+        $order->address = $request->address;
+        $order->total_price = $totalPrice;
+        $order->payment = $request->payment;
+        if ($request->payment == 'Thanh toán khi nhận hàng') {
+            $order->payment_status = 'Chưa thanh toán';
+        } elseif ($request->payment == 'Thanh toán qua VNPay') {
+            $order->payment_status = 'Đã thanh toán';
+        }
+        $order->save();
+
+        foreach ($request->input('variant_id') as $index => $variantId) {
+            $quantity = $request->input('quantity')[$index];
+            $price = $request->input('price')[$index];
+
+            if ($price < 0 || $quantity < 0) {
+                return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
             }
-            $totalPrice = 0;
-            $order = new Order();
-            $order->code = strtoupper(Str::random(6)) . rand(100, 999);
-            $order->user_id = Auth::id(); 
-            $order->fullname = $request->name;
-            $order->phone = $request->phone;
-            $order->email = $request->email;
-            $order->address = $request->address;
-            $order->total_price = $totalPrice; 
-            $order->payment = $request->payment;
-            if($request->payment == 'Thanh toán khi nhận hàng'){
-                $order->payment_status = 'Chưa thanh toán';
-            }
-            elseif($request->payment == 'Thanh toán qua VNPay'){
-                $order->payment_status = 'Đã thanh toán';
-            }
-            $order->save();
-            
-            foreach ($request->input('variant_id') as $index => $variantId) {
-                $quantity = $request->input('quantity')[$index]; 
-                $price = $request->input('price')[$index];
-    
-                if ($price < 0 || $quantity < 0) {
-                    return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
-                }
-    
-                $orderDetail = new OrderDetail();
-                $orderDetail->order_id = $order->id; 
-                $orderDetail->variant_id = $variantId;
-                $orderDetail->quantity = $quantity; 
-                $orderDetail->price = $price; 
-                $orderDetail->total_price = $price * $quantity; 
-                $orderDetail->save();
-                $totalPrice += $orderDetail->total_price;
-            }
-    
-            $order->total_price = $totalPrice;
-            $order->save();
-           
-            $cart = Cart::where('user_id', Auth::id())->first();
-            if ($cart) {
-                $cart->items()->delete(); 
-                $cart->delete(); 
-            }
-                return redirect()->route('thankyou', ['order' => $order->code]);
-    
+
+            $orderDetail = new OrderDetail();
+            $orderDetail->order_id = $order->id;
+            $orderDetail->variant_id = $variantId;
+            $orderDetail->quantity = $quantity;
+            $orderDetail->price = $price;
+            $orderDetail->total_price = $price * $quantity;
+            $orderDetail->save();
+            $totalPrice += $orderDetail->total_price;
+        }
+
+        $order->total_price = $totalPrice;
+        $order->save();
+
+        $cart = Cart::where('user_id', Auth::id())->first();
+        if ($cart) {
+            $cart->items()->delete();
+            $cart->delete();
+        }
+        return redirect()->route('thankyou', ['order' => $order->code]);
     }
-    
+
     public function vnpay_payment(Request $request)
     {
         $request->validate([
@@ -99,9 +103,9 @@ class CheckoutController extends Controller
             'payment' => 'required|string',
             'variant_id' => 'required|array',
             'price' => 'required|array',
-            'quantity' => 'required|array', 
+            'quantity' => 'required|array',
         ]);
-    
+
         try {
             if (!Auth::check()) {
                 return redirect()->route('login')->withErrors(['message' => 'Bạn cần đăng nhập để thanh toán.']);
@@ -109,54 +113,53 @@ class CheckoutController extends Controller
             $totalPrice = 0;
             $order = new Order();
             $order->code = strtoupper(Str::random(6)) . rand(100, 999);
-            $order->user_id = Auth::id(); 
+            $order->user_id = Auth::id();
             $order->fullname = $request->name;
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
-            $order->total_price = $totalPrice; 
+            $order->total_price = $totalPrice;
             $order->payment = $request->payment;
-            if($request->payment == 'Thanh toán khi nhận hàng'){
+            if ($request->payment == 'Thanh toán khi nhận hàng') {
                 $order->payment_status = 'Chưa thanh toán';
-            }
-            elseif($request->payment == 'Thanh toán qua VNPay'){
+            } elseif ($request->payment == 'Thanh toán qua VNPay') {
                 $order->payment_status = 'Đã thanh toán';
             }
             $order->save();
-            
+
             foreach ($request->input('variant_id') as $index => $variantId) {
-                $quantity = $request->input('quantity')[$index]; 
+                $quantity = $request->input('quantity')[$index];
                 $price = $request->input('price')[$index];
-    
+
                 if ($price < 0 || $quantity < 0) {
                     return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
                 }
-    
+
                 $orderDetail = new OrderDetail();
-                $orderDetail->order_id = $order->id; 
+                $orderDetail->order_id = $order->id;
                 $orderDetail->variant_id = $variantId;
-                $orderDetail->quantity = $quantity; 
-                $orderDetail->price = $price; 
-                $orderDetail->total_price = $price * $quantity; 
+                $orderDetail->quantity = $quantity;
+                $orderDetail->price = $price;
+                $orderDetail->total_price = $price * $quantity;
                 $orderDetail->save();
                 $totalPrice += $orderDetail->total_price;
             }
-    
+
             $order->total_price = $totalPrice;
             $order->save();
-           
+
             $cart = Cart::where('user_id', Auth::id())->first();
             if ($cart) {
-                $cart->items()->delete(); 
-                $cart->delete(); 
+                $cart->items()->delete();
+                $cart->delete();
             }
-    
+
             // Tạo URL thanh toán VNPAY
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
             $vnp_Returnurl = route('thankyou', ['order' => $order->code]); // Thay đổi ở đây
             $vnp_TmnCode = "OXAW03IW"; // Mã website tại VNPAY 
             $vnp_HashSecret = "0GXPKQFPJA8NE2VE2LO0WYO575TFRTAZ"; // Chuỗi bí mật
-    
+
             $vnp_TxnRef = $order->code; // Sử dụng mã đơn hàng đã được tạo trước đó
             $vnp_OrderInfo = "Thanh toán hóa đơn";
             $vnp_OrderType = "Datch Fashion";
@@ -164,7 +167,7 @@ class CheckoutController extends Controller
             $vnp_Locale = "VN";
             $vnp_BankCode = "NCB";
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-    
+
             $inputData = [
                 "vnp_Version" => "2.1.0",
                 "vnp_TmnCode" => $vnp_TmnCode,
@@ -179,11 +182,11 @@ class CheckoutController extends Controller
                 "vnp_ReturnUrl" => $vnp_Returnurl,
                 "vnp_TxnRef" => $vnp_TxnRef
             ];
-    
+
             if (isset($vnp_BankCode) && $vnp_BankCode != "") {
                 $inputData['vnp_BankCode'] = $vnp_BankCode;
             }
-    
+
             // Sắp xếp dữ liệu và tạo chuỗi hash
             ksort($inputData);
             $query = "";
@@ -198,35 +201,45 @@ class CheckoutController extends Controller
                 }
                 $query .= urlencode($key) . "=" . urlencode($value) . '&';
             }
-    
+
             // Tạo URL với các tham số đã mã hóa
             $vnp_Url = $vnp_Url . "?" . $query;
             if (isset($vnp_HashSecret)) {
                 $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                 $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
             }
-        
+
             // Chuyển hướng đến VNPAY
             return redirect()->away($vnp_Url);
         } catch (\Exception $e) {
             return back()->withErrors(['message' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
         }
     }
-    
 
-    
-public function thankyou($order)
-{
-    $order = Order::where('code', $order)->first();
-    if ($order) {
-        Mail::to($order->email)->send(new OrderSuccessMail($order));
-        return view('Client.checkout.done', compact('order'));
+
+
+    public function thankyou($order)
+    {
+        $order = Order::where('code', $order)->first();
+        if ($order) {
+            Mail::to($order->email)->send(new OrderSuccessMail($order));
+            return view('Client.checkout.done', compact('order'));
+        }
+        return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
     }
-    return redirect()->route('home')->withErrors(['message' => 'Đơn hàng không hợp lệ.']);
-}
 
-    
+    public function getDistricts($province_id)
+    {
+        $districts = District::where('province_id', $province_id)->get();
+        return response()->json($districts);
+    }
 
+    // Lấy danh sách phường theo huyện
+    public function getCommunes($district_id)
+    {
+        $communes = Commune::where('district_id', $district_id)->get();
+        return response()->json($communes);
+    }
 }
 // Dữ liệu test 
 // Ngân hàng: NCB

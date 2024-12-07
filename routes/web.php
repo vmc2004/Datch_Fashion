@@ -41,7 +41,7 @@ use App\Http\Controllers\OrderController as ControllersOrderController;
 |
 */
 
-
+Route::post('/apply-coupon', [CouponController::class, 'applyCoupon']);
 Route::get('/products/filter-by-color', [ProductController::class, 'filterByColor'])->name('products.filter-by-color');
 Route::get('/filter-by-size', [ProductController::class, 'filterBySize'])->name('filterBySize');
 Route::get('/products', [ProductController::class, 'index']);
@@ -88,9 +88,11 @@ Route::get('acount/orders/edit/{code}', [OrderController::class, 'edit']);
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 
 
+
 Route::get('/tai-khoan', function () {
     return view('Client.account.profile');
 });
+
 
 
 
@@ -114,7 +116,7 @@ Route::get('/Client/account/register', [ClientUserController::class, 'register']
 Route::post('/Client/account/showRegisterForm', [ClientUserController::class, 'showRegisterForm'])->name('showRegisterForm');
 Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile')->middleware('auth');
-Route::put('/tai-khoan/update', [ClientUserController::class, 'updateProfile'])->name('Client.account.updateProfile')->middleware('auth');
+Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile'])->middleware('auth');
 
 
 

@@ -107,7 +107,7 @@ class CartController extends Controller
         if (!$cartItem) {
             return response()->json(['success' => false], 404);
         }
-        
+
         // Cập nhật số lượng
         $cartItem->quantity = $request->quantity;
         $cartItem->save();

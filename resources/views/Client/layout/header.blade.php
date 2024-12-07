@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <!-- Thêm vào trong <head> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 
@@ -240,65 +242,62 @@
             <span class="absolute bottom-3 left-3 bg-red-600 text-white text-xs rounded-full px-1"> {{$totalCart}} </span>
           </a>
         </div>
-      </nav>
-    </div>
-    </nav>
 
-    <!-- Loading overlay -->
-    <div id="loading-overlay">
-      <img src="{{asset('assets/admin/img/logDatch.png')}}" alt="" width="300px" id="loading-logo">
+        <!-- Loading overlay -->
+        <div id="loading-overlay">
+          <img src="{{asset('assets/admin/img/logDatch.png')}}" alt="" width="300px" id="loading-logo">
+        </div>
+
+        <!-- Nội dung trang web -->
+        <div id="content" style="display:none;">
+          <!-- Nội dung chính của trang -->
+        </div>
+
+        <script>
+          // Script để ẩn overlay sau khi trang tải xong
+          window.addEventListener("load", function() {
+            document.getElementById("loading-overlay").style.display = "none";
+            document.getElementById("content").style.display = "block";
+          });
+        </script>
+
+
     </div>
 
-    <!-- Nội dung trang web -->
-    <div id="content" style="display:none;">
-      <!-- Nội dung chính của trang -->
-    </div>
 
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-      // Script để ẩn overlay sau khi trang tải xong
-      window.addEventListener("load", function() {
-        document.getElementById("loading-overlay").style.display = "none";
-        document.getElementById("content").style.display = "block";
-      });
-    </script>
+      $(document).ready(function() {
+        $('#search-box').on('keyup', function() {
+          let query = $(this).val();
 
+          if (query.length > 1) {
+            $.ajax({
+              url: "{{ route('autocomplete') }}", // Đảm bảo đây là đường dẫn đúng tới API autocompletion
+              type: "GET",
+              data: {
+                query: query
+              },
+              success: function(data) {
+                let suggestions = $('#suggestions');
+                suggestions.empty().show();
 
-  </div>
+                if (data.length > 0) {
+                  data.forEach(function(product) {
+                    // Làm nổi bật từ khóa trong tên sản phẩm
+                    let highlightedName = product.name.replace(
+                      new RegExp(query, "gi"),
+                      (match) => `<strong>${match}</strong>`
+                    );
 
-
-
-
-
-
-
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $('#search-box').on('keyup', function() {
-        let query = $(this).val();
-
-        if (query.length > 1) {
-          $.ajax({
-            url: "{{ route('autocomplete') }}", // Đảm bảo đây là đường dẫn đúng tới API autocompletion
-            type: "GET",
-            data: {
-              query: query
-            },
-            success: function(data) {
-              let suggestions = $('#suggestions');
-              suggestions.empty().show();
-
-              if (data.length > 0) {
-                data.forEach(function(product) {
-                  // Làm nổi bật từ khóa trong tên sản phẩm
-                  let highlightedName = product.name.replace(
-                    new RegExp(query, "gi"),
-                    (match) => `<strong>${match}</strong>`
-                  );
-
-                  // Sử dụng slug thay vì id để tạo đường dẫn
-                  suggestions.append(`
+                    // Sử dụng slug thay vì id để tạo đường dẫn
+                    suggestions.append(`
                   <div style="padding: 10px; border-bottom: 1px solid #eee;">
                     <a href="/product/${product.slug}" class="flex items-center">
                       <img src="${product.image}" alt="${product.name}" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
@@ -309,56 +308,56 @@
                     </a>
                   </div>
                 `);
-                });
-              } else {
-                suggestions.append('<div style="padding: 10px;">Không tìm thấy sản phẩm</div>');
+                  });
+                } else {
+                  suggestions.append('<div style="padding: 10px;">Không tìm thấy sản phẩm</div>');
+                }
               }
-            }
-          });
-        } else {
-          $('#suggestions').hide();
-        }
-      });
-    });
-    document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
-
-    document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
-
-    function showDropdownMenu() {
-      document.getElementById('menu-container').classList.remove('hidden');
-    }
-
-    function hideDropdownMenu() {
-      document.getElementById('menu-container').classList.add('hidden');
-    }
-
-    // Hiển thị danh mục con khi di chuột vào danh mục cha
-    function showSubcategories(categoryId, categoryName) {
-      const subcategoryList = document.getElementById('subcategory-list');
-      subcategoryList.innerHTML = '';
-
-      // Tạo tiêu đề danh mục cha
-      const parentCategoryItem = document.createElement('li');
-      parentCategoryItem.className = 'font-bold px-4 py-2 text-gray-700';
-      parentCategoryItem.textContent = categoryName;
-      subcategoryList.appendChild(parentCategoryItem);
-
-      // Lấy danh sách danh mục con
-      const categories = @json($categories);
-      const parentCategory = categories.find(cat => cat.id === categoryId);
-      if (parentCategory && parentCategory.sub) {
-        parentCategory.sub.forEach(subcat => {
-          const li = document.createElement('li');
-          li.className = 'hover:bg-gray-100';
-
-          const a = document.createElement('a');
-          a.href = `/cua-hang/danh-muc/${subcat.id}`;
-          a.className = 'block px-4 py-2 text-gray-700';
-          a.textContent = subcat.name;
-
-          li.appendChild(a);
-          subcategoryList.appendChild(li);
+            });
+          } else {
+            $('#suggestions').hide();
+          }
         });
+      });
+      document.getElementById('dropdownHoverButton').addEventListener('mouseenter', showDropdownMenu);
+
+      document.querySelector('.dropdown').addEventListener('mouseleave', hideDropdownMenu);
+
+      function showDropdownMenu() {
+        document.getElementById('menu-container').classList.remove('hidden');
       }
-    }
-  </script>
+
+      function hideDropdownMenu() {
+        document.getElementById('menu-container').classList.add('hidden');
+      }
+
+      // Hiển thị danh mục con khi di chuột vào danh mục cha
+      function showSubcategories(categoryId, categoryName) {
+        const subcategoryList = document.getElementById('subcategory-list');
+        subcategoryList.innerHTML = '';
+
+        // Tạo tiêu đề danh mục cha
+        const parentCategoryItem = document.createElement('li');
+        parentCategoryItem.className = 'font-bold px-4 py-2 text-gray-700';
+        parentCategoryItem.textContent = categoryName;
+        subcategoryList.appendChild(parentCategoryItem);
+
+        // Lấy danh sách danh mục con
+        const categories = @json($categories);
+        const parentCategory = categories.find(cat => cat.id === categoryId);
+        if (parentCategory && parentCategory.sub) {
+          parentCategory.sub.forEach(subcat => {
+            const li = document.createElement('li');
+            li.className = 'hover:bg-gray-100';
+
+            const a = document.createElement('a');
+            a.href = `/cua-hang/danh-muc/${subcat.id}`;
+            a.className = 'block px-4 py-2 text-gray-700';
+            a.textContent = subcat.name;
+
+            li.appendChild(a);
+            subcategoryList.appendChild(li);
+          });
+        }
+      }
+    </script>
