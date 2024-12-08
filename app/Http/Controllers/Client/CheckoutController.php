@@ -144,14 +144,10 @@ class CheckoutController extends Controller
                 $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
             }
-            $cart = Cart::where('user_id', Auth::id())->first();
-            if ($cart) {
-                $cart->items()->delete(); 
-                $cart->delete(); 
-            }
+           
     
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-            $vnp_Returnurl = route('thankyou', ['order' => $order->code]); // Thay đổi ở đây
+            $vnp_Returnurl = route('payment.return');
             $vnp_TmnCode = "OXAW03IW"; // Mã website tại VNPAY 
             $vnp_HashSecret = "0GXPKQFPJA8NE2VE2LO0WYO575TFRTAZ"; // Chuỗi bí mật
     
@@ -159,7 +155,7 @@ class CheckoutController extends Controller
             $vnp_OrderInfo = "Thanh toán hóa đơn";
             $vnp_OrderType = "Datch Fashion";
             $vnp_Amount = $order->total_price * 100; // Quy đổi thành đồng
-            $vnp_Locale = "VN";
+            $vnp_Locale = "vn";
             $vnp_BankCode = "NCB";
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
     
@@ -223,14 +219,18 @@ class CheckoutController extends Controller
                     if ($variant->quantity >= $detail->quantity) {
                         $variant->quantity -= $detail->quantity; 
                         $variant->save(); 
-
+                        $cart = Cart::where('user_id', Auth::id())->first();
+                        if ($cart) {
+                            $cart->items()->delete(); 
+                            $cart->delete(); 
+                        }
                     } else {
                         $order->orderDetails()->delete();
 
                         $order->delete();
         
-                        return redirect()->route('cart.show')->withErrors([
-                            'message' => 'Sản phẩm không đủ số lượng tồn kho.'
+                        return redirect()->route('cart.show')->with([
+                            'warning' => 'Sản phẩm không đủ số lượng tồn kho.'
                         ]);
                     }
                 }
@@ -259,7 +259,7 @@ class CheckoutController extends Controller
         ->where('is_active', 1)
         ->first();
         if (!$coupon) {
-            return redirect()->back()->with('success', 'Mã giảm giá không hợp lệ!');
+            return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ!');
         }
        else{
        if($coupon->discount_type=='fixed'){
@@ -284,15 +284,34 @@ class CheckoutController extends Controller
     }
     public function clearSession()
     {
-        // Xóa session cụ thể
         Session::forget('subtotals');
         Session::forget('discount');
-
-        // Trả về một phản hồi thành công
         return response()->json(['status' => 'success']);
     }
     
-
+    public function handlePaymentReturn(Request $request)
+    {
+        $vnp_ResponseCode = $request->input('vnp_ResponseCode');
+        $orderCode = $request->input('vnp_TxnRef');
+    
+        $order = Order::where('code', $orderCode)->first();
+    
+        if (!$order) {
+            return redirect()->route('cart.show')->withErrors(['error' => 'Đơn hàng không tồn tại.']);
+        }
+        if ($vnp_ResponseCode == '00') { 
+            $order->payment_status = 'Đã thanh toán';
+            $order->save();
+            return redirect()->route('thankyou', ['order' => $order->code])
+                ->with('success', 'Thanh toán thành công!');
+        } else { 
+            $order->orderDetails()->delete();
+            $order->delete();
+            return redirect('/mua-hang/'.Auth::id())
+                ->with(['warning' => 'Thanh toán bị hủy. Đơn hàng chưa được xử lý.']);
+        }
+    }
+    
 
 
     

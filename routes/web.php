@@ -244,6 +244,7 @@ Route::group([
 
 
 
+Route::get('/payment/return', [CheckoutController::class, 'handlePaymentReturn'])->name('payment.return');
 
 Route::get('/Danh-gia/{variant_id}', [CommentController::class, 'form'])->name('rate.form');
 Route::get('/Danh-gia-cua-toi', [CommentController::class, 'listRate'])->name('rate.list');
