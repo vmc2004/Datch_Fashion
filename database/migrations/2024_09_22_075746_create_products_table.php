@@ -17,10 +17,12 @@ return new class extends Migration
             $table->string('name', 199);
             $table->string('slug', 255)->unique();
             $table->string('image', 255)->nullable();
+            $table->double('price');
             $table->text('description')->nullable();
             $table->string('material')->nullable();
             $table->boolean('status')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->double('views')->default(0)->after('material'); 
             $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('brand_id')->constrained('brands');
             $table->softDeletes();
