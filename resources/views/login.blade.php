@@ -60,6 +60,10 @@
                             <a href="{{ route('forgot-password') }}" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Quên mật khẩu?</a>
                         </div>
                         <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Đăng nhập</button>
+                        <a href="{{ route('google.login') }}" class="w-full flex items-center justify-center mt-4 py-2 px-4 text-sm font-semibold rounded-md border border-gray-300 hover:bg-gray-100 text-gray-700 focus:outline-none">
+                            <img src="https://img.icons8.com/color/20/000000/google-logo.png" class="mr-2" />
+                            Đăng nhập bằng Google
+                        </a>
                         <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                             Bạn chưa có tài khoản? <a href="{{ route('register') }}" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Đăng kí</a>
                         </p>

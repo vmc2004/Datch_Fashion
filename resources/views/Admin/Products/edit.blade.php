@@ -1,5 +1,7 @@
 @extends('Admin.layout.app')
-
+@section('title', "Sản phẩm")
+@section('title-page', "Sản phẩm")
+@section('single-page', "Cập nhật sản phẩm")
 @section('content')
     <div class="row m-4 vh-90">
         <div class="col-lg-12 mb-lg-0 mb-4">
@@ -44,7 +46,7 @@
                                     </div>
                                 @enderror
                                 @if ($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" width="100px" height="100px"
+                                    <img src="{{ asset($product->image) }}" width="100px" height="100px"
                                         alt="">
                                 @endif
                             </div>

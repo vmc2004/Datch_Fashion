@@ -61,7 +61,7 @@
                           </label>
                         </div>
                         <div>
-                          <a href="jajvascript:void(0);" class="text-blue-600 font-semibold text-sm hover:underline">
+                          <a href="{{ route('Client.account.forgot-password') }}" class="text-blue-600 font-semibold text-sm hover:underline">
                             Quên mật khẩu?
                           </a>
                         </div>
@@ -71,6 +71,10 @@
                         <button type="submit" class="w-full py-2 px-4 text-sm font-semibold rounded-md bg-blue-600 hover:bg-blue-700 text-white focus:outline-none">
                             Đăng nhập
                         </button>
+                        <a href="{{ route('Client.google.login') }}" class="w-full flex items-center justify-center mt-4 py-2 px-4 text-sm font-semibold rounded-md border border-gray-300 hover:bg-gray-100 text-gray-700 focus:outline-none">
+                            <img src="https://img.icons8.com/color/20/000000/google-logo.png" class="mr-2" />
+                            Đăng nhập bằng Google
+                        </a>
                         <p class="text-sm font-light text-gray-500 dark:text-gray-400 mt-6">
                             Bạn chưa có tài khoản? <a href="{{ route('Client.account.register') }}" class="text-blue-500 font-semibold hover:underline">Đăng kí</a>
                         </p>

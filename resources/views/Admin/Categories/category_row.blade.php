@@ -17,7 +17,7 @@
         <form action="{{ route('categories.hide', $category->id) }}" method="POST" style="display:inline;">
             @method('PATCH')
             @csrf
-            <button type="submit" class="btn btn-sm {{ $category->is_active ? 'btn-secondary' : 'btn-warning' }}">
+            <button type="submit" class="btn btn-sm {{ $category->is_active ? 'btn-success' : 'btn-warning' }}">
                 {{ $category->is_active ? 'Đã hiển thị' : 'Đã ẩn' }}
             </button>
         </form>

@@ -13,18 +13,31 @@ use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
-    public function getSaleProducts()
-    {     
+    public function index(Request $request, $category_id = null)
+{
+    // Lấy danh mục
+    $categories = Category::all();
+
+    // Nếu người dùng chọn danh mục
+    if ($category_id) {
+        $saleProducts = Product::where('category_id', $category_id)
+            ->whereHas('productVariants', function ($query) {
+                $query->whereNotNull('price'); // Chỉ lấy sản phẩm đang giảm giá
+            })
+            ->paginate(9);
+    } else {
+        // Hiển thị tất cả sản phẩm giảm giá
         $saleProducts = Product::whereHas('productVariants', function ($query) {
-            $query->where('sale_price', '<', DB::raw('price'));
-        })->with(['productVariants' => function ($query) {
-            $query->where('sale_price', '<', DB::raw('price'));  
-        }])->paginate(6);
-        
-        $category = Category::query()->limit(10)->get();
-        $size = Size::query()->limit(10)->get();
-        $color = Color::query()->limit(10)->get();
-        return view('Client.sale.index', compact('saleProducts','category','size','color'))
-        ->with('i' , (request()->input('page',1)-1)*6);
+            $query->whereNotNull('price');
+        })->paginate(9);
     }
+
+    return view('Client.sale.index', [
+        'saleProducts' => $saleProducts,
+        'category' => $categories
+    ]);
 }
+
+    
+}
+    

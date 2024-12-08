@@ -16,50 +16,46 @@
         <div id="error-toast" class="fixed top-0 right-0 m-4 p-4 bg-red-500 text-white rounded-lg shadow-lg hidden">
             {{ session('error') }}
         </div>
-        
         <div class="col-span-4">
             <div>
                 <h3
                     class="p-3 bg-white text-slate-800 text-black text-lg md:mb-12 mb-2 border border-solid border-transparent rounded-lg shadow-md shadow-gray-300 hidden md:block">
                     <strong>Chi tiết đơn mua</strong>
                 </h3>
-     
-                    {{-- <div class="flex items-center ml-auto text-sm">
-                        <label class="mr-2">Sắp xếp:</label>
-                        <form>
-                            <div class="inline-block w-[80px] md:w-48">
-                                <div class="h-full">
-                                    <select
-                                        class="md:w-full md:h-full w-16 rounded-full border border-solid border-current py-1 px-2.5">
-                                        <option value="-createdAt">Được tạo gần đây</option>
-                                        <option value="createdAt">Cũ nhất được tạo trước</option>
-                                        <option value="updatedAt">Cập nhật gần đây</option>
-                                        <option value="-updatedAt">Cũ nhất cập nhật trước</option>
-                                        <option value="totalPrice">Giá cao tới thấp</option>
-                                        <option value="-totalPrice">Giá thấp tới cao</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-                    </div> --}}
-
             <div>
                 <div class="p-3 text-slate-800 text-black text-lg md:mb-12 mb-2 border border-solid border-transparent rounded-lg shadow-md shadow-gray-300 hidden md:block">
-                    <table class="table-auto w-full border-collapse border border-gray-300">
+                    <table class="table-auto w-full ">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 border border-gray-300 text-center">Mã đơn Hàng</th>
-                                <th class="px-4 py-2 border border-gray-300 text-center">Tên Hàng</th>
-                                <th class="px-4 py-2 border border-gray-300 text-center">Ảnh sản phẩm</th>
-                                <th class="px-4 py-2 border border-gray-300 text-center">Màu</th>
-                                <th class="px-4 py-2 border border-gray-300 text-center">Size</th>
-                                <th class="px-4 py-2 border border-gray-300 text-center">Đơn Giá</th>
-                                <th class="px-4 py-2 border border-gray-300 text-center">Số Lượng</th>
-                                <th class="px-4 py-2 border border-gray-300 text-center">Thành Tiền</th>
+                                <th class="px-4 py-2 text-center">Mã đơn Hàng</th>
+                                <th class="px-4 py-2 text-center">Tên Hàng</th>
+                                <th class="px-4 py-2 text-center">Ảnh sản phẩm</th>
+                                <th class="px-4 py-2 text-center">Màu</th>
+                                <th class="px-4 py-2 text-center">Size</th>
+                                <th class="px-4 py-2 text-center">Đơn Giá</th>
+                                <th class="px-4 py-2 text-center">Số Lượng</th>
+                                <th class="px-4 py-2 text-center">Thành Tiền</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($order->OrderDetails as $detail)
+                            @if ($order->status=="Đã giao hàng" && $order->payment_status=="Đã thanh toán")
+                            <tr class="hover:bg-gray-100">
+                                <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:130px;">{{$detail->variant->product->code}}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    {{ $detail->variant->product->name }}
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">
+                                    <img src="{{asset($detail->variant->image)}}" alt="" width="100">
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ $detail->variant->color->name }}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ $detail->variant->size->name }}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->variant->price) }} ₫</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->quantity}}</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
+                                <td class="px-4 py-2 border border-gray-300 text-center"><a href="{{route('rate.form',$detail->variant->id)}}" class="btn btn-danger">Đánh giá</a></td>
+                            </tr>
+                            @else
                             <tr class="hover:bg-gray-100">
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->variant->product->code}}</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center" style="max-width:200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
@@ -74,6 +70,7 @@
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->quantity}}</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
                             </tr>
+                            @endif
                             @endforeach
                         </tbody>
                     </table>

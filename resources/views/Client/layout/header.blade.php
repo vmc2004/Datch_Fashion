@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  
   <link rel="shortcut icon" href="{{asset('assets/admin/img/logoDatch.png')}}" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,20 +13,26 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <title>@yield('title') - Datch</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="{{asset('assets/client//assets/css/styles.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/client/css/styles.css')}}">
+  
   <link rel="stylesheet" href="{{asset('assets/client/assets/css/styles-be.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <!-- Thêm vào trong <head> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Thêm vào trước thẻ </body> -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   <style>
     .border-blue-500 {
       border-color: #3B82F6;
@@ -101,6 +108,91 @@
         transform: rotate(360deg);
       }
     }
+
+    .chat-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #2c3e50;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        z-index: 1000;
+    }
+
+    .chat-icon img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #e74c3c;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Cửa sổ chat */
+    .chat-popup {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 300px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .chat-header {
+        padding: 10px;
+        background: #2c3e50;
+        color: white;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .chat-header h3 {
+        margin: 0;
+    }
+
+    .chat-body {
+        padding: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .chat-footer {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .chat-footer button {
+        padding: 10px 20px;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .chat-footer button:hover {
+        background: #2980b9;
+    }
   </style>
 
 </head>
@@ -171,7 +263,7 @@
                   <div class="relative group menucha">
                     <!-- User profile link -->
                     <a href="/tai-khoan" class="flex items-center text-gray-800 group" class="group-hover:opacity-100 group-hover:block opacity-0 hidden">
-                      <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User" width="30" >
+                      <img src="{{ Auth::user()->avatar ? asset('uploads/' . Auth::user()->avatar) : asset('assets/client/images/no-avatar.svg') }}" alt="Avatar User"  class="rounded-full w-8 h-8 mr-2" >
                       <span class="text-sm">{{ Auth::user()->fullname }}</span>
                     </a>
                     
@@ -190,13 +282,17 @@
                         </svg>
                           Yêu thích</a>
                         </li>
+                        <li><a href="/account/points" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                          <i class="fa-solid fa-hand-holding-medical"></i>
+                          Tích điểm</a>
+                        </li>
                         <li><a href="/account/orders" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="shopping-cart" class="overflow-hidden svg-vertical inline-block w-[15.75px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M551.991 64H129.28l-8.329-44.423C118.822 8.226 108.911 0 97.362 0H12C5.373 0 0 5.373 0 12v8c0 6.627 5.373 12 12 12h78.72l69.927 372.946C150.305 416.314 144 431.42 144 448c0 35.346 28.654 64 64 64s64-28.654 64-64a63.681 63.681 0 0 0-8.583-32h145.167a63.681 63.681 0 0 0-8.583 32c0 35.346 28.654 64 64 64 35.346 0 64-28.654 64-64 0-17.993-7.435-34.24-19.388-45.868C506.022 391.891 496.76 384 485.328 384H189.28l-12-64h331.381c11.368 0 21.177-7.976 23.496-19.105l43.331-208C578.592 77.991 567.215 64 551.991 64zM240 448c0 17.645-14.355 32-32 32s-32-14.355-32-32 14.355-32 32-32 32 14.355 32 32zm224 32c-17.645 0-32-14.355-32-32s14.355-32 32-32 32 14.355 32 32-14.355 32-32 32zm38.156-192H171.28l-36-192h406.876l-40 192z"></path>
                         </svg>
                           Đơn mua</a>
                         </li>
-                        <li><a href="/account/reviews" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                        <li><a href="Danh-gia-cua-toi" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="star" class="w-[15px] h-[14px] overflow-hidden svg-vertical inline-block mr-2.5" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM405.8 317.9l27.8 162L288 403.5 142.5 480l27.8-162L52.5 203.1l162.7-23.6L288 32l72.8 147.5 162.7 23.6-117.7 114.8z"></path>
                         </svg>
@@ -243,7 +339,29 @@
               </nav>
             </div>
             </nav>
-
+            <div class="chat-widget">
+              <div class="chat-icon" id="chatIcon">
+                  <img src="{{ asset('users->image') }}" alt="Chat">
+                  <div class="notification-badge" id="notificationBadge" style="display: none;">0</div>
+              </div>
+              <!-- Cửa sổ chat -->
+              <div class="chat-popup" id="chatPopup" style="display: none;">
+                  <div class="chat-header">
+                      <h3>Xin chào 👋</h3>
+                      <p>Hãy hỏi bất cứ điều gì hoặc chia sẻ phản hồi của bạn.</p>
+                  </div>
+                  <div class="chat-body">
+                      <h4>Danh sách hội thoại</h4>
+                      <div class="chat-conversation">
+                          <p><strong>DATCH FASHION</strong></p>
+                          <p>Xin chào 👋, Datch Fashion có thể giúp.</p>
+                      </div>
+                  </div>
+                  <div class="chat-footer">
+                      <button id="newConversation">Hội thoại mới</button>
+                  </div>
+              </div>
+          </div>
   <!-- Loading overlay -->
   <div id="loading-overlay">
     <img src="{{asset('assets/admin/img/logDatch.png')}}" alt="" width="300px" id="loading-logo">
@@ -261,7 +379,45 @@
       document.getElementById("content").style.display = "block";
     });
   </script>
-  
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatIcon = document.getElementById('chatIcon');
+        const chatPopup = document.getElementById('chatPopup');
+
+        // Hiển thị/ẩn popup chat khi nhấp vào biểu tượng
+        chatIcon.addEventListener('click', function () {
+            if (chatPopup.style.display === 'none') {
+                chatPopup.style.display = 'block';
+            } else {
+                chatPopup.style.display = 'none';
+            }
+        });
+
+        // Tải số lượng tin nhắn chưa đọc
+        fetch('/account/chat/unread-count')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('notificationBadge');
+                if (data.unread_count > 0) {
+                    badge.style.display = 'flex';
+                    badge.innerText = data.unread_count;
+                }
+            });
+    });
+    document.getElementById('newConversation').addEventListener('click', function () {
+    window.location.href = '/account/chat'; // Chuyển đến giao diện chat đầy đủ
+});
+document.getElementById('chatIcon').addEventListener('click', function() {
+    var chatBubble = document.getElementById('chatBubble');
+    if (chatBubble.style.display === 'block') {
+        chatBubble.style.display = 'none';
+    } else {
+        chatBubble.style.display = 'block';
+    }
+});
+
+</script>
+
 
         </div>
         

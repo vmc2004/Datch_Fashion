@@ -27,11 +27,10 @@
         </div>
     @endif
 
-    <div class="container" style="width: 60%">
-        <h2>cập nhật banner</h2>
-        <form method="POST" action="{{route('banners.update',$banner)}}" enctype="multipart/form-data">
+    <div class="container" >
+        <h2 class="text-center">Tạo banner mới</h2>
+        <form method="POST" action="{{ route('banners.update',$banner) }}" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
 
             <div class="mb-3">
                 <label for="" class="form-label">Tiêu đề</label>
@@ -40,22 +39,35 @@
 
             <div class="mb-3">
                 <label for="image" class="form-label">Ảnh banner</label>
-                <input type="file" class="form-control" name="image">
-                <br><img src="{{ asset('/storage/' . $banner->image) }}" alt="{{$banner->image}}" width="100">
+                <input type="file" class="form-control" id="image" name="image" value="{{$banner->image}}">
+                <img src="{{asset($banner->image)}}" alt="" width="200px">
             </div>
 
             <div class="mb-3">
-                <label for="" class="form-label">Nội dung</label>
-                <textarea class="form-control" name="description" rows="6">{{$banner->description}}</textarea>
-            </div>
-
-            <div class="mb-3">
-                <label for="" class="form-label">Ngày tạo</label>
-                <input type="datetime-local" id="created_at" name="created_at" value="{{ $banner->created_at}}">
-
+                <label for="" class="form-label">Đường dẫn</label>
+                <input type="text" class="form-control" id="link" name="link" value="{{$banner->link}}">
             </div>
             
-            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <div class="d-flex">
+                <div class="mb-3 me-4">
+                    <label class="form-label">Home</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="location">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Active</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="is_active">
+                    </div>
+                </div>
+            </div>
+            
+            
+
+           
+            
+            <button type="submit" class="btn btn-primary">Lưu</button>
             <a href="{{route('banners.index')}}" class="btn btn-success">Quay lại</a>
         </form>
     </div>

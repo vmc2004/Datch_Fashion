@@ -1,13 +1,17 @@
 @extends('Admin.layout.app')
-
+@section('title', "Danh mục")
+@section('title-page', "Danh mục")
+@section('single-page', "Thêm mới danh mục")
 @section('content')
     <div class="row m-4 vh-90">
         <div class="col-lg-12 mb-lg-0 mb-4">
             <div class="card z-index-2 h-100">
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <div class="container">
-                        <h2>Thêm mới danh mục</h2>
-                        <a href="{{ route('categories.index') }}" class="btn btn-secondary mb-2">
+                        <h2 class="text-center">Thêm mới danh mục</h2>
+                        <br>
+                        <br>
+                        <a href="{{ route('categories.index') }}" class="btn btn-primary mb-2">
                             <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang danh sách
                         </a>
 
@@ -62,7 +66,7 @@
                                 </select>
                             </div> --}}
 
-                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                            <button type="submit" class="btn btn-success">Thêm mới</button>
                         </form>
                     </div>
                 </div>

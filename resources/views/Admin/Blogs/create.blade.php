@@ -28,8 +28,8 @@
                     @endif
 
                     <div class="container">
-                        <h2>Thêm Bài Viết Mới</h2>
-                        <a href="{{ route('blogs.index') }}" class="btn btn-secondary mb-2">
+                        <h2 class="text-center">Tạo Bài Viết Mới</h2>
+                        <a href="{{ route('blogs.index') }}" class="btn btn-primary mb-2">
                             <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang danh sách
                         </a>
                         <form method="POST" action="{{ route('blogs.store') }}" enctype="multipart/form-data">

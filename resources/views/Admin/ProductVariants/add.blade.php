@@ -1,5 +1,7 @@
 @extends('Admin.layout.app')
-
+@section('title', "Biến thể")
+@section('title-page', "Sản phẩm")
+@section('single-page', "Thêm mới Biến thể")
 @section('content')
     <div class="row m-4 vh-90">
         <div class="col-lg-12 mb-lg-0 mb-4">

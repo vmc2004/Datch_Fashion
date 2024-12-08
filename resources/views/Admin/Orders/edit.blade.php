@@ -21,6 +21,7 @@
                 <thead>
                     <tr>
                         <th>Mã sản phẩm</th>
+                        <th>Ảnh sản phẩm</th>
                         <th>Tên Hàng</th>
                         <th>Màu</th>
                         <th>Size</th>
@@ -33,6 +34,7 @@
                     @foreach ($order->OrderDetails as $detail)
                     <tr>
                         <td>{{$detail->variant->product->code}}</td>
+                        <td><img src="{{asset($detail->variant->image)}}" alt="Ảnh sản phẩm" width="100"></td>
                         <td style="max-width:400px" class="text-truncate">{{ $detail->variant->product->name }}</td>
                         <td>{{ $detail->variant->color->name }}</td>
                         <td>{{ $detail->variant->size->name }}</td>
@@ -40,9 +42,33 @@
                         <td>{{$detail->quantity}}</td>
                         <td>{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
                     </tr>
+                   
                     @endforeach
-                    
+                        
+
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7" class="text-end"><strong>Tổng tiền hàng:</strong></td>
+                        <td><strong>{{ number_format($order->OrderDetails->sum(function($detail) { return $detail->quantity * $detail->variant->price; })) }} ₫</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="text-end"><strong>Tiền giao hàng:</strong></td>
+                        <td>@if (($order->OrderDetails->sum(function($detail) { return $detail->quantity * $detail->variant->price; }))  > 599000)
+                            <strong>0₫</strong>
+                        @else
+                        <strong>30.000₫</strong>
+                        @endif</td>
+                    </tr>
+                    {{-- <tr>
+                        <td colspan="7" class="text-end"><strong>Giảm giá:</strong></td>
+                        <td><strong>{{ number_format($order->discount) }} ₫</strong></td>
+                    </tr> --}}
+                    <tr>
+                        <td colspan="7" class="text-end"><strong>Tổng cộng:</strong></td>
+                        <td><strong>{{ number_format($order->total_price) }} ₫</strong></td>
+                    </tr>
+                </tfoot>
             </table>
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -74,15 +100,15 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <label for="receiverName" class="form-label">Tên người nhận:</label>
-                                <input type="text" class="form-control" id="receiverName" value="{{$order->fullname}}">
+                                <input type="text" class="form-control" id="receiverName" value="{{$order->fullname}}"  disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="receiverPhone" class="form-label">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="receiverPhone" value="{{$order->phone}}">
+                                <input type="text" class="form-control" id="receiverPhone" value="{{$order->phone}}" disabled>
                             </div>
                             <div class="mb-3">
                                 <label for="receiverAddress" class="form-label">Địa chỉ:</label>
-                                <input type="text" class="form-control" id="receiverAddress" value="{{$order->address}}">
+                                <input type="text" class="form-control" id="receiverAddress" value="{{$order->address}}" disabled>
                             </div>
                         </div>
                     </div>
@@ -102,7 +128,8 @@
                                 <!-- Trạng thái -->
                                 <div class="col-md-3">
                                     <label for="payer" class="form-label">Trạng thái</label>
-                                    <select class="form-select" id="payer" name="status">
+                                    <select class="form-select" id="payer" name="status" 
+                                        {{ in_array($order->status, ['Đơn hàng đã hủy', 'Đã giao hàng']) ? 'disabled' : '' }}>
                                         <option value="Chờ xác nhận" {{ $order->status == "Chờ xác nhận" ? 'selected' : '' }}>Chờ xác nhận</option>
                                         <option value="Đã xác nhận" {{ $order->status == "Đã xác nhận" ? 'selected' : '' }}>Đã xác nhận</option>
                                         <option value="Đang chuẩn bị hàng" {{ $order->status == "Đang chuẩn bị hàng" ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
@@ -111,6 +138,7 @@
                                         <option value="Đơn hàng đã hủy" {{ $order->status == "Đơn hàng đã hủy" ? 'selected' : '' }}>Đơn hàng đã hủy</option>
                                     </select>
                                 </div>
+                                
                             
                                 <!-- Ghi chú -->
                                 <div class="col-md-9">
@@ -123,9 +151,15 @@
                         
                     </div>
                 </div>
-                <div class="d-flex  ms-2">
+                <div class="d-flex justify-content-between ms-2">
+                   <div>
                     <button type="submit" class="btn btn-success me-2">Cập nhật đơn hàng</button>
                     <a href="{{route('orders.index')}}"  class="btn btn-danger">Danh sách</a>
+                   </div>
+                    <div>
+                        <a href="" class="btn btn-primary me-2"><i class="fa-solid fa-print me-1" style="color: #ffffff;"></i> In hóa đơn
+                        </a>
+                    </div>
                 </div>
             </div>
         </form>

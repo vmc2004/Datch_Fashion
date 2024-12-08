@@ -1,27 +1,27 @@
 @extends('Client.layout.layout')
 
-@section('title', 'Chi tiết sản phẩm')
+@section('title', 'Bài Viết')
 
 
 @section('content')
-<div class="container flex mx-auto flex">
-    <div>
-       <ul class="flex container mx-auto pt-4 text-sm ">
-          <li>
-                <a class="hover:underline cursor-pointer" href="/">
-                   Datch Fashion
-                </a>
-          </li>
-          <li>
-                <span class="mx-4">&gt;</span>
-                <a class="hover:underline cursor-pointer" href="{{route('client.blog')}}">Bài viết</a>
-          </li>
-       </ul>
+<div class="max-w-screen-xl mx-auto ">
+        
+    <div class="container mx-auto ">
+        <div class="mb-5">
+            <ul class="flex container mx-auto py-2">
+                <li>
+                    <a class="hover:underline hover:text-red-700 cursor-pointer" href="/">Datch Fashion</a>
+                </li>
+                <li>
+                    <span class="mx-3">&gt;</span>
+                    <a class="hover:underline hover:text-red-700 cursor-pointer" href="/bai-viet">Bài Viết</a>
+                </li>
+            </ul>
+        </div>
     </div>
+    <h1 class="text-center p-5 border shadow-xl rounded-lg text-2xl font-bold">Bài viết</h1>
 </div>
-<hr>
 <div class="max-w-screen-xl mx-auto py-8">
-    <h2 class="text-2xl font-semibold mb-4">BÀI VIẾT</h2>
     <div class="relative">
         <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

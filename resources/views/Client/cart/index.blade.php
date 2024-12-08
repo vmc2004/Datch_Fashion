@@ -3,9 +3,37 @@
 @section('title', 'Giỏ hàng')
 @section('content')
     <hr>
+    @if ($errors->has('message'))
+    <div id="toast-message" class="fixed top-5 right-5 bg-red-500 text-white px-4 py-3 rounded shadow-lg flex items-center space-x-4 z-50">
+        <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a2 2 0 100-4H7a2 2 0 100 4h10zM9 16h6m-6 0a2 2 0 100-4h6a2 2 0 100 4h-6z" />
+        </svg>
+        <span>{{ $errors->first('message') }}</span>
+        <button onclick="removeToast()" class="text-white hover:text-red-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        // Tự động ẩn sau 3 giây
+        setTimeout(() => removeToast(), 3000);
+
+        // Hàm xóa toast
+        function removeToast() {
+            const toast = document.getElementById('toast-message');
+            if (toast) {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500); // Xóa khỏi DOM sau khi mờ dần
+            }
+        }
+    </script>
+@endif
 
     <div class="max-w-screen-xl mx-auto ">
-        <div class="container mx-auto mb-12 pb-20">
+
+        <div class="container mx-auto  pb-20">
             <div class="mb-5">
                 <ul class="flex container mx-auto py-2">
                     <li>
@@ -13,16 +41,17 @@
                     </li>
                     <li>
                         <span class="mx-3">&gt;</span>
-                        <a class="hover:underline hover:text-red-700 cursor-pointer" href="/">Giỏ hàng</a>
+                        <a class="hover:underline hover:text-red-700 cursor-pointer" href="/gio-hang">Giỏ hàng</a>
                     </li>
                 </ul>
             </div>
-         
-            <div class="flex md:mt-16">
+            <h1 class="text-center p-5 border shadow-xl rounded-lg text-2xl font-bold">Giỏ hàng</h1>
+
+            <div class="flex md:mt-8 ">
                 <div class="flex-1 md:mr-8">
-                    <div class="bg-white md:px-6 md:py-10 py-4 px-2 rounded-lg">
+                    <div class="bg-white shadow rounded-md md:px-6 md:py-10 py-4 px-2 rounded-lg">
                         <div>
-                            <div id="paymentBtn" class="cursor-pointer select-none">
+                            {{-- <div id="paymentBtn" class="cursor-pointer select-none">
                                 <span class="paymentClose">
                                     <svg class="w-4 h-4 inline-block svg-vertical" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 512 512">
@@ -32,7 +61,7 @@
                                     </svg>
                                 </span>
                                 <span class="ml-2">Chọn tất cả</span>
-                            </div>
+                            </div> --}}
                             <div class="container mx-auto shadow-2xl">
                                 @if ($cart && $cart->items->count() > 0)
                                     <div class="bg-white shadow-md rounded-lg p-4">
@@ -95,7 +124,7 @@
                     </div>
                 </div>
 
-                <div class="w-96 hidden md:block mt-16">
+                <div class="w-96 hidden md:block mt-18">
                     <div class="md:flex p-6 mb-8 rounded-lg bg-[#05a5011a] text-[#05a501] text-sm hidden">
                         <div>
                             <svg class="font-bold mr-2 overflow-visible w-4 inline-block svg-vertical"
@@ -112,30 +141,43 @@
                     </div>
                     <div class="bg-white rounded-lg border shadow-2xl">
                         @if ($cart && $cart->items->count() > 0)
-                        <div class="p-5 border-b text-lg uppercase text-slate-700">
-                            Tóm tắt đơn hàng
-                        </div>
-                        <div class="p-5 border-b">
-                            <div class="flex flex-col gap-3 mb-8 text-sm">
-                                <div class="flex">
-                                    <div>Tổng tiền hàng:</div>
-                                    <div class="ml-auto" id="total-price-cart">
-                                        {{ number_format($cart->items->sum('price_at_purchase')) }} đ
+                            <div class="p-5 border-b text-lg uppercase text-slate-700">
+                                Tóm tắt đơn hàng
+                            </div>
+                            <div class="p-5 border-b">
+                                <div class="flex flex-col gap-3 mb-8 text-sm">
+                                    <div class="flex">
+                                        <div>Tổng tiền hàng:</div>
+                                        <div class="ml-auto" id="total-price-cart">
+                                            {{ number_format(
+                                                $cart->items->sum(function ($item) {
+                                                    return $item->price_at_purchase * $item->quantity;
+                                                }),
+                                            ) }}
+                                            đ
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex font-bold">
+                                    <div>Tổng cộng:</div>
+                                    <div class="ml-auto" id="total-cart-price">
+                                        {{ number_format(
+                                            $cart->items->sum(function ($item) {
+                                                return $item->price_at_purchase * $item->quantity;
+                                            }),
+                                        ) }}
+                                        đ
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex font-bold">
-                                <div>Tổng cộng:</div>
-                                <div class="ml-auto" id="total-cart-price">
-                                    {{ number_format($cart->items->sum('price_at_purchase')) }} đ
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-5 flex items-center justify-between">
+                            <div class="p-5 flex items-center justify-between">
                                 <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
-                                    href="/mua-hang/{{Auth::id()}}">Thanh toán</a></button>
-                        </div>
+                                        href="/mua-hang/{{ Auth::id() }}">Thanh toán</a></button>
+                            </div>
+                        @else
+                            <div class="p-5 text-center text-gray-500">
+                                Giỏ hàng của bạn hiện đang trống.
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -164,6 +206,7 @@
                         if (data.success) {
                             // Xóa sản phẩm khỏi giỏ hàng trên giao diện
                             form.closest('.flex').remove(); // Xóa phần tử sản phẩm
+                            location.reload();
                             // alert(data.message); // Hiển thị thông báo thành công
                         } else {
                             alert(data.message); // Hiển thị thông báo lỗi
@@ -222,4 +265,4 @@
         }
     </script>
 
-@endsection    
+@endsection

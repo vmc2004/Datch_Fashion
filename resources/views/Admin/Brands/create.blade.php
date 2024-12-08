@@ -10,7 +10,7 @@
             <div class="card z-index-2 h-100">
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <div class="card mt-3">
-                        <h3 class="card-header">Thêm mới thương hiệu</h3>
+                        <h3 class="card-header text-center">Tạo thương hiệu mới</h3>
                     </div>
                 </div>
                 <div class="card-body p-3">

@@ -91,13 +91,13 @@
             <div class="w-5/12">
                 <div class="font-bold text-slate-800 text-2xl mb-9"> Giao dịch của bạn</div>
                 <div class="flex">
-                    <img src="{{asset('assets/client/assets/images/vnpay.png')}}" alt="payment" loading="lazy">
+                    <img src="{{asset('assets/client/images/vnpay.png')}}" alt="payment" loading="lazy">
                 </div>
                
             </div>
             <div class="w-3/12">
                 <div class="font-bold text-slate-800 text-2xl mb-9">Chứng nhận</div>
-                <a href="" target="_blank" rel="noreferrer"><img src="{{asset('assets/client/assets/images/dadangky.png')}}"
+                <a href="" target="_blank" rel="noreferrer"><img src="{{asset('assets/client/images/dadangky.png')}}"
                         alt="bocongthuong" loading="lazy"></a>
             </div>
             <div class="w-4/12">
@@ -198,5 +198,39 @@
 </div>  
 </div>
 </body>
+    @if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: '{{ session('error') }}',
+            showConfirmButton: true,
+        });
+    </script>
+@endif
+
+@if (session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: '{{ session('success') }}',
+            timer: 2000,
+            showConfirmButton: false,
+        });
+    </script>
+@endif
+
+@if (session('warning'))
+    <script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cảnh báo',
+            text: '{{ session('warning') }}',
+            showConfirmButton: true,
+        });
+    </script>
+@endif
+
 @yield('javascript')
 </html>
