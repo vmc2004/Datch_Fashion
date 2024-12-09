@@ -4,6 +4,8 @@
 
 
 @section('content')
+
+
     @include('Client.layout.slide')
     {{-- <div class="bird-container">
     <img src="https://chillnfree.vn/assets/images/bird-animation-desktop-1.gif" alt="chillnfree" class="bird-animation bird-desktop" id="birdAnimation">
@@ -290,6 +292,13 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+    setTimeout(() => {
+        const toast = document.getElementById('toast-message');
+        if (toast) {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 500); // Xóa khỏi DOM sau khi mờ dần
+        }
+    }, 3000);
         </script>
         <style>
             .product-item {

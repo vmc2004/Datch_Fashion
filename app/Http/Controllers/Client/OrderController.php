@@ -29,6 +29,7 @@ class OrderController extends Controller
             'order'=> $order,
         ]);
     }
+    
     public function huy($code)
     {
         $order = Order::where('code', $code)

@@ -114,16 +114,16 @@
                 <td>{{$comment->rating}} sao</td>
                 <td>{{$comment->created_at}} </td>
                 <td>
-                  <form method="POST" action="{{ route('comments.update', $comment) }}" enctype="multipart/form-data">
+                  <form method="POST" action="{{ route('comments.update', $comment) }}" enctype="multipart/form-data" class="d-inline">
                     @method('PUT')
                     @csrf
                     <div class="form-group">
                         <select id="my-select" class="form-control" name="status">
-                            <option value="pending" >Đang chờ</option>
                             <option value="approved" {{$comment->status=='approved'?'selected':''}}>Duyệt bình luận</option>
                             <option value="rejected" {{$comment->status=='rejected'?'selected':''}}>Từ chối</option>
                         </select>
                     </div>
+                    <button type="submit" class="btn btn-primary">cập nhật</button>
                   </form>
             </td>
               </tr>

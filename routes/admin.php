@@ -28,15 +28,16 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
-    Route::get('/users/profile', [UserController::class, 'profile']);
     Route::get('/topProduct', [HomeController::class, 'showTopProduct'])->name('admin.topProduct');
+    Route::get('/orderStatus', [HomeController::class, 'showOderStatus'])->name('admin.orderStatus');
+    Route::get('/inventory', [HomeController::class, 'showInventory'])->name('admin.inventory');
     Route::get('/users/profile', [UserController::class, 'profile']);
 
     Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
     Route::post('/filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');
-    
+    Route::post('/filter-by-inventori', [HomeController::class, 'filterStockStatus'])->name('admin.inventori');
+    Route::post('/filter-by-statusOrder', [HomeController::class, 'filterOrderStatus'])->name('admin.statusOrder');
     Route::post('/dashboard-filter',[HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
-    Route::post('/dashboard-filter', [HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
     Route::post('/day-sorder', [HomeController::class, 'get30DaysOrderData'])->name('admin.day-sorder');
 
 
@@ -73,11 +74,9 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     });
     // Kết thúc người dùng
 
-    // Đường dẫn bình luận
-    Route::prefix('comments')->group(function () {
+     // Đường dẫn bình luận
+     Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('comments.index');
-        Route::post('/send-comment/{product_id}', [CommentController::class, 'sendComment'])->name('comments.sendComment');
-        Route::post('/send-rate/{product_id}', [CommentController::class, 'sendRate'])->name('comments.sendRate');
         Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('comments.edit');
         Route::put('/edit/{comment}', [CommentController::class, 'update'])->name('comments.update');
     });
@@ -91,10 +90,9 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::post('/create', [ProductController::class, 'store'])->name('products.store');
         Route::get('/show/{id}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
+        Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
         Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-        Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
-        Route::get('/products/filter', [ProductController::class, 'filter'])->name('products.filter');
     });
     // Kết thúc sản phẩm
 
@@ -107,9 +105,6 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::get('/edit/{id}', [BrandController::class, 'edit'])->name('brands.edit');
         Route::put('/edit/{id}', [BrandController::class, 'update'])->name('brands.update');
         Route::delete('/destroy/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
-        Route::get('/brands/filter', [BrandController::class, 'filter'])->name('brands.filter');
-        Route::get('/brands/search', [BrandController::class, 'search'])->name('brands.search');
-
     });
 
     // Đường dẫn sản phẩm biến thể
@@ -207,17 +202,3 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
 
     
 
-
-// // Đường dẫn mã giảm giá
-// Route::prefix('coupons')->group(function () {
-//     Route::get('/', [CouponController::class, 'index'])->name('coupons.index');
-//     Route::get('/create', [CouponController::class, 'create'])->name('coupons.create');
-//     Route::post('/create', [CouponController::class, 'store'])->name('coupons.store');
-//     Route::post('/send_coupon/{coupon}', [CouponController::class, 'send_coupon'])->name('coupons.send_coupon');
-//     Route::get('/edit/{coupon}', [CouponController::class, 'edit'])->name('coupons.edit');
-//     Route::put('/update/{coupon}', [CouponController::class, 'update'])->name('coupons.update');
-//     Route::delete('/destroy/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
-//     Route::put('/{coupon}', [CouponController::class, 'stateChangeCoupon'])->name('coupons.stateChangeCoupon');
-//     Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
-// });
-// // Kết thúc mã giảm giá

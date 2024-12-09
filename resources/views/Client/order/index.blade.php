@@ -60,8 +60,18 @@
                          </span>
                          <div class="text-sm text-gray-500">
                           <span>
+
                          {{$order->created_at}}
                           </span>
+                          @if ($order->payment_status == 'Chưa thanh toán')
+                          <span class="ml-2 text-red-500">
+                            | {{$order->payment_status}}
+                           </span>
+                           @else
+                           <span class="ml-2 text-green-500">
+                            | {{$order->payment_status}}
+                           </span>
+                          @endif
                           @if ($order->status == 'Đơn hàng đã hủy')
                           <span class="ml-2 text-red-500">
                             | {{$order->status}}
@@ -71,6 +81,7 @@
                             | {{$order->status}}
                            </span>
                           @endif
+                         
                          </div>
                         </div>
                         <!-- Items -->

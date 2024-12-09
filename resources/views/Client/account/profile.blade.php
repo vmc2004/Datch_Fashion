@@ -240,7 +240,7 @@
                                 <p class="mr-8">
                                     <input type="text"  name="email"
                                     class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4"
-                                    placeholder="Nhập họ và tên" value="{{ $user->email }}">
+                                    placeholder="Nhập họ và tên" value="{{ $user->email }}" readonly>
                                 </p>
                                 @error('email')
                                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -253,7 +253,7 @@
                                 <p class="mr-8">
                                 <input type="text"  name="phone"
                                 class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4"
-                                placeholder="Nhập số điện thoại" value="{{ $user->phone }}">
+                                placeholder="Nhập số điện thoại" value="{{ $user->phone }}" readonly>
                                 </p>
                             </div>
                             @error('phone')
