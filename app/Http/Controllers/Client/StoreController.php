@@ -166,8 +166,8 @@ class StoreController extends Controller
     {
         $brand = Brand::all();
         $category = Category::query()->limit(10)->get();
-        $size = Size::query()->limit(10)->get();
-        $color = Color::query()->limit(10)->get();
+        $sizes = Size::query()->limit(10)->get();
+        $colors = Color::query()->limit(10)->get();
         $flow_type = request()->input('flow_type', 'default');
         $price_filter = $request->input('price', 'price_all');
         // Khởi tạo truy vấn cho sản phẩm
@@ -231,9 +231,9 @@ class StoreController extends Controller
         return view('Client.category.index', [
             'products' => $products,
             'category' => $category,
-            'size' => $size,
+            'sizes' => $sizes,
             'brand' => $brand,
-            'color' => $color,
+            'colors' => $colors,
             'flow_type' => $flow_type,
         ]);
     }
