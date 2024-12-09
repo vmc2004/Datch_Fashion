@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\OrdersExport;
+use App\Mail\OrderStatusUpdatedMail;
 use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Carbon\Carbon;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session as FacadesSession;
-use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -106,26 +104,27 @@ public function index(Request $request)
      * Update the specified resource in storage.
      */
     public function update(Request $request, Order $order)
-{
-    $request->validate([
-        'status' => 'required|string',
-        'note' => function ($attribute, $value, $fail) use ($request) {
-            if ($request->status === 'Đơn hàng đã hủy' && empty($value)) {
-                $fail('Vui lòng ghi chú lý do hủy đơn hàng.');
-            }
-        },
-    ]);
-    $data = [
-        'status' => $request->status,
-        'note' => $request->note,
-    ];
+    {
+        $request->validate([
+            'status' => 'required|string',
+            'note' => function ($attribute, $value, $fail) use ($request) {
+                if ($request->status === 'Đơn hàng đã hủy' && empty($value)) {
+                    $fail('Vui lòng ghi chú lý do hủy đơn hàng.');
+                }
+            },
+        ]);
+        $data = [
+            'status' => $request->status,
+            'note' => $request->note,
+        ];
 
-    if ($request->status === 'Đã giao hàng') {
-        $data['payment_status'] = 'Đã thanh toán';
+        if ($request->status === 'Đã giao hàng') {
+            $data['payment_status'] = 'Đã thanh toán';
+        }
+        $order->update($data);
+        Mail::to($order->email)->send(new OrderStatusUpdatedMail($order));
+        return redirect()->back()->with('success', 'Cập nhật thành công!');
     }
-    $order->update($data);
-    return redirect()->back()->with('message', 'Cập nhật thành công!');
-}
 
     
 
