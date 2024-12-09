@@ -87,6 +87,8 @@
                         </div>
                         <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                         <input type="hidden" name="product_id" value="{{$variant->product->id}}">
+                        <input type="hidden" name="order_id" value="{{$order->id}}">
+                        <input type="hidden" name="variant_id" value="{{$variant->id}}">
                         <textarea name="content" placeholder="Viết bình luận của bạn..." required></textarea>
                         <button type="submit" class="submit-button">Đánh giá</button>
                     </form>

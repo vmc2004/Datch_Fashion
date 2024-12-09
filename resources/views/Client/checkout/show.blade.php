@@ -125,7 +125,7 @@
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700">Số điện thoại</label>
-                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="phone" placeholder="Số điện thoại" type="text" value="{{Auth::user()->phone}}" readonly/>
+                            <input class="w-full p-2 border border-gray-300 rounded mt-1" name="phone" placeholder="Số điện thoại" type="text" value="{{Auth::user()->phone}}"      />
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700">Email của bạn</label>
