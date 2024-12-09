@@ -612,7 +612,39 @@ $('.dashboard-filter').change(function() {
 });
 
 </script>
+@if (session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: '{{ session('error') }}',
+        showConfirmButton: true,
+    });
+</script>
+@endif
 
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công',
+        text: '{{ session('success') }}',
+        timer: 2000,
+        showConfirmButton: false,
+    });
+</script>
+@endif
+
+@if (session('warning'))
+<script>
+    Swal.fire({
+        icon: 'warning',
+        title: 'Cảnh báo',
+        text: '{{ session('warning') }}',
+        showConfirmButton: true,
+    });
+</script>
+@endif
 </body>
 
 </html>
