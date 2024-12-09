@@ -52,12 +52,12 @@ class ProductController extends Controller
         $imagePath = $request->file('image')->move(public_path('uploads/products'), $imageName);
     }
 
-    // Tạo sản phẩm mới
+
     $product = Product::create([
         'code' => $request->code,
         'name' => $request->name,
         'slug' => $slug,
-        'image' => 'uploads/products/' . $imageName, // Lưu đường dẫn ảnh trong cơ sở dữ liệu
+        'image' => 'uploads/products/' . $imageName, 
         'price' => $request->price,
         'description' => $request->description,
         'material' => $request->material,

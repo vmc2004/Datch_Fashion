@@ -61,18 +61,7 @@
                                 <p class="mt-2 text-gray-700">
                                     {{ $new->name }}
                                 </p>
-                                @if ($new->ProductVariants->first()?->sale_price != 0)
-                                    <p class="text-lg font-semibold">
-                                        {{ number_format($new->ProductVariants->first()?->sale_price ?? 0) }} đ
-                                    </p>
-                                    <p class="text-gray-500 line-through">
-                                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
-                                    </p>
-                                @else
-                                    <p class="text-gray-500">
-                                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
-                                    </p>
-                                @endif
+                                {{ number_format($new->price) }} đ
                             </div>
                         </div>
                     @endforeach

@@ -71,10 +71,11 @@
                                 <tr>
                                     <th scope="col">Mã SKU</th>
                                     <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Giá</th>
                                     <th scope="col">Hình ảnh</th>
                                     <th scope="col">Chất liệu</th>
-                                    <th scope="col">Trạng thái</th>
                                     <th scope="col">TTHĐ</th>
+                                    <th scope="col">Trạng thái</th>
                                     <th scope="col">Danh mục</th>
                                     <th scope="col">Thương hiệu</th>
                                     <th scope="col">Action</th>
@@ -86,6 +87,7 @@
                                         <tr>
                                             <td>{{ $item->code }}</td>
                                             <td style="max-width:100px ;" class="text-truncate">{{ $item->name }}</td>
+                                            <td>{{ number_format($item->price) }}</td>
                                             <td>
                                                 @if ($item->image)
                                                     <img src="{{ asset($item->image) }}" width="100px" alt="">
@@ -102,11 +104,13 @@
                                             <td>{{ $item->brand->name }}</td>
                                             <td>
                                                 <a href="{{ route('productVariants.create', $item->id) }}"
-                                                    class="btn btn-success">Thêm biến thể</a>
+                                                    class="btn btn-success">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </a>
                                                 <a href="{{ route('productVariants.index', $item->id) }}"
-                                                    class="btn btn-primary">Danh sách biến thể</a>
+                                                    class="btn btn-primary"><i class="fa-solid fa-list"></i></a>
                                                 <a href="{{ route('products.edit', $item->id) }}"
-                                                    class="btn btn-warning">Sửa</a>
+                                                    class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i></a>
                                         </tr>
                                     {{-- @else
                                         <div class=""></div>
