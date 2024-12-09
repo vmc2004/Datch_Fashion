@@ -90,6 +90,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::post('/create', [ProductController::class, 'store'])->name('products.store');
         Route::get('/show/{id}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
+        Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
         Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     });

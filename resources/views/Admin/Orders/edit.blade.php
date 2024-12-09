@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
                         <td colspan="7" class="text-end"><strong>Tiền giao hàng:</strong></td>
-                        <td>@if ( ($order->OrderDetails->sum(function($detail) { return $detail->quantity * $detail->variant->price; }))  >= 599000)
+                        <td>@if (($order->OrderDetails->sum(function($detail) { return $detail->quantity * $detail->variant->price; }))  > 599000)
                             <strong>0₫</strong>
                         @else
                         <strong>30.000₫</strong>
