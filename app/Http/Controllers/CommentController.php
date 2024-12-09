@@ -57,7 +57,7 @@ class CommentController extends Controller
     }
 
     public function listRate(){
-        $listRate = Comment::query()->where('user_id',Auth::user()->id)->where('rating','!=',null)->with('product')->paginate(6);
+        $listRate = Comment::query()->where('user_id',Auth::user()->id)->where('rating','!=',null)->orderBy('id','desc')->with('product')->paginate(6);
         return view('Client.comment.myRate',compact('listRate'));
     }
 
