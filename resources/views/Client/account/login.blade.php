@@ -61,7 +61,7 @@
                           </label>
                         </div>
                         <div>
-                          <a href="jajvascript:void(0);" class="text-blue-600 font-semibold text-sm hover:underline">
+                          <a href="{{ route('Client.account.forgot-password') }}" class="text-blue-600 font-semibold text-sm hover:underline">
                             Quên mật khẩu?
                           </a>
                         </div>

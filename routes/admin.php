@@ -28,9 +28,15 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     // Route truy cập trang index của admin
     // Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/', [HomeController::class, 'indexAdmin'])->name('admin.index');
+    Route::get('/topProduct', [HomeController::class, 'showTopProduct'])->name('admin.topProduct');
+    Route::get('/orderStatus', [HomeController::class, 'showOderStatus'])->name('admin.orderStatus');
+    Route::get('/inventory', [HomeController::class, 'showInventory'])->name('admin.inventory');
     Route::get('/users/profile', [UserController::class, 'profile']);
 
-    Route::post('/filter-by-date',[HomeController::class, 'filter'])->name('admin.filter');
+    Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
+    Route::post('/filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');
+    Route::post('/filter-by-inventori', [HomeController::class, 'filterStockStatus'])->name('admin.inventori');
+    Route::post('/filter-by-statusOrder', [HomeController::class, 'filterOrderStatus'])->name('admin.statusOrder');
     Route::post('/dashboard-filter',[HomeController::class, 'dashboard_filter'])->name('admin.db_filter');
     Route::post('/day-sorder', [HomeController::class, 'get30DaysOrderData'])->name('admin.day-sorder');
 
@@ -71,8 +77,6 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
      // Đường dẫn bình luận
      Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('comments.index');
-        Route::post('/send-comment/{product_id}', [CommentController::class, 'sendComment'])->name('comments.sendComment');
-        Route::post('/send-rate/{product_id}', [CommentController::class, 'sendRate'])->name('comments.sendRate');
         Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('comments.edit');
         Route::put('/edit/{comment}', [CommentController::class, 'update'])->name('comments.update');
     });

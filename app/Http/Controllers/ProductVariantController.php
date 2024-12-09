@@ -73,23 +73,12 @@ class ProductVariantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductVariantRequest $request,$id)
+    public function update(Request $request,$id)
     {
         $productVariant = ProductVariant::query()->find($id);
         $id = $productVariant->product_id;
         $dataVariant = $request->except('image');
         if ($request->hasFile('image')) {
-        // Lưu ảnh mới vào thư mục public/uploads/variants
-        $image = $request->file('image');
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('uploads/variants'), $imageName);
-        $dataVariant['image'] = 'uploads/variants/' . $imageName;
-
-        // Xóa ảnh cũ nếu có
-        if ($productVariant->image && file_exists(public_path($productVariant->image))) {
-            unlink(public_path($productVariant->image));
-        }
-    }if ($request->hasFile('image')) {
         // Lưu ảnh mới vào thư mục public/uploads/variants
         $image = $request->file('image');
         $imageName = time() . '_' . $image->getClientOriginalName();

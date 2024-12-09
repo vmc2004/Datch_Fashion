@@ -75,7 +75,8 @@
 
                                 <th>Mã Giảm giá</th>
                                 <th>Giảm giá</th>
-                                <th>Loại giảm giá</th>
+                                <th>Số lượng</th>
+                                <th>Đã sử dụng</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày hết hạn</th>
                                 <th>Trạng thái</th>
@@ -93,13 +94,15 @@
                                         {{ number_format($coupon->discount)}}đ
                                         @endif
                                     </td>
-                                    <td>
+                                    <td>{{$coupon->quantity}}</td>
+                                    <td>{{$coupon->used}}</td>
+                                    {{-- <td>
                                         @if ($coupon->discount_type=='percent')
                                         Theo phần trăm
                                         @elseif ($coupon->discount_type == 'fixed')
                                         Cố định
                                         @endif
-                                    </td>
+                                    </td> --}}
                                    
                                     <td>{{ $coupon->start_date }}</td>
                                     <td>{{ $coupon->end_date }}</td>

@@ -15,6 +15,7 @@ class OrderDetail extends Model
         'variant_id',
         'price',
         'quantity',
+        'is_rated',
         'unit_price',
     ];
 

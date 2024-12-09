@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ShowLoginFormRequest;
+use App\Mail\SendOtpMail;
 use App\Models\Banner;
 use App\Models\Brand;
 use App\Models\Category;
@@ -16,7 +18,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -25,6 +30,7 @@ class UserController extends Controller
     {
         // Lấy danh sách danh mục từ cơ sở dữ liệu
         $banners = Banner::where('is_active', 1)->where('location', 1)->get();
+        // $banners = Banner::query()->get();
         $brands = Brand::query()->limit(5)->get();
         $category = Category::query()->limit(5)->get();
         $newPro = Product::query()->latest('id')->limit(5)->get();
@@ -39,62 +45,149 @@ class UserController extends Controller
         return view('Client.account.register');
        }
     
-    public function showLoginForm(Request $request) {
-        $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required',
-        ]);
-        $user = User::where('email', $request->email)->first();
+       public function showLoginForm(ShowLoginFormRequest $request)
+{
+    $credentials = $request->only('email', 'password');
 
-    
-    if ($user && password_verify($request->password, $user->password)) {
-      
-        Auth::login($user);
-        
-
-        if ($user->role === 'member') {
+    if (Auth::attempt($credentials)) {
+        if (Auth::user()->role === 'member') {
             return redirect()->route('Client.home')->with([
-                'message' => 'Đăng nhập thành công với quyền Member',
+                'message' => 'Đăng nhập thành công',
                 'message_type' => 'success',
             ]);
+        } else {
+            Auth::logout();
+            return redirect()->back()->with([
+                'message' => 'Bạn không có quyền truy cập vào trang này.',
+                'message_type' => 'error',
+            ]);
         }
-        return back()->withErrors([
-            'role' => 'Bạn không có quyền truy cập vào hệ thống.',
-        ]);
     }
 
-    // Trả về lỗi nếu đăng nhập thất bại
-    return back()->withErrors([
-        'email' => 'Thông tin đăng nhập không khớp với hồ sơ của chúng tôi.',
+    return redirect()->back()->withErrors([
+        'email' => 'Email hoặc mật khẩu không đúng.',
     ]);
 }
 
+       
 public function showRegisterForm(Request $request)
 {
-    
-    $validator = Validator::make($request->all(), [
-        'fullname' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed', 
-    ]);
+     $check = User::where('email', $request->email)->exists();
+    if($check){
+        return redirect()->back()->with([
+            'message' => 'Tài khoản email đã tồn tại', 'message_type' => 'error' 
+        ]);
+    }else{
+        $otp = rand(100000, 999999); 
+        $data = [
+            'fullname' => $request->fullname,
+            'email' => $request->email,
+            'password' =>Hash::make($request->password),
+           
+        ];
+        session(['otp' => $otp]);
 
-    if ($validator->fails()) {
-        return redirect()->back()
-                         ->withErrors($validator)
-                         ->withInput();
+        $newUser = User::create($data);
+        Mail::to($newUser->email)->send(new SendOtpMail($otp, $request->fullname));
+        return redirect()->route('Client.otp.confirm', ['email' => $newUser->email, 'otp' => $otp])
+        ->with('message', 'Đăng kí thành công. Vui lòng kiểm tra email để nhận mã OTP.')
+        ->with('message_type', 'success');
+
     }
-
-   
-    User::create([
-        'fullname' => $request->fullname,
-        'email' => $request->email,
-        'password' => Hash::make($request->password), 
-    ]);
-
-    return redirect()->route('Client.account.login')->with(['message' => 'Đăng ký thành công. Bạn có thể đăng nhập ngay bây giờ.', 'message_type' => 'success']);
 }
 
 
+public function showForgotPasswordForm(){
+    return view('Client.account.forgot-password');
+}
+public function sendResetLinkEmail(Request $request)
+{
+    // Xác thực email
+    $request->validate(['email' => 'required|email']);
+
+    // Gửi liên kết đặt lại mật khẩu
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    // Kiểm tra kết quả và trả về thông báo
+    if ($status === Password::RESET_LINK_SENT) {
+        return back()->with('status', 'Chúng tôi đã gửi email liên kết đặt lại mật khẩu cho bạn.');
+    } else {
+        $errorMessage = $status === Password::INVALID_USER 
+            ? 'Chúng tôi không tìm thấy người dùng nào với địa chỉ email này.' 
+            : 'Đã xảy ra lỗi. Vui lòng thử lại sau.';
+
+        return back()->withErrors(['email' => $errorMessage]);
+    }
+}
+
+public function showResetPasswordForm($token)
+{
+    return view('Client.account.reset-password', ['token' => $token]);
+}
+public function resetPassword(Request $request)
+{
+    $request->validate(
+        [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ],
+        [
+            'token.required' => 'Token không được để trống.',
+            'email.required' => 'Email không được để trống.',
+            'email.email' => 'Email không hợp lệ.',
+            'password.required' => 'Mật khẩu mới không được để trống.',
+            'password.min' => 'Mật khẩu phải có ít nhất :min ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+        ]
+    );
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password),
+            ])->save();
+
+            $user->setRememberToken(Str::random(60));
+        }
+    );
+
+    return $status === Password::PASSWORD_RESET
+        ? redirect()->route('Client.account.login')->with('status', 'Mật khẩu đã được đặt lại thành công.')
+        : back()->withErrors(['email' => ['Không tìm thấy người dùng với địa chỉ email này.']]);
+}
+public function showOtpConfirmationForm(Request $request)
+    {
+        // Lấy email từ query string
+        $email = $request->input('email');
+        
+        return view('Client.otp.otp-confirmation', compact('email'));
+    }
+
+public function verifyOtp(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email|exists:users',
+        'otp' => 'required|digits:6',
+    ]);
+
+    $sessionOtp = session('otp');
+
+         if ($sessionOtp && $request->otp == $sessionOtp) {
+            return redirect()->route('Client.account.login')->with([
+                'message' => 'Xác nhận thành công! Bạn có thể đăng nhập.',
+                'message_type' => 'success'
+            ]);
+            } else {
+                return redirect()->back()->with([
+                    'message' => 'Mã OTP không hợp lệ hoặc đã hết hạn.',
+                    'message_type' => 'error'
+            ]);
+            }
+}
 
 public function profile()
 {
