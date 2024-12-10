@@ -29,7 +29,7 @@ use App\Http\Controllers\Client\StoreController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController as ControllersOrderController;
-
+use App\Http\Controllers\ProductVariantController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,6 +41,8 @@ use App\Http\Controllers\OrderController as ControllersOrderController;
 |
 */
 
+
+Route::post('/product-variants/check-duplicate', [ProductVariantController::class, 'checkDuplicate'])->name('productVariants.checkDuplicate');
 Route::post('/apply-coupon', [CouponController::class, 'applyCoupon']);
 Route::get('/products/filter-by-color', [ProductController::class, 'filterByColor'])->name('products.filter-by-color');
 Route::get('/filter-by-size', [ProductController::class, 'filterBySize'])->name('filterBySize');

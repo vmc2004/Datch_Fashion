@@ -78,7 +78,7 @@
                         <input type="hidden" name="variant_id[]" value="{{ $item['variant_id'] }}">
                         <input type="hidden" name="price[]" value="{{ $item['price_at_purchase'] }}">
                         <div class="flex items-center mb-4">
-                            <img alt="Ảnh sản phẩm" class="w-16 rounded-lg" src="{{asset($item->variant->image)}}" />
+                            <img alt="Ảnh sản phẩm" class="w-20 h-20 rounded-lg" height="80" src="{{asset($item->variant->image)}}" width="80" />
                             <div class="ml-4">
                                 <p>{{ $item->variant->product->name }} - {{ $item->variant->color->name }}, {{ $item->variant->size->name }}</p>
                                 <p>{{ number_format($item['price_at_purchase']) }} đ</p>
@@ -86,22 +86,10 @@
                             </div>
                         </div>
                         @endforeach
-                        <div class="mb-4">
-                            <label class="block text-gray-700">Mã giảm giá</label>
-                            <input id="coupon_code" class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="Nhập mã giảm giá" type="text">
-                            <button onclick="applyCoupon()" class="mt-2 p-2 bg-blue-500 text-white rounded">Áp dụng</button>
-                            <p id="discount_message" class="text-red-500 mt-2"></p>
-                        </div>
 
                         <div class="mb-4">
-                            <div class="flex justify-between">
-                                <span>Giảm giá</span>
-                                <span id="discount_amount">0 đ</span>
-                            </div>
-                            <div class="flex justify-between font-bold">
-                                <span>Tổng thanh toán</span>
-                                <span id="total_payment">{{ number_format($subtotal) }} đ</span>
-                            </div>
+                            <label class="block text-gray-700">Mã giảm giá</label>
+                            <input class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="Nhập mã giảm giá" type="text" />
                         </div>
                         <div class="mb-4">
                             <div class="flex justify-between">
@@ -142,48 +130,6 @@
                 form.action = "{{ route('post_checkout') }}";
             }
         });
-    });
-
-
-    document.getElementById('apply_coupon_button').addEventListener('click', function(event) {
-        event.preventDefault(); // Ngăn ngừa form gửi và reload trang
-
-        const couponCode = document.getElementById('coupon_code').value;
-
-        if (!couponCode) {
-            alert('Vui lòng nhập mã giảm giá!');
-            return;
-        }
-
-        console.log("Coupon code entered:", couponCode);
-
-        fetch('/apply-coupon', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                },
-                body: JSON.stringify({
-                    coupon_code: couponCode,
-                    total_amount: 100000 // Thêm giá trị tổng đơn hàng giả sử
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response JSON data:', data);
-
-                if (data.success) {
-                    document.getElementById('discount_message').innerText = `Giảm giá: ${data.discount} đ`;
-                } else {
-                    document.getElementById('discount_message').innerText = `Lỗi: ${data.message}`;
-                    document.getElementById('discount_message').style.color = 'red'; // Đổi màu chữ khi có lỗi
-                }
-            })
-            .catch(error => {
-                console.error('Error applying coupon:', error);
-                document.getElementById('discount_message').innerText = 'Đã xảy ra lỗi khi áp dụng mã giảm giá. Vui lòng thử lại.';
-                document.getElementById('discount_message').style.color = 'red';
-            });
     });
 </script>
 
