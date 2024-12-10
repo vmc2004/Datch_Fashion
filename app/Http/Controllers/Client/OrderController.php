@@ -51,7 +51,21 @@ class OrderController extends Controller
     
         return redirect()->back()->with('error', 'Không tìm thấy đơn hàng');
     }
-    
+    public function updateStatus(Order $order)
+    {
+        if (auth()->user()->id !== $order->user_id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+        if ($order->status == 'Chờ xác nhận') {
+            $order->status = 'Đã giao hàng';
+            $order->save();
+
+            return response()->json(['status' => $order->status]);
+        }
+
+        return response()->json(['status' => $order->status]);
+    }
+
 
 
 }

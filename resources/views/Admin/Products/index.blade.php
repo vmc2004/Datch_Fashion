@@ -119,12 +119,11 @@
                             </tbody>
                         </table>
                     </div>
-                    {{-- <div class="chart">
-                        <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-
-                    </div> --}}
+ 
                 </div>
-                {{ $products->links() }}
+                <div>
+                    {{ $products->links() }}
+                </div>
             </div>
         </div>
     </div>

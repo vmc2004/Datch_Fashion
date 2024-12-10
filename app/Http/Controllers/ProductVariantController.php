@@ -48,7 +48,7 @@ class ProductVariantController extends Controller
             $productVariant['image'] = 'uploads/variants/' . $imageName;
         }
         ProductVariant::query()->create($productVariant); 
-        return redirect()->route('products.index')->with('message','Thêm biến thể thành công');
+        return redirect()->route('products.index')->with('success','Thêm biến thể thành công');
     }
 
     /**

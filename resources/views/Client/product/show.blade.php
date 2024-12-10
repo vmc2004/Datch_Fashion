@@ -107,12 +107,14 @@
                             @php
                                 $uniqueColors = $product->ProductVariants->unique('color_id');
                             @endphp
-
+                    
                             @foreach ($uniqueColors as $variant)
-                                <button type="button" class="color-button w-8 h-8 border border-gray-300 rounded-full"
+                                <button type="button"
+                                    class="color-button w-8 h-8 border border-gray-300 rounded-full outline outline-4 outline-offset-2 outline-white"
                                     style="background-color: {{ $variant->color->color_code }};"
                                     data-color-id="{{ $variant->color->id }}"
-                                    data-color-name="{{ $variant->color->name }}" onclick="selectColor(this)">
+                                    data-color-name="{{ $variant->color->name }}" 
+                                    onclick="selectColor(this)">
                                 </button>
                             @endforeach
                         </div>

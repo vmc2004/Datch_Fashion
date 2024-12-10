@@ -243,7 +243,6 @@ if (win && document.querySelector('#sidenav-scrollbar')) {
     },
     error: function(xhr, status, error) {
       console.error("Có lỗi khi gọi API:", error);
-      alert("Có lỗi xảy ra khi lấy dữ liệu.");
     }
   });
 }

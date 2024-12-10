@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderStatusUpdated;
 use App\Mail\OrderStatusUpdatedMail;
 use App\Models\Order;
 use App\Models\Product;
@@ -113,6 +114,7 @@ public function index(Request $request)
                 }
             },
         ]);
+
         $data = [
             'status' => $request->status,
             'note' => $request->note,
@@ -121,10 +123,17 @@ public function index(Request $request)
         if ($request->status === 'Đã giao hàng') {
             $data['payment_status'] = 'Đã thanh toán';
         }
-        $order->update($data);
-        Mail::to($order->email)->send(new OrderStatusUpdatedMail($order));
+
+        try {
+            $order->update($data);
+            Mail::to($order->email)->send(new OrderStatusUpdatedMail($order));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật đơn hàng.');
+        }
+
         return redirect()->back()->with('success', 'Cập nhật thành công!');
     }
+
 
     
 
