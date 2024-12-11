@@ -9,13 +9,7 @@
     <div class="mt-12 md:grid grid-cols-5 gap-8">
         <!-- Sidebar -->
         @include('Client.layout.profile_sidebar')
-        <div id="toast" class="fixed top-0 right-0 m-4 p-4 bg-green-500 text-white rounded-lg shadow-lg hidden">
-            {{ session('success') }}
-        </div>
-        
-        <div id="error-toast" class="fixed top-0 right-0 m-4 p-4 bg-red-500 text-white rounded-lg shadow-lg hidden">
-            {{ session('error') }}
-        </div>
+       
         <div class="col-span-4">
             <div>
                 <h3
@@ -122,34 +116,5 @@
     </div>
 </div>
 
-<script>
-    function updateOrderStatus() {
-        fetch("{{ route('order.updateStatus', ['order' => $order->id]) }}")
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('orderStatus').innerText = data.status;
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    // Cập nhật trạng thái mỗi giây
-    setInterval(updateOrderStatus, 1000);
-    
-    @if(session('success'))
-        const toast = document.getElementById('toast');
-        toast.classList.remove('hidden');
-        setTimeout(() => {
-            toast.classList.add('hidden');
-        }, 3000); // 3s
-    @endif
-
-    @if(session('error'))
-        const errorToast = document.getElementById('error-toast');
-        errorToast.classList.remove('hidden');
-        setTimeout(() => {
-            errorToast.classList.add('hidden');
-        }, 3000); // 3s
-    @endif
-</script>
 
 @endsection

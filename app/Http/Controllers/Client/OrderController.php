@@ -35,37 +35,25 @@ class OrderController extends Controller
         $order = Order::where('code', $code)
             ->with('orderDetails.productVariant') 
             ->first();
-        if ($order) {
-            foreach ($order->orderDetails as $detail) {
-                $variant = $detail->productVariant;
-                if ($variant) {
-                    $variant->quantity += $detail->quantity;
-                    $variant->save(); 
+        if($order->status == 'Chờ xác nhận'){
+            if ($order) {
+                foreach ($order->orderDetails as $detail) {
+                    $variant = $detail->productVariant;
+                    if ($variant) {
+                        $variant->quantity += $detail->quantity;
+                        $variant->save(); 
+                    }
                 }
+                $order->status = 'Đơn hàng đã hủy';
+                $order->save();
+                return redirect()->back()->with('success', 'Hủy đơn hàng thành công');
             }
-            $order->status = 'Đơn hàng đã hủy';
-            $order->save();
-    
-            return redirect()->back()->with('success', 'Hủy đơn hàng thành công');
         }
-    
-        return redirect()->back()->with('error', 'Không tìm thấy đơn hàng');
+        else
+        {
+            return redirect()->back()->with('error', 'Bạn không thể hủy đơn hàng này!');
+        }
     }
-    public function updateStatus(Order $order)
-    {
-        if (auth()->user()->id !== $order->user_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
-        if ($order->status == 'Chờ xác nhận') {
-            $order->status = 'Đã giao hàng';
-            $order->save();
-
-            return response()->json(['status' => $order->status]);
-        }
-
-        return response()->json(['status' => $order->status]);
-    }
-
 
 
 }
