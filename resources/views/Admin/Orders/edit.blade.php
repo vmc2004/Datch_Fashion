@@ -74,9 +74,10 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer text-end">
-                <button class="btn btn-success">Xuất hóa đơn</button>
-                <button class="btn btn-secondary">Quay lại</button>
+            <div class="card-footer ">
+                <a href="{{route('orders.index')}}">
+                    <button class="btn btn-success">Quay lại</button>
+                </a>
             </div>
         </div>
     </div>

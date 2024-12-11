@@ -69,7 +69,7 @@
                         <th>Thời gian</th>
                         <th>Khách hàng</th>
                         <th>Sđt</th>
-                        <th>Tổng tiền hàng</th>
+                        <th>Tổng</th>
                         <th>Trạng thái thanh toán</th>
                         <th>Trạng thái</th>
                     </tr>

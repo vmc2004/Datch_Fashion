@@ -8,32 +8,35 @@ use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
     public function checkout(Request $request ,$user_id)
     {
-        $price= 0;
+        $priceProduct= 0;
         $user = Auth::user();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
         foreach ($cartItems->items as $item) {
-            $price += $item->price_at_purchase * $item->quantity;  
+            $priceProduct += $item->price_at_purchase * $item->quantity;  
             
         }
-        if($price <= 599000){
-            $total_price = $price+30000;
+        if($priceProduct <= 599000){
+            $total_price = $priceProduct+30000;
         }
         else{
-            $total_price = $price;
+            $total_price = $priceProduct;
         }
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
+            'priceProduct' => $priceProduct,
             'total_price' => $total_price,
             'user'=> $user,
         ]);
@@ -61,6 +64,8 @@ class CheckoutController extends Controller
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
+            $order->shiping = $request->shiping;
+            $order->discount = $request->discount;
             $order->total_price =$request->subtotal; 
             $order->payment = $request->payment;
             if($request->payment == 'Thanh toán khi nhận hàng'){
@@ -129,11 +134,19 @@ class CheckoutController extends Controller
             $order->save();
             
             foreach ($request->input('variant_id') as $index => $variantId) {
-                $quantity = $request->input('quantity')[$index]; 
+                $quantity = $request->input('quantity')[$index];
                 $price = $request->input('price')[$index];
     
                 if ($price < 0 || $quantity < 0) {
                     return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
+                }
+                $variant = ProductVariant::find($variantId); 
+                if (!$variant || $variant->stock < $quantity) {
+                    $order->orderDetails()->delete();
+                    $order->delete();
+                    return redirect()->route('cart.show')->with([
+                        'warning' => 'Sản phẩm không đủ số lượng tồn kho.'
+                    ]);
                 }
     
                 $orderDetail = new OrderDetail();
@@ -248,40 +261,51 @@ class CheckoutController extends Controller
     }
  
     public function apply(Request $request)
-    {
-        $request->validate([
-            'code' => 'required|string|max:10',
-            'subtotal' => 'required',
-        ]);
-        $subtotal = $request->subtotal;
-        $code = $request->code;
-        $coupon = Coupon::where('code', $code)
+{
+    $request->validate([
+        'code' => 'required|string|max:10',
+        'subtotal' => 'required',
+    ]);
+    $subtotal = $request->subtotal;
+    $code = $request->code;
+    $coupon = Coupon::where('code', $code)
         ->where('is_active', 1)
         ->first();
-        if (!$coupon) {
-            return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ!');
-        }
-       else{
-       if($coupon->discount_type=='fixed'){
-        $subtotals = $subtotal - $coupon->discount;
-        session([
-            'subtotals' => $subtotals,
-            'discount'=>$coupon->discount,
-        ]);
-       }
-       else{
-        $discountAmount = $subtotal * ($coupon->discount / 100); 
-        $subtotals = $subtotal - $discountAmount;  
-        session([
-            'subtotals' => $subtotals,
-            'discount'=>$discountAmount,
-        ]);
-       }
-        
-        
-        return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
-        }
+
+    if (!$coupon) {
+        return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ!');
     }
+
+    $userId = Auth::id(); 
+    $alreadyUsed = DB::table('coupon_user')
+        ->where('user_id', $userId)
+        ->where('coupon_id', $coupon->id)
+        ->exists();
+    if ($alreadyUsed) {
+        return redirect()->back()->with('error', 'Bạn đã sử dụng mã giảm giá này rồi!');
+    }
+    if ($coupon->discount_type == 'fixed') {
+        $discountAmount = $coupon->discount;
+        $subtotals = $subtotal - $discountAmount;
+    } else {
+        $discountAmount = $subtotal * ($coupon->discount / 100);
+        $subtotals = $subtotal - $discountAmount;
+    }
+
+    session([
+        'subtotals' => $subtotals,
+        'discount' => $discountAmount,
+    ]);
+
+    DB::table('coupon_user')->insert([
+        'user_id' => $userId,
+        'coupon_id' => $coupon->id,
+        'used_at' => now(),
+    ]);
+
+    return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
+}
+
     public function clearSession()
     {
         Session::forget('subtotals');

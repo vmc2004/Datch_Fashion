@@ -19,13 +19,11 @@ class HomeController extends Controller
     public function index()
     {
         $banners = Banner::where('is_active', 1)->where('location', 1)->get();
-        // $banners = Banner::query()->get();
         $brands = Brand::query()->limit(5)->get();
         $newPro = Product::query()->where('status', 1)->latest('id')->limit(10)->get();
         $Proview = Product::query()->where('status', 1)->orderBy('views', 'desc')->limit(10)->get();
         $category = Category::all();
 
-        // Kiểm tra lại việc truyền biến vào view
         return view('Client.home', compact('brands', 'category', 'newPro', 'Proview', 'banners'));
     }
     public function feedback()
@@ -46,7 +44,6 @@ class HomeController extends Controller
 
         $products = Product::whereIn('id', $wishlist)->get();
 
-        // Render view danh sách yêu thích
         $html = view('partials.wishlist', compact('products'))->render();
 
         return response()->json([
@@ -59,23 +56,23 @@ class HomeController extends Controller
         $query = FavoriteProduct::query();
         $query->when($sort, function ($query) use ($sort) {
             switch ($sort) {
-                case '-createdAt':  // Được tạo gần đây
+                case '-createdAt': 
                     $query->orderBy('created_at', 'desc');
                     break;
-                case 'createdAt':  // Cũ nhất được tạo trước
+                case 'createdAt':  
                     $query->orderBy('created_at', 'asc');
                     break;
-                case 'updatedAt':  // Cập nhật gần đây
+                case 'updatedAt': 
                     $query->orderBy('updated_at', 'desc');
                     break;
-                case '-updatedAt':  // Cũ nhất cập nhật trước
+                case '-updatedAt': 
                     $query->orderBy('updated_at', 'asc');
                     break;
-                case 'totalPrice':  // Giá cao tới thấp
+                case 'totalPrice':  
                     $query->join('product_items', 'product_items.product_id', '=', 'favourites.product_id')
                           ->orderBy('product_items.price', 'desc');
                     break;
-                case '-totalPrice':  // Giá thấp tới cao
+                case '-totalPrice': 
                     $query->join('product_items', 'product_items.product_id', '=', 'favourites.product_id')
                           ->orderBy('product_items.price', 'asc');
                     break;

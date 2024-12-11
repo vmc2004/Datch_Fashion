@@ -19,6 +19,8 @@ class Order extends Model
         'note', 
         'payment_status',
         'total_money',  
+        'shiping',  
+        'discount',  
         'status',   
         'user_id',  
     ];
