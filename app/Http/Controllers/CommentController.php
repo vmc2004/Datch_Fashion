@@ -41,19 +41,25 @@ class CommentController extends Controller
 
     public function sendRate(StoreCommentRequest $request, $product_id)
     {
-        $orderDetail = OrderDetail::query()->where('order_id',$request->order_id)->where('variant_id',$request->variant_id)->get();
+        $orderDetail = OrderDetail::query()->where('order_id', $request->order_id)
+        ->where('variant_id',$request->variant_id)->first();
         $user_id = Auth::user()->id;
-        Comment::query()->create([
-            'product_id' => $product_id,
-            'user_id' => $user_id,
-            'order_id' => $request->order_id,
-            'content' => $request->content,
-            'rating' => $request->rating,
-        ]);
-        OrderDetail::where('order_id', $request->order_id)
-        ->whereIn('variant_id', $orderDetail->pluck('variant_id'))
-        ->update(['is_rated' => true]);
-        return redirect()->route('rate.list')->with('message','Đánh giá sản phẩm thành công!');
+        
+            if ($orderDetail->is_rated == false) {
+                Comment::query()->create([
+                    'product_id' => $product_id,
+                    'user_id' => $user_id,
+                    'order_id' => $request->order_id,
+                    'content' => $request->content,
+                    'rating' => $request->rating,
+                ]);
+                OrderDetail::where('order_id', $request->order_id)
+                ->whereIn('variant_id', $orderDetail->pluck('variant_id'))
+                ->update(['is_rated' => true]);
+                return redirect()->route('rate.form',[$request->variant_id,$request->order_id])->with('message','Đánh giá sản phẩm thành công!');
+            }
+            return redirect()->route('rate.form',[$request->variant_id,$request->order_id])->with('message','sản phẩm này đã đánh giá rồi');        
+        
     }
 
     public function listRate(){
