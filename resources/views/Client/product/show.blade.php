@@ -208,14 +208,14 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 gap-6">
                 @foreach ($comments as $comment)
-                    @if ($comment->rating != '')
+                    @if ($comment->rating != '' && $comment->status == 'approved')
                         <div class="">
                             <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
                                 {{ $comment->created_at->format('d/m/Y') }}</p>
                             <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
                             <p><span class="font-bold">Đánh giá:</span> {{ $comment->rating }} sao</p>
                         </div>
-                    @else
+                    @elseif ($comment->rating == '' && $comment->status == 'approved')
                         <div class="">
                             <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
                                 {{ $comment->created_at->format('d/m/Y') }}</p>
