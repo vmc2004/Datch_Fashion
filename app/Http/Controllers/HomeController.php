@@ -134,6 +134,7 @@ class HomeController extends Controller
         }
     }
     $chart_data = array_values($chart_data);
+    // Thống kê 10 sản phẩm bán chạy nhất
 
     return response()->json($chart_data);
 }
