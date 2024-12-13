@@ -224,12 +224,14 @@
                             </div>
                         </div>
                     </form>
-                        <form action="{{route('coupon.apply')}}" method="POST">
+                        <form action="{{route('coupon.apply')}}" method="POST" >
                             @csrf
                                 <label class="block text-gray-700">Mã giảm giá</label>
+                               <div class="flex">
                                 <input type="hidden" name="subtotal" value="{{$total_price}}">
                                 <input type="text" class="border border-gray-500 rounded-md pl-1 w-8/12" id="code" name="code" placeholder="Nhập mã giảm giá">
-                                <button type="submit" class="mt-2 ml-2 bg-gray-300 border-gray-500  text-white px-4 py-1 rounded" >Áp dụng</button>
+                                <button type="submit" class="mt-2 ml-2 bg-gray-500 border-gray-500  text-white px-4 py-1 rounded" >Áp dụng</button>
+                               </div>
                         </form>
                     
                     </div>

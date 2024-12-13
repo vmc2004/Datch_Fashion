@@ -169,9 +169,8 @@
 
                     <!-- Nút hành động -->
                     <div class="mt-4 flex space-x-4">
-                        <button class="border border-red-500 rounded-lg px-4 py-2 text-black" type="submit">Thêm vào giỏ
+                        <button class="bg-red-600 text-white rounded-lg px-4 py-2" type="submit">Thêm vào giỏ
                             hàng</button>
-                        <button class="bg-red-600 text-white rounded-lg px-4 py-2">Mua ngay</button>
                     </div>
                 </form>
 

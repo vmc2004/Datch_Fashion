@@ -142,7 +142,7 @@ class CheckoutController extends Controller
                     return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
                 }
                 $variant = ProductVariant::find($variantId); 
-                if (!$variant || $variant->stock < $quantity) {
+                if (!$variant || $variant->quantity < $quantity) {
                     $order->orderDetails()->delete();
                     $order->delete();
                     return redirect()->route('cart.show')->with([
