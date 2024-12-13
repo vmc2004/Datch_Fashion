@@ -143,9 +143,20 @@
                         </div>
                     </div>
 
+                    <div class="mt-4 mb-4">
+                        <p>
+                            Chỉ còn
+                            <span id="stockQuantity" class="text-red-500 font-bold">
+                                {{ $product->ProductVariants->first()->quantity }}
+                            </span>
+                            sản phẩm trong kho!
+                        </p>
+                    </div>
+
+
                     <!-- Số lượng -->
                     <p class="font-bold">Số lượng:</p>
-                    <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-4 mt-2">
                         <div class="flex items-center border rounded-lg px-1 py-1">
                             <button type="button" class="text-gray-500" onclick="decrement()">−</button>
                             <input type="number" id="quantity" name="quantity" value="1" min="1"
@@ -334,34 +345,14 @@
                 });
                 button.classList.add('border-4', 'border-black');
 
-                // Reset tất cả các size (sáng lên)
-                document.querySelectorAll('.size-option').forEach(element => {
-                    element.classList.remove('opacity-50', 'cursor-not-allowed');
-                    element.disabled = false; // Cho phép chọn
-                });
+                // Reset kích cỡ và cập nhật trạng thái các size phù hợp
+                resetSizes();
+                updateSizeOptions(selectedColorId);
 
-                // Làm mờ các size không thuộc biến thể của màu được chọn
-                document.querySelectorAll('.size-option').forEach(element => {
-                    const sizeId = element.getAttribute('data-size');
-                    const sizeColorMatch = productVariants.some(variant =>
-                        variant.color_id == selectedColorId && variant.size_id == sizeId
-                    );
-
-                    if (!sizeColorMatch) {
-                        element.classList.add('opacity-50', 'cursor-not-allowed');
-                        element.disabled = true; // Không cho chọn
-                    }
-                });
-
-                // Reset kích cỡ được chọn trước đó
+                // Reset giá trị của kích cỡ
                 document.getElementById('selectedSizeId').value = '';
-                document.querySelectorAll('.size-option').forEach(element => {
-                    element.classList.remove('border-4', 'border-blue-500');
-                });
-
-                console.log('Selected color_id:', selectedColorId);
+                document.getElementById('quantity').value = 1;
             }
-
 
             function highlightSize(selectedButton) {
                 // Nếu kích cỡ bị vô hiệu hóa, không cho phép chọn
@@ -379,16 +370,30 @@
 
                 // Lấy size_id từ thuộc tính data
                 const sizeId = selectedButton.getAttribute('data-size');
-                console.log('ID kích cỡ đã chọn:', sizeId);
 
                 // Cập nhật giá trị của input ẩn
                 document.getElementById('selectedSizeId').value = sizeId;
+
+                // Cập nhật số lượng tồn kho dựa trên biến thể được chọn
+                updateStockQuantity();
+                document.getElementById('quantity').value = 1;
             }
 
             function increment() {
                 let quantityInput = document.getElementById('quantity');
                 let currentValue = parseInt(quantityInput.value);
-                quantityInput.value = currentValue + 1;
+
+                // Lấy số lượng tồn kho từ biến thể đã chọn
+                const stockQuantity = getSelectedVariantStock();
+
+                if (currentValue < stockQuantity) {
+                    quantityInput.value = currentValue + 1;
+                } else {
+                    toastr.warning("Sản phẩm vượt quá số lượng tồn kho.", "Thông báo", {
+                        closeButton: true,
+                        progressBar: true
+                    });
+                }
             }
 
             function decrement() {
@@ -399,6 +404,52 @@
                     quantityInput.value = currentValue - 1;
                 }
             }
+
+            function resetSizes() {
+                // Reset tất cả các size (bỏ làm mờ và cho phép chọn)
+                document.querySelectorAll('.size-option').forEach(element => {
+                    element.classList.remove('opacity-50', 'cursor-not-allowed', 'border-4', 'border-blue-500');
+                    element.disabled = false;
+                });
+            }
+
+            function updateSizeOptions(selectedColorId) {
+                // Làm mờ và vô hiệu hóa các size không thuộc màu được chọn
+                document.querySelectorAll('.size-option').forEach(element => {
+                    const sizeId = element.getAttribute('data-size');
+                    const sizeColorMatch = productVariants.some(variant =>
+                        variant.color_id == selectedColorId && variant.size_id == sizeId
+                    );
+
+                    if (!sizeColorMatch) {
+                        element.classList.add('opacity-50', 'cursor-not-allowed');
+                        element.disabled = true;
+                    }
+                });
+            }
+
+            function updateStockQuantity() {
+                const stockQuantity = getSelectedVariantStock();
+                document.getElementById('stockQuantity').textContent = stockQuantity || 0;
+            }
+
+            function getSelectedVariantStock() {
+                const selectedColorId = document.getElementById('selectedColorId').value;
+                const selectedSizeId = document.getElementById('selectedSizeId').value;
+
+                if (!selectedColorId || !selectedSizeId) {
+                    return 0;
+                }
+
+                const selectedVariant = productVariants.find(variant =>
+                    variant.color_id == selectedColorId && variant.size_id == selectedSizeId
+                );
+
+                return selectedVariant ? selectedVariant.quantity : 0;
+            }
+
+            console.log("Script loaded successfully.");
+
 
 
 
