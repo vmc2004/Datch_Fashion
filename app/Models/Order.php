@@ -34,4 +34,9 @@ class Order extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class,'order_id');
+    }
 }

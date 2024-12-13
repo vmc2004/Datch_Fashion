@@ -342,7 +342,7 @@ $('.dashboard-filter').change(function() {
                                     <td>${order.period}</td>
                                     <td>${order.order_count}</td>
                                     <td>${order.quantity}</td>
-                                    <td>${order.total_price.toLocaleString()}</td>
+                                    <td>${order.total_price.toLocaleString()} VNĐ</td>
                                 </tr>
                             `;
                             tableBody.append(row);
@@ -542,18 +542,18 @@ $('.dashboard-filter').change(function() {
             });
 
             // Tạo biểu đồ với Morris.Bar
-            new Morris.Bar({
-                element: 'myInventori',  // ID của phần tử chứa biểu đồ
-                data: chartData,  // Dữ liệu cho biểu đồ
-                barColors: ['#819C79', '#fc8710', '#FF6541'],  // Màu sắc các cột
+            new Morris.Area({
+                element: 'myInventori',
+                data: chartData, 
+                lineColors: ['#819C79', '#fc8710', '#FF6541'],
                 pointFillColors: ['#ffffff'], 
                 pointStrokeColors: ['black'],
                 fillOpacity: 0.6, 
                 hideHover: 'auto', 
-                parseTime: false,  // Không phân tích thời gian
-                xkey: 'product_name',  // Dữ liệu cho trục X
-                ykeys: ['quantity', 'price'],  // Dữ liệu cho trục Y (chỉ có số liệu)
-                labels: ['Số lượng tồn kho', 'Giá'],  // Nhãn cho các trục Y
+                parseTime: false,
+                xkey: 'product_name',
+                ykeys: ['quantity', 'price'], 
+                labels: ['Số lượng tồn kho', 'Giá'],  
             });
         },
         error: function(xhr, status, error) {

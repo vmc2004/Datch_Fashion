@@ -77,8 +77,6 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
      // Đường dẫn bình luận
      Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'index'])->name('comments.index');
-        Route::post('/send-comment/{product_id}', [CommentController::class, 'sendComment'])->name('comments.sendComment');
-        Route::post('/send-rate/{product_id}', [CommentController::class, 'sendRate'])->name('comments.sendRate');
         Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('comments.edit');
         Route::put('/edit/{comment}', [CommentController::class, 'update'])->name('comments.update');
     });
@@ -165,6 +163,8 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::get('/edit/{blog}', [BlogController::class, 'edit'])->name('blogs.edit');
         Route::put('/update/{blog}', [BlogController::class, 'update'])->name('blogs.update');
         Route::delete('/destroy/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+        Route::get('blogs/search',[BlogController::class,'search'])->name('blogs.search');
+        Route::get('blogs/filter',[BlogController::class,'filter'])->name('blogs.filter');
     });
     // Đường dẫn thuộc tính màu sắc
     Route::prefix('colors')->group(function () {

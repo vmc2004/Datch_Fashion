@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +18,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::query()->with('user','product')->paginate('9');
+        $comments = Comment::query()->where('status','approved')->with('user','product')->paginate('9');
         return view('Admin.comments.index',compact('comments'));
     }
 
@@ -39,25 +41,37 @@ class CommentController extends Controller
 
     public function sendRate(StoreCommentRequest $request, $product_id)
     {
+        $orderDetail = OrderDetail::query()->where('order_id', $request->order_id)
+        ->where('variant_id',$request->variant_id)->first();
         $user_id = Auth::user()->id;
-        Comment::query()->create([
-            'product_id' => $product_id,
-            'user_id' => $user_id,
-            'content' => $request->content,
-            'rating' => $request->rating,
-        ]);
-        return redirect()->route('rate.list')->with('message','Đánh giá sản phẩm thành công!');
+        
+            if ($orderDetail->is_rated == false) {
+                Comment::query()->create([
+                    'product_id' => $product_id,
+                    'user_id' => $user_id,
+                    'order_id' => $request->order_id,
+                    'content' => $request->content,
+                    'rating' => $request->rating,
+                ]);
+                OrderDetail::where('order_id', $request->order_id)
+                ->whereIn('variant_id', $orderDetail->pluck('variant_id'))
+                ->update(['is_rated' => true]);
+                return redirect()->route('rate.form',[$request->variant_id,$request->order_id])->with('message','Đánh giá sản phẩm thành công!');
+            }
+            return redirect()->route('rate.form',[$request->variant_id,$request->order_id])->with('message','sản phẩm này đã đánh giá rồi');        
+        
     }
 
     public function listRate(){
-        $listRate = Comment::query()->where('user_id',Auth::user()->id)->where('rating','!=',null)->with('product')->paginate(6);
+        $listRate = Comment::query()->where('user_id',Auth::user()->id)->where('rating','!=',null)->orderBy('id','desc')->with('product')->paginate(6);
         return view('Client.comment.myRate',compact('listRate'));
     }
 
-    public function form($variant_id)
+    public function form($variant_id,$order_id)
     {
+        $order = Order::query()->where('id',$order_id)->first();
         $variant = ProductVariant::query()->where('id',$variant_id)->with(['size','color','product'])->first();
-        return view('Client.comment.sendRate',compact('variant'));
+        return view('Client.comment.sendRate',compact(['variant','order']));
     }
 
     /**
