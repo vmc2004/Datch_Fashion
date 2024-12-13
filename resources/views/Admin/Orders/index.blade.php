@@ -8,12 +8,6 @@
     <div class="col-lg-12 mb-lg-0 mb-4">
       <div class="card z-index-2 h-100">
         <div class="card-header pb-0 pt-3 bg-transparent">
-           
-  @if (session()->has('message'))
-      <div class="alert alert-success text-white">
-        {{session()->get('message')}}
-      </div>
-      @endif
       <h2 class="text-center">Đơn hàng</h2>
       <div class="search-box col-md-8">
           <form action="" method="GET" class="d-flex align-items-center">
@@ -67,16 +61,15 @@
                 
                 
                 
-                {{-- <div>
-                  <a href="{{ route('orders.export') }}" class="btn btn-custom btn-success"><i class="fas fa-file-export"></i>Xuất file</a>
-                </div> --}}
+              
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-dark-subtle">
                         <th>Mã đơn hàng</th>
                         <th>Thời gian</th>
                         <th>Khách hàng</th>
-                        <th>Tổng tiền hàng</th>
+                        <th>Sđt</th>
+                        <th>Tổng</th>
                         <th>Trạng thái thanh toán</th>
                         <th>Trạng thái</th>
                     </tr>
@@ -88,6 +81,7 @@
                     <td><a href="{{route('orders.edit', $order->id)}}" class="d-flex justify-content-center"> {{ $order->code }}</a></td>
                     <td>{{ $order->created_at }}</td>
                     <td class="d-flex justify-content-center">{{ $order->fullname }}</td>
+                    <td class="">{{ $order->phone }}</td>
                     
                  
                     
@@ -101,17 +95,18 @@
                         @endif
                     </td>
                     <td>
-                        @if ($order->status == 'Đã giao hàng')
-                            <p class="text-success">Hoàn thành</p>
-                        @elseif ($order->status == 'Đơn hàng đã hủy')
-                            <p class="text-danger">Hủy đơn hàng</p>
-                        @elseif ($order->status == 'Đang giao hàng')
-                        <p class="text-primary">Đang giao hàng</p>
-                        @elseif($order->status == 'Chờ xác nhận')
-                            <p>Đơn hàng mới</p>
-                        @else
-                            <p class="text-primary">Đang xử lý</p>
-                        @endif
+                        <form action="{{ route('orders.update', $order) }}" method="POST" id="orderForm">
+                            @csrf
+                            @method('PUT')
+                            <select name="status" class="border border-secondary-subtle rounded-2" id="status" {{ ($order->status == 'Đã giao hàng' || $order->status == 'Đơn hàng đã hủy') ? 'disabled' : '' }} onchange="handleStatusChange(event)">
+                                <option value="Chờ xác nhận" {{ $order->status == 'Chờ xác nhận' ? 'selected' : '' }}>Chờ xác nhận</option>
+                                <option value="Đã xác nhận" {{ $order->status == 'Đã xác nhận' ? 'selected' : '' }}>Đã xác nhận</option>
+                                <option value="Đang chuẩn bị hàng" {{ $order->status == 'Đang chuẩn bị hàng' ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
+                                <option value="Đang giao hàng" {{ $order->status == 'Đang giao hàng' ? 'selected' : '' }}>Đang giao hàng</option>
+                                <option value="Đã giao hàng" {{ $order->status == 'Đã giao hàng' ? 'selected' : '' }}>Đã giao hàng</option>
+                                <option value="Đơn hàng đã hủy" {{ $order->status == 'Đơn hàng đã hủy' ? 'selected' : '' }}>Đơn hàng đã hủy</option>
+                            </select>
+                        </form>
                     </td>
                 </tr>
                   @endforeach
@@ -125,6 +120,34 @@
                         <li>{{$orders->links()}}</li>
                     </ul>
                 </nav>
+                <script>
+                    function handleStatusChange(event) {
+                        if (event.target.value === 'Đơn hàng đã hủy') {
+                            Swal.fire({
+                                title: 'Nhập lý do hủy',
+                                input: 'text',
+                                inputPlaceholder: 'Lý do hủy đơn hàng',
+                                showCancelButton: true,
+                                confirmButtonText: 'Xác nhận',
+                                cancelButtonText: 'Hủy'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    let reason = result.value;
+                                    let form = document.getElementById('orderForm');
+                                    let inputHidden = document.createElement('input');
+                                    inputHidden.type = 'hidden';
+                                    inputHidden.name = 'note';
+                                    inputHidden.value = reason;
+                                    form.appendChild(inputHidden);
+                                    form.submit();
+                                }
+                            });
+                        } else {
+                            document.getElementById('orderForm').submit();
+                        }
+                    }
+                </script>
+                
        
 @endsection
 

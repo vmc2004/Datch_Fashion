@@ -9,7 +9,7 @@
                         <h3 class="card-header text-center">Danh sách thương hiệu</h3>
                     </div>
                     <div class="container-fluid mt-4   ">
-                        <form action="{{ route('brands.search') }}" method="GET" class="row g-3">
+                        <form action="" method="GET" class="row g-3">
                             <div class="col-md-6">
                                 <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm thương hiệu"
                                     value="{{ request('keyword') }}">
@@ -25,7 +25,7 @@
                     <!-- Form lọc danh mục -->
                     <div class="container-fluid d-flex align-items-center justify-content-between">
                         <div class="flex-grow-1 me-3">
-                            <form action="{{ route('brands.filter') }}" method="GET" class="row g-3">
+                            <form action="" method="GET" class="row g-3">
                                 <div class="col-md-5">
                                     <select class="form-select" name="sort">
                                         <option value="#">Sắp xếp theo</option>

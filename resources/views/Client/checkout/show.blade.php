@@ -182,14 +182,16 @@
                         <div class="mb-4">
                             <div class="flex justify-between">
                                 <span>Tạm tính</span>
-                                <span>{{ number_format($total_price) }} đ</span>
+                                <span>{{ number_format($priceProduct) }} đ</span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Vận chuyển</span>
                                 @if($total_price >= 629000)
                                 <span>0 đ</span>
+                                <input type="hidden" name="shiping" value="0">
                                 @else
                                 <span>30.000 đ</span>
+                                <input type="hidden" name="shiping" value="30000">
                                 @endif
                             </div>
 
@@ -198,12 +200,14 @@
                             @if (session('discount'))
                             <div class="flex justify-between">
                                 <span>Giảm giá</span>
+                                <input type="hidden" name="discount" value="{{session('discount')}}">
                                 {{ number_format(session('discount')) }} đ
                             </div>
                             @else   
                             <div class="flex justify-between">
                                 <span>Giảm giá</span>
                                 <span>0 đ</span>
+                                <input type="hidden" name="discount" value="0">
                             </div>
                             @endif
                         </div>

@@ -79,6 +79,7 @@ Route::get('/account/favorites',[HomeController::class, 'favorite']);
 Route::post('/apply-coupon', [CheckoutController::class, 'apply'])->name('coupon.apply');
 // web.php
 Route::post('/clear-session', [CheckoutController::class, 'clearSession']);
+Route::get('/order/{order}/update-status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
 
 Route::middleware('auth')->group(function () {
 

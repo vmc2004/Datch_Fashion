@@ -23,6 +23,11 @@ return new class extends Migration
             $table->enum('role',['member','admin'])->default('member');
             $table->boolean('status')->default(true);
             $table->string('otp')->nullable();
+            $table->string('google_id')->nullable()->unique();
+            $table->enum('gender', ['Nam', 'Nữ', 'Khác'])->nullable();
+            $table->date('birthday')->nullable();
+            $table->string('language')->nullable()->default('Vietnamese');
+            $table->text('introduction')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

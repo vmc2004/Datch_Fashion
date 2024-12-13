@@ -35,7 +35,7 @@ class ColorController extends Controller
         ]);
 
         Color::query()->create($validated);
-        return redirect()->route('colors.index')->with('message','Thêm mới thành công');
+        return redirect()->route('colors.index')->with('success','Thêm mới thành công');
     }
 
     /**
@@ -65,7 +65,7 @@ class ColorController extends Controller
         ]);
         
         $color->update($validated);
-        return redirect()->back()->with('message','Cập nhật thành công');
+        return redirect()->back()->with('success','Cập nhật thành công');
     }
 
     /**

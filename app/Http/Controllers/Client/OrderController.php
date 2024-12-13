@@ -37,19 +37,20 @@ class OrderController extends Controller
         $order = Order::where('code', $code)
             ->with('orderDetails.productVariant')
             ->first();
-        if ($order) {
-            foreach ($order->orderDetails as $detail) {
-                $variant = $detail->productVariant;
-                if ($variant) {
-                    $variant->quantity += $detail->quantity;
-                    $variant->save();
-                }
-            }
-            $order->status = 'Đơn hàng đã hủy';
-            $order->save();
 
-            // Tạo thông báo hủy đơn hàng
-            $notificationData = [
+        if($order->status == 'Chờ xác nhận'){
+            if ($order) {
+                foreach ($order->orderDetails as $detail) {
+                    $variant = $detail->productVariant;
+                    if ($variant) {
+                        $variant->quantity += $detail->quantity;
+                        $variant->save(); 
+                    }
+
+                }
+                $order->status = 'Đơn hàng đã hủy';
+                $order->save();
+               $notificationData = [
                 'message' => 'Đơn hàng #' . $order->code . ' đã bị hủy.',
                 'order_code' => $order->code,
                 'order_status' => 'Đã hủy',
@@ -60,10 +61,16 @@ class OrderController extends Controller
 
             // Gửi thông báo cho người dùng
             Auth::user()->notify(new OrderCancelled($notificationData));
+                return redirect()->back()->with('success', 'Hủy đơn hàng thành công');
+            }
 
-            return redirect()->back()->with('success', 'Hủy đơn hàng thành công');
         }
-
-        return redirect()->back()->with('error', 'Không tìm thấy đơn hàng');
+        else
+        {
+            return redirect()->back()->with('error', 'Bạn không thể hủy đơn hàng này!');
+        }
     }
+
+
+
 }
