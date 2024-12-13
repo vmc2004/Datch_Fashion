@@ -48,9 +48,9 @@
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->quantity}}</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>    
                                 @if (!$detail->is_rated)
-                                <td class="px-4 py-2 border border-gray-300 text-center"><a href="{{route('rate.form',[$detail->variant->id,$order->id])}}" class="btn btn-danger">Đánh giá</a></td>
+                                <td class="px-4 py-2 border border-gray-300 text-center"><a href="{{route('rate.form',[$detail->variant->id,$order->id])}}" class="btn btn-danger fw-bold">Đánh giá</a></td>
                                 @else
-                                <td class="px-4 py-2 border border-gray-300 text-center">Đã đánh giá</td>    
+                                <td class="px-4 py-2 border border-gray-300 text-center text-success fw-bold">Đã đánh giá</td>    
                                 @endif
                             </tr>
                             @else

@@ -23,6 +23,7 @@ use App\Http\Controllers\Client\ChatController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\NotificationController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
@@ -72,7 +73,7 @@ Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn']);
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('thankyou');
-Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit']);
+Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit'])->name('order.show');
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 Route::get('/account/favorites',[HomeController::class, 'favorite']);
 Route::post('/apply-coupon', [CheckoutController::class, 'apply'])->name('coupon.apply');
@@ -80,6 +81,25 @@ Route::post('/apply-coupon', [CheckoutController::class, 'apply'])->name('coupon
 Route::post('/clear-session', [CheckoutController::class, 'clearSession']);
 Route::get('/order/{order}/update-status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
 
+Route::middleware('auth')->group(function () {
+
+    // Route để hiển thị danh sách thông báo
+    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.index');
+
+    // Route để đánh dấu một thông báo là đã đọc
+    Route::get('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+
+    
+
+    // Route để đánh dấu tất cả thông báo là đã đọc
+    Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
+
+    // Route để xóa một thông báo
+    Route::delete('/notifications/{id}', [NotificationController::class, 'deleteNotification'])->name('notifications.delete');
+
+    // Route để xóa tất cả thông báo
+    Route::delete('/notifications/delete-all', [NotificationController::class, 'deleteAllNotifications'])->name('notifications.deleteAll');
+});
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);

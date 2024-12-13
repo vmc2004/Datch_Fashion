@@ -4,32 +4,36 @@
 @section('content')
     <hr>
     @if ($errors->has('message'))
-    <div id="toast-message" class="fixed top-5 right-5 bg-red-500 text-white px-4 py-3 rounded shadow-lg flex items-center space-x-4 z-50">
-        <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a2 2 0 100-4H7a2 2 0 100 4h10zM9 16h6m-6 0a2 2 0 100-4h6a2 2 0 100 4h-6z" />
-        </svg>
-        <span>{{ $errors->first('message') }}</span>
-        <button onclick="removeToast()" class="text-white hover:text-red-300">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        <div id="toast-message"
+            class="fixed top-5 right-5 bg-red-500 text-white px-4 py-3 rounded shadow-lg flex items-center space-x-4 z-50">
+            <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m2 0a2 2 0 100-4H7a2 2 0 100 4h10zM9 16h6m-6 0a2 2 0 100-4h6a2 2 0 100 4h-6z" />
             </svg>
-        </button>
-    </div>
+            <span>{{ $errors->first('message') }}</span>
+            <button onclick="removeToast()" class="text-white hover:text-red-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    class="h-6 w-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
 
-    <script>
-        // Tự động ẩn sau 3 giây
-        setTimeout(() => removeToast(), 3000);
+        <script>
+            // Tự động ẩn sau 3 giây
+            setTimeout(() => removeToast(), 3000);
 
-        // Hàm xóa toast
-        function removeToast() {
-            const toast = document.getElementById('toast-message');
-            if (toast) {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500); // Xóa khỏi DOM sau khi mờ dần
+            // Hàm xóa toast
+            function removeToast() {
+                const toast = document.getElementById('toast-message');
+                if (toast) {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 500); // Xóa khỏi DOM sau khi mờ dần
+                }
             }
-        }
-    </script>
-@endif
+        </script>
+    @endif
 
     <div class="max-w-screen-xl mx-auto ">
 
@@ -169,10 +173,15 @@
                                         đ
                                     </div>
                                 </div>
-                            </div>
-                            <div class="p-5 flex items-center justify-between">
-                                <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full" type="submit"><a
-                                        href="/mua-hang/{{ Auth::id() }}">Thanh toán</a></button>
+
+                                <div class="p-5 flex items-center justify-between">
+                                    <?php
+                                    $user_id = 1;
+                                    ?>
+                                    <button class="bg-red-600 hover:bg-red-700 text-white h-10 rounded-lg w-full"
+                                        type="submit"><a href="/mua-hang/{{ Auth::id() }}">Thanh toán</a></button>
+                                </div>
+
                             </div>
                         @else
                             <div class="p-5 text-center text-gray-500">

@@ -11,7 +11,7 @@
     <div class="col-12 text-center">
       <a href="{{ route('admin.index') }}" class="btn btn-danger mx-2">Thống kê đơn hàng doanh số</a>
       <a href="{{ route('admin.topProduct') }}" class="btn btn-success mx-2">Thống kê 10 sản phẩm bán chạy nhất</a>
-      <a href="" class="btn btn-warning mx-2">Thống kê hàng tồn kho</a>
+      <a href="{{ route('admin.inventory') }}" class="btn btn-warning mx-2">Thống kê hàng tồn kho</a>
       <a href="{{ route('admin.orderStatus') }}" class="btn btn-info mx-2">Thống kê trạng thái đơn hàng</a>
     </div>
   </div>
