@@ -185,3 +185,63 @@
             </div>
         </div>
     @endsection
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": true,
+        "showDuration": "1000",
+        "hideDuration": "500",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "easeOutQuart",
+        "hideEasing": "easeInQuart",
+        "showMethod": "slideDown",
+        "hideMethod": "fadeOut"
+    };
+
+    const colorSelect = document.querySelector('select[name="color_id"]');
+    const sizeSelect = document.querySelector('select[name="size_id"]');
+    const submitButton = document.querySelector('button[type="submit"]');
+
+    function checkDuplicate() {
+        const product_id = document.querySelector('input[name="product_id"]').value;
+        const color_id = colorSelect.value;
+        const size_id = sizeSelect.value;
+
+        if (color_id && size_id) {
+            fetch("{{ route('productVariants.checkDuplicate') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    product_id,
+                    color_id,
+                    size_id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    toastr.error('Biến thể sản phẩm này đã tồn tại!');
+                    submitButton.disabled = true;
+                } else {
+                    toastr.success('Biến thể hợp lệ! Bạn có thể cập nhật.');
+                    submitButton.disabled = false;
+                }
+            });
+        }
+    }
+
+    colorSelect.addEventListener('change', checkDuplicate);
+    sizeSelect.addEventListener('change', checkDuplicate);
+});
+
+    </script>
+    
