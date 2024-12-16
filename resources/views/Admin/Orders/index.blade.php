@@ -98,13 +98,19 @@
                         <form action="{{ route('orders.update', $order) }}" method="POST" id="orderForm-{{ $order->id }}">
                             @csrf
                             @method('PUT')
-                            <select name="status" class="border border-secondary-subtle rounded-2" id="status" {{ ($order->status == 'Đã giao hàng' || $order->status == 'Đơn hàng đã hủy') ? 'disabled' : '' }} onchange="handleStatusChange(event, {{ $order->id }})">
-                                <option 1 value="Chờ xác nhận" {{ $order->status == 'Chờ xác nhận' ? 'selected' : '' }}>Chờ xác nhận</option>
-                                <option 2 value="Đã xác nhận" {{ $order->status == 'Đã xác nhận' ? 'selected' : '' }}>Đã xác nhận</option>
-                                <option 3  value="Đang chuẩn bị hàng" {{ $order->status == 'Đang chuẩn bị hàng' ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
-                                <option 4 value="Đang giao hàng" {{ $order->status == 'Đang giao hàng' ? 'selected' : '' }}>Đang giao hàng</option>
-                                <option 5 value="Đã giao hàng" {{ $order->status == 'Đã giao hàng' ? 'selected' : '' }}>Đã giao hàng</option>
-                                <option 6 value="Đơn hàng đã hủy" {{ $order->status == 'Đơn hàng đã hủy' ? 'selected' : '' }}>Đơn hàng đã hủy</option>
+                            <select 
+                                name="status" 
+                                class="border border-secondary-subtle rounded-2" 
+                                id="status-{{ $order->id }}" 
+                                data-current-status="{{ $order->status }}" 
+                                {{ ($order->status == 'Đã giao hàng' || $order->status == 'Đơn hàng đã hủy') ? 'disabled' : '' }} 
+                                onchange="handleStatusChange(event, {{ $order->id }})">
+                                <option value="Chờ xác nhận" {{ $order->status == 'Chờ xác nhận' ? 'selected' : '' }}>Chờ xác nhận</option>
+                                <option value="Đã xác nhận" {{ $order->status == 'Đã xác nhận' ? 'selected' : '' }}>Đã xác nhận</option>
+                                <option value="Đang chuẩn bị hàng" {{ $order->status == 'Đang chuẩn bị hàng' ? 'selected' : '' }}>Đang chuẩn bị hàng</option>
+                                <option value="Đang giao hàng" {{ $order->status == 'Đang giao hàng' ? 'selected' : '' }}>Đang giao hàng</option>
+                                <option value="Đã giao hàng" {{ $order->status == 'Đã giao hàng' ? 'selected' : '' }}>Đã giao hàng</option>
+                                <option value="Đơn hàng đã hủy" {{ $order->status == 'Đơn hàng đã hủy' ? 'selected' : '' }}>Đơn hàng đã hủy</option>
                             </select>
                         </form>
                     </td>
@@ -121,11 +127,32 @@
                     </ul>
                 </nav>
                 <script>
-                  function handleStatusChange(event, orderId) {
+               function handleStatusChange(event, orderId) {
                     const formId = `orderForm-${orderId}`;
+                    const select = event.target;
                     const form = document.getElementById(formId);
-
-                    if (event.target.value === 'Đơn hàng đã hủy') {
+                    const currentStatus = select.getAttribute('data-current-status');
+                    const newStatus = select.value;
+                    const statusOrder = [
+                        "Chờ xác nhận", 
+                        "Đã xác nhận", 
+                        "Đang chuẩn bị hàng", 
+                        "Đang giao hàng", 
+                        "Đã giao hàng", 
+                        "Đơn hàng đã hủy"
+                    ];
+                    const currentIndex = statusOrder.indexOf(currentStatus);
+                    const newIndex = statusOrder.indexOf(newStatus);
+                    if (newIndex <= currentIndex) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cập nhật không hợp lệ',
+                            text: 'Không thể quay lại trạng thái trước.',
+                        });
+                        select.value = currentStatus;
+                        return;
+                    }
+                    if (newStatus === "Đơn hàng đã hủy") {
                         Swal.fire({
                             title: 'Nhập lý do hủy',
                             input: 'text',
@@ -142,6 +169,8 @@
                                 inputHidden.value = reason;
                                 form.appendChild(inputHidden);
                                 form.submit();
+                            } else {
+                                select.value = currentStatus;
                             }
                         });
                     } else {
