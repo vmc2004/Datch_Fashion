@@ -37,6 +37,7 @@ class CouponController extends Controller
             'discount' => 'required',
             'discount_type'=> 'required|in:percent,fixed',
             'quantity' => 'required|integer|min:1',
+            'max_price' => 'nullable',
             'start_date' => 'nullable|date', 
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ],[
@@ -53,6 +54,11 @@ class CouponController extends Controller
             'end_date.date' => 'Ngày kết thúc phải là định dạng ngày hợp lệ.',
             'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
         ]);
+        if ($coupon['discount_type'] === 'percent' && $coupon['discount'] > 99) {
+            return back()->withErrors([
+                'discount' => 'Giảm giá theo phần trăm không được vượt quá 99%.',
+            ])->withInput();
+        }
         Coupon::create($coupon);
         return redirect()->route('coupons.index')->with('message','Thêm mã giảm giá thành công');
     }

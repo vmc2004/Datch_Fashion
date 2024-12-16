@@ -29,7 +29,7 @@ class OrderDetail extends Model
         return $this->belongsTo(Order::class);
     }
     
-    public function ProductVariant()
+    public function ProductVariant()    
     {
         return $this->belongsTo(ProductVariant::class,'variant_id');
     }

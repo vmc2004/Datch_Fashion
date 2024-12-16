@@ -238,17 +238,23 @@ class CheckoutController extends Controller
                             $cart->items()->delete(); 
                             $cart->delete(); 
                         }
-                        $notificationData = [
-                            'message' => 'Đơn hàng ' . $order->code . ' đã được đặt thành công.',
-                            'order_code' => $order->code,
-                            'order_status' => $order->payment_status,
-                            'details_url' => route('order.show', ['code' => $order->code]), 
-                            'product_name' => $order->orderDetails->first()->productVariant->product->name, 
-                            'product_image' => asset(($order->orderDetails->first()->productVariant->product->image ?? 'default-image.jpg')),
-                        ];
-                
-                
-                        Auth::user()->notify(new OrderPlaced($notificationData));
+                        $orderDetail = $order->orderDetails->first();
+                        if ($orderDetail && $orderDetail->productVariant && $orderDetail->productVariant->product) {
+                            $notificationData = [
+                                'message' => 'Đơn hàng ' . $order->code . ' đã được đặt thành công.',
+                                'order_code' => $order->code,
+                                'order_status' => $order->payment_status,
+                                'details_url' => route('order.show', ['code' => $order->code]), 
+                                'product_name' => $orderDetail->productVariant->product->name,
+                                'product_image' => $orderDetail->productVariant->product->image,
+                            ];
+                        
+                            Auth::user()->notify(new OrderPlaced($notificationData));
+                        } else {
+                            // Xử lý khi thiếu dữ liệu
+                            \Log::error('Lỗi thông báo: Không tìm thấy chi tiết sản phẩm.');
+                        }
+                        
                     } else {
                         $order->orderDetails()->delete();
 
@@ -276,10 +282,13 @@ class CheckoutController extends Controller
 {
     $request->validate([
         'code' => 'required|string|max:10',
-        'subtotal' => 'required',
+        'subtotal' => 'required|numeric|min:0',
     ]);
+
     $subtotal = $request->subtotal;
     $code = $request->code;
+
+    // Tìm mã giảm giá
     $coupon = Coupon::where('code', $code)
         ->where('is_active', 1)
         ->first();
@@ -288,7 +297,9 @@ class CheckoutController extends Controller
         return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ!');
     }
 
-    $userId = Auth::id(); 
+    $userId = Auth::id();
+
+    // Kiểm tra mã giảm giá đã sử dụng
     $alreadyUsed = DB::table('coupon_user')
         ->where('user_id', $userId)
         ->where('coupon_id', $coupon->id)
@@ -296,19 +307,29 @@ class CheckoutController extends Controller
     if ($alreadyUsed) {
         return redirect()->back()->with('error', 'Bạn đã sử dụng mã giảm giá này rồi!');
     }
+
+    // Tính toán giảm giá
     if ($coupon->discount_type == 'fixed') {
-        $discountAmount = $coupon->discount;
+        $discountAmount = min($coupon->discount, $subtotal); // Không cho giảm nhiều hơn tổng tiền
         $subtotals = $subtotal - $discountAmount;
     } else {
         $discountAmount = $subtotal * ($coupon->discount / 100);
+
+        // Nếu giảm giá vượt quá giá trị giảm tối đa (max_price)
+        if ($discountAmount > $coupon->max_price) {
+            $discountAmount = $coupon->max_price;
+        }
+
         $subtotals = $subtotal - $discountAmount;
     }
 
+    // Cập nhật giá trị vào session
     session([
         'subtotals' => $subtotals,
         'discount' => $discountAmount,
     ]);
 
+    // Lưu vào bảng coupon_user để đánh dấu mã đã được sử dụng
     DB::table('coupon_user')->insert([
         'user_id' => $userId,
         'coupon_id' => $coupon->id,
@@ -317,6 +338,7 @@ class CheckoutController extends Controller
 
     return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
 }
+
 
     public function clearSession()
     {

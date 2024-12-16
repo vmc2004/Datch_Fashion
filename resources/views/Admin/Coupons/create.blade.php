@@ -55,6 +55,11 @@
                 <input type="number" name="quantity" class="form-control" id="">
             </div>
 
+            <div class="mb-3">
+                <label for="" class="form-label">Giá tối đa</label>
+                <input type="number" name="max_price" class="form-control" id="">
+            </div>
+
 
             <div class="mb-3">
                 <label for="" class="form-label">Ngày bắt đầu</label>

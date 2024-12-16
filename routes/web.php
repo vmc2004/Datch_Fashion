@@ -32,7 +32,7 @@ use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController as ControllersOrderController;
-
+use App\Http\Controllers\ProductVariantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +49,7 @@ use App\Http\Controllers\OrderController as ControllersOrderController;
 
 
 
+Route::post('/product-variants/check-duplicate', [ProductVariantController::class, 'checkDuplicate'])->name('productVariants.checkDuplicate');
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/filter-products', [ProductController::class, 'filterByCategory'])->name('products.filter');

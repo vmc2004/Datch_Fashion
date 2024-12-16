@@ -14,7 +14,7 @@
   <title>@yield('title') - Datch</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{{asset('assets/client/css/styles.css')}}">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
   <link rel="stylesheet" href="{{asset('assets/client/assets/css/styles-be.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
@@ -285,6 +285,9 @@
                         <li><a href="/account/points" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <i class="fa-solid fa-hand-holding-medical"></i>
                           Tích điểm</a>
+                        </li>
+                        <li><a href="/notifications" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                          <i class="fa-regular fa-bell"></i> Thông báo </a>
                         </li>
                         <li><a href="/account/orders" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="shopping-cart" class="overflow-hidden svg-vertical inline-block w-[15.75px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">

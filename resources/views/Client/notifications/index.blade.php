@@ -39,7 +39,7 @@
                                 <!-- Hiển thị chi tiết đơn hàng hoặc sản phẩm liên quan -->
                                 <div class="flex items-center mb-2">
                                     <img alt="{{ $notification->data['product_name'] }}" class="w-12 h-12 mr-4"
-                                        src="{{ asset('uploads/' . ($notification->data['product_image'] ?? 'default-image.jpg')) }}"
+                                        src=""
                                         width="50" height="50" />
                                     <div>
                                         <div class="text-gray-700">
