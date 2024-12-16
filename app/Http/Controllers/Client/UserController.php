@@ -168,27 +168,46 @@ public function showOtpConfirmationForm(Request $request)
         return view('Client.otp.otp-confirmation', compact('email'));
     }
 
-public function verifyOtp(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email|exists:users',
-        'otp' => 'required|digits:6',
-    ]);
-
-    $sessionOtp = session('otp');
-
-         if ($sessionOtp && $request->otp == $sessionOtp) {
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'otp' => 'required|digits:6',
+        ]);
+    
+        $sessionOtp = session('otp');
+        $otpCreatedAt = session('otp_created_at');
+    
+        // Kiểm tra OTP có tồn tại và thời hạn
+        if (!$sessionOtp || now()->diffInMinutes($otpCreatedAt) > 5) {
+            session()->forget(['otp', 'otp_created_at']); // Xóa OTP hết hạn
+            return redirect()->back()->with([
+                'message' => 'Mã OTP đã hết hạn. Vui lòng yêu cầu lại.',
+                'message_type' => 'error'
+            ]);
+        }
+    
+        // Kiểm tra OTP khớp
+        if ($request->otp == $sessionOtp) {
+            // Kích hoạt tài khoản
+            $user = User::where('email', $request->email)->first();
+            $user->update(['is_active' => true]);
+    
+            session()->forget(['otp', 'otp_created_at']); // Xóa OTP sau khi xác nhận thành công
+    
             return redirect()->route('Client.account.login')->with([
                 'message' => 'Xác nhận thành công! Bạn có thể đăng nhập.',
                 'message_type' => 'success'
             ]);
-            } else {
-                return redirect()->back()->with([
-                    'message' => 'Mã OTP không hợp lệ hoặc đã hết hạn.',
-                    'message_type' => 'error'
-            ]);
-            }
-}
+        }
+    
+        // OTP không hợp lệ
+        return redirect()->back()->with([
+            'message' => 'Mã OTP không hợp lệ. Vui lòng thử lại.',
+            'message_type' => 'error'
+        ]);
+    }
+    
 
 public function profile()
 {

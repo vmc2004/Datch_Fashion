@@ -19,7 +19,6 @@ use App\Http\Controllers\Client\BlogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\GoogleController;
 use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\ChatController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
@@ -90,10 +89,8 @@ Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.bl
 
 Route::get('/lien-he', [ContactController::class, 'contact'])->name('Client.contact');
 Route::post('/lien-he', [ContactController::class, 'updateContact'])->name('Client.updateContact');
-Route::get('/account/chat', [ChatController::class, 'index'])->name('Client.chat.index');
-Route::get('/account/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages']);
-Route::post('/account/chat/sendMessage', [ChatController::class, 'sendMessage']);
-Route::get('/account/chat/unread-count', [ChatController::class, 'getUnreadCount']);
+
+
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile');
 Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
 

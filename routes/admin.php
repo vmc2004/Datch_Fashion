@@ -19,6 +19,7 @@ use App\Http\Controllers\OrderController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SizeController;
 
 
@@ -203,6 +204,18 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
     });
             // Kết thúc mã giảm giá
+
+    Route::prefix('roles')->group(function() {
+        Route::get('/', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
+        Route::post('/create', [RoleController::class, 'store'])->name('roles.store');
+        Route::get('/show/{user}', [RoleController::class, 'show'])->name('roles.show');
+        Route::get('/edit/{user}', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::put('/edit/{user}', [RoleController::class, 'update'])->name('roles.update');
+        Route::delete('/destroy/{user}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+    });
+    
 });
 
     
