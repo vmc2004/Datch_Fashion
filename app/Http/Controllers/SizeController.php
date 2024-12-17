@@ -31,6 +31,10 @@ class SizeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|unique:sizes|max:25',
+        ], [
+            'name.required' => 'Tên kích thước là trường bắt buộc.',
+            'name.unique' => 'Tên kích thước này đã tồn tại, vui lòng chọn tên khác.',
+            'name.max' => 'Tên kích thước không được vượt quá :max ký tự.'
         ]);
 
         Size::query()->create($validated);
@@ -60,6 +64,10 @@ class SizeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|unique:sizes|max:25',
+        ], [
+            'name.required' => 'Tên kích thước là trường bắt buộc.',
+            'name.unique' => 'Tên kích thước này đã tồn tại, vui lòng chọn tên khác.',
+            'name.max' => 'Tên kích thước không được vượt quá :max ký tự.'
         ]);
 
         $size->update($validated);
