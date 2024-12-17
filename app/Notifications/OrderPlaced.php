@@ -31,6 +31,8 @@ class OrderPlaced extends Notification
             'order_status' => $this->notificationData['order_status'],
             'details_url' => $this->notificationData['details_url'],
             'product_name' => $this->notificationData['product_name'],
+            'product_image' => $this->notificationData['product_image'],
+
         ];
     }
 }

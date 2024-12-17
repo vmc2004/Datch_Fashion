@@ -4,32 +4,30 @@
 
 
 @section('content')
-<div class="max-w-screen-xl mx-auto ">
-        
-    <div class="container mx-auto ">
-        <div class="mb-5">
-            <ul class="flex container mx-auto py-2">
-                <li>
-                    <a class="hover:underline hover:text-red-700 cursor-pointer" href="/">Datch Fashion</a>
-                </li>
-                <li>
-                    <span class="mx-3">&gt;</span>
-                    <a class="hover:underline hover:text-red-700 cursor-pointer" href="/bai-viet">Bài Viết</a>
-                </li>
-                <li>
-                    <span class="mx-3">&gt;</span>
-                    <a class="hover:underline hover:text-red-700 cursor-pointer" href="">{{ $blog->title }}</a>
-                </li>
-            </ul>
+    <div class="max-w-screen-xl mx-auto ">
+
+        <div class="container mx-auto ">
+            <div class="mb-5">
+                <ul class="flex container mx-auto py-2">
+                    <li>
+                        <a class="hover:underline hover:text-red-700 cursor-pointer" href="/">Datch Fashion</a>
+                    </li>
+                    <li>
+                        <span class="mx-3">&gt;</span>
+                        <a class="hover:underline hover:text-red-700 cursor-pointer" href="/bai-viet">Bài Viết</a>
+                    </li>
+                    <li>
+                        <span class="mx-3">&gt;</span>
+                        <a class="hover:underline hover:text-red-700 cursor-pointer" href="">{{ $blog->title }}</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
     <div class="mt-[28px] mx-auto w-[1400px]">
-        <!-- Phần content top -->
         <div class="grid grid-cols-[1fr_4fr_1fr] ">
             <div class="pt-[40px] mb-[20px] "></div>
             <div class="">
-                <!-- Phần content chính -->
                 <div class="">
                     <h2 class="text-[36px] font-bold mb-2">{{ $blog->title }}</h2>
                     <span class="text-slate-500 ">Ngày đăng: {{ $blog->created_at }} </span>
