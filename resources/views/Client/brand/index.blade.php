@@ -245,11 +245,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Hiển thị danh mục đang chọn -->
-
-                    <!-- Kết thúc iển thị danh mục đang chọn -->
-
-                    <!-- Sản phẩm -->
                     <div class="mt-6 grid md:grid-cols-3 grid-cols-2 md:gap-10 gap-4">
                         @foreach ($products as $new)
                             <div class="h-full rounded-lg relative shadow-xl">
