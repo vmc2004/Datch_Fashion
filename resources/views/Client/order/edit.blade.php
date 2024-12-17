@@ -9,13 +9,7 @@
     <div class="mt-12 md:grid grid-cols-5 gap-8">
         <!-- Sidebar -->
         @include('Client.layout.profile_sidebar')
-        <div id="toast" class="fixed top-0 right-0 m-4 p-4 bg-green-500 text-white rounded-lg shadow-lg hidden">
-            {{ session('success') }}
-        </div>
-        
-        <div id="error-toast" class="fixed top-0 right-0 m-4 p-4 bg-red-500 text-white rounded-lg shadow-lg hidden">
-            {{ session('error') }}
-        </div>
+       
         <div class="col-span-4">
             <div>
                 <h3
@@ -52,8 +46,12 @@
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{ $detail->variant->size->name }}</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->variant->price) }} ₫</td>
                                 <td class="px-4 py-2 border border-gray-300 text-center">{{$detail->quantity}}</td>
-                                <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
-                                <td class="px-4 py-2 border border-gray-300 text-center"><a href="{{route('rate.form',$detail->variant->id)}}" class="btn btn-danger">Đánh giá</a></td>
+                                <td class="px-4 py-2 border border-gray-300 text-center">{{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>    
+                                @if (!$detail->is_rated)
+                                <td class="px-4 py-2 border border-gray-300 text-center"><a href="{{route('rate.form',[$detail->variant->id,$order->id])}}" class="btn btn-danger fw-bold">Đánh giá</a></td>
+                                @else
+                                <td class="px-4 py-2 border border-gray-300 text-center text-success fw-bold">Đã đánh giá</td>    
+                                @endif
                             </tr>
                             @else
                             <tr class="hover:bg-gray-100">
@@ -78,7 +76,7 @@
                 <div class="border border-gray-300 rounded-lg shadow-lg">
                     <div class="bg-gray-100 p-4 text-lg font-semibold flex items-center space-x-2">
                         <i class="fas fa-user"></i> 
-                        <span>Người nhận</span>
+                        <span>Thông tin người nhận</span>
                     </div>
                     <div class="p-4">
                         <div class="mb-4">
@@ -96,47 +94,27 @@
                     </div>
                 </div>
                 
+                <div class="flex space-x-4 mt-3">
+                    @if ($order->status == 'Chờ xác nhận')
+                        <form action="{{ URL('huy-don', $order->code) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="code" value="{{ $order->code }}">
+                            <button type="submit" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                                Hủy đơn hàng
+                            </button>
+                        </form>
+                    @endif
                 
-            </div>
-            <div class="flex space-x-4 mt-3">
-                @if ($order->status == 'Chờ xác nhận')
-                    <form action="{{ URL('huy-don', $order->code) }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="code" value="{{ $order->code }}">
-                        <button type="submit" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                            Hủy đơn hàng
+                    <a href="/account/orders">
+                        <button class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                            Quay lại
                         </button>
-                    </form>
-                @endif
-            
-                <a href="/account/orders">
-                    <button class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                        Quay lại
-                    </button>
-                </a>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    @if(session('success'))
-        const toast = document.getElementById('toast');
-        toast.classList.remove('hidden');
-        setTimeout(() => {
-            toast.classList.add('hidden');
-        }, 3000); // 3s
-    @endif
-
-    @if(session('error'))
-        const errorToast = document.getElementById('error-toast');
-        errorToast.classList.remove('hidden');
-        setTimeout(() => {
-            errorToast.classList.add('hidden');
-        }, 3000); // 3s
-    @endif
-</script>
-
 
 
 @endsection

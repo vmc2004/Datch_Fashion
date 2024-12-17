@@ -14,7 +14,8 @@
   <title>@yield('title') - Datch</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{{asset('assets/client/css/styles.css')}}">
-  
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
   <link rel="stylesheet" href="{{asset('assets/client/assets/css/styles-be.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
@@ -25,9 +26,9 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Thêm vào trước thẻ </body> -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -286,6 +287,9 @@
                           <i class="fa-solid fa-hand-holding-medical"></i>
                           Tích điểm</a>
                         </li>
+                        <li><a href="/notifications" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
+                          <i class="fa-regular fa-bell"></i> Thông báo </a>
+                        </li>
                         <li><a href="/account/orders" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="shopping-cart" class="overflow-hidden svg-vertical inline-block w-[15.75px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M551.991 64H129.28l-8.329-44.423C118.822 8.226 108.911 0 97.362 0H12C5.373 0 0 5.373 0 12v8c0 6.627 5.373 12 12 12h78.72l69.927 372.946C150.305 416.314 144 431.42 144 448c0 35.346 28.654 64 64 64s64-28.654 64-64a63.681 63.681 0 0 0-8.583-32h145.167a63.681 63.681 0 0 0-8.583 32c0 35.346 28.654 64 64 64 35.346 0 64-28.654 64-64 0-17.993-7.435-34.24-19.388-45.868C506.022 391.891 496.76 384 485.328 384H189.28l-12-64h331.381c11.368 0 21.177-7.976 23.496-19.105l43.331-208C578.592 77.991 567.215 64 551.991 64zM240 448c0 17.645-14.355 32-32 32s-32-14.355-32-32 14.355-32 32-32 32 14.355 32 32zm224 32c-17.645 0-32-14.355-32-32s14.355-32 32-32 32 14.355 32 32-14.355 32-32 32zm38.156-192H171.28l-36-192h406.876l-40 192z"></path>
@@ -299,12 +303,6 @@
                           Đánh giá của tôi</a>
                         </li>
                         <div class="mx-[15px] my-[20px] mb-[20px] text-[#333] text-[16px] font-bold">Cài đặt</div>
-                        <li><a href="/tro-giup" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
-                          <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="question" class="overflow-hidden svg-vertical inline-block w-[10.5px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                            <path fill="currentColor" d="M200.343 0C124.032 0 69.761 31.599 28.195 93.302c-14.213 21.099-9.458 49.674 10.825 65.054l42.034 31.872c20.709 15.703 50.346 12.165 66.679-8.51 21.473-27.181 28.371-31.96 46.132-31.96 10.218 0 25.289 6.999 25.289 18.242 0 25.731-109.3 20.744-109.3 122.251V304c0 16.007 7.883 30.199 19.963 38.924C109.139 360.547 96 386.766 96 416c0 52.935 43.065 96 96 96s96-43.065 96-96c0-29.234-13.139-55.453-33.817-73.076 12.08-8.726 19.963-22.917 19.963-38.924v-4.705c25.386-18.99 104.286-44.504 104.286-139.423C378.432 68.793 288.351 0 200.343 0zM192 480c-35.29 0-64-28.71-64-64s28.71-64 64-64 64 28.71 64 64-28.71 64-64 64zm50.146-186.406V304c0 8.837-7.163 16-16 16h-68.292c-8.836 0-16-7.163-16-16v-13.749c0-86.782 109.3-57.326 109.3-122.251 0-32-31.679-50.242-57.289-50.242-33.783 0-49.167 16.18-71.242 44.123-5.403 6.84-15.284 8.119-22.235 2.848l-42.034-31.872c-6.757-5.124-8.357-14.644-3.62-21.677C88.876 60.499 132.358 32 200.343 32c70.663 0 146.089 55.158 146.089 127.872 0 96.555-104.286 98.041-104.286 133.722z"></path>
-                        </svg>
-                          Trung tâm trợ giúp</a>
-                        </li>
                         <li><a href="/feedback" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                           <svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="exclamation-triangle" class="overflow-hidden svg-vertical inline-block w-[15.75px] h-[14px]" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                             <path fill="currentColor" d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.054-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.952 83.154 0l239.94 416.028zm-27.658 15.991l-240-416c-6.16-10.678-21.583-10.634-27.718 0l-240 416C27.983 466.678 35.731 480 48 480h480c12.323 0 19.99-13.369 13.859-23.996zM288 372c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28zm-11.49-212h22.979c6.823 0 12.274 5.682 11.99 12.5l-7 168c-.268 6.428-5.556 11.5-11.99 11.5h-8.979c-6.433 0-11.722-5.073-11.99-11.5l-7-168c-.283-6.818 5.167-12.5 11.99-12.5zM288 372c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28z"></path>
@@ -378,7 +376,7 @@
 
         if (query.length > 1) {
           $.ajax({
-            url: "{{ route('autocomplete') }}", // Đảm bảo đây là đường dẫn đúng tới API autocompletion
+            url: "{{ route('autocomplete') }}", 
             type: "GET",
             data: {
               query: query
@@ -389,13 +387,10 @@
 
               if (data.length > 0) {
                 data.forEach(function(product) {
-                  // Làm nổi bật từ khóa trong tên sản phẩm
                   let highlightedName = product.name.replace(
                     new RegExp(query, "gi"),
                     (match) => `<strong>${match}</strong>`
                   );
-
-                  // Sử dụng slug thay vì id để tạo đường dẫn
                   suggestions.append(`
                   <div style="padding: 10px; border-bottom: 1px solid #eee;">
                     <a href="/product/${product.slug}" class="flex items-center">

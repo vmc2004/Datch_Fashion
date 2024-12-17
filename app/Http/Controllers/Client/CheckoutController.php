@@ -8,32 +8,37 @@ use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Point;
+use App\Models\ProductVariant;
+use App\Notifications\OrderPlaced;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
     public function checkout(Request $request ,$user_id)
     {
-        $price= 0;
+        $priceProduct= 0;
         $user = Auth::user();
         $cartItems = Cart::with('items')->where('user_id', $user_id)->first();
         foreach ($cartItems->items as $item) {
-            $price += $item->price_at_purchase * $item->quantity;  
+            $priceProduct += $item->price_at_purchase * $item->quantity;  
             
         }
-        if($price <= 599000){
-            $total_price = $price+30000;
+        if($priceProduct <= 599000){
+            $total_price = $priceProduct+30000;
         }
         else{
-            $total_price = $price;
+            $total_price = $priceProduct;
         }
         return view('Client.checkout.show', [
             'cartItems' => $cartItems,
+            'priceProduct' => $priceProduct,
             'total_price' => $total_price,
             'user'=> $user,
         ]);
@@ -61,6 +66,8 @@ class CheckoutController extends Controller
             $order->phone = $request->phone;
             $order->email = $request->email;
             $order->address = $request->address;
+            $order->shiping = $request->shiping;
+            $order->discount = $request->discount;
             $order->total_price =$request->subtotal; 
             $order->payment = $request->payment;
             if($request->payment == 'Thanh toán khi nhận hàng'){
@@ -90,11 +97,6 @@ class CheckoutController extends Controller
     
            
            
-            $cart = Cart::where('user_id', Auth::id())->first();
-            if ($cart) {
-                $cart->items()->delete(); 
-                $cart->delete(); 
-            }
                 return redirect()->route('thankyou', ['order' => $order->code]);
     
     }
@@ -134,11 +136,19 @@ class CheckoutController extends Controller
             $order->save();
             
             foreach ($request->input('variant_id') as $index => $variantId) {
-                $quantity = $request->input('quantity')[$index]; 
+                $quantity = $request->input('quantity')[$index];
                 $price = $request->input('price')[$index];
     
                 if ($price < 0 || $quantity < 0) {
                     return back()->withErrors(['message' => 'Giá và số lượng không thể âm.']);
+                }
+                $variant = ProductVariant::find($variantId); 
+                if (!$variant || $variant->quantity < $quantity) {
+                    $order->orderDetails()->delete();
+                    $order->delete();
+                    return redirect()->route('cart.show')->with([
+                        'warning' => 'Sản phẩm không đủ số lượng tồn kho.'
+                    ]);
                 }
     
                 $orderDetail = new OrderDetail();
@@ -149,14 +159,10 @@ class CheckoutController extends Controller
                 $orderDetail->total_price = $price * $quantity; 
                 $orderDetail->save();
             }
-            $cart = Cart::where('user_id', Auth::id())->first();
-            if ($cart) {
-                $cart->items()->delete(); 
-                $cart->delete(); 
-            }
+           
     
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-            $vnp_Returnurl = route('thankyou', ['order' => $order->code]); // Thay đổi ở đây
+            $vnp_Returnurl = route('payment.return');
             $vnp_TmnCode = "OXAW03IW"; // Mã website tại VNPAY 
             $vnp_HashSecret = "0GXPKQFPJA8NE2VE2LO0WYO575TFRTAZ"; // Chuỗi bí mật
     
@@ -164,7 +170,7 @@ class CheckoutController extends Controller
             $vnp_OrderInfo = "Thanh toán hóa đơn";
             $vnp_OrderType = "Datch Fashion";
             $vnp_Amount = $order->total_price * 100; // Quy đổi thành đồng
-            $vnp_Locale = "VN";
+            $vnp_Locale = "vn";
             $vnp_BankCode = "NCB";
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
     
@@ -222,19 +228,66 @@ class CheckoutController extends Controller
             ->first();
     
         if ($order) {
+
             foreach ($order->orderDetails as $detail) {
                 $variant = $detail->productVariant; 
                 if ($variant) {
                     if ($variant->quantity >= $detail->quantity) {
                         $variant->quantity -= $detail->quantity; 
                         $variant->save(); 
+                        $cart = Cart::where('user_id', Auth::id())->first();
+                        if ($cart) {
+                            $cart->items()->delete(); 
+                            $cart->delete(); 
+                        }
+                        $orderDetail = $order->orderDetails->first();
+                        if ($orderDetail && $orderDetail->productVariant && $orderDetail->productVariant->product) {
+                            $notificationData = [
+                                'message' => 'Đơn hàng #' . $order->code . ' đã được đặt thành công.',
+                                'order_code' => $order->code,
+                                'order_status' => $order->payment_status,
+                                'details_url' => route('order.show', ['code' => $order->code]), 
+                                'product_name' => $orderDetail->productVariant->product->name,
+                                'product_image' => $orderDetail->productVariant->product->image,
+                            ];
+                        
+                            Auth::user()->notify(new OrderPlaced($notificationData));
+                        } else {
+                            // Xử lý khi thiếu dữ liệu
+                            \Log::error('Lỗi thông báo: Không tìm thấy chi tiết sản phẩm.');
+                        }
+                        
                     } else {
-                        return redirect()->route('Client.home')->withErrors([
-                            'message' => 'Sản phẩm ' . $variant->name . ' không đủ số lượng tồn kho.'
+                        $order->orderDetails()->delete();
+
+                        $order->delete();
+        
+                        return redirect()->route('cart.show')->with([
+                            'warning' => 'Sản phẩm không đủ số lượng tồn kho.'
                         ]);
                     }
                 }
             }
+            
+            $cart = Cart::where('user_id', Auth::id())->first();
+            if ($cart) {
+                $cart->items()->delete(); 
+                $cart->delete(); 
+            }
+
+            $pointsEarned = floor($order->total_price / 10000); 
+
+            // Lấy hoặc tạo bản ghi Point cho người dùng
+            $point = Point::firstOrCreate(
+                ['user_id' => Auth::id()], // Điều kiện để tìm kiếm
+                ['points' => 0] // Giá trị mặc định nếu không tìm thấy
+            );
+            
+            // Cập nhật số điểm
+            $point->points += $pointsEarned;
+            $point->save();
+            
+
             Mail::to($order->email)->send(new OrderSuccessMail($order));
             return view('Client.checkout.done', compact('order'));
         }
@@ -245,48 +298,92 @@ class CheckoutController extends Controller
     {
         $request->validate([
             'code' => 'required|string|max:10',
-            'subtotal' => 'required',
+            'subtotal' => 'required|numeric|min:0',
         ]);
+
         $subtotal = $request->subtotal;
         $code = $request->code;
         $coupon = Coupon::where('code', $code)
-        ->where('is_active', 1)
-        ->first();
+            ->where('is_active', 1)
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->first();
+
         if (!$coupon) {
-            return redirect()->back()->with('success', 'Mã giảm giá không hợp lệ!');
+            return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ hoặc đã hết hạn!');
         }
-       else{
-       if($coupon->discount_type=='fixed'){
-        $subtotals = $subtotal - $coupon->discount;
+
+        $userId = Auth::id();
+        $alreadyUsed = DB::table('coupon_user')
+            ->where('user_id', $userId)
+            ->where('coupon_id', $coupon->id)
+            ->exists();
+
+        if ($alreadyUsed) {
+            return redirect()->back()->with('error', 'Bạn đã sử dụng mã giảm giá này rồi!');
+        }
+
+        $coupon->quantity -= 1;
+        $coupon->used += 1; 
+        $coupon->save(); 
+        if ($coupon->discount_type == 'fixed') {
+            $discountAmount = min($coupon->discount, $subtotal);
+            $subtotals = $subtotal - $discountAmount;
+        } else {
+            $discountAmount = $subtotal * ($coupon->discount / 100);
+            if ($discountAmount > $coupon->max_price) {
+                $discountAmount = $coupon->max_price;
+            }
+
+            $subtotals = $subtotal - $discountAmount;
+        }
+
         session([
             'subtotals' => $subtotals,
-            'discount'=>$coupon->discount,
+            'discount' => $discountAmount,
         ]);
-       }
-       else{
-        $discountAmount = $subtotal * ($coupon->discount / 100); 
-        $subtotals = $subtotal - $discountAmount;  
-        session([
-            'subtotals' => $subtotals,
-            'discount'=>$discountAmount,
+
+        DB::table('coupon_user')->insert([
+            'user_id' => $userId,
+            'coupon_id' => $coupon->id,
+            'used_at' => now(),
         ]);
-       }
-        
-        
+
         return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
-        }
     }
+
+
+
     public function clearSession()
     {
-        // Xóa session cụ thể
         Session::forget('subtotals');
         Session::forget('discount');
-
-        // Trả về một phản hồi thành công
         return response()->json(['status' => 'success']);
     }
     
-
+    public function handlePaymentReturn(Request $request)
+    {
+        $vnp_ResponseCode = $request->input('vnp_ResponseCode');
+        $orderCode = $request->input('vnp_TxnRef');
+    
+        $order = Order::where('code', $orderCode)->first();
+    
+        if (!$order) {
+            return redirect()->route('cart.show')->withErrors(['error' => 'Đơn hàng không tồn tại.']);
+        }
+        if ($vnp_ResponseCode == '00') { 
+            $order->payment_status = 'Đã thanh toán';
+            $order->save();
+            return redirect()->route('thankyou', ['order' => $order->code])
+                ->with('success', 'Thanh toán thành công!');
+        } else { 
+            $order->orderDetails()->delete();
+            $order->delete();
+            return redirect('/mua-hang/'.Auth::id())
+                ->with(['warning' => 'Thanh toán bị hủy. Đơn hàng chưa được xử lý.']);
+        }
+    }
+    
 
 
     

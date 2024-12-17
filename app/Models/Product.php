@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
+    
     protected $fillable = [
         'code',
         'name',
         'slug',
         'image',
+        'price',
         'description',
         'material',
         'status',
@@ -57,6 +59,6 @@ class Product extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
-    public $timestamps = false;
+    public $timestamps = true;
     protected $dates = ['deleted_at'];
 }

@@ -1,3 +1,4 @@
+
 @extends('Client.layout.layout')
 @section('single-page', "Danh sách sản phẩm")
 @section('title', "Cửa hàng")
@@ -84,28 +85,24 @@
                <form action="" method="GET" id="filterForm">
                   <div class="space-y-3 text-sm">
                      <div>
-                           <input id="all" type="radio" name="price" value="price_all" />
-                           <label for="all">Tất cả</label>
+                        <input id="all" type="radio" name="price" onclick="setPriceRange(0, 100000000)" />
+                        <label for="all">Tất cả</label>
+                    </div>
+                    <div>
+                        <input id="from_0_to_100" type="radio" name="price" onclick="setPriceRange(0, 99999)" />
+                        <label for="from_0_to_100">Dưới 100.000đ</label>
+                    </div>
+                     <div>
+                           <input id="from_100_to_200" type="radio"  name="price" onclick="setPriceRange(100000, 200000)"/>
+                           <label for="from_100_to_200">100.000đ - 200.000đ</label>
                      </div>
                      <div>
-                           <input id="free" type="radio" name="price" value="free" />
-                           <label for="free">Sản phẩm 0đ</label>
+                           <input id="from_200_to_500" type="radio"  name="price" onclick="setPriceRange(200000, 500000)" />
+                           <label for="from_200_to_500">200.000đ - 500.000đ</label>
                      </div>
                      <div>
-                           <input id="under100" type="radio" name="price" value="price_all" />
-                           <label for="under100">Dưới 100.000đ</label>
-                     </div>
-                     <div>
-                           <input id="price_under_200" type="radio" name="price" value="price_under_200" />
-                           <label for="price_under_200">100.000đ - 200.000đ</label>
-                     </div>
-                     <div>
-                           <input id="price_under_500" type="radio" name="price" value="price_under_500" />
-                           <label for="price_under_500">200.000đ - 500.000đ</label>
-                     </div>
-                     <div>
-                           <input id="price_above_500" type="radio" name="price" value="price_above_500" />
-                           <label for="price_above_500">Trên 500.000đ</label>
+                           <input id="above_500" type="radio" name="price" onclick="setPriceRange(500001 , null)"/>
+                           <label for="above_500">Trên 500.000đ</label>
                      </div>
                      <div class="flex items-start cursor-pointer">
                            <input type="radio" id="price" name="price" value="aaa">
@@ -115,9 +112,9 @@
                                  <div class="flex items-center gap-3">
                                        <div class="relative">
                                           <div class="relative">
-                                             <input type="text" name="priceMin"
+                                             <input type="text" name="min"
                                                    class="border border-current border-solid rounded-lg w-24 p-2 bg-[#e2e2e2]"
-                                                   placeholder="Từ" disabled value="">
+                                                   placeholder="Từ"  value="">
                                              <span
                                                    class="absolute right-3 top-1/2 -translate-y-1/2 color-black-100">đ</span>
                                           </div>
@@ -125,9 +122,9 @@
                                        <div>-</div>
                                        <div class="relative">
                                           <div class="relative">
-                                             <input type="text" name="priceMax"
+                                             <input type="text" name="max"
                                                    class="border border-current border-solid rounded-lg w-24 p-2 bg-[#e2e2e2]"
-                                                   placeholder="Đến" disabled value="">
+                                                   placeholder="Đến"  value="">
                                              <span
                                                    class="absolute right-3 top-1/2 -translate-y-1/2 color-black-100">đ</span>
                                           </div>
@@ -136,9 +133,8 @@
                                  <button class="hover:text-blue-700 cursor-pointer">Áp dụng</button>
                               </div>
                            </label>
-
                      </div>
-                  </form>
+               </form>
                   </div>
             </div>
       </div>
@@ -157,13 +153,20 @@
                         </svg>
                      </span>
                   </div>
-                  <div class="can-mini pr-5 border-b pb-8">
-                      <div class="grid grid-cols-5 gap-2">
-                        @foreach($size as $sz)
-                           <input class="border border-gray-300 rounded-md py-2 text-gray-600 text-center" value="{{$sz->name}}">
-                        @endforeach
-                      </div>
-                  </div>
+                  <form action="" method="GET" id="sizeForm">
+                     <div class="can-mini pr-5 border-b pb-8">
+                         <div class="grid grid-cols-5 gap-2">
+                             @foreach($sizes as $sz)
+                                 <div class="size-option">
+                                     <input type="radio" name="size" value="{{ $sz->id }}" id="size-{{ $sz->id }}" class="hidden size-radio" >
+                                     <label for="size-{{ $sz->id }}" class="border border-gray-300 rounded-md py-2 text-gray-600 text-center cursor-pointer block" style="width: 40px; height: 40px;">
+                                         {{ $sz->name }}
+                                     </label>
+                                 </div>
+                             @endforeach
+                         </div>
+                     </div>
+                 </form>
             </div>
              
 
@@ -173,18 +176,29 @@
                <div class="text-slate-800 font-bold flex items-center">
                  Màu sắc
                </div>
+               <span class="dropdownBtn size-8 flex justify-center items-center">
+                  <svg class="w-3" viewBox="0 0 256 512">
+                        <path fill="currentColor"
+                           d="M136.5 185.1l116 117.8c4.7 4.7 4.7 12.3 0 17l-7.1 7.1c-4.7 4.7-12.3 4.7-17 0L128 224.7 27.6 326.9c-4.7 4.7-12.3 4.7-17 0l-7.1-7.1c-4.7-4.7-4.7-12.3 0-17l116-117.8c4.7-4.6 12.3-4.6 17 .1z">
+                        </path>
+                  </svg>
+               </span>
             </div>
             <div class="can-mini pr-5 border-b pb-8">
-                <div class="grid grid-cols-5 gap-2">
-                  @foreach($color as $cl)
-                     <label class="cursor-pointer">
-                        <input type="radio" name="color" value="{{ $cl->id }}" class="hidden color-radio" data-color-name="{{ $cl->name }}">
-                        <div class="color-option w-8 h-8 border border-gray-300 rounded-full" 
-                        style="background-color: {{$cl->color_code}} ">
-                        </div>
-                     </label>
-                  @endforeach
-                </div>
+               <form action="" method="GET" id="color-form">
+                  <div class="flex flex-wrap">
+                      <div class="grid grid-cols-5 gap-2">
+                          @foreach ($colors as $cl)
+                              <div class="mr-2 mb-2">
+                                  <input type="radio" name="color" value="{{ $cl->id }}" id="color-{{ $cl->id }}" class="hidden color-radio" data-color-name="{{ $cl->name }}">
+                                  <label for="color-{{ $cl->id }}" class="cursor-pointer inline-block w-10 h-10 rounded-full border-2 border-gray-300" style="background-color: {{ $cl->color_code }};" title="{{ $cl->name }}">
+                                      <span class="sr-only">Chọn màu {{ $cl->name }}</span>
+                                  </label>
+                              </div>
+                          @endforeach
+                      </div>
+                  </div>
+              </form>
             </div>
       </div>
       <!-- Hết bên trái -->
@@ -230,44 +244,34 @@
 
                      <!-- Sản phẩm -->
                      <div class="mt-6 grid md:grid-cols-3 grid-cols-2 md:gap-10 gap-4">
-                     @foreach($products as $new)
-                     <div class="h-full rounded-lg relative shadow-xl">
-                        <div class="absolute -left-[3.2px] top-2 z-10">
-                            <div
-                                class="size-0 border-2 border-[#098E91] border-l-transparent border-b-transparent">
+                        @foreach($products as $new)
+                        <div class="h-full rounded-lg relative shadow-xl">
+                            <div class="absolute -left-[3.2px] top-2 z-10">
+                                <div class="size-0 border-2 border-[#098E91] border-l-transparent border-b-transparent"></div>
+                            </div>
+                            <div class="h-full rounded-lg overflow-hidden flex flex-col">
+                                <div class="overflow-hidden h-72">
+                                    <a href="/product/{{$new->slug}}">
+                                        <img class="hover:scale-110 duration-100" src="{{ asset($new->image) }}" alt="{{$new->slug}}">
+                                    </a>
+                                </div>
+                                <div class="flex justify-center mt-2">
+                                    @foreach ($new->ProductVariants->unique('color_id') as $variant)
+                                        <div class="w-4 mr-1 h-4 rounded-full border border-gray-300"
+                                             style="background-color: {{ $variant->color->color_code }}">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <p class="mt-2 text-gray-700 text-center">
+                                    {{ $new->name }}
+                                </p>
+                                <p class="text-gray-900 font-bold text-center">
+                                    {{ number_format($new->price) }} đ
+                                </p>
                             </div>
                         </div>
-                        <div class="h-full rounded-lg overflow-hidden flex flex-col">
-                            <div class="overflow-hidden h-72">
-                                <a href="/product/{{$new->slug}}">
-                                    <img class="hover:scale-110 duration-100"
-                                        src="{{ asset($new->image) }}" alt="{{$new->slug}}" >
-                                </a>
-                            </div>
-                            <div class="bg-white p-2 flex flex-col space-y-2">
-                                <div class="">
-                                    <div class="cursor-pointer">
-                                        <a class="text-slate-800" href=""> {{$new->name}} </a>
-                                    </div>
-                                </div>
-                                <div class="space-y-2">
-                                    <p class="font-semibold text-slate-800">
-                                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
-                                    </p>
-                                    <div class="flex gap-2 text-xs text-slate-700">
-                                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                            stroke="currentColor" class="size-4">
-                                            <path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                            <path
-                                                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                        </svg>
-                                        Hà Nội
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     @endforeach
+                    @endforeach
+                    
                      
                      </div>
                      <div class="py-4">
@@ -289,6 +293,39 @@
       document.querySelectorAll('input[type="radio"]').forEach(function(input) {
         input.addEventListener('change', function() {
             document.getElementById('filterForm').submit();
+        });
+    });
+
+    
+function setPriceRange(min, max) {
+        // Cập nhật giá trị trong các input "Từ" và "Đến"
+        document.querySelector('input[name="min"]').value = min;
+        document.querySelector('input[name="max"]').value = max;
+    }
+
+    // Hàm này có thể được sử dụng để khi người dùng submit form, kiểm tra giá trị trong các input
+    document.getElementById('filterForm').addEventListener('submit', function() {
+        // Nếu người dùng không chọn khoảng giá mà chỉ để trống priceMin và priceMax
+        var min = document.querySelector('input[name="min"]').value;
+        var max = document.querySelector('input[name="max"]').value;
+
+        // Cập nhật giá trị mặc định nếu trống
+        if (min === "") {
+            document.querySelector('input[name="min"]').value = 0; // Giá trị mặc định
+        }
+        if (max === "") {
+            document.querySelector('input[name="max"]').value = 100000000; // Giá trị mặc định
+        }
+    });
+      // Lắng nghe sự kiện thay đổi của radio button
+      document.querySelectorAll('.color-radio').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            document.getElementById('color-form').submit(); // Submit form khi chọn màu
+        });
+    });
+    document.querySelectorAll('.size-option input').forEach(input => {
+        input.addEventListener('change', function() {
+            document.getElementById('sizeForm').submit(); // Submit form khi chọn size
         });
     });
 </script>

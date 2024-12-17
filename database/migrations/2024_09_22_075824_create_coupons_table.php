@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique(); // mã giảm giá
-            $table->double('discount', 10, 2); // số tiền hoặc số % giảm giá
-            $table->enum('discount_type', ['fixed', 'percent']); // Loại giảm giá
-            $table->integer('quantity')->nullable(); // Giới hạn sử dụng toàn hệ thống
-            $table->integer('used')->default(0)->nullable(); // Số lần đã sử dụng
-            $table->date('start_date')->nullable(); // Ngày bắt đầu
-            $table->date('end_date')->nullable(); // Ngày kết thúc
-            $table->boolean('is_active')->default(true); // Trạng thái hoạt động
+            $table->string('code')->unique(); 
+            $table->double('discount', 10, 2);
+            $table->enum('discount_type', ['fixed', 'percent']);
+            $table->integer('quantity')->nullable(); 
+            $table->integer('used')->default(0)->nullable(); 
+            $table->double('max_price')->nullable(); 
+            $table->date('start_date')->nullable(); 
+            $table->date('end_date')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

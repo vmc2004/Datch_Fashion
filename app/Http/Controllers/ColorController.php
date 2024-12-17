@@ -12,7 +12,7 @@ class ColorController extends Controller
      */
     public function index()
     {
-        $colors = Color::query()->latest('id')->paginate(5);
+        $colors = Color::query()->latest('id')->paginate(8);
         return view('Admin.colors.index',compact('colors'));
     }
 
@@ -32,10 +32,14 @@ class ColorController extends Controller
         $validated = $request->validate([
             'name' => 'required|unique:colors|max:255',
             'color_code' => 'required'
+        ], [
+            'name.required' => 'Tên màu là trường bắt buộc.',
+            'name.unique' => 'Tên màu này đã tồn tại, vui lòng chọn tên khác.',
+            'name.max' => 'Tên màu không được vượt quá :max ký tự.',
+            'color_code.required' => 'Mã màu là trường bắt buộc.'
         ]);
-
         Color::query()->create($validated);
-        return redirect()->route('colors.index')->with('message','Thêm mới thành công');
+        return redirect()->route('colors.index')->with('success','Thêm mới thành công');
     }
 
     /**
@@ -62,10 +66,15 @@ class ColorController extends Controller
         $validated = $request->validate([
             'name' => 'required|unique:colors|max:255',
             'color_code' => 'required'
+        ], [
+            'name.required' => 'Tên màu là trường bắt buộc.',
+            'name.unique' => 'Tên màu này đã tồn tại, vui lòng chọn tên khác.',
+            'name.max' => 'Tên màu không được vượt quá :max ký tự.',
+            'color_code.required' => 'Mã màu là trường bắt buộc.'
         ]);
         
         $color->update($validated);
-        return redirect()->back()->with('message','Cập nhật thành công');
+        return redirect()->back()->with('success','Cập nhật thành công');
     }
 
     /**

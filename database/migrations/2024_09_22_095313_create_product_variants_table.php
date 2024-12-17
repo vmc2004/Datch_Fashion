@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('size_id')->constrained('sizes');
             $table->double('price');
             $table->double('sale_price')->nullable();
+            $table->date('sale_date')->nullable();
             $table->integer('quantity',);
             $table->string('image', 255);
             $table->softDeletes();

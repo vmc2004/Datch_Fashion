@@ -22,6 +22,7 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\NotificationController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\SaleController;
@@ -30,7 +31,7 @@ use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController as ControllersOrderController;
-
+use App\Http\Controllers\ProductVariantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,7 @@ use App\Http\Controllers\OrderController as ControllersOrderController;
 
 
 
+Route::post('/product-variants/check-duplicate', [ProductVariantController::class, 'checkDuplicate'])->name('productVariants.checkDuplicate');
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/filter-products', [ProductController::class, 'filterByCategory'])->name('products.filter');
@@ -71,13 +73,33 @@ Route::get('/vnpay/return', [CheckoutController::class, 'vnpayReturn']);
 Route::get('/mua-hang/{user_id}', [CheckoutController::class, 'checkout']);
 Route::post('/post_checkout', [CheckoutController::class, 'post_checkout'])->name('post_checkout');
 Route::get('/thankyou/{order}', [CheckoutController::class, 'thankyou'])->name('thankyou');
-Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit']);
+Route::get('/account/orders/edit/{code}', [OrderController::class, 'edit'])->name('order.show');
 Route::post('huy-don/{code}', [OrderController::class, 'huy']);
 Route::get('/account/favorites',[HomeController::class, 'favorite']);
 Route::post('/apply-coupon', [CheckoutController::class, 'apply'])->name('coupon.apply');
 // web.php
 Route::post('/clear-session', [CheckoutController::class, 'clearSession']);
+Route::get('/order/{order}/update-status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
 
+Route::middleware('auth')->group(function () {
+
+    // Route để hiển thị danh sách thông báo
+    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.index');
+
+    // Route để đánh dấu một thông báo là đã đọc
+    Route::get('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+
+    
+
+    // Route để đánh dấu tất cả thông báo là đã đọc
+    Route::get('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
+
+    // Route để xóa một thông báo
+    Route::delete('/notifications/{id}', [NotificationController::class, 'deleteNotification'])->name('notifications.delete');
+
+    // Route để xóa tất cả thông báo
+    Route::delete('/notifications/delete-all', [NotificationController::class, 'deleteAllNotifications'])->name('notifications.deleteAll');
+});
 
 
 Route::get('/cua-hang/danh-muc/{id}', [StoreController::class,'getById']);
@@ -241,9 +263,12 @@ Route::group([
 
 
 
+Route::get('/payment/return', [CheckoutController::class, 'handlePaymentReturn'])->name('payment.return');
 
-Route::get('/Danh-gia/{variant_id}', [CommentController::class, 'form'])->name('rate.form');
+Route::get('/Danh-gia/{variant_id}/{order_id}', [CommentController::class, 'form'])->name('rate.form');
 Route::get('/Danh-gia-cua-toi', [CommentController::class, 'listRate'])->name('rate.list');
+Route::post('/send-comment/{product_id}', [CommentController::class, 'sendComment'])->name('comments.sendComment');
+Route::post('/send-rate/{product_id}', [CommentController::class, 'sendRate'])->name('comments.sendRate');
 
 
 

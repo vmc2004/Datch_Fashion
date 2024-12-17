@@ -4,6 +4,8 @@
 
 
 @section('content')
+
+
     @include('Client.layout.slide')
     {{-- <div class="bird-container">
     <img src="https://chillnfree.vn/assets/images/bird-animation-desktop-1.gif" alt="chillnfree" class="bird-animation bird-desktop" id="birdAnimation">
@@ -12,7 +14,7 @@
 
 
 
-        <h2 class="text-2xl font-semibold text-left">Danh mục bạn yêu thích</h2>
+        <h2 class="text-2xl font-semibold text-left">Thương hiệu</h2>
         <div class="relative">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
 
@@ -59,18 +61,7 @@
                                 <p class="mt-2 text-gray-700">
                                     {{ $new->name }}
                                 </p>
-                                @if ($new->ProductVariants->first()?->sale_price != 0)
-                                    <p class="text-lg font-semibold">
-                                        {{ number_format($new->ProductVariants->first()?->sale_price ?? 0) }} đ
-                                    </p>
-                                    <p class="text-gray-500 line-through">
-                                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
-                                    </p>
-                                @else
-                                    <p class="text-gray-500">
-                                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
-                                    </p>
-                                @endif
+                                {{ number_format($new->price) }} đ
                             </div>
                         </div>
                     @endforeach
@@ -290,6 +281,13 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+    setTimeout(() => {
+        const toast = document.getElementById('toast-message');
+        if (toast) {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 500); // Xóa khỏi DOM sau khi mờ dần
+        }
+    }, 3000);
         </script>
         <style>
             .product-item {

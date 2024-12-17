@@ -43,6 +43,17 @@
                                     </div>
                                 @enderror
                             </div>
+
+                            <div class="mb-3">
+                                <label for="image" class="form-lable">Giá: </label>
+                                <input type="number" name="price"
+                                    class="form-control @error('price') is-invalid @enderror" value="{{ old('price') }}">
+                                @error('price')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                             <div class="mb-3">
                                 <label for="description" class="form-lable">Mô tả sản phẩm:</label>
                                 <textarea name="description" class="form-control @error('description') is-invalid @enderror" cols="30"
@@ -66,7 +77,6 @@
                             </div>
                             <div class="mb-3">
                                 <label for="status" class="form-lable">Trạng thái: </label>
-                                {{-- <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" value="{{old('image')}}"> --}}
                                 <select id="status" name="status"
                                     class="form-select @error('status') is-invalid @enderror">
                                     <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Hiển thị</option>

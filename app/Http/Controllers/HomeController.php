@@ -134,6 +134,7 @@ class HomeController extends Controller
         }
     }
     $chart_data = array_values($chart_data);
+    // Thống kê 10 sản phẩm bán chạy nhất
 
     return response()->json($chart_data);
 }
@@ -164,6 +165,7 @@ public function get30DaysOrderData(Request $request)
         return response()->json($chart_data);
     }
 
+
     public function topSellingProducts(Request $request)
 {
     $data = $request->all();
@@ -181,7 +183,11 @@ public function get30DaysOrderData(Request $request)
     }
 
     // Truy vấn dữ liệu từ bảng order_details (hoặc bảng tương ứng)
-    $query = OrderDetail::selectRaw('product_variants.product_id, SUM(order_details.quantity) as total_quantity, SUM(order_details.price * order_details.quantity) as total_sales')
+    $query = OrderDetail::selectRaw('
+            product_variants.product_id, 
+            SUM(order_details.quantity) as total_quantity, 
+            SUM(order_details.price * order_details.quantity) as total_sales,
+            AVG(order_details.price) as average_price')  // Lấy giá trung bình
         ->join('product_variants', 'order_details.variant_id', '=', 'product_variants.id')
         ->join('products', 'product_variants.product_id', '=', 'products.id')
         ->groupBy('product_variants.product_id')
@@ -216,13 +222,102 @@ public function get30DaysOrderData(Request $request)
         return [
             'product_name' => $product ? $product->name : 'Sản phẩm không tồn tại',
             'quantity_sold' => $item->total_quantity,
-            'unit_price' => $item->price,  // Giá từ bảng order_details
-            'total_sales' => $item->total_sales
+            'total_sales' => $item->total_sales,
+            'average_price' => $item->average_price // Trả về giá trung bình
         ];
     });
 
     return response()->json($result);
 }
+
+public function filterOrderStatus(Request $request)
+{
+    $data = $request->all();
+    $from_date = $data['from_date'];
+    $to_date = $data['to_date'];
+    try {
+        $from_date = Carbon::parse($from_date)->startOfDay();
+        $to_date = Carbon::parse($to_date)->endOfDay();
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Ngày tháng không hợp lệ'], 400);
+    }
+
+    $orders = Order::whereBetween('created_at', [$from_date, $to_date])
+        ->with(['orderDetails.productVariant.product'])
+        ->get();
+
+    if ($orders->isEmpty()) {
+        return response()->json(['message' => 'Không có đơn hàng trong khoảng thời gian này'], 404);
+    }
+
+    $order_data = [];
+
+    foreach ($orders as $order) {
+
+        $order_date = $order->created_at->format('Y-m-d');
+
+        foreach ($order->orderDetails as $orderDetail) {
+            $product_name = $orderDetail->productVariant->product ? $orderDetail->productVariant->product->name : 'Không có sản phẩm';
+
+            $order_status = $order->status;
+
+            $payment = $order->payment;
+
+            $payment_status = $order->payment_status;
+
+            $order_data[] = [
+                'order_date' => $order_date,
+                'product_name' => $product_name,
+                'order_status' => $order_status,
+                'payment' => $payment, 
+                'payment_status' => $payment_status, 
+            ];
+        }
+    }
+
+    return response()->json($order_data);
+}
+
+public function filterStockStatus(Request $request)
+{
+    $data = $request->all();
+    $from_date = $data['from_date'];
+    $to_date = $data['to_date'];
+
+    try {
+        $from_date = Carbon::parse($from_date)->startOfDay();
+        $to_date = Carbon::parse($to_date)->endOfDay();
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Ngày tháng không hợp lệ'], 400);
+    }
+
+    $products = Product::with(['productVariants' => function($query) {
+
+        $query->select('id', 'product_id', 'size_id', 'color_id', 'quantity', 'price');
+    }, 'productVariants.size', 'productVariants.color']) 
+    ->get();
+
+    if ($products->isEmpty()) {
+        return response()->json(['message' => 'Không có sản phẩm nào'], 404);
+    }
+
+    $product_data = [];
+
+    foreach ($products as $product) {
+        foreach ($product->productVariants as $variant) {
+            $product_data[] = [
+                'product_name' => $product->name,       
+                'quantity' => $variant->quantity,           
+                'price' => $variant->price,                  
+                'size' => $variant->size->name,             
+                'color' => $variant->color->name,          
+            ];
+        }
+    }
+
+    return response()->json($product_data);
+}
+
 
 
     public function indexAdmin()
@@ -231,6 +326,12 @@ public function get30DaysOrderData(Request $request)
 }
     public function showTopProduct(){
         return view('Admin.Statistic.topProduct');
+    }
+    public function showInventory(){
+        return view('Admin.Statistic.inventory');
+    }
+    public function showOderStatus(){
+        return view('Admin.Statistic.orderStatus');
     }
     public function __construct()
     {

@@ -11,6 +11,11 @@
                         <h3 class="card-header text-center">Danh sách biến thể</h3>
                       
                     </div>
+                    <a href="{{route('products.index')}}" class="btn btn-primary ">Quay lại</a>
+                    <a href="{{ route('productVariants.create', Route::current()->parameter('id')) }}"
+                        class="btn btn-success">
+                        <i class="fa-solid fa-plus"></i> Tạo biến thể
+                    </a>
                     @foreach ($productVariants as $productVariant)
                     @endforeach
                      {{-- <a href="{{route('productVariants.create',$productVariant->id)}}" class="btn btn-success"> <i class="fa-solid fa-plus me-2"></i>Thêm biến thể</a> --}}
@@ -35,13 +40,13 @@
                                             <td>{{ $productVariant->product->name }}</td>
                                             <td>{{ $productVariant->color->name }}</td>
                                             <td>{{ $productVariant->size->name }}</td>
-                                            <td>{{$productVariant->price}}</td>
+                                            <td>{{number_format($productVariant->price)}}</td>
                                             <td>{{$productVariant->sale_price}}</td>
                                             <td>{{$productVariant->quantity}}</td>
                                             <td><img src="{{asset($productVariant->image)}}" style="width: 100px" alt=""></td>
                                             <td>
-                                                <a href="{{route('productVariants.edit',$productVariant->id)}}" class="btn btn-warning">Cập nhật</a>
-                                                <a href="{{route('products.index')}}" class="btn btn-success">Quay lại</a>
+                                                <a href="{{route('productVariants.edit',$productVariant->id)}}" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i></a>
+                                                
                                             </td>
 
                                     @endforeach

@@ -110,14 +110,6 @@
                 <h3 class="text-lg p-4 bg-white text-black mb-8 shadow-md shadow-gray-300 rounded-md " style="width: 920px;">
                     <strong>Hồ sơ của tôi</strong>
                 </h3>
-                @if(session('success'))
-                      <div id="toast" class="fixed top-20 right-5 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center space-x-2 transition-opacity opacity-0">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>{{ session('success') }}</span>
-                    </div>
-                @endif
                 <div class="shadow-md shadow-gray-300 mb-8 text-black">
                     <div class="bg-white md:p-12">
                         <div class="flex">
@@ -240,7 +232,7 @@
                                 <p class="mr-8">
                                     <input type="text"  name="email"
                                     class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4"
-                                    placeholder="Nhập họ và tên" value="{{ $user->email }}">
+                                    placeholder="Nhập họ và tên" value="{{ $user->email }}" readonly>
                                 </p>
                                 @error('email')
                                     <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -253,7 +245,7 @@
                                 <p class="mr-8">
                                 <input type="text"  name="phone"
                                 class="text-blue-900 border border-blue-900 w-full h-9 rounded-3xl py-2.5 px-3.5 mr-4"
-                                placeholder="Nhập số điện thoại" value="{{ $user->phone }}">
+                                placeholder="Nhập số điện thoại" value="{{ $user->phone }}" >
                                 </p>
                             </div>
                             @error('phone')

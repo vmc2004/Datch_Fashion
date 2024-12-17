@@ -78,4 +78,8 @@ class Category extends Model
 
         return $categories;
     }
+    public function sub()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
 }

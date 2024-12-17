@@ -13,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        // Lấy các danh mục cha (parent_id = null) và load các danh mục con
+
         $categories = Category::whereNull('parent_id')->with('children')->paginate(10);
 
         return view('Admin.Categories.index', compact('categories'));
@@ -70,10 +70,16 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:categories|max:255',
+            'name' => 'required|max:255',
             'image' => 'nullable|image',
             'is_active' => 'boolean',
             'parent_id' => 'nullable|exists:categories,id'
+        ], [
+            'name.required' => 'Tên là trường bắt buộc.',
+            'name.max' => 'Tên không được vượt quá :max ký tự.',
+            'image.image' => 'Ảnh phải là định dạng hình ảnh hợp lệ.',
+            'is_active.boolean' => 'Trạng thái hoạt động phải là đúng hoặc sai.',
+            'parent_id.exists' => 'Danh mục cha không tồn tại trong hệ thống.'
         ]);
 
         $data = $request->all();
@@ -114,6 +120,12 @@ class CategoryController extends Controller
             'image' => 'nullable|image',
             'is_active' => 'boolean',
             'parent_id' => 'nullable|exists:categories,id'
+        ], [
+            'name.required' => 'Tên là trường bắt buộc.',
+            'name.max' => 'Tên không được vượt quá :max ký tự.',
+            'image.image' => 'Ảnh phải là định dạng hình ảnh hợp lệ.',
+            'is_active.boolean' => 'Trạng thái hoạt động phải là đúng hoặc sai.',
+            'parent_id.exists' => 'Danh mục cha không tồn tại trong hệ thống.'
         ]);
 
         $data = $request->all();

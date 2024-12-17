@@ -19,6 +19,8 @@ class Order extends Model
         'note', 
         'payment_status',
         'total_money',  
+        'shiping',  
+        'discount',  
         'status',   
         'user_id',  
     ];
@@ -33,5 +35,10 @@ class Order extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class,'order_id');
     }
 }

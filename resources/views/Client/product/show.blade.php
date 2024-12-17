@@ -16,7 +16,7 @@
                     </li>
                     <li>
                         <span class="mx-4">&gt;</span>
-                        <a class="hover:underline cursor-pointer" href="">{{ $product->category->name }}</a>
+                        <a class="hover:underline cursor-pointer" href="/cua-hang/danh-muc/{{ $product->category->id }}">{{ $product->category->name }}</a>
                     </li>
                     <li>
                         <span class="mx-4">&gt;</span>
@@ -48,22 +48,23 @@
                     </div>
 
                     <!-- Ảnh biến thể -->
-                    <div class="flex flex-col space-y-2 ml-4 ">
-                        @php
-                            $uniqueVariants = $product->ProductVariants->unique('color_id');
-                        @endphp
-
-                        @foreach ($uniqueVariants as $variant)
-                            <img alt="Ảnh biến thể" class="w-28 border thumbnail cursor-pointer"
-                                src="{{ asset($variant->image) }}" />
+                    <div class="flex flex-col space-y-2 ml-4">
+                        @foreach ($product->ProductVariants as $variant)
+                            <img 
+                                alt="Ảnh biến thể" 
+                                class="w-28 border thumbnail cursor-pointer" 
+                                src="{{ asset($variant->image) }}" 
+                                data-color-id="{{ $variant->color->id }}" 
+                                style="display: {{ $loop->first ? 'block' : 'none' }};" />
                         @endforeach
                     </div>
+                    
                 </div>
 
             </div>
             <!-- Right Section: Product Details  2-->
             <div class="w-7/12 mr-4">
-                <h1 class="text-2xl font-bold flex">
+                <h1 class="text-2xl font-bold flex justify-between">
                     {{ $product->name }}
                     <button class="action action-wishlist action towishlist ml-8 wishlist-button"
                         data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-slug="{{ $product->slug }}"
@@ -80,7 +81,11 @@
 
 
                 <p class="text-2xl font-bold text-red-600 mt-2">
-                    {{ number_format($product->ProductVariants->first()?->price ?? 0) }} đ
+                    @if ($product->price == $product->ProductVariants->first()?->price)
+                        {{ number_format($product->price) }} đ
+                    @else
+                        {{ number_format($product->price) }} đ - {{ number_format($product->ProductVariants->first()?->price) }} đ
+                    @endif
                 </p>
                 @if ($product->ProductVariants->first()->price > 599000)
                     <div class="bg-red-600 text-white text-center py-2 mt-4">
@@ -96,9 +101,9 @@
                     <input type="hidden" id="selectedSizeId" name="size_id" value="">
 
                     <!-- Màu sắc -->
+                    
                     <div class="mt-4">
-                        <p class="font-bold">
-                            Màu sắc:
+                        <p class="font-bold">Màu sắc:
                             <span id="selectedColorName" class="text-gray-500">
                                 {{ $product->ProductVariants->first()->color->name }}
                             </span>
@@ -107,12 +112,13 @@
                             @php
                                 $uniqueColors = $product->ProductVariants->unique('color_id');
                             @endphp
-
                             @foreach ($uniqueColors as $variant)
-                                <button type="button" class="color-button w-8 h-8 border border-gray-300 rounded-full"
+                                <button type="button"
+                                    class="color-button w-8 h-8 border border-gray-300 rounded-full outline outline-4 outline-offset-2 outline-white"
                                     style="background-color: {{ $variant->color->color_code }};"
                                     data-color-id="{{ $variant->color->id }}"
-                                    data-color-name="{{ $variant->color->name }}" onclick="selectColor(this)">
+                                    data-color-name="{{ $variant->color->name }}" 
+                                    onclick="selectColor(this)">
                                 </button>
                             @endforeach
                         </div>
@@ -143,9 +149,20 @@
                         </div>
                     </div>
 
+                    <div class="mt-4 mb-4">
+                        <p>
+                            Chỉ còn
+                            <span id="stockQuantity" class="text-red-500 font-bold">
+                                {{ $product->ProductVariants->first()->quantity }}
+                            </span>
+                            sản phẩm trong kho!
+                        </p>
+                    </div>
+
+
                     <!-- Số lượng -->
                     <p class="font-bold">Số lượng:</p>
-                    <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-4 mt-2">
                         <div class="flex items-center border rounded-lg px-1 py-1">
                             <button type="button" class="text-gray-500" onclick="decrement()">−</button>
                             <input type="number" id="quantity" name="quantity" value="1" min="1"
@@ -156,43 +173,47 @@
 
                     <!-- Nút hành động -->
                     <div class="mt-4 flex space-x-4">
-                        <button class="border border-red-500 rounded-lg px-4 py-2 text-black" type="submit">Thêm vào giỏ
+                        <button class="bg-red-600 text-white rounded-lg px-4 py-2" type="submit">Thêm vào giỏ
                             hàng</button>
-                        <button class="bg-red-600 text-white rounded-lg px-4 py-2">Mua ngay</button>
                     </div>
                 </form>
 
 
 
-                <div class="mt-4">
-                    <h2 class="font-bold">
-                        Mô tả
+                <div class="mt-4" id="descriptionSection">
+                    <h2 class="font-bold text-gray-500 cursor-pointer flex items-center justify-between" onclick="toggleContent(this)">
+                        <span>Mô tả</span>
+                        <span class="ml-2 text-2xl	">+</span>
                     </h2>
-                    <p class="text-gray-700 mt-2">
-                        {{ $product->description }}
-                    </p>
+                    <div class="text-gray-700 mt-2 hidden">
+                        <p>{{ $product->description }}</p>
+                    </div>
                 </div>
-                <div class="mt-4">
-                    <h2 class="font-bold">
-                        Chất liệu
+                
+                <div class="mt-4" id="materialSection">
+                    <h2 class="font-bold text-gray-500 cursor-pointer flex items-center justify-between" onclick="toggleContent(this)">
+                        <span>Chất liệu</span>
+                        <span class="ml-2 text-2xl	">+</span>
                     </h2>
-                    <p class="text-gray-700 mt-2">
-                        {{ $product->material }}
-                    </p>
+                    <div class="text-gray-700 mt-2 hidden">
+                        <p>{{ $product->material }}</p>
+                    </div>
                 </div>
-                <div class="mt-4">
-                    <h2 class="font-bold">
-                        Hướng dẫn sử dụng
+                
+                <div class="mt-4" id="usageGuideSection">
+                    <h2 class="font-bold text-gray-500 cursor-pointer flex items-center justify-between" onclick="toggleContent(this)">
+                        <span>Hướng dẫn sử dụng</span>
+                        <span class="ml-2 text-2xl	">+</span>
                     </h2>
-                    <p class="text-gray-700 mt-2">
-                        Giặt máy ở chế độ nhẹ, nhiệt độ thường.
-                        Không sử dụng hóa chất tẩy có chứa Clo.
-                        Phơi trong bóng mát.
-                        Sấy khô ở nhiệt độ thấp.
-                        Là ở nhiệt độ thấp 110 độ C.
-                        Giặt với sản phẩm cùng màu.
-                        Không là lên chi tiết trang trí.
-                    </p>
+                    <div class="text-gray-700 mt-2 hidden">
+                        <p>Giặt máy ở chế độ nhẹ, nhiệt độ thường.<br>
+                        Không sử dụng hóa chất tẩy có chứa Clo.<br>
+                        Phơi trong bóng mát.<br>
+                        Sấy khô ở nhiệt độ thấp.<br>
+                        Là ở nhiệt độ thấp 110 độ C.<br>
+                        Giặt với sản phẩm cùng màu.<br>
+                        Không là lên chi tiết trang trí.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -208,14 +229,14 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 gap-6">
                 @foreach ($comments as $comment)
-                    @if ($comment->rating != '')
+                    @if ($comment->rating != '' && $comment->status == 'approved')
                         <div class="">
                             <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
                                 {{ $comment->created_at->format('d/m/Y') }}</p>
                             <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
                             <p><span class="font-bold">Đánh giá:</span> {{ $comment->rating }} sao</p>
                         </div>
-                    @else
+                    @elseif ($comment->rating == '' && $comment->status == 'approved')
                         <div class="">
                             <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
                                 {{ $comment->created_at->format('d/m/Y') }}</p>
@@ -318,49 +339,40 @@
             });
 
             function selectColor(button) {
-                // Lấy color_id và color name từ thuộc tính của button
-                let selectedColorId = button.getAttribute('data-color-id');
-                let selectedColorName = button.getAttribute('data-color-name');
+            // Lấy color_id và color name từ thuộc tính của button
+            let selectedColorId = button.getAttribute('data-color-id');
+            let selectedColorName = button.getAttribute('data-color-name');
 
-                // Gán giá trị vào trường ẩn để submit form
-                document.getElementById('selectedColorId').value = selectedColorId;
+            // Gán giá trị vào trường ẩn để submit form
+            document.getElementById('selectedColorId').value = selectedColorId;
 
-                // Hiển thị tên màu được chọn
-                document.getElementById('selectedColorName').textContent = selectedColorName;
+            // Hiển thị tên màu được chọn
+            document.getElementById('selectedColorName').textContent = selectedColorName;
 
-                // Làm nổi bật nút màu được chọn
-                document.querySelectorAll('.color-button').forEach(element => {
-                    element.classList.remove('border-4', 'border-black');
-                });
-                button.classList.add('border-4', 'border-black');
+            // Làm nổi bật nút màu được chọn
+            document.querySelectorAll('.color-button').forEach(element => {
+                element.classList.remove('border-4', 'border-black');
+            });
+            button.classList.add('border-4', 'border-black');
 
-                // Reset tất cả các size (sáng lên)
-                document.querySelectorAll('.size-option').forEach(element => {
-                    element.classList.remove('opacity-50', 'cursor-not-allowed');
-                    element.disabled = false; // Cho phép chọn
-                });
+            // Reset kích cỡ và cập nhật trạng thái các size phù hợp
+            resetSizes();
+            updateSizeOptions(selectedColorId);
 
-                // Làm mờ các size không thuộc biến thể của màu được chọn
-                document.querySelectorAll('.size-option').forEach(element => {
-                    const sizeId = element.getAttribute('data-size');
-                    const sizeColorMatch = productVariants.some(variant =>
-                        variant.color_id == selectedColorId && variant.size_id == sizeId
-                    );
+            // Reset giá trị của kích cỡ
+            document.getElementById('selectedSizeId').value = '';
+            document.getElementById('quantity').value = 1;
 
-                    if (!sizeColorMatch) {
-                        element.classList.add('opacity-50', 'cursor-not-allowed');
-                        element.disabled = true; // Không cho chọn
-                    }
-                });
-
-                // Reset kích cỡ được chọn trước đó
-                document.getElementById('selectedSizeId').value = '';
-                document.querySelectorAll('.size-option').forEach(element => {
-                    element.classList.remove('border-4', 'border-blue-500');
-                });
-
-                console.log('Selected color_id:', selectedColorId);
-            }
+            // Hiển thị các ảnh tương ứng với màu đã chọn
+            document.querySelectorAll('.thumbnail').forEach(image => {
+                const imageColorId = image.getAttribute('data-color-id');
+                if (imageColorId == selectedColorId) {
+                    image.style.display = 'block';
+                } else {
+                    image.style.display = 'none';
+                }
+            });
+        }
 
 
             function highlightSize(selectedButton) {
@@ -379,16 +391,30 @@
 
                 // Lấy size_id từ thuộc tính data
                 const sizeId = selectedButton.getAttribute('data-size');
-                console.log('ID kích cỡ đã chọn:', sizeId);
 
                 // Cập nhật giá trị của input ẩn
                 document.getElementById('selectedSizeId').value = sizeId;
+
+                // Cập nhật số lượng tồn kho dựa trên biến thể được chọn
+                updateStockQuantity();
+                document.getElementById('quantity').value = 1;
             }
 
             function increment() {
                 let quantityInput = document.getElementById('quantity');
                 let currentValue = parseInt(quantityInput.value);
-                quantityInput.value = currentValue + 1;
+
+                // Lấy số lượng tồn kho từ biến thể đã chọn
+                const stockQuantity = getSelectedVariantStock();
+
+                if (currentValue < stockQuantity) {
+                    quantityInput.value = currentValue + 1;
+                } else {
+                    toastr.warning("Sản phẩm vượt quá số lượng tồn kho.", "Thông báo", {
+                        closeButton: true,
+                        progressBar: true
+                    });
+                }
             }
 
             function decrement() {
@@ -399,6 +425,52 @@
                     quantityInput.value = currentValue - 1;
                 }
             }
+
+            function resetSizes() {
+                // Reset tất cả các size (bỏ làm mờ và cho phép chọn)
+                document.querySelectorAll('.size-option').forEach(element => {
+                    element.classList.remove('opacity-50', 'cursor-not-allowed', 'border-4', 'border-blue-500');
+                    element.disabled = false;
+                });
+            }
+
+            function updateSizeOptions(selectedColorId) {
+                // Làm mờ và vô hiệu hóa các size không thuộc màu được chọn
+                document.querySelectorAll('.size-option').forEach(element => {
+                    const sizeId = element.getAttribute('data-size');
+                    const sizeColorMatch = productVariants.some(variant =>
+                        variant.color_id == selectedColorId && variant.size_id == sizeId
+                    );
+
+                    if (!sizeColorMatch) {
+                        element.classList.add('opacity-50', 'cursor-not-allowed');
+                        element.disabled = true;
+                    }
+                });
+            }
+
+            function updateStockQuantity() {
+                const stockQuantity = getSelectedVariantStock();
+                document.getElementById('stockQuantity').textContent = stockQuantity || 0;
+            }
+
+            function getSelectedVariantStock() {
+                const selectedColorId = document.getElementById('selectedColorId').value;
+                const selectedSizeId = document.getElementById('selectedSizeId').value;
+
+                if (!selectedColorId || !selectedSizeId) {
+                    return 0;
+                }
+
+                const selectedVariant = productVariants.find(variant =>
+                    variant.color_id == selectedColorId && variant.size_id == selectedSizeId
+                );
+
+                return selectedVariant ? selectedVariant.quantity : 0;
+            }
+
+            console.log("Script loaded successfully.");
+
 
 
 
@@ -552,6 +624,16 @@
                     });
                 });
             });
+            function toggleContent(header) {
+                const content = header.nextElementSibling;
+                const toggleIcon = header.querySelector('span.ml-2');
+                content.classList.toggle('hidden');
+                if (content.classList.contains('hidden')) {
+                    toggleIcon.textContent = '+';
+                } else {
+                    toggleIcon.textContent = '-'; 
+                }
+            }
         </script>
         <style>
             .image-container {
