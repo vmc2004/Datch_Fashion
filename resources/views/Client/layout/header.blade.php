@@ -14,7 +14,8 @@
   <title>@yield('title') - Datch</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="{{asset('assets/client/css/styles.css')}}">
-  
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
   <link rel="stylesheet" href="{{asset('assets/client/assets/css/styles-be.css')}}">
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
   <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
@@ -28,7 +29,6 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Thêm vào trước thẻ </body> -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -439,7 +439,7 @@ document.getElementById('chatIcon').addEventListener('click', function() {
 
         if (query.length > 1) {
           $.ajax({
-            url: "{{ route('autocomplete') }}", // Đảm bảo đây là đường dẫn đúng tới API autocompletion
+            url: "{{ route('autocomplete') }}", 
             type: "GET",
             data: {
               query: query
@@ -450,13 +450,10 @@ document.getElementById('chatIcon').addEventListener('click', function() {
 
               if (data.length > 0) {
                 data.forEach(function(product) {
-                  // Làm nổi bật từ khóa trong tên sản phẩm
                   let highlightedName = product.name.replace(
                     new RegExp(query, "gi"),
                     (match) => `<strong>${match}</strong>`
                   );
-
-                  // Sử dụng slug thay vì id để tạo đường dẫn
                   suggestions.append(`
                   <div style="padding: 10px; border-bottom: 1px solid #eee;">
                     <a href="/product/${product.slug}" class="flex items-center">

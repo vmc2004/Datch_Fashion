@@ -11,7 +11,11 @@
                         <h3 class="card-header text-center">Danh sách biến thể</h3>
                       
                     </div>
-                    <a href="{{route('products.index')}}" class="btn btn-success mt-2">Quay lại</a>
+                    <a href="{{route('products.index')}}" class="btn btn-primary ">Quay lại</a>
+                    <a href="{{ route('productVariants.create', Route::current()->parameter('id')) }}"
+                        class="btn btn-success">
+                        <i class="fa-solid fa-plus"></i> Tạo biến thể
+                    </a>
                     @foreach ($productVariants as $productVariant)
                     @endforeach
                      {{-- <a href="{{route('productVariants.create',$productVariant->id)}}" class="btn btn-success"> <i class="fa-solid fa-plus me-2"></i>Thêm biến thể</a> --}}

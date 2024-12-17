@@ -14,7 +14,7 @@
 
 
 
-        <h2 class="text-2xl font-semibold text-left">Danh mục bạn yêu thích</h2>
+        <h2 class="text-2xl font-semibold text-left">Thương hiệu</h2>
         <div class="relative">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
 

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -67,13 +69,26 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
+        $category = Category::query()->where('is_active', 1)->limit(10)->get();
+        $sizes = Size::query()->limit(10)->get();
+        $colors = Color::query()->limit(10)->get();
+        $flow_type = $request->input('flow_type', 'default');
+        $price_filter = $request->input('price', 'price_all');
+        $min = $request->query('min', 0);
+        $max = $request->query('max', 999999999);
+        $color = $request->get('color');
+        $size = $request->get('size');
         $query = $request->input('query');
         $products = Product::where('name', 'like', '%' . $query . '%')->paginate(5); // Phân trang với 5 sản phẩm mỗi trang
         $totalResults = $products->total(); // Tổng số kết quả tìm được
 
-        return view('search_results', [
+        return view('Client.category.index', [
             'products' => $products,
             'totalResults' => $totalResults,
+            'category' => $category,
+            'sizes' => $sizes,
+            'colors' => $colors,
+            'flow_type' =>$flow_type,
         ]);
     }
     public function getProducts(Request $request)

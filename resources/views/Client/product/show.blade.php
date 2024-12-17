@@ -48,16 +48,17 @@
                     </div>
 
                     <!-- Ảnh biến thể -->
-                    <div class="flex flex-col space-y-2 ml-4 ">
-                        @php
-                            $uniqueVariants = $product->ProductVariants->unique('color_id');
-                        @endphp
-
-                        @foreach ($uniqueVariants as $variant)
-                            <img alt="Ảnh biến thể" class="w-28 border thumbnail cursor-pointer"
-                                src="{{ asset($variant->image) }}" />
+                    <div class="flex flex-col space-y-2 ml-4">
+                        @foreach ($product->ProductVariants as $variant)
+                            <img 
+                                alt="Ảnh biến thể" 
+                                class="w-28 border thumbnail cursor-pointer" 
+                                src="{{ asset($variant->image) }}" 
+                                data-color-id="{{ $variant->color->id }}" 
+                                style="display: {{ $loop->first ? 'block' : 'none' }};" />
                         @endforeach
                     </div>
+                    
                 </div>
 
             </div>
@@ -96,9 +97,9 @@
                     <input type="hidden" id="selectedSizeId" name="size_id" value="">
 
                     <!-- Màu sắc -->
+                    
                     <div class="mt-4">
-                        <p class="font-bold">
-                            Màu sắc:
+                        <p class="font-bold">Màu sắc:
                             <span id="selectedColorName" class="text-gray-500">
                                 {{ $product->ProductVariants->first()->color->name }}
                             </span>
@@ -107,7 +108,6 @@
                             @php
                                 $uniqueColors = $product->ProductVariants->unique('color_id');
                             @endphp
-                    
                             @foreach ($uniqueColors as $variant)
                                 <button type="button"
                                     class="color-button w-8 h-8 border border-gray-300 rounded-full outline outline-4 outline-offset-2 outline-white"
@@ -176,35 +176,40 @@
 
 
 
-                <div class="mt-4">
-                    <h2 class="font-bold">
-                        Mô tả
+                <div class="mt-4" id="descriptionSection">
+                    <h2 class="font-bold text-gray-500 cursor-pointer flex items-center justify-between" onclick="toggleContent(this)">
+                        <span>Mô tả</span>
+                        <span class="ml-2 text-2xl	">+</span>
                     </h2>
-                    <p class="text-gray-700 mt-2">
-                        {{ $product->description }}
-                    </p>
+                    <div class="text-gray-700 mt-2 hidden">
+                        <p>{{ $product->description }}</p>
+                    </div>
                 </div>
-                <div class="mt-4">
-                    <h2 class="font-bold">
-                        Chất liệu
+                
+                <div class="mt-4" id="materialSection">
+                    <h2 class="font-bold text-gray-500 cursor-pointer flex items-center justify-between" onclick="toggleContent(this)">
+                        <span>Chất liệu</span>
+                        <span class="ml-2 text-2xl	">+</span>
                     </h2>
-                    <p class="text-gray-700 mt-2">
-                        {{ $product->material }}
-                    </p>
+                    <div class="text-gray-700 mt-2 hidden">
+                        <p>{{ $product->material }}</p>
+                    </div>
                 </div>
-                <div class="mt-4">
-                    <h2 class="font-bold">
-                        Hướng dẫn sử dụng
+                
+                <div class="mt-4" id="usageGuideSection">
+                    <h2 class="font-bold text-gray-500 cursor-pointer flex items-center justify-between" onclick="toggleContent(this)">
+                        <span>Hướng dẫn sử dụng</span>
+                        <span class="ml-2 text-2xl	">+</span>
                     </h2>
-                    <p class="text-gray-700 mt-2">
-                        Giặt máy ở chế độ nhẹ, nhiệt độ thường.
-                        Không sử dụng hóa chất tẩy có chứa Clo.
-                        Phơi trong bóng mát.
-                        Sấy khô ở nhiệt độ thấp.
-                        Là ở nhiệt độ thấp 110 độ C.
-                        Giặt với sản phẩm cùng màu.
-                        Không là lên chi tiết trang trí.
-                    </p>
+                    <div class="text-gray-700 mt-2 hidden">
+                        <p>Giặt máy ở chế độ nhẹ, nhiệt độ thường.<br>
+                        Không sử dụng hóa chất tẩy có chứa Clo.<br>
+                        Phơi trong bóng mát.<br>
+                        Sấy khô ở nhiệt độ thấp.<br>
+                        Là ở nhiệt độ thấp 110 độ C.<br>
+                        Giặt với sản phẩm cùng màu.<br>
+                        Không là lên chi tiết trang trí.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -330,30 +335,41 @@
             });
 
             function selectColor(button) {
-                // Lấy color_id và color name từ thuộc tính của button
-                let selectedColorId = button.getAttribute('data-color-id');
-                let selectedColorName = button.getAttribute('data-color-name');
+            // Lấy color_id và color name từ thuộc tính của button
+            let selectedColorId = button.getAttribute('data-color-id');
+            let selectedColorName = button.getAttribute('data-color-name');
 
-                // Gán giá trị vào trường ẩn để submit form
-                document.getElementById('selectedColorId').value = selectedColorId;
+            // Gán giá trị vào trường ẩn để submit form
+            document.getElementById('selectedColorId').value = selectedColorId;
 
-                // Hiển thị tên màu được chọn
-                document.getElementById('selectedColorName').textContent = selectedColorName;
+            // Hiển thị tên màu được chọn
+            document.getElementById('selectedColorName').textContent = selectedColorName;
 
-                // Làm nổi bật nút màu được chọn
-                document.querySelectorAll('.color-button').forEach(element => {
-                    element.classList.remove('border-4', 'border-black');
-                });
-                button.classList.add('border-4', 'border-black');
+            // Làm nổi bật nút màu được chọn
+            document.querySelectorAll('.color-button').forEach(element => {
+                element.classList.remove('border-4', 'border-black');
+            });
+            button.classList.add('border-4', 'border-black');
 
-                // Reset kích cỡ và cập nhật trạng thái các size phù hợp
-                resetSizes();
-                updateSizeOptions(selectedColorId);
+            // Reset kích cỡ và cập nhật trạng thái các size phù hợp
+            resetSizes();
+            updateSizeOptions(selectedColorId);
 
-                // Reset giá trị của kích cỡ
-                document.getElementById('selectedSizeId').value = '';
-                document.getElementById('quantity').value = 1;
-            }
+            // Reset giá trị của kích cỡ
+            document.getElementById('selectedSizeId').value = '';
+            document.getElementById('quantity').value = 1;
+
+            // Hiển thị các ảnh tương ứng với màu đã chọn
+            document.querySelectorAll('.thumbnail').forEach(image => {
+                const imageColorId = image.getAttribute('data-color-id');
+                if (imageColorId == selectedColorId) {
+                    image.style.display = 'block';
+                } else {
+                    image.style.display = 'none';
+                }
+            });
+        }
+
 
             function highlightSize(selectedButton) {
                 // Nếu kích cỡ bị vô hiệu hóa, không cho phép chọn
@@ -604,6 +620,16 @@
                     });
                 });
             });
+            function toggleContent(header) {
+                const content = header.nextElementSibling;
+                const toggleIcon = header.querySelector('span.ml-2');
+                content.classList.toggle('hidden');
+                if (content.classList.contains('hidden')) {
+                    toggleIcon.textContent = '+';
+                } else {
+                    toggleIcon.textContent = '-'; 
+                }
+            }
         </script>
         <style>
             .image-container {
