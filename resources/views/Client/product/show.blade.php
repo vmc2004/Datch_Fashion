@@ -16,7 +16,7 @@
                     </li>
                     <li>
                         <span class="mx-4">&gt;</span>
-                        <a class="hover:underline cursor-pointer" href="">{{ $product->category->name }}</a>
+                        <a class="hover:underline cursor-pointer" href="/cua-hang/danh-muc/{{ $product->category->id }}">{{ $product->category->name }}</a>
                     </li>
                     <li>
                         <span class="mx-4">&gt;</span>
@@ -64,7 +64,7 @@
             </div>
             <!-- Right Section: Product Details  2-->
             <div class="w-7/12 mr-4">
-                <h1 class="text-2xl font-bold flex">
+                <h1 class="text-2xl font-bold flex justify-between">
                     {{ $product->name }}
                     <button class="action action-wishlist action towishlist ml-8 wishlist-button"
                         data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-slug="{{ $product->slug }}"
@@ -81,7 +81,11 @@
 
 
                 <p class="text-2xl font-bold text-red-600 mt-2">
-                    {{ number_format($product->ProductVariants->first()?->price ?? 0) }} đ
+                    @if ($product->price == $product->ProductVariants->first()?->price)
+                        {{ number_format($product->price) }} đ
+                    @else
+                        {{ number_format($product->price) }} đ - {{ number_format($product->ProductVariants->first()?->price) }} đ
+                    @endif
                 </p>
                 @if ($product->ProductVariants->first()->price > 599000)
                     <div class="bg-red-600 text-white text-center py-2 mt-4">

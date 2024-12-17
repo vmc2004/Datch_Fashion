@@ -36,7 +36,7 @@
 
             <div class="mb-3">
                 <label for="" class="form-label">Mã giảm giá</label>
-                <input type="text" name="code" class="form-control" id="" value="{{$coupon->code}}">
+                <input type="text" name="code" class="form-control" id="" value="{{$coupon->code}}" >
             </div>
             
             <div class="form-group">

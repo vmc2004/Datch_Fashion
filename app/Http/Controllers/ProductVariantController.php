@@ -128,7 +128,7 @@ class ProductVariantController extends Controller
     
         $productVariant->update($dataVariant);
     
-        return redirect()->route('productVariants.index', ['id' => $id])->with('message', 'Cập nhật thành công!');
+        return redirect()->route('productVariants.index', ['id' => $id])->with('success', 'Cập nhật thành công!');
     }
     
 
