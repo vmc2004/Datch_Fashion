@@ -13,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        // Lấy các danh mục cha (parent_id = null) và load các danh mục con
+
         $categories = Category::whereNull('parent_id')->with('children')->paginate(10);
 
         return view('Admin.Categories.index', compact('categories'));
