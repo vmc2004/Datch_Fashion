@@ -20,7 +20,6 @@
                         @foreach ($notifications as $notification)
                             <div class="bg-white p-4 rounded-lg shadow-md mb-4">
                                 <div class="flex items-center mb-2">
-                                    <!-- Kiểm tra loại thông báo và hiển thị icon tương ứng -->
                                     @if (Str::contains($notification->data['message'], 'hủy'))
                                         <i class="fas fa-exclamation-circle text-purple-500 mr-2"></i>
                                     @elseif (Str::contains($notification->data['message'], 'đặt'))
@@ -36,14 +35,11 @@
                                     {{ \Carbon\Carbon::parse($notification->created_at)->format('d/m/Y') }}
                                 </div>
 
-                                <!-- Hiển thị chi tiết đơn hàng hoặc sản phẩm liên quan -->
                                 <div class="flex items-center mb-2">
                                     <img alt="{{ $notification->data['product_name'] }}" class="w-12 h-12 mr-4"
-                                        src=""
-                                        width="50" height="50" />
+                                        src="" width="50" height="50" />
                                     <div>
                                         <div class="text-gray-700">
-                                            <!-- Tên sản phẩm hoặc đơn hàng -->
                                             @if (isset($notification->data['product_name']))
                                                 {{ $notification->data['product_name'] }}
                                             @else
@@ -58,7 +54,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Nếu thông báo có link chi tiết -->
                                 @if (isset($notification->data['details_url']))
                                     <div class="text-blue-500 text-sm">
                                         <a href="{{ $notification->data['details_url'] }}">

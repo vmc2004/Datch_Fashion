@@ -113,7 +113,7 @@ class BlogController extends Controller
         $data['user_id'] = Auth::user()->id;
 
         if ($request->hasFile('image')) {
-            // Tạo tên file duy nhất cho ảnh mới
+
             $file = $request->file('image');
             $fileName = time() . '_' . $file->getClientOriginalName();
     
