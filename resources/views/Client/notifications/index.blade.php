@@ -37,7 +37,8 @@
 
                                 <div class="flex items-center mb-2">
                                     <img alt="{{ $notification->data['product_name'] }}" class="w-12 h-12 mr-4"
-                                        src="" width="50" height="50" />
+                                        src="{{ array_key_exists('product_image', $notification->data) ? asset($notification->data['product_image']) : '' }}"
+                                        width="50" height="50" />
                                     <div>
                                         <div class="text-gray-700">
                                             @if (isset($notification->data['product_name']))
