@@ -32,8 +32,12 @@ class ColorController extends Controller
         $validated = $request->validate([
             'name' => 'required|unique:colors|max:255',
             'color_code' => 'required'
+        ], [
+            'name.required' => 'Tên màu là trường bắt buộc.',
+            'name.unique' => 'Tên màu này đã tồn tại, vui lòng chọn tên khác.',
+            'name.max' => 'Tên màu không được vượt quá :max ký tự.',
+            'color_code.required' => 'Mã màu là trường bắt buộc.'
         ]);
-
         Color::query()->create($validated);
         return redirect()->route('colors.index')->with('success','Thêm mới thành công');
     }
@@ -62,6 +66,11 @@ class ColorController extends Controller
         $validated = $request->validate([
             'name' => 'required|unique:colors|max:255',
             'color_code' => 'required'
+        ], [
+            'name.required' => 'Tên màu là trường bắt buộc.',
+            'name.unique' => 'Tên màu này đã tồn tại, vui lòng chọn tên khác.',
+            'name.max' => 'Tên màu không được vượt quá :max ký tự.',
+            'color_code.required' => 'Mã màu là trường bắt buộc.'
         ]);
         
         $color->update($validated);

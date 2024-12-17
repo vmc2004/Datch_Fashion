@@ -241,7 +241,7 @@ class CheckoutController extends Controller
                         $orderDetail = $order->orderDetails->first();
                         if ($orderDetail && $orderDetail->productVariant && $orderDetail->productVariant->product) {
                             $notificationData = [
-                                'message' => 'Đơn hàng ' . $order->code . ' đã được đặt thành công.',
+                                'message' => 'Đơn hàng #' . $order->code . ' đã được đặt thành công.',
                                 'order_code' => $order->code,
                                 'order_status' => $order->payment_status,
                                 'details_url' => route('order.show', ['code' => $order->code]), 
