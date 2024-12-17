@@ -113,10 +113,8 @@ Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
     
 
 
-    Route::prefix('member')->middleware('checkUser')->group(function () {
-    Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
     
-    });
+    Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
     Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
     Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
     Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');

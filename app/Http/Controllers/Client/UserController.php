@@ -46,33 +46,37 @@ class UserController extends Controller
         return view('Client.account.register');
        }
     
-    public function showLoginForm(ShowLoginFormRequest $request)
-    {
-    $credentials = $request->only('email', 'password');
-
-    if (Auth::attempt($credentials)) {
-        if (Auth::user()->role === 'member') {
-            return redirect()->route('Client.home')->with([
-                'message' => 'Đăng nhập thành công',
-                'message_type' => 'success',
-            ]);
-        } else {
-            Auth::logout();
-            return redirect()->back()->with([
-                'message' => 'Bạn không có quyền truy cập vào trang này.',
-                'message_type' => 'error',
-            ]);
-        }
-    }
-
-    return redirect()->back()->withErrors([
-        'email' => 'Email hoặc mật khẩu không đúng.',
-    ]);
-}
-
+       public function showLoginForm(ShowLoginFormRequest $request)
+       {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'], 
+            'password' => ['required', 'string', 'min:8'], 
+        ]);
+           $credentials = $request->only('email', 'password');
+       
+           // Kiểm tra thông tin đăng nhập
+           if (Auth::attempt($credentials)) {
+               // Đăng nhập thành công, chuyển hướng đến trang chủ
+               return redirect()->route('Client.home')->with([
+                   'message' => 'Đăng nhập thành công',
+                   'message_type' => 'success',
+               ]);
+           }
+       
+           return redirect()->back()->withErrors([
+               'email' => 'Email hoặc mật khẩu không đúng.',
+           ]);
+       }
+       
        
 public function showRegisterForm(Request $request)
 {
+    $validated = $request->validate([
+        'fullname' => ['required', 'string', 'max:255'], 
+        'email' => ['required', 'email', 'unique:users,email'], 
+        'password' => ['required', 'string', 'min:8', 'confirmed'], 
+    ]);
+
      $check = User::where('email', $request->email)->exists();
     if($check){
         return redirect()->back()->with([

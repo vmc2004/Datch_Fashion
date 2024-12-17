@@ -49,4 +49,11 @@ return [
         'email' => 'Email',
         'password' => 'Mật khẩu',
     ],
+
+    'attributes' => [
+        'fullname' => 'Họ và tên',
+        'email' => 'Email',
+        'password' => 'Mật khẩu',
+        
+    ]
 ];
