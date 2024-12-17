@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Point;
 use App\Models\ProductVariant;
 use App\Notifications\OrderPlaced;
 use Illuminate\Http\Request;
@@ -227,6 +228,7 @@ class CheckoutController extends Controller
             ->first();
     
         if ($order) {
+
             foreach ($order->orderDetails as $detail) {
                 $variant = $detail->productVariant; 
                 if ($variant) {
@@ -272,6 +274,20 @@ class CheckoutController extends Controller
                 $cart->items()->delete(); 
                 $cart->delete(); 
             }
+
+            $pointsEarned = floor($order->total_price / 10000); 
+
+            // Lấy hoặc tạo bản ghi Point cho người dùng
+            $point = Point::firstOrCreate(
+                ['user_id' => Auth::id()], // Điều kiện để tìm kiếm
+                ['points' => 0] // Giá trị mặc định nếu không tìm thấy
+            );
+            
+            // Cập nhật số điểm
+            $point->points += $pointsEarned;
+            $point->save();
+            
+
             Mail::to($order->email)->send(new OrderSuccessMail($order));
             return view('Client.checkout.done', compact('order'));
         }
