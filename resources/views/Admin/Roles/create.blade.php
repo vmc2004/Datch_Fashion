@@ -9,7 +9,7 @@
 @endsection
 
 @section('single-page')
-    Danh sách phân quyền
+    Thêm phân quyền
 @endsection
 
 @section('content')
@@ -26,7 +26,11 @@
             </ul>
         </div>
     @endif
-
+    @if (session()->has('message'))
+    <div class="alert alert-success text-white">
+        {{ session()->get('message') }}
+    </div>
+@endif
 
     <form action="{{ route('roles.store') }}" method="POST">
         @csrf
@@ -34,23 +38,35 @@
    
         <div class="mb-3 mt-9">
             <label for="name" class="form-label">Tên vai trò</label>
-            <input type="text" name="name" id="name" class="form-control" value="" required>
+            <input type="text" name="name" value="{{ old('name') }}" id="name" class="form-control">
+
+            @error('name')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
        
         <div class="mb-3">
-            <label for="display_name" class="form-label">Tên hiện thị</label>
-            <input type="display_name" name="display_name" id="display_name" class="form-control" value="" required>
+            <label for="display_name" class="form-label">Tên hiển thị</label>
+            <input type="text" name="display_name" value="{{ old('display_name') ?? $role->display_name }}" id="display_name" class="form-control">
+            @error('display_name')
+            <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
+        
 
         
         <div class="mb-3">
             <label for="group" class="form-label">Nhóm</label>
             <select name="group" class="form-control">
-                <option value="system">System</option>
-                <option value="user">User</option>
+                <option value="system" {{ old('group') == 'system' ? 'selected' : '' }}>System</option>
+                <option value="user" {{ old('group') == 'user' ? 'selected' : '' }}>User</option>
 
             </select>
+
+            @error('group')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
 
         </div>
 
@@ -58,28 +74,30 @@
         <div class="mb-3">
             <label for="role" class="form-label">Quyền</label>
             <div class="row">
-                @foreach ($permission as $groupName => $permission)
-                    <div class="col-5">
-                        <h4>{{ $groupName }}</h4>
-
-                        <div>
-                            @foreach ($permission as $item)
-                                <div class="form-check">
-                                    <input class="form-check-input" name="permission_ids[]" type="checkbox"
-                                        value="{{ $item->id }}">
-                                    <label class="custom-control-label"
-                                        for="customCheck1">{{ $item->display_name }}</label>
-                                </div>
-                            @endforeach
-                        </div>
+                @foreach ($permissions as $groupName => $permissions)
+                <div class="col-5">
+                    <h4>{{ $groupName }}</h4>
+                    <div>
+                        @foreach ($permissions as $item)
+                            <div class="form-check">
+                                <input class="form-check-input" name="permission_ids[]" type="checkbox"
+                                    id="permission_{{ $item->id }}" value="{{ $item->id }}">
+                                <label class="custom-control-label" for="permission_{{ $item->id }}">
+                                    {{ $item->display_name }}
+                                </label>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                </div>
+            @endforeach
+            
             </div>
 
         </div>
 
         {{-- Nút gửi --}}
         <button type="submit" class="btn btn-primary text-center">Thêm mới</button>
+        <a href="{{ route('roles.index') }}" class="btn btn-success">Quay lại</a>
     </form>
 </div>
 @endsection

@@ -209,10 +209,10 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('roles.index');
         Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
         Route::post('/create', [RoleController::class, 'store'])->name('roles.store');
-        Route::get('/show/{user}', [RoleController::class, 'show'])->name('roles.show');
-        Route::get('/edit/{user}', [RoleController::class, 'edit'])->name('roles.edit');
-        Route::put('/edit/{user}', [RoleController::class, 'update'])->name('roles.update');
-        Route::delete('/destroy/{user}', [RoleController::class, 'destroy'])->name('roles.destroy');
+        Route::get('/show/{role}', [RoleController::class, 'show'])->name('roles.show');
+        Route::get('/edit/{role}', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::put('/edit/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::delete('/destroy/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
 
     });
     

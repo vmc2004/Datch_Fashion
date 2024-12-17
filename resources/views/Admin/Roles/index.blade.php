@@ -19,6 +19,11 @@
         <div class="card mt-3">
             <h3 class="card-header text-center">Danh sách phân quyền</h3>
         </div>
+        @if (session()->has('message'))
+        <div class="alert alert-success text-white">
+            {{ session()->get('message') }}
+        </div>
+    @endif
 
         <!-- Thanh tìm kiếm và thêm mới -->
         <div class="container mt-4">
@@ -41,6 +46,7 @@
                         <th>#</th>
                         <th>Tên vai trò</th>
                         <th>Tên hiện thị</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,11 +57,11 @@
                             <td>{{ $role->display_name }}</td>
                             <td>
                                 <!-- Nút chỉnh sửa -->
-                                <a href="" class="btn btn-link text-primary">
+                                <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-link text-primary">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <!-- Nút xóa -->
-                                <form action="" method="POST" style="display: inline-block;">
+                                <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-link text-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?')">
