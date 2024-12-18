@@ -54,11 +54,11 @@ class CommentController extends Controller
                     'rating' => $request->rating,
                 ]);
                 OrderDetail::where('order_id', $request->order_id)
-                ->whereIn('variant_id', $orderDetail->pluck('variant_id'))
+                ->where('variant_id',$request->variant_id)
                 ->update(['is_rated' => true]);
-                return redirect()->route('rate.form',[$request->variant_id,$request->order_id])->with('message','Đánh giá sản phẩm thành công!');
+                return redirect()->route('rate.form',[$request->variant_id,$request->order_id])->with('success','Đánh giá sản phẩm thành công!');
             }
-            return redirect()->route('rate.form',[$request->variant_id,$request->order_id])->with('message','sản phẩm này đã đánh giá rồi');        
+            return redirect()->route('rate.form',[$request->variant_id,$request->order_id])->with('error','sản phẩm này đã đánh giá rồi');        
         
     }
 

@@ -117,7 +117,7 @@ Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client
 Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
 
 //USER
-
+    
     Route::get('/Client/account/login', [ClientUserController::class, 'login'])->name('Client.account.login');
     Route::post('/Client/account/showLoginForm', [ClientUserController::class, 'showLoginForm'])->name('showLoginForm');
     Route::get('/Client/account/register', [ClientUserController::class, 'register'])->name('Client.account.register');

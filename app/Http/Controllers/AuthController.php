@@ -37,7 +37,7 @@ class AuthController extends Controller
             'message_type' => 'success']);
 
         }else{
-            Auth::logout(); 
+            // Auth::logout(); 
             return redirect()->back()->with([
                 'message' => 'Bạn không có quyền truy cập vào trang admin',
                 'message_type' => 'error'
