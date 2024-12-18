@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShowLoginFormRequest;
+use App\Mail\ClientOtpMail;
 use App\Mail\SendOtpMail;
 use App\Models\Banner;
 use App\Models\Brand;
@@ -46,32 +47,36 @@ class UserController extends Controller
        }
     
        public function showLoginForm(ShowLoginFormRequest $request)
-{
-    $credentials = $request->only('email', 'password');
-
-    if (Auth::attempt($credentials)) {
-        if (Auth::user()->role === 'member') {
-            return redirect()->route('Client.home')->with([
-                'message' => 'Đăng nhập thành công',
-                'message_type' => 'success',
-            ]);
-        } else {
-            Auth::logout();
-            return redirect()->back()->with([
-                'message' => 'Bạn không có quyền truy cập vào trang này.',
-                'message_type' => 'error',
-            ]);
-        }
-    }
-
-    return redirect()->back()->withErrors([
-        'email' => 'Email hoặc mật khẩu không đúng.',
-    ]);
-}
-
+       {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'], 
+            'password' => ['required', 'string', 'min:8'], 
+        ]);
+           $credentials = $request->only('email', 'password');
+       
+           // Kiểm tra thông tin đăng nhập
+           if (Auth::attempt($credentials)) {
+               // Đăng nhập thành công, chuyển hướng đến trang chủ
+               return redirect()->route('Client.home')->with([
+                   'message' => 'Đăng nhập thành công',
+                   'message_type' => 'success',
+               ]);
+           }
+       
+           return redirect()->back()->withErrors([
+               'email' => 'Email hoặc mật khẩu không đúng.',
+           ]);
+       }
+       
        
 public function showRegisterForm(Request $request)
 {
+    $validated = $request->validate([
+        'fullname' => ['required', 'string', 'max:255'], 
+        'email' => ['required', 'email', 'unique:users,email'], 
+        'password' => ['required', 'string', 'min:8', 'confirmed'], 
+    ]);
+
      $check = User::where('email', $request->email)->exists();
     if($check){
         return redirect()->back()->with([
@@ -88,7 +93,7 @@ public function showRegisterForm(Request $request)
         session(['otp' => $otp]);
 
         $newUser = User::create($data);
-        Mail::to($newUser->email)->send(new SendOtpMail($otp, $request->fullname));
+        Mail::to($newUser->email)->send(new ClientOtpMail($otp, $request->fullname));
         return redirect()->route('Client.otp.confirm', ['email' => $newUser->email, 'otp' => $otp])
         ->with('message', 'Đăng kí thành công. Vui lòng kiểm tra email để nhận mã OTP.')
         ->with('message_type', 'success');
@@ -167,27 +172,46 @@ public function showOtpConfirmationForm(Request $request)
         return view('Client.otp.otp-confirmation', compact('email'));
     }
 
-public function verifyOtp(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email|exists:users',
-        'otp' => 'required|digits:6',
-    ]);
-
-    $sessionOtp = session('otp');
-
-         if ($sessionOtp && $request->otp == $sessionOtp) {
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'otp' => 'required|digits:6',
+        ]);
+    
+        $sessionOtp = session('otp');
+        $otpCreatedAt = session('otp_created_at');
+    
+        // Kiểm tra OTP có tồn tại và thời hạn
+        if (!$sessionOtp || now()->diffInMinutes($otpCreatedAt) > 5) {
+            session()->forget(['otp', 'otp_created_at']); // Xóa OTP hết hạn
+            return redirect()->back()->with([
+                'message' => 'Mã OTP đã hết hạn. Vui lòng yêu cầu lại.',
+                'message_type' => 'error'
+            ]);
+        }
+    
+        // Kiểm tra OTP khớp
+        if ($request->otp == $sessionOtp) {
+            // Kích hoạt tài khoản
+            $user = User::where('email', $request->email)->first();
+            $user->update(['is_active' => true]);
+    
+            session()->forget(['otp', 'otp_created_at']); // Xóa OTP sau khi xác nhận thành công
+    
             return redirect()->route('Client.account.login')->with([
                 'message' => 'Xác nhận thành công! Bạn có thể đăng nhập.',
                 'message_type' => 'success'
             ]);
-            } else {
-                return redirect()->back()->with([
-                    'message' => 'Mã OTP không hợp lệ hoặc đã hết hạn.',
-                    'message_type' => 'error'
-            ]);
-            }
-}
+        }
+    
+        // OTP không hợp lệ
+        return redirect()->back()->with([
+            'message' => 'Mã OTP không hợp lệ. Vui lòng thử lại.',
+            'message_type' => 'error'
+        ]);
+    }
+    
 
 public function profile()
 {

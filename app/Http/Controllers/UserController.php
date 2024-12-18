@@ -132,4 +132,7 @@ class UserController extends Controller
         'user' => $user,
     ]);
     }
+    public function updateprofile(Request $request){
+        return redirect()->back()->with('success', 'Cập nhật thành công');
+    }
 }

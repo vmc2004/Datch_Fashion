@@ -19,6 +19,7 @@ use App\Http\Controllers\OrderController;
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SizeController;
 
 
@@ -31,7 +32,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     Route::get('/topProduct', [HomeController::class, 'showTopProduct'])->name('admin.topProduct');
     Route::get('/orderStatus', [HomeController::class, 'showOderStatus'])->name('admin.orderStatus');
     Route::get('/inventory', [HomeController::class, 'showInventory'])->name('admin.inventory');
-    Route::get('/users/profile', [UserController::class, 'profile']);
+    Route::get('/profile', [UserController::class, 'profile']);
 
     Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
     Route::post('/filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');
@@ -198,6 +199,18 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
         Route::get('/search', [CouponController::class, 'search_coupon'])->name('coupons.search');
     });
             // Kết thúc mã giảm giá
+
+    Route::prefix('roles')->group(function() {
+        Route::get('/', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
+        Route::post('/create', [RoleController::class, 'store'])->name('roles.store');
+        Route::get('/show/{role}', [RoleController::class, 'show'])->name('roles.show');
+        Route::get('/edit/{role}', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::put('/edit/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::delete('/destroy/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+    });
+    
 });
 
     
