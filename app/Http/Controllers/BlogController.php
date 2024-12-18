@@ -73,7 +73,6 @@ class BlogController extends Controller
         $data = $request->except('image');
         $data['user_id'] = Auth::user()->id;
         if ($request->hasFile('image')) {
-            // Lưu hình ảnh vào thư mục uploads/blogs bằng phương thức move
             $file = $request->file('image');
             $fileName = time() . '_' . $file->getClientOriginalName(); // Tạo tên file duy nhất
             $file->move(public_path('uploads/blogs'), $fileName);
@@ -114,15 +113,14 @@ class BlogController extends Controller
         $data['user_id'] = Auth::user()->id;
 
         if ($request->hasFile('image')) {
-            // Tạo tên file duy nhất cho ảnh mới
+
             $file = $request->file('image');
             $fileName = time() . '_' . $file->getClientOriginalName();
     
-            // Di chuyển ảnh mới vào thư mục public/uploads/blogs
             $file->move(public_path('uploads/blogs'), $fileName);
             $data['image'] = 'uploads/blogs/' . $fileName;
     
-            // Xóa ảnh cũ nếu tồn tại
+
             if ($blog->image && file_exists(public_path($blog->image))) {
                 unlink(public_path($blog->image));
             }
