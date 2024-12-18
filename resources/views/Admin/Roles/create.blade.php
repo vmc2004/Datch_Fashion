@@ -48,7 +48,7 @@
        
         <div class="mb-3">
             <label for="display_name" class="form-label">Tên hiển thị</label>
-            <input type="text" name="display_name" value="{{ old('display_name') ?? $role->display_name }}" id="display_name" class="form-control">
+            <input type="text" name="display_name" value="{{ old('display_name') }}" id="display_name" class="form-control">
             @error('display_name')
             <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -59,8 +59,9 @@
         <div class="mb-3">
             <label for="group" class="form-label">Nhóm</label>
             <select name="group" class="form-control">
-                <option value="system" {{ old('group') == 'system' ? 'selected' : '' }}>System</option>
-                <option value="user" {{ old('group') == 'user' ? 'selected' : '' }}>User</option>
+                <option value="system" {{ old('group') == 'system' ? 'selected' : '' }}>Hệ thống</option>
+                <option value="user" {{ old('group') == 'user' ? 'selected' : '' }}>Người dùng</option>
+                <option value="admin" {{ old('group') == 'admin' ? 'selected' : '' }}>Quản trị</option>
 
             </select>
 

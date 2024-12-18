@@ -36,7 +36,6 @@
         <span class="py-2">
             Tin nhắn
         </span>
-
     </a>  --}}
     
     <a href="{{ route('notifications.index') }}" class="flex my-1.5 text-black hover:text-blue-700 items-center sidebar-nav">

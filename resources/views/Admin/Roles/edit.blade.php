@@ -60,8 +60,9 @@
         <div class="mb-3">
             <label for="group" class="form-label">Nhóm</label>
             <select name="group" class="form-control">
-                <option value="system" {{ $role->group == 'system' ? 'selected' : '' }}>System</option>
-                <option value="user" {{ $role->group == 'user' ? 'selected' : '' }}>User</option>
+                <option value="system" {{ $role->group == 'system' ? 'selected' : '' }}>Hệ thống</option>
+                <option value="user" {{ $role->group == 'user' ? 'selected' : '' }}>Người dùng</option>
+                <option value="admin" {{ $role->group == 'admin' ? 'selected' : '' }}>Quản trị</option>
             </select>
 
             @error('group')
