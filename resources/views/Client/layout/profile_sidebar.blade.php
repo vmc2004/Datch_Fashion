@@ -28,14 +28,6 @@
             Đơn mua
         </span>
     </a>
-   
-    <a class="flex my-1.5 text-black hover:text-blue-700 items-center sidebar-nav" href="/account/points">
-        <i class="fa-solid fa-hand-holding-medical mr-2.5 ml-4"></i>
-        <span class="py-2">
-           Tích điểm
-        </span>
-    </a>
-
      {{-- <a class="flex my-1.5 text-black hover:text-blue-700 items-center sidebar-nav" href="/account/chat">
 
         <span class="mr-2.5 ml-4">

@@ -32,7 +32,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     Route::get('/topProduct', [HomeController::class, 'showTopProduct'])->name('admin.topProduct');
     Route::get('/orderStatus', [HomeController::class, 'showOderStatus'])->name('admin.orderStatus');
     Route::get('/inventory', [HomeController::class, 'showInventory'])->name('admin.inventory');
-    Route::get('/users/profile', [UserController::class, 'profile']);
+    Route::get('/profile', [UserController::class, 'profile']);
 
     Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
     Route::post('/filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');

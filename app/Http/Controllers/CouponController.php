@@ -68,6 +68,9 @@ class CouponController extends Controller
     }
     public function update(Request $request, Coupon $coupon)
     {
+        if ($coupon->used > 0) {
+            return redirect()->back()->with('error', 'Không thể cập nhật mã giảm giá đã được sử dụng.');
+        }
         {
             $data = $request->validate([
                 'code' => 'required|unique:coupons,code,' . $coupon->id . '|max:10',
