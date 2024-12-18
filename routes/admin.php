@@ -33,6 +33,7 @@ Route::prefix('admin')->middleware('checkAdmin')->group(function () {
     Route::get('/orderStatus', [HomeController::class, 'showOderStatus'])->name('admin.orderStatus');
     Route::get('/inventory', [HomeController::class, 'showInventory'])->name('admin.inventory');
     Route::get('/profile', [UserController::class, 'profile']);
+    Route::post('/profile', [UserController::class, 'updateProfile']);
 
     Route::post('/filter-by-date', [HomeController::class, 'filter'])->name('admin.filter');
     Route::post('/filter-by-topProduct', [HomeController::class, 'topSellingProducts'])->name('admin.topproduct');

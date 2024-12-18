@@ -102,8 +102,9 @@
         <div class="card z-index-2 h-100">
             <div class="card-header pb-0 pt-3 bg-transparent">
                 <div class="container">
-                    <form action="/update-profile" method="POST" enctype="multipart/form-data">
+                    <form action="/admin/profile" method="POST" enctype="multipart/form-data">
                         @csrf
+                       
                     <div class="row">
                      <div class="col-md-3">
                       <div class="card">
@@ -158,6 +159,9 @@
                             Tên khách hàng
                            </label>
                            <input class="form-control" id="fullname" name="fullname" type="text" value="{{$user->fullname}}"/>
+                           @error('fullname')
+                           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                       @enderror
                           </div>
                           <div class="col-md-6">
                            <label class="form-label" for="email">
@@ -172,6 +176,9 @@
                             Số điện thoại
                            </label>
                            <input class="form-control"  name="phone" type="text" value="{{$user->phone}}"/>
+                           @error('phonephone')
+                           <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                       @enderror
                           </div>
                           <div class="col-md-6">
                            <label class="form-label" for="matKhau">
