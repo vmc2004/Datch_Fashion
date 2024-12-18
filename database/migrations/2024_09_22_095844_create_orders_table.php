@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
@@ -29,8 +30,8 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
-        
     }
+    
 
     /**
      * Reverse the migrations.

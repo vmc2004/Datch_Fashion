@@ -22,6 +22,7 @@ class RoleController extends Controller
     public function create()
     {
         $permissions = Permission::all()->groupBy('group');
+        $role = null;
         return view('Admin.roles.create', compact('permissions'));
     }
 
