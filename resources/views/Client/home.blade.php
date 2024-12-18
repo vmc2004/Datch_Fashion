@@ -136,6 +136,17 @@
                 </div>
             </div>
         </div>
+        
+        <div class="max-w-screen-xl mx-auto py-8">
+            <h2 class="text-2xl font-semibold mb-4">DATCHLIFE</h2>
+            <div class="relative">
+                <div class="relative">
+                    <div class="flex overflow-hidden" id="slider">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
         <script>
             AOS.init({
                 duration: 1200, // Thời gian chạy hiệu ứng (tính bằng ms)
