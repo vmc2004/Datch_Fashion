@@ -54,8 +54,6 @@
         <span class="py-2">
             Thông báo
         </span>
-    
-        <!-- Hiển thị số lượng thông báo chưa đọc -->
         @if (isset($unreadNotificationsCount) && $unreadNotificationsCount > 0)
             <span class="ml-2 text-xs font-semibold text-red-500 bg-red-200 rounded-full px-2 py-1">
                 {{ $unreadNotificationsCount }}
