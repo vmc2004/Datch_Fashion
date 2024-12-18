@@ -78,11 +78,6 @@
                         <div class="border border-gray-300 rounded-lg shadow-lg">
                             <form action="{{ route('comments.sendRate', $variant->product->id) }}" method="POST" class="comment-form w-100 my-3">
                                 @csrf
-                                @if (session()->has('message'))
-                                    <div class="alert alert-success text-white fw-bold slide-in" id="success-message">
-                                        {{ session()->get('message') }}
-                                    </div>
-                                @endif
                                 <div class="star-rating">
                                     <input type="radio" id="star5" name="rating" value="5" />
                                     <label for="star5">&#9733;</label>
