@@ -20,7 +20,7 @@
         </div>
     @endif
 
-        <form action="{{ route('verifyOtp') }}" method="POST">
+        <form action="{{ route('Client.verifyOtp') }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>

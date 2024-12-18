@@ -33,6 +33,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+ 
   <style>
     .border-blue-500 {
       border-color: #3B82F6;
@@ -336,29 +337,8 @@
               </nav>
             </div>
             </nav>
-            <div class="chat-widget">
-              <div class="chat-icon" id="chatIcon">
-                  <img src="{{ asset('users->image') }}" alt="Chat">
-                  <div class="notification-badge" id="notificationBadge" style="display: none;">0</div>
-              </div>
-              <!-- Cửa sổ chat -->
-              <div class="chat-popup" id="chatPopup" style="display: none;">
-                  <div class="chat-header">
-                      <h3>Xin chào 👋</h3>
-                      <p>Hãy hỏi bất cứ điều gì hoặc chia sẻ phản hồi của bạn.</p>
-                  </div>
-                  <div class="chat-body">
-                      <h4>Danh sách hội thoại</h4>
-                      <div class="chat-conversation">
-                          <p><strong>DATCH FASHION</strong></p>
-                          <p>Xin chào 👋, Datch Fashion có thể giúp.</p>
-                      </div>
-                  </div>
-                  <div class="chat-footer">
-                      <button id="newConversation">Hội thoại mới</button>
-                  </div>
-              </div>
-          </div>
+          
+         
   <!-- Loading overlay -->
   <div id="loading-overlay">
     <img src="{{asset('assets/admin/img/logDatch.png')}}" alt="" width="300px" id="loading-logo">
@@ -376,44 +356,7 @@
       document.getElementById("content").style.display = "block";
     });
   </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const chatIcon = document.getElementById('chatIcon');
-        const chatPopup = document.getElementById('chatPopup');
-
-        // Hiển thị/ẩn popup chat khi nhấp vào biểu tượng
-        chatIcon.addEventListener('click', function () {
-            if (chatPopup.style.display === 'none') {
-                chatPopup.style.display = 'block';
-            } else {
-                chatPopup.style.display = 'none';
-            }
-        });
-
-        // Tải số lượng tin nhắn chưa đọc
-        fetch('/account/chat/unread-count')
-            .then(response => response.json())
-            .then(data => {
-                const badge = document.getElementById('notificationBadge');
-                if (data.unread_count > 0) {
-                    badge.style.display = 'flex';
-                    badge.innerText = data.unread_count;
-                }
-            });
-    });
-    document.getElementById('newConversation').addEventListener('click', function () {
-    window.location.href = '/account/chat'; // Chuyển đến giao diện chat đầy đủ
-});
-document.getElementById('chatIcon').addEventListener('click', function() {
-    var chatBubble = document.getElementById('chatBubble');
-    if (chatBubble.style.display === 'block') {
-        chatBubble.style.display = 'none';
-    } else {
-        chatBubble.style.display = 'block';
-    }
-});
-
-</script>
+  
 
 
         </div>
