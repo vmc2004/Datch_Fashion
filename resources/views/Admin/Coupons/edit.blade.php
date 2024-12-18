@@ -69,7 +69,7 @@
                 <input type="date" name="end_date" class="form-control" id=""  value="{{$coupon->end_date}}">
             </div>
 
-            <button type="submit" class="btn btn-primary">Thêm</button>
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
             <a href="{{route('coupons.index')}}" class="btn btn-success">Quay lại</a>
         </form>
     </div>
