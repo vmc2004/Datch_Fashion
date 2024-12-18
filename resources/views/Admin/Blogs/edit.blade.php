@@ -34,9 +34,7 @@
 
                     <div class="container">
                         <h2>Cập Nhật Bài Viết</h2>
-                        <a href="{{ route('blogs.index') }}" class="btn btn-secondary mb-2">
-                            <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang danh sách
-                        </a>
+                       
                         <form method="POST" action="{{ route('blogs.update', $blog) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -95,7 +93,10 @@
                                     </option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            <a href="{{ route('blogs.index') }}" class="btn btn-primary ">
+                                <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang danh sách
+                            </a>
+                            <button type="submit" class="btn btn-success">Cập nhật</button>
                         </form>
                     </div>
                 </div>

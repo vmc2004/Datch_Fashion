@@ -97,8 +97,9 @@
                                                  style="background-color: {{ $variant->color->color_code }}">
                                             </div>
                                         @endforeach
+                                     
                                     </div>
-                                    <p class="mt-2 text-gray-700">{{ $view->name }}</p>
+                                    <p class="mt-2 text-gray-700">{{ $view->name }}</p>    <i class="fa-regular fa-eye"></i> {{$view->views}}
                                     @if ($view->ProductVariants->first()?->sale_price != 0)
                                         <p class="text-lg font-semibold">
                                             {{ number_format($view->ProductVariants->first()?->sale_price ?? 0) }} đ
@@ -138,15 +139,33 @@
         </div>
         
         <div class="max-w-screen-xl mx-auto py-8">
-            <h2 class="text-2xl font-semibold mb-4">DATCHLIFE</h2>
-            <div class="relative">
-                <div class="relative">
-                    <div class="flex overflow-hidden" id="slider">
-                        
-                    </div>
+            <div class="flex justify-between items-center mb-4">
+             <h1 class="text-2xl font-bold">
+              DATCHLIFE
+             </h1>
+             <a class="text-red-500" href="/bai-viet">
+              Xem thêm
+              <i class="fas fa-chevron-right">
+              </i>
+             </a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            @foreach ($blogs as $blog)
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+               <a href="/bai-viet/{{ $blog->slug }}">
+                <img alt="Two people wearing pink hoodies" class="w-full h-48 object-cover" height="400" src="{{asset($blog->image)}}" width="600"/>
+                <div class="p-4">
+                 <h2 class="text-lg font-semibold">
+                 {{$blog->title}}
+                 </h2>
                 </div>
+               </a>
+            </div>
+            @endforeach
             </div>
         </div>
+    </div>
+    
         <script>
             AOS.init({
                 duration: 1200, // Thời gian chạy hiệu ứng (tính bằng ms)

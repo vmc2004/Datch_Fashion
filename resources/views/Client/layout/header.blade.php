@@ -246,7 +246,6 @@
                         </div>
                     </div>
 
-                    <a href="/sale" class="text-gray-800 font-semibold">Sale</a>
                     <a href="/bai-viet" class="text-gray-800 font-semibold">Bài viết</a>
                     <a href="/lien-he" class="text-gray-800 font-semibold">Liên hệ</a>
                 </div>

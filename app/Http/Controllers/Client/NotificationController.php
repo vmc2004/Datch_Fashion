@@ -28,7 +28,4 @@ class NotificationController extends Controller
         // Truyền thông báo và số lượng chưa đọc vào view
         return view('Client.notifications.index', compact('notifications', 'unreadNotificationsCount'));
     }
-
-
-
 }

@@ -58,17 +58,17 @@
                                         
                                         {{ $color->color_code }}
                                     </td>
-                                    {{-- <td class="d-flex"> 
+                                    <td class="d-flex"> 
                                         <a href="{{ route('colors.edit', $color) }}" class="btn btn-sm btn-info me-2"><i
                                                 class="fa-solid fa-pen-to-square"></i></a>
-                                        <form action="{{ route('colors.destroy', $color) }}" method="POST">
+                                        {{-- <form action="{{ route('colors.destroy', $color) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger "
                                                 onclick="return confirm('Bạn có chắc là muốn xóa hay không?')"><i
                                                     class="fa-solid fa-trash"></i></button>
-                                        </form>
-                                    </td> --}}
+                                        </form> --}}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

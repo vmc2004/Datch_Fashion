@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
+use App\Models\Blog;
 use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -18,13 +19,14 @@ class HomeController extends Controller
 
     public function index()
     {
+        $blogs = Blog::where('status', 1)->paginate(4);
         $banners = Banner::where('is_active', 1)->where('location', 1)->get();
         $brands = Brand::query()->limit(5)->get();
         $newPro = Product::query()->where('status', 1)->latest('id')->limit(10)->get();
         $Proview = Product::query()->where('status', 1)->orderBy('views', 'desc')->limit(10)->get();
         $category = Category::all();
 
-        return view('Client.home', compact('brands', 'category', 'newPro', 'Proview', 'banners'));
+        return view('Client.home', compact('brands', 'category', 'newPro', 'Proview', 'banners', 'blogs'));
     }
     public function feedback()
     {

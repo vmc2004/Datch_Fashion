@@ -203,6 +203,9 @@
       </div>
       <!-- Hết bên trái -->
       <!-- Bên phải -->
+      {{-- @if ($request->get('query'))
+        Kết quả tìm kiếm cho {{$request->get('query')}}
+      @endif --}}
             </div>
             <div class="flex-1">
                <div>
