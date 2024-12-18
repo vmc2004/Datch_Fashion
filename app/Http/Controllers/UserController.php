@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -37,7 +38,10 @@ class UserController extends Controller
         // dd($request->all());
         $user = $request->except('avatar');
         if ($request->hasFile('avatar')) {
-            $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
+            $avatarFile = $request->file('avatar');
+            $avatarName = time() . '-' . $avatarFile->getClientOriginalName(); 
+            $avatarFile->move(public_path('uploads/avatars'), $avatarName); 
+            $user['avatar'] = 'avatars/' . $avatarName; 
         }
         User::query()->create($user);
         return redirect()->route('users.index')->with('message','Thêm mới người dùng thành công');
@@ -66,13 +70,18 @@ class UserController extends Controller
     {
         $data = $request->except('avatar');
         if ($request->hasFile('avatar')) {
-            $oldAvatar = $user->avatar;
-            if ($oldAvatar && Storage::exists($oldAvatar)) {
-                Storage::delete($oldAvatar);
+            if (!empty($user->avatar)) {
+                $oldAvatarPath = public_path('uploads/avatars/' . $user->avatar);
+                if (File::exists($oldAvatarPath)) {
+                    File::chmod($oldAvatarPath, 0775);
+                    File::delete($oldAvatarPath); 
+                }
             }
-            $user['avatar'] = Storage::put('uploads/users',$request->file('avatar'));
+            $avatarFile = $request->file('avatar');
+            $avatarName = time() . '-' . $avatarFile->getClientOriginalName(); 
+            $avatarFile->move(public_path('uploads/avatars'), $avatarName); 
+            $data['avatar'] = 'avatars/' . $avatarName; 
         }
-
         $user->update($data);
         return redirect()->route('users.index')->with('message','Cập nhật người dùng thành công');
     }

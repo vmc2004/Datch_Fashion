@@ -61,10 +61,6 @@
             @if ($user->email == Auth::user()->email)
                 <div class=""></div>
             @else
-            <div class="mb-3">
-                <label for="" class="form-label">password</label>
-                <input type="text" name="password" value="{{$user->password}}" class="form-control" id="">
-            </div>
 
             <div class="form-group">
                 <label for="my-select">role</label>

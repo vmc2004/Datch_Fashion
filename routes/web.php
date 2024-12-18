@@ -120,7 +120,7 @@ Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client
 Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
 
 //USER
-
+    
     Route::get('/Client/account/login', [ClientUserController::class, 'login'])->name('Client.account.login');
     Route::post('/Client/account/showLoginForm', [ClientUserController::class, 'showLoginForm'])->name('showLoginForm');
     Route::get('/Client/account/register', [ClientUserController::class, 'register'])->name('Client.account.register');
@@ -136,7 +136,7 @@ Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
     Route::post('/Client/account/verify-otp', [ClientUserController::class, 'verifyOtp'])->name('Client.account.verifyOtp');
 
 
-    Route::prefix('member')->middleware('checkUser')->group(function () {
+    Route::prefix('member')->group(function () {
     Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
     
     });

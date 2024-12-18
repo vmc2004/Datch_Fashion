@@ -104,13 +104,6 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <img src="{{ asset('assets/client/images/no-avatar.svg') }}" alt="Avatar Admin"
-                                            class="rounded-circle me-2" style="width: 150px; height: 150px;">
-                                    </div>
-
-                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="card">
@@ -120,6 +113,26 @@
                                     <div class="card-body">
                                         <form method="POST" enctype="multipart/form-data" action="{{ route('users.store') }}">
                                             @csrf
+                                            <section>
+                                            <div role="presentation" tabindex="0" class="outline-none">
+                                                <input id="avatarInput" name="avatar" accept="image/*" multiple="" type="file" tabindex="-1" style="display: none;">
+                                                <div class="inline-block ml-auto relative group">
+                                                    <span
+                                                        class="bottom-0 rounded-b-3xl h-14 absolute flex b-0 l-0 w-full items-center justify-center cursor-pointer"
+                                                        style="background: hsla(0, 0%, 77%, .8); border-radius: 0 0 60px 60px;"
+                                                        onclick="document.getElementById('avatarInput').click();">
+                                                        <svg aria-hidden="true" focusable="false" data-prefix="fal"
+                                                            data-icon="camera" class="overflow-visible w-8 text-3xl"
+                                                            role="img" xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 512 512">
+                                                            <path fill="currentColor"
+                                                                d="M324.3 64c3.3 0 6.3 2.1 7.5 5.2l22.1 58.8H464c8.8 0 16 7.2 16 16v288c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16h110.2l20.1-53.6c2.3-6.2 8.3-10.4 15-10.4h131m0-32h-131c-20 0-37.9 12.4-44.9 31.1L136 96H48c-26.5 0-48 21.5-48 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V144c0-26.5-21.5-48-48-48h-88l-14.3-38c-5.8-15.7-20.7-26-37.4-26zM256 408c-66.2 0-120-53.8-120-120s53.8-120 120-120 120 53.8 120 120-53.8 120-120 120zm0-208c-48.5 0-88 39.5-88 88s39.5 88 88 88 88-39.5 88-88-39.5-88-88-88z">
+                                                            </path>
+                                                        </svg>
+                                                    </span>
+                                                </div>
+                                            </div>
+
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <label class="form-label" for="tenKhachHang">
@@ -257,6 +270,17 @@
         document.addEventListener('click', function(e) {
             if (!suggestionsContainer.contains(e.target) && e.target !== addressInput) {
                 suggestionsContainer.style.display = 'none';
+            }
+        });
+
+        document.getElementById('avatarInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('avatarPreview').src = e.target.result; // Xem trước ảnh
+                };
+                reader.readAsDataURL(file);
             }
         });
     </script>
