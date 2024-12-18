@@ -14,7 +14,7 @@
 
 
 
-        <h2 class="text-2xl font-semibold text-left">Danh mục bạn yêu thích</h2>
+        <h2 class="text-2xl font-semibold text-left">Thương hiệu</h2>
         <div class="relative">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
 
@@ -133,6 +133,17 @@
                 </button>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-5 gap-6" id="wishlist-container">
                     <!-- Sản phẩm yêu thích sẽ được thêm vào đây -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-screen-xl mx-auto py-8">
+            <h2 class="text-2xl font-semibold mb-4">DATCHLIFE</h2>
+            <div class="relative">
+                <div class="relative">
+                    <div class="flex overflow-hidden" id="slider">
+                        
+                    </div>
                 </div>
             </div>
         </div>

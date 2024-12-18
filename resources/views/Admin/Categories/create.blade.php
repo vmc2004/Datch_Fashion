@@ -11,9 +11,7 @@
                         <h2 class="text-center">Thêm mới danh mục</h2>
                         <br>
                         <br>
-                        <a href="{{ route('categories.index') }}" class="btn btn-primary mb-2">
-                            <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang danh sách
-                        </a>
+                        
 
                         @if ($errors->any())
                             <div class="alert alert-danger ">
@@ -65,7 +63,9 @@
                                     <option value="0">Ẩn</option>
                                 </select>
                             </div> --}}
-
+                            <a href="{{ route('categories.index') }}" class="btn btn-primary ">
+                                <i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang danh sách
+                            </a>
                             <button type="submit" class="btn btn-success">Thêm mới</button>
                         </form>
                     </div>

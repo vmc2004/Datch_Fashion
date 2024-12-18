@@ -19,7 +19,6 @@ use App\Http\Controllers\Client\BlogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\GoogleController;
 use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\ChatController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
@@ -112,10 +111,8 @@ Route::get('/bai-viet/{slug}', [BlogController::class, 'show'])->name('client.bl
 
 Route::get('/lien-he', [ContactController::class, 'contact'])->name('Client.contact');
 Route::post('/lien-he', [ContactController::class, 'updateContact'])->name('Client.updateContact');
-Route::get('/account/chat', [ChatController::class, 'index'])->name('Client.chat.index');
-Route::get('/account/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages']);
-Route::post('/account/chat/sendMessage', [ChatController::class, 'sendMessage']);
-Route::get('/account/chat/unread-count', [ChatController::class, 'getUnreadCount']);
+
+
 Route::get('/tai-khoan', [ClientUserController::class, 'profile'])->name('Client.account.profile');
 Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
 
@@ -131,15 +128,15 @@ Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
     Route::post('/Client/account/reset-password', [ClientUserController::class, 'resetPassword'])->name('Client.account.password.update');
     // Route cho form nhập OTP
     Route::get('Client/otp/confirm', [ClientUserController::class, 'showOtpConfirmationForm'])->name('Client.otp.confirm');
-
-// Route để xử lý xác thực OTP
-    Route::post('/Client/account/verify-otp', [ClientUserController::class, 'verifyOtp'])->name('Client.account.verifyOtp');
-
-
-    Route::prefix('member')->middleware('checkUser')->group(function () {
-    Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
+    Route::get('Client/verify-otp', function () {
+        return view('Client.verifyOtp');
+    })->name('Client.verifyOtpForm');  
+    Route::post('Client/verify-otp', [ClientUserController::class, 'verifyOtp'])->name('Client.verifyOtp');
     
-    });
+
+
+    
+    Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
     Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
     Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
     Route::get('/Client/account/logout', [ClientUserController::class, 'logout'])->name('Client.account.logout');

@@ -12,7 +12,7 @@ class ColorController extends Controller
      */
     public function index()
     {
-        $colors = Color::query()->latest('id')->paginate(5);
+        $colors = Color::query()->latest('id')->paginate(8);
         return view('Admin.colors.index',compact('colors'));
     }
 

@@ -244,36 +244,34 @@
 
                      <!-- Sản phẩm -->
                      <div class="mt-6 grid md:grid-cols-3 grid-cols-2 md:gap-10 gap-4">
-                     @foreach($products as $new)
-                     <div class="h-full rounded-lg relative shadow-xl">
-                        <div class="absolute -left-[3.2px] top-2 z-10">
-                            <div
-                                class="size-0 border-2 border-[#098E91] border-l-transparent border-b-transparent">
+                        @foreach($products as $new)
+                        <div class="h-full rounded-lg relative shadow-xl">
+                            <div class="absolute -left-[3.2px] top-2 z-10">
+                                <div class="size-0 border-2 border-[#098E91] border-l-transparent border-b-transparent"></div>
+                            </div>
+                            <div class="h-full rounded-lg overflow-hidden flex flex-col">
+                                <div class="overflow-hidden h-72">
+                                    <a href="/product/{{$new->slug}}">
+                                        <img class="hover:scale-110 duration-100" src="{{ asset($new->image) }}" alt="{{$new->slug}}">
+                                    </a>
+                                </div>
+                                <div class="flex justify-center mt-2">
+                                    @foreach ($new->ProductVariants->unique('color_id') as $variant)
+                                        <div class="w-4 mr-1 h-4 rounded-full border border-gray-300"
+                                             style="background-color: {{ $variant->color->color_code }}">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <p class="mt-2 text-gray-700 text-center">
+                                    {{ $new->name }}
+                                </p>
+                                <p class="text-gray-900 font-bold text-center">
+                                    {{ number_format($new->price) }} đ
+                                </p>
                             </div>
                         </div>
-                        <div class="h-full rounded-lg overflow-hidden flex flex-col">
-                            <div class="overflow-hidden h-72">
-                                <a href="/product/{{$new->slug}}">
-                                    <img class="hover:scale-110 duration-100"
-                                        src="{{ asset($new->image) }}" alt="{{$new->slug}}" >
-                                </a>
-                            </div>
-                            <div class="bg-white p-2 flex flex-col space-y-2">
-                                <div class="">
-                                    <div class="cursor-pointer">
-                                        <a class="text-slate-800" href=""> {{$new->name}} </a>
-                                    </div>
-                                </div>
-                                <div class="space-y-2">
-                                    <p class="font-semibold text-slate-800">
-                                        {{ number_format($new->ProductVariants->first()?->price ?? 0) }} đ
-                                    </p>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     @endforeach
+                    @endforeach
+                    
                      
                      </div>
                      <div class="py-4">

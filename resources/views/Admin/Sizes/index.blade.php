@@ -61,16 +61,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $sizes->links() }}
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <nav>
-                            <ul class="pagination">
-
-                            </ul>
-                        </nav>
-
-                    </div>
+                    
 
                 @endsection
 

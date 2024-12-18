@@ -11,8 +11,8 @@ class ShowLoginFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Cho phép tất cả người dùng thực hiện yêu cầu này.
-        // Nếu cần kiểm tra quyền, thêm logic tại đây.
+       
+    
         return true;
     }
 

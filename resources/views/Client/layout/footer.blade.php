@@ -8,25 +8,10 @@
                     Hỗ trợ
                 </div>
                 <div class="mb-2 block text-slate-700">
-                    <a href="">Hướng dẫn bán hàng</a>
-                </div>
-                <div class="mb-2 block text-slate-700">
-                    <a href="">Trở thành người bán</a>
-                </div>
-                <div class="mb-2 block text-slate-700">
-                    <a href="">Các câu hỏi thường gặp</a>
-                </div>
-                <div class="mb-2 block text-slate-700">
                     <a href="">Chính sách bảo vệ người mua</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
                     <a href="">Phản hồi</a>
-                </div>
-                <div class="mb-2 block text-slate-700">
-                    <a href="">Quy chế hoạt động</a>
-                </div>
-                <div class="mb-2 block text-slate-700">
-                    <a href="">Chính sách giải quyết tranh chấp</a>
                 </div>
             </div>
 
@@ -35,16 +20,13 @@
                     Tài khoản
                 </div>
                 <div class="mb-2 block text-slate-700">
-                    <a href="">Đăng ký</a>
+                    <a href="{{route('Client.account.register')}}">Đăng ký</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
                     <a href="{{route('Client.account.login')}}">Đăng nhập</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
                     <a href="">Yêu thích</a>
-                </div>
-                <div class="mb-2 block text-slate-700">
-                    <a href="">Tin nhắn</a>
                 </div>
             </div>
 
@@ -56,10 +38,10 @@
                     <a href="">Giới thiệu về Dacth Fashion</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
-                    <a href="">Liên hệ với chúng tôi</a>
+                    <a href="/lien-he">Liên hệ với chúng tôi</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
-                    <a href="">Blog</a>
+                    <a href="/bai-viet">Blog</a>
                 </div>
             </div>
 
@@ -72,9 +54,6 @@
                 </div>
                 <div class="mb-2 block text-slate-700">
                     <a href="">Điều khoản dịch vụ</a>
-                </div>
-                <div class="mb-2 block text-slate-700">
-                    <a href="">Những món đồ bị cấm</a>
                 </div>
                 <div class="mb-2 block text-slate-700">
                     <a href="">Hành vi bị cấm</a>

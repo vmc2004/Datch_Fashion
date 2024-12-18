@@ -39,6 +39,7 @@
 
                                 <th>STT</th>
                                 <th>Tên màu</th>
+                                <th>Màu</th>
                                 <th>Mã màu</th>
                                 <th></th>
                             </tr>
@@ -49,7 +50,12 @@
                                     <td>{{ $color->id }}</td>
                                     <td>{{ $color->name }}</td>
                                     <td>
-                                        <div style="background-color: {{ $color->color_code }}"></div>
+                                        <label for="color-{{ $color->id }}" class="cursor-pointer d-inline-block rounded-circle border border-secondary" style="width: 2rem; height: 2rem; background-color: {{ $color->color_code }};" title="{{ $color->name }}">
+                                            <span class="sr-only">Chọn màu {{ $color->name }}</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        
                                         {{ $color->color_code }}
                                     </td>
                                     {{-- <td class="d-flex"> 

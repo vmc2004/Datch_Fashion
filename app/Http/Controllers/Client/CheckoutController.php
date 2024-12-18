@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Point;
 use App\Models\ProductVariant;
 use App\Notifications\OrderPlaced;
 use Illuminate\Http\Request;
@@ -227,6 +228,7 @@ class CheckoutController extends Controller
             ->first();
     
         if ($order) {
+
             foreach ($order->orderDetails as $detail) {
                 $variant = $detail->productVariant; 
                 if ($variant) {
@@ -272,6 +274,20 @@ class CheckoutController extends Controller
                 $cart->items()->delete(); 
                 $cart->delete(); 
             }
+
+            $pointsEarned = floor($order->total_price / 10000); 
+
+            // Lấy hoặc tạo bản ghi Point cho người dùng
+            $point = Point::firstOrCreate(
+                ['user_id' => Auth::id()], // Điều kiện để tìm kiếm
+                ['points' => 0] // Giá trị mặc định nếu không tìm thấy
+            );
+            
+            // Cập nhật số điểm
+            $point->points += $pointsEarned;
+            $point->save();
+            
+
             Mail::to($order->email)->send(new OrderSuccessMail($order));
             return view('Client.checkout.done', compact('order'));
         }
@@ -279,65 +295,63 @@ class CheckoutController extends Controller
     }
  
     public function apply(Request $request)
-{
-    $request->validate([
-        'code' => 'required|string|max:10',
-        'subtotal' => 'required|numeric|min:0',
-    ]);
+    {
+        $request->validate([
+            'code' => 'required|string|max:10',
+            'subtotal' => 'required|numeric|min:0',
+        ]);
 
-    $subtotal = $request->subtotal;
-    $code = $request->code;
+        $subtotal = $request->subtotal;
+        $code = $request->code;
+        $coupon = Coupon::where('code', $code)
+            ->where('is_active', 1)
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->first();
 
-    // Tìm mã giảm giá
-    $coupon = Coupon::where('code', $code)
-        ->where('is_active', 1)
-        ->first();
-
-    if (!$coupon) {
-        return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ!');
-    }
-
-    $userId = Auth::id();
-
-    // Kiểm tra mã giảm giá đã sử dụng
-    $alreadyUsed = DB::table('coupon_user')
-        ->where('user_id', $userId)
-        ->where('coupon_id', $coupon->id)
-        ->exists();
-    if ($alreadyUsed) {
-        return redirect()->back()->with('error', 'Bạn đã sử dụng mã giảm giá này rồi!');
-    }
-
-    // Tính toán giảm giá
-    if ($coupon->discount_type == 'fixed') {
-        $discountAmount = min($coupon->discount, $subtotal); // Không cho giảm nhiều hơn tổng tiền
-        $subtotals = $subtotal - $discountAmount;
-    } else {
-        $discountAmount = $subtotal * ($coupon->discount / 100);
-
-        // Nếu giảm giá vượt quá giá trị giảm tối đa (max_price)
-        if ($discountAmount > $coupon->max_price) {
-            $discountAmount = $coupon->max_price;
+        if (!$coupon) {
+            return redirect()->back()->with('error', 'Mã giảm giá không hợp lệ hoặc đã hết hạn!');
         }
 
-        $subtotals = $subtotal - $discountAmount;
+        $userId = Auth::id();
+        $alreadyUsed = DB::table('coupon_user')
+            ->where('user_id', $userId)
+            ->where('coupon_id', $coupon->id)
+            ->exists();
+
+        if ($alreadyUsed) {
+            return redirect()->back()->with('error', 'Bạn đã sử dụng mã giảm giá này rồi!');
+        }
+
+        $coupon->quantity -= 1;
+        $coupon->used += 1; 
+        $coupon->save(); 
+        if ($coupon->discount_type == 'fixed') {
+            $discountAmount = min($coupon->discount, $subtotal);
+            $subtotals = $subtotal - $discountAmount;
+        } else {
+            $discountAmount = $subtotal * ($coupon->discount / 100);
+            if ($discountAmount > $coupon->max_price) {
+                $discountAmount = $coupon->max_price;
+            }
+
+            $subtotals = $subtotal - $discountAmount;
+        }
+
+        session([
+            'subtotals' => $subtotals,
+            'discount' => $discountAmount,
+        ]);
+
+        DB::table('coupon_user')->insert([
+            'user_id' => $userId,
+            'coupon_id' => $coupon->id,
+            'used_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
     }
 
-    // Cập nhật giá trị vào session
-    session([
-        'subtotals' => $subtotals,
-        'discount' => $discountAmount,
-    ]);
-
-    // Lưu vào bảng coupon_user để đánh dấu mã đã được sử dụng
-    DB::table('coupon_user')->insert([
-        'user_id' => $userId,
-        'coupon_id' => $coupon->id,
-        'used_at' => now(),
-    ]);
-
-    return redirect()->back()->with('success', 'Áp dụng mã giảm giá thành công!');
-}
 
 
     public function clearSession()

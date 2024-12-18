@@ -47,22 +47,31 @@ class ProductVariantController extends Controller
             'sale_price' => 'nullable|numeric|min:0',
             'image' => 'nullable|image|max:2048',
         ]);
-
+    
+        // Kiểm tra trùng lặp trước khi lưu
         $exists = ProductVariant::where('product_id', $request->product_id)
             ->where('color_id', $request->color_id)
             ->where('size_id', $request->size_id)
             ->exists();
-
+    
         if ($exists) {
-            return back()->withErrors(['duplicate' => 'Biến thể sản phẩm này đã tồn tại!'])->withInput();
+            return back()->with(['error' => 'Biến thể sản phẩm này đã tồn tại!'])->withInput();
         }
-
-        // Lưu biến thể nếu không trùng
-        ProductVariant::create($request->all());
-
+    
+        $productVariant = $request->except('image');
+        if ($request->hasFile('image')) {
+            // Lưu ảnh vào thư mục public/uploads/variants
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/variants'), $imageName);
+            $productVariant['image'] = 'uploads/variants/' . $imageName;
+        }
+        ProductVariant::query()->create($productVariant); 
         return redirect()->route('productVariants.index', $request->product_id)
             ->with('success', 'Thêm biến thể sản phẩm thành công!');
     }
+    
+    
 
     /**
      * Display the specified resource.
@@ -77,34 +86,51 @@ class ProductVariantController extends Controller
      */
     public function edit($id)
     {
-        $productVariant = ProductVariant::query()->find($id);
-        $colors = Color::query()->get();
-        $sizes = Size::query()->get();
-        return view('Admin.ProductVariants.edit',compact('productVariant','colors','sizes'));
+        $productVariant = ProductVariant::find($id);
+        $colors = Color::all();
+        $sizes = Size::all();
+        return view('Admin.ProductVariants.edit', compact('productVariant', 'colors', 'sizes'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
-        $productVariant = ProductVariant::query()->find($id);
+        $productVariant = ProductVariant::find($id);
         $id = $productVariant->product_id;
         $dataVariant = $request->except('image');
-        if ($request->hasFile('image')) {
-        // Lưu ảnh mới vào thư mục public/uploads/variants
-        $image = $request->file('image');
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('uploads/variants'), $imageName);
-        $dataVariant['image'] = 'uploads/variants/' . $imageName;
-
-        // Xóa ảnh cũ nếu có
-        if ($productVariant->image && file_exists(public_path($productVariant->image))) {
-            unlink(public_path($productVariant->image));
+    
+        // Kiểm tra trùng lặp
+        $exists = ProductVariant::where('product_id', $request->product_id)
+            ->where('color_id', $request->color_id)
+            ->where('size_id', $request->size_id)
+            ->where('id', '!=', $id) // Loại trừ chính biến thể đang cập nhật
+            ->exists();
+    
+        if ($exists) {
+            return back()->with(['error' => 'Biến thể sản phẩm này đã tồn tại!'])->withInput();
         }
+    
+        if ($request->hasFile('image')) {
+            // Lưu ảnh mới vào thư mục public/uploads/variants
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/variants'), $imageName);
+            $dataVariant['image'] = 'uploads/variants/' . $imageName;
+    
+            // Xóa ảnh cũ nếu có
+            if ($productVariant->image && file_exists(public_path($productVariant->image))) {
+                unlink(public_path($productVariant->image));
+            }
+        }
+    
+        $productVariant->update($dataVariant);
+    
+        return redirect()->route('productVariants.index', ['id' => $id])->with('success', 'Cập nhật thành công!');
     }
-            return redirect()->route('productVariants.index',['id'=>$id])->with('message','cập nhật thành công');
-    }
+    
 
     /**
      * Remove the specified resource from storage.

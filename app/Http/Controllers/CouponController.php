@@ -68,9 +68,12 @@ class CouponController extends Controller
     }
     public function update(Request $request, Coupon $coupon)
     {
+        if ($coupon->used > 0) {
+            return redirect()->back()->with('error', 'Không thể cập nhật mã giảm giá đã được sử dụng.');
+        }
         {
             $data = $request->validate([
-                'code' => 'required|unique:coupons,code|max:10',
+                'code' => 'required|unique:coupons,code,' . $coupon->id . '|max:10',
                 'discount' => 'required',
                 'discount_type'=> 'required|in:percent,fixed',
                 'quantity' => 'required|integer|min:1',
@@ -92,7 +95,7 @@ class CouponController extends Controller
             ]);
             $coupon->update($data);
 
-            return redirect()->back()->with('message', 'Cập nhật thành công');
+            return redirect()->back()->with('success', 'Cập nhật thành công');
             
         }
     
@@ -118,36 +121,5 @@ class CouponController extends Controller
         Mail::to($email)->send(new SendCoupon($coupon));
         return redirect()->back()->with('message', 'Email đã được gửi thành công!');
     }
-    public function applyCoupon(Request $request)
-    {
-        // Lấy thông tin mã giảm giá và tổng tiền từ request
-        $couponCode = $request->input('coupon_code');
-        $cartTotal = $request->input('cart_total');
-
-        // Kiểm tra mã giảm giá
-        $coupon = \App\Models\Coupon::where('code', $couponCode)->first();
-
-        if (!$coupon) {
-            return response()->json(['error' => 'Mã giảm giá không hợp lệ'], 400);
-        }
-
-        // Kiểm tra điều kiện áp dụng
-        if ($coupon->min_order_value > $cartTotal) {
-            return response()->json(['error' => 'Giá trị đơn hàng không đủ để áp dụng mã giảm giá'], 400);
-        }
-
-        // Tính toán giảm giá
-        $discount = $coupon->type === 'percent' 
-            ? $cartTotal * ($coupon->value / 100) 
-            : $coupon->value;
-
-        $discount = min($discount, $coupon->max_discount); // Giới hạn giảm giá tối đa
-
-        $totalAfterDiscount = $cartTotal - $discount;
-
-        return response()->json([
-            'discount' => number_format($discount),
-            'total' => number_format($totalAfterDiscount)
-        ]);
-    }
+  
 }

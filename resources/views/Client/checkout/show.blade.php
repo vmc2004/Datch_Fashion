@@ -179,6 +179,47 @@
                             </div>
                         @endforeach
                        
+                        <div class="">
+                            
+                            <div class="flex justify-between">
+                                @if($total_price >= 629000)
+                                <input type="hidden" name="shiping" value="0">
+                                @else
+                                <input type="hidden" name="shiping" value="30000">
+                                @endif
+                            </div>
+
+                         
+
+                            @if (session('discount'))
+                            <div class="flex justify-between">
+                                <input type="hidden" name="discount" value="{{session('discount')}}">
+                            </div>
+                            @else   
+                            <div class="flex justify-between">
+                                <input type="hidden" name="discount" value="0">
+                            </div>
+                            @endif
+                        </div>
+                        <div class="">
+                            <div class="flex justify-between font-bold">
+                                @if (session('subtotals'))
+                                <input type="hidden" name="subtotal" value="{{session('subtotals')}}">
+                                @else   
+                                <input type="hidden" name="subtotal" value="{{$total_price}}">
+                                @endif
+                            </div>
+                        </div>
+                    </form>
+                        <form action="{{route('coupon.apply')}}" method="POST" class="mb-4" >
+                            @csrf
+                                <label class="block text-gray-700">Mã giảm giá</label>
+                               <div class="flex">
+                                <input type="hidden" name="subtotal" value="{{$total_price}}">
+                                <input type="text" class="border border-gray-500 rounded-md pl-1 w-8/12" id="code" name="code" placeholder="Nhập mã giảm giá">
+                                <button type="submit" class="ml-3 bg-gray-500 border-gray-500  text-white px-4 py-1 rounded" >Áp dụng</button>
+                               </div>
+                        </form>
                         <div class="mb-4">
                             <div class="flex justify-between">
                                 <span>Tạm tính</span>
@@ -223,16 +264,6 @@
                                 @endif
                             </div>
                         </div>
-                    </form>
-                        <form action="{{route('coupon.apply')}}" method="POST" >
-                            @csrf
-                                <label class="block text-gray-700">Mã giảm giá</label>
-                               <div class="flex">
-                                <input type="hidden" name="subtotal" value="{{$total_price}}">
-                                <input type="text" class="border border-gray-500 rounded-md pl-1 w-8/12" id="code" name="code" placeholder="Nhập mã giảm giá">
-                                <button type="submit" class="mt-2 ml-2 bg-gray-500 border-gray-500  text-white px-4 py-1 rounded" >Áp dụng</button>
-                               </div>
-                        </form>
                     
                     </div>
                 </div>
