@@ -32,7 +32,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function huy($code)
+    public function huy(Request $request,$code)
     {
         $order = Order::where('code', $code)
             ->with('orderDetails.productVariant')
@@ -49,9 +49,10 @@ class OrderController extends Controller
 
                 }
                 $order->status = 'Đơn hàng đã hủy';
+                $order->note = $request->note;
                 $order->save();
                $notificationData = [
-                'message' => 'Đơn hàng #' . $order->code . ' đã bị hủy.',
+                'message' => 'Đơn hàng #' . $order->code . ' đã bị hủy, Lí do:' .$order->note . '.',
                 'order_code' => $order->code,
                 'order_status' => 'Đã hủy',
                 'details_url' => route('order.show', ['code' => $order->code]), // Link chi tiết đơn hàng

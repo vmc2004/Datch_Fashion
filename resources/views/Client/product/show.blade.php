@@ -219,58 +219,48 @@
         </div>
 
         <div class="container mx-auto p-4 pt-10">
-            <div id="toast" class="toast">Bình luận của bạn đã được gửi thành công!</div>
-            <h2 class="text-2xl font-semibold mb-4 t">
-                Bình luận sản phẩm
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">
+                Đánh giá
             </h2>
-
-            <p class="mt-2"><span class="font-bold">Đánh giá trung bình:</span> {{ round($avgRating, 1) }}/5 <i
-                    class="fa-solid fa-star text-warning"></i></p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-cols-3 gap-6">
+        
+            <p class="text-lg font-medium text-gray-700 mb-6">
+                <span class="font-semibold">Đánh giá trung bình:</span> 
+                {{ round($avgRating, 1) }}/5 
+                <i class="fa-solid fa-star text-yellow-500"></i>
+            </p>
+        
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($comments as $comment)
-                    @if ($comment->rating != '' && $comment->status == 'approved')
-                        <div class="">
-                            <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
-                                {{ $comment->created_at->format('d/m/Y') }}</p>
-                            <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
-                            <p><span class="font-bold">Đánh giá:</span> {{ $comment->rating }} sao</p>
+                    <div class="bg-white shadow-md rounded-lg p-5 border border-gray-200">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                             <img src="{{asset('uploads/'.$comment->user->avatar)}}" alt="" class="rounded-full w-12 h-12">
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-lg font-semibold text-gray-800">
+                                    {{ $comment->user->fullname }}
+                                </div>
+                                <div class="flex items-center text-yellow-500 mt-1">
+                                    @for ($i = 1; $i <= $comment->rating; $i++)
+                                        <i class="fas fa-star"></i>
+                                    @endfor
+                                    @for ($i = $comment->rating + 1; $i <= 5; $i++)
+                                        <i class="far fa-star"></i>
+                                    @endfor
+                                </div>
+                                <div class="text-sm text-gray-500 mt-1">
+                                    {{ $comment->created_at->format('H:i d/m/Y') }}
+                                </div>
+                            </div>
                         </div>
-                    @elseif ($comment->rating == '' && $comment->status == 'approved')
-                        <div class="">
-                            <p><span class="font-bold">Đăng bởi:</span> {{ $comment->user->fullname }} vào ngày
-                                {{ $comment->created_at->format('d/m/Y') }}</p>
-                            <p><span class="font-bold">Nội dung:</span> {{ $comment->content }}</p>
+                        <div class="text-gray-700">
+                            {{ $comment->content }}
                         </div>
-                    @endif
+                    </div>
                 @endforeach
-                {{ $comments->links() }}
             </div>
-            <hr class="mb-3">
-
-            @if (Auth::check())
-                <form action="{{ route('comments.sendComment', $product->id) }}" method="POST"
-                    class="comment-form w-100">
-                    @csrf
-                    {{-- <div class="star-rating">
-                    <input type="radio" id="star5" name="rating" value="5" />
-                    <label for="star5">&#9733;</label>
-                    <input type="radio" id="star4" name="rating" value="4" />
-                    <label for="star4">&#9733;</label>
-                    <input type="radio" id="star3" name="rating" value="3" />
-                    <label for="star3">&#9733;</label>
-                    <input type="radio" id="star2" name="rating" value="2" />
-                    <label for="star2">&#9733;</label>
-                    <input type="radio" id="star1" name="rating" value="1" />
-                    <label for="star1">&#9733;</label>
-                </div> --}}
-                    <textarea name="content" placeholder="Viết bình luận của bạn..." required></textarea>
-                    <button type="submit" class="submit-button">Gửi bình luận</button>
-                </form>
-            @else
-                <div class=""></div>
-            @endif
         </div>
+        
 
 
 

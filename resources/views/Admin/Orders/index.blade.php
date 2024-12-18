@@ -79,7 +79,7 @@
                   @foreach ($orders as $order)
                   <tr>
                     <td><a href="{{route('orders.edit', $order->id)}}" class="d-flex justify-content-center"> {{ $order->code }}</a></td>
-                    <td>{{ $order->created_at }}</td>
+                    <td>{{ $order->created_at->format('H:i d/m/Y') }}</td>
                     <td class="d-flex justify-content-center">{{ $order->fullname }}</td>
                     <td class="">{{ $order->phone }}</td>
                     

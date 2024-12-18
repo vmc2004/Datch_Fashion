@@ -56,21 +56,22 @@
                                                     {{ $detail->quantity }}</td>
                                                 <td class="px-4 py-2 border border-gray-300 text-center">
                                                     {{ number_format($detail->quantity * $detail->variant->price) }} ₫</td>
-                                                    @if (!$detail->is_rated)
+                                                @if (!$detail->is_rated)
                                                     <td class="px-4 py-2 border border-gray-300 text-center">
                                                         <a href="{{ route('rate.form', [$detail->variant->id, $order->id]) }}"
-                                                           class="inline-block px-4 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 transition duration-300 whitespace-nowrap">
-                                                           Đánh giá
+                                                            class="inline-block px-4 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 transition duration-300 whitespace-nowrap">
+                                                            Đánh giá
                                                         </a>
                                                     </td>
-                                                    @else
+                                                @else
                                                     <td class="px-4 py-2 border border-gray-300 text-center">
-                                                        <a href="{{route('rate.list')}}" class="inline-block px-4 py-2 bg-green-500 text-white font-bold rounded-lg cursor-default whitespace-nowrap">
+                                                        <a href="{{ route('rate.list') }}"
+                                                            class="inline-block px-4 py-2 bg-green-500 text-white font-bold rounded-lg cursor-default whitespace-nowrap">
                                                             Xem đánh giá
                                                         </a>
                                                     </td>
-                                                    @endif
-                                                    
+                                                @endif
+
 
                                             </tr>
                                         @else
@@ -129,14 +130,10 @@
 
                         <div class="flex space-x-4 mt-3">
                             @if ($order->status == 'Chờ xác nhận')
-                                <form action="{{ URL('huy-don', $order->code) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="code" value="{{ $order->code }}">
-                                    <button type="submit"
-                                        class="px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                                        Hủy đơn hàng
-                                    </button>
-                                </form>
+                                <button type="button" onclick="confirmCancel('{{ $order->code }}')"
+                                    class="px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-md hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                                    Hủy đơn hàng
+                                </button>
                             @endif
 
                             <a href="/account/orders">
@@ -151,5 +148,41 @@
             </div>
         </div>
 
+<script>
+    function confirmCancel(orderCode) {
+    Swal.fire({
+        title: 'Lý do hủy đơn hàng',
+        input: 'textarea',
+        inputLabel: 'Vui lòng nhập lý do',
+        inputPlaceholder: 'Nhập lý do hủy đơn hàng tại đây...',
+        inputAttributes: {
+            'aria-label': 'Nhập lý do hủy đơn hàng tại đây'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Xác nhận',
+        cancelButtonText: 'Hủy',
+        preConfirm: (reason) => {
+            if (!reason) {
+                Swal.showValidationMessage('Lý do không được để trống!');
+            }
+            return reason;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tạo form động với action chứa $order->code
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `{{ URL('huy-don/${orderCode}') }}`; // Tạo URL động với order code
+            form.innerHTML = `
+                @csrf
+                <input type="hidden" name="code" value="${orderCode}">
+                <input type="hidden" name="note" value="${result.value}">
+            `;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
 
+</script>
     @endsection

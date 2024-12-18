@@ -7,8 +7,10 @@ use App\Mail\OrderStatusUpdatedMail;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Notifications\OrderCancelled;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session as FacadesSession;
 
@@ -120,6 +122,20 @@ public function index(Request $request)
             'note' => $request->note,
         ];
 
+     
+        if ($request->status === 'Đơn hàng đã hủy') {
+            $notificationData = [
+                'message' => 'Đơn hàng #' . $order->code . ' đã bị hủy, Lí do:' .$order->note . '.',
+                'order_code' => $order->code,
+                'order_status' => 'Đã hủy',
+                'details_url' => route('order.show', ['code' => $order->code]), // Link chi tiết đơn hàng
+                'product_name' => $order->orderDetails->first()->productVariant->product->name,  // Lấy tên sản phẩm
+                'product_image' => $order->orderDetails->first()->productVariant->product->image,  // Lấy ảnh sản phẩm đầu tiên trong đơn hàng
+            ];
+    
+            // Gửi thông báo cho người dùng
+            Auth::user()->notify(new OrderCancelled($notificationData));
+        }
         if ($request->status === 'Đã giao hàng') {
             $data['payment_status'] = 'Đã thanh toán';
         }
@@ -130,7 +146,7 @@ public function index(Request $request)
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật đơn hàng.');
         }
-
+       
         return redirect()->back()->with('success', 'Cập nhật thành công!');
     }
 
