@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -132,7 +133,51 @@ class UserController extends Controller
         'user' => $user,
     ]);
     }
-    public function updateprofile(Request $request){
+    public function updateProfile(Request $request){
+        $data = $request->validate([
+        'fullname' => 'required|max:200',
+        'phone' => [
+            'required',
+            'regex:/^\d+$/',
+            'min:10',
+            'max:11',
+        ],
+        'address' => 'required',
+        'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+        ],[
+            'avatar.mimes' => 'Ảnh đại diện chỉ được có định dạng: jpeg, png, jpg, gif, svg',
+            'avatar.max' => 'Ảnh đại diện chỉ được có kích thước tối đa 2048KB',
+            'fullname.required' => 'Tên người dùng là bắt buộc',
+            'fullname.max' => 'Tên người dùng không được dài quá 200 ký tự',
+            'phone.required' => 'Số điện thoại không được để trống.',
+            'phone.min' => 'Số điện thoại tối thiểu 10 số.',
+            'phone.max' => 'Số điện thoại tối đa 11 số.',
+            'phone.regex' => 'Số điện thoại chỉ được chứa số.',
+            'address.required' => 'Địa chỉ là bắt buộc',
+
+
+        ]);
+        $user = User::findOrFail($request->id);
+        $userData = [
+            'fullname' => $data['fullname'],
+            'address' => $data['address'],
+            'phone' => $data['phone'],
+        ];
+        if ($request->hasFile('avatar')) {
+            if (!empty($user->avatar)) {
+                $oldAvatarPath = public_path('uploads/avatars/' . $user->avatar);
+                if (File::exists($oldAvatarPath)) {
+                    File::chmod($oldAvatarPath, 0775);
+                    File::delete($oldAvatarPath); 
+                }
+            }
+            $avatarFile = $request->file('avatar');
+            $avatarName = time() . '-' . $avatarFile->getClientOriginalName(); 
+            $avatarFile->move(public_path('uploads/avatars'), $avatarName); 
+            $userData['avatar'] = 'avatars/' . $avatarName; 
+        }
+        $user->update($userData);
         return redirect()->back()->with('success', 'Cập nhật thành công');
     }
 }

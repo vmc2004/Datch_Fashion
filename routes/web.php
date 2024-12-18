@@ -132,10 +132,7 @@ Route::post('/tai-khoan', [ClientUserController::class, 'updateProfile']);
         return view('Client.verifyOtp');
     })->name('Client.verifyOtpForm');  
     Route::post('Client/verify-otp', [ClientUserController::class, 'verifyOtp'])->name('Client.verifyOtp');
-    
 
-
-    
     Route::get('/Client/home', [ClientUserController::class, 'homeClient'])->name('Client.home');
     Route::get('client/google', [GoogleController::class, 'redirectToGoogle'])->name('Client.google.login');
     Route::get('client/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('Client.google.callback');
